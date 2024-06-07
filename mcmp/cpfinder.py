@@ -120,7 +120,11 @@ def find_coexisting_phases_impl(
         revive_count = 0
         # check if there is invalid phase.
         if revive_count < revive_tries:
-            n_valid_phase = np.sum(Js > kill_threshold)
+            n_valid_phase = 0
+            for J in Js:
+                if J > kill_threshold:
+                    n_valid_phase += 1
+
             if n_valid_phase != num_phases:
                 # kill and revive the phase
 
@@ -128,8 +132,8 @@ def find_coexisting_phases_impl(
                 omega_centers = np.full(num_comps, 0.0, float)
                 omega_widths = np.full(num_comps, 0.0, float)
                 for itr_comp in range(num_comps):
-                    current_omega_min = omegas[itr_comp].min()
                     current_omega_max = omegas[itr_comp].max()
+                    current_omega_min = omegas[itr_comp].min()
                     omega_centers[itr_comp] = (
                         current_omega_max + current_omega_min
                     ) * 0.5
@@ -180,9 +184,11 @@ def find_coexisting_phases_impl(
         xi /= num_comps
 
         # local energy. i.e. energy of phases excluding the partition function part
-        local_energy = (xi + 1.0) * incomp + 1.0
+        local_energy = xi * incomp
         for itr_comp in range(num_comps):
-            local_energy += (-0.5 * omega_temp[itr_comp] - xi) * phis[itr_comp]
+            local_energy += (
+                -0.5 * omega_temp[itr_comp] - xi - 1.0 / sizes[itr_comp]
+            ) * phis[itr_comp]
 
         # Js is updated according to this local energy
         local_energy_mean = (local_energy * Js).sum() / n_valid_phase
@@ -502,7 +508,7 @@ class CoexistingPhasesFinder:
                 is_last_step_safe,
             ) = find_coexisting_phases_impl(
                 self.phi_means,
-                self.chis,
+                chis_shifted,
                 self.sizes,
                 omegas=self.omegas,
                 Js=self.Js,
@@ -517,11 +523,15 @@ class CoexistingPhasesFinder:
                 rng=self.rng,
             )
 
-            pbar.set_description(
-                "max_abs_incomp={:6.4f} max_abs_omega_diff={:6.4f} max_abs_js_diff={:6.4f}".format(
-                    max_abs_incomp, max_abs_omega_diff, max_abs_js_diff
+            if progress:
+                pbar.set_description(
+                    "Incomp={:6.4f}\t, Domega={:6.4f}, Dj={:6.4f}, revive_left={:d}".format(
+                        max_abs_incomp,
+                        max_abs_omega_diff,
+                        max_abs_js_diff,
+                        self.revive_count_left,
+                    )
                 )
-            )
 
             num_steps += steps_inner
             t += steps_inner
@@ -562,6 +572,10 @@ class CoexistingPhasesFinder:
         self.diagnostics = {
             "num_steps": num_steps,
             "steps_tracker": steps_tracker,
+            "max_abs_incomp": max_abs_incomp,
+            "max_abs_omega_diff": max_abs_omega_diff,
+            "max_abs_js_diff": max_abs_js_diff,
+            "revive_count_left": self.revive_count_left,
         }
 
         if save_intermediate_data:
