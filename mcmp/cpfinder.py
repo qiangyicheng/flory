@@ -125,6 +125,7 @@ class CPFinder:
         self._logger = logging.getLogger(self.__class__.__name__)
 
         # chis
+        chis = np.array(chis)
         if chis.shape[0] == chis.shape[1]:
             self._chis = chis
             self._num_components = chis.shape[0]
@@ -136,6 +137,7 @@ class CPFinder:
             raise ValueError("chis matrix must be square.")
 
         # phi_means
+        phi_means = np.array(phi_means)
         if phi_means.shape[0] == self._num_components:
             self._phi_means = phi_means
             if np.abs(self._phi_means.sum() - 1.0) > 1e-12:
@@ -158,6 +160,7 @@ class CPFinder:
         if sizes is None:
             self._sizes = np.ones(self._num_components)
         else:
+            sizes = np.array(sizes)
             if sizes.shape[0] == self._num_components:
                 self._sizes = sizes
                 if np.sum(self._sizes <= 0):
@@ -379,7 +382,7 @@ class CPFinder:
         pbar2 = tqdm(**bar_args, position=1, desc="Field Error")
         pbar3 = tqdm(**bar_args, position=2, desc="Volume Error")
         
-        bar_val_func = lambda a : max(0, min(round(-np.log10(a), 1), bar_max))
+        bar_val_func = lambda a : max(0, min(round(-np.log10(max(a,1e-100)), 1), bar_max))
         
         for _ in range(steps_tracker):
             # do the inner steps
