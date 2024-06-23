@@ -402,8 +402,22 @@ def multicomponent_self_consistent_metastep(
     )
 
 
-def sort_phases(Js_phases:np.ndarray, phis_phases:np.ndarray) -> tuple[int, np.ndarray,np.ndarray]:
-    """Sort the results phases"""
+def sort_phases(Js_phases:np.ndarray, phis_phases:np.ndarray) -> tuple[np.ndarray,np.ndarray]:
+    """
+    Sort the phases according to the index of most concentrated components. 
+
+    Args:
+        Js_phases (np.ndarray):
+            Const. 1D array of the volumes of each phase.
+        phis_phases (np.ndarray):
+            Const. 2D array containing the volume fractions of the components in each
+            phase. The first dimension must be the same as `Js_phases`. Note that usually
+            this corresponds the transpose of `phis` in class `CoexistingPhasesFinder`. 
+
+    Returns:
+        np.ndarray: sorted `Js_phases`
+        np.ndarray: sorted `phis_phases`
+    """
     enrich_indexes = np.argsort(phis_phases)
     sorting_index = np.lexsort(np.transpose(enrich_indexes))
     return Js_phases[sorting_index], phis_phases[sorting_index]
@@ -413,6 +427,11 @@ def get_clusters(Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2) -> tuple[
     Return the concentrations in the distinct clusters
 
     Args:
+        Js (np.ndarray):
+            Const. 1D array of the volumes of each phase.
+        phis (np.ndarray):
+            Const. 2D array containing the volume fractions of the components in each
+            phase. The second dimension must be the same as `Js`. 
         dist (float): Cut-off distance for cluster analysis
     """
     # transpose to make the compartment index the first index
