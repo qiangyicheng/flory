@@ -1,9 +1,9 @@
 """
-Package for finding multiple coexistent phases in multicomponent systems
+Package for finding multiple coexisting phases in multicomponent systems
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
-from .cpfinder import CoexistingPhasesFinder
+from .cpfinder import CPFinder, cpfinder
 
 __version__ = "0.0"

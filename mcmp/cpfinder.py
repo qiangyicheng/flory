@@ -12,12 +12,11 @@ from tqdm.auto import tqdm
 from datetime import datetime
 
 import numpy as np
-import time
 
 from .cpfinder_impl import *
 
 
-class CoexistingPhasesFinder:
+class CPFinder:
     def __init__(
         self,
         chis: np.ndarray,
@@ -28,9 +27,9 @@ class CoexistingPhasesFinder:
         rng: np.random.Generator | None = None,
         max_steps: int = 100000,
         convergence_criterion: str = "standard",
-        convergence_tolerance: float = 1e-5,
-        convergence_check_interval: int = 1000,
-        convergence_show_progress: bool = True,
+        tolerance: float = 1e-5,
+        interval: int = 1000,
+        progress: bool = True,
         random_std: float = 5.0,
         acceptance_Js: float = 0.0002,
         acceptance_omega: float = 0.002,
@@ -41,7 +40,7 @@ class CoexistingPhasesFinder:
         additional_chis_shift: float = 1.0,
     ):
         """
-        Construct a CoexistingPhasesFinder for finding coexisting phases. This class is
+        Construct a CPFinder for finding coexisting phases. This class is
         recommended when multiple instances of chis matrix or phi_means vector need to be
         calculated. The class will reuse all the options and the internal resources. Note
         that reuse the instance of this class is only possible when all the system sizes
@@ -78,11 +77,11 @@ class CoexistingPhasesFinder:
             option, which requires checking of incompressibility, field error between
             successive intervals and relative volume error between successive intervals.
             Defaults to "standard".
-        convergence_tolerance (float, optional):
+        tolerance (float, optional):
             The tolerance to determine convergence. Defaults to 1e-5.
-        convergence_check_interval (int, optional):
+        interval (int, optional):
             The interval of steps to check convergence. Defaults to 1000.
-        convergence_show_progress (bool, optional):
+        progress (bool, optional):
             Whether to show status when checking convergence. Defaults to True.
         random_std (float, optional):
             The amplitude of the randomly generated fields. Defaults to 5.0.
@@ -186,9 +185,9 @@ class CoexistingPhasesFinder:
         # other parameters
         self._max_steps = max_steps
         self._convergence_criterion = convergence_criterion
-        self._convergence_tolerance = convergence_tolerance
-        self._convergence_check_interval = convergence_check_interval
-        self._convergence_show_progress = convergence_show_progress
+        self._tolerance = tolerance
+        self._interval = interval
+        self._progress = progress
 
         self._random_std = random_std
         self._acceptance_Js = acceptance_Js
@@ -330,7 +329,7 @@ class CoexistingPhasesFinder:
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Run instance to find coexisting phases. All keywords arguments can be used to
-        overwrite the values during construction of the class.
+        temporarily overwrite the values during construction of the class.
 
         Args:
             max_steps (float | None):
@@ -355,11 +354,11 @@ class CoexistingPhasesFinder:
         if max_steps is None:
             max_steps = self._max_steps
         if tolerance is None:
-            tolerance = self._convergence_tolerance
+            tolerance = self._tolerance
         if interval is None:
-            interval = self._convergence_check_interval
+            interval = self._interval
         if progress is None:
-            progress = self._convergence_show_progress
+            progress = self._progress
 
         steps_tracker = int(np.ceil(max_steps / interval))
         steps_inner = max(1, int(np.ceil(max_steps)) // steps_tracker)
@@ -458,3 +457,32 @@ class CoexistingPhasesFinder:
         phases_volumes, phases_compositions = get_clusters(final_Js, final_phis)
 
         return phases_volumes, phases_compositions
+    
+def cpfinder(
+    chis: np.ndarray,
+    phi_means: np.ndarray,
+    num_compartments: int,
+    ** kwargs,
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    The convenience version of `CPFinder`. This function will create the class `CPFinder` internally, and then conduct the random initialization, finally use self consistent iterations to find coexisting phases. `kwargs` is forwarded to `CPFinder`. See class `CPFinder` for all the possible options.
+
+    Args:
+        chis (np.ndarray):
+            The interaction matrix. 2D array with size of num_components-by-num_components. This chi
+            matrix should be the full chi matrix of the system, including the solvent
+            component. Note that the symmetry is not checked, which should be guaranteed
+            externally.
+        phi_means (np.ndarray):
+            The average volume fraction of all the components of the system. 1D array with
+            size of num_components. Note that the volume fraction of the solvent is included as
+            well, therefore the sum of this array must be unity, which is not checked by
+            this function and should be guaranteed externally.
+        num_compartments (int):
+            Number of compartment in the system.
+
+    Returns:
+        tuple[np.ndarray, np.ndarray]: _description_
+    """
+    finder = CPFinder(chis, phi_means, num_compartments, **kwargs)
+    return finder.run()
