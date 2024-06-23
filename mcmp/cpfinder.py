@@ -25,10 +25,10 @@ class CPFinder:
         *,
         sizes: np.ndarray | None = None,
         rng: np.random.Generator | None = None,
-        max_steps: int = 100000,
+        max_steps: int = 1000000,
         convergence_criterion: str = "standard",
         tolerance: float = 1e-5,
-        interval: int = 1000,
+        interval: int = 10000,
         progress: bool = True,
         random_std: float = 5.0,
         acceptance_Js: float = 0.0002,
@@ -482,7 +482,10 @@ def cpfinder(
             Number of compartment in the system.
 
     Returns:
-        tuple[np.ndarray, np.ndarray]: _description_
+            np.ndarray: Volume fractions of components in each phase. 2D array with the
+            size of num_phases-by-num_components
+            np.ndarray: Volume fractions of each phase. 1D array with the size of
+            num_phases
     """
     finder = CPFinder(chis, phi_means, num_compartments, **kwargs)
     return finder.run()
