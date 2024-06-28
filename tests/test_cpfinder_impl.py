@@ -42,6 +42,7 @@ def test_revive_compartments_by_random(threshold: float, scaler: float):
     rng = np.random.default_rng()
     Js = np.array([1.0, 0.3, 0.2, 1.8, -0.2, 1.7, 2.2])
     targets = rng.uniform(-amp, amp, (3, 7))
+    target_centers = 0.5 * (targets.min(axis=1) + targets.max(axis=1))
     mask = Js > threshold
     Js_original = Js.copy()
     targets_original = targets.copy()
@@ -52,7 +53,7 @@ def test_revive_compartments_by_random(threshold: float, scaler: float):
             assert Js_original[itr] == Js[itr]
             assert np.all(targets_original[:, itr] == targets[:, itr])
         else:
-            assert np.abs(targets[:, itr]).max() < scaler * 3.0
+            assert np.abs(targets[:, itr] - target_centers).max() < scaler * 3.0
             assert Js[itr] == 1
             assert str(targets[:, itr]) not in oldlist
 
