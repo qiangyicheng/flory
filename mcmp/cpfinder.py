@@ -8,10 +8,12 @@
 """
 
 import logging
-from tqdm.auto import tqdm
-from datetime import datetime
 
 import numpy as np
+
+from datetime import datetime
+from typing import Optional
+from tqdm.auto import tqdm
 
 from .cpfinder_impl import *
 
@@ -23,8 +25,8 @@ class CPFinder:
         phi_means: np.ndarray,
         num_compartments: int,
         *,
-        sizes: np.ndarray | None = None,
-        rng: np.random.Generator | None = None,
+        sizes: Optional[np.ndarray] = None,
+        rng: Optional[np.random.Generator] = None,
         max_steps: int = 1000000,
         convergence_criterion: str = "standard",
         tolerance: float = 1e-5,
@@ -325,25 +327,25 @@ class CPFinder:
     def run(
         self,
         *,
-        max_steps: float | None = None,
-        tolerance: float | None = None,
-        interval: int | None = None,
-        progress: bool | None = None,
+        max_steps: Optional[float] = None,
+        tolerance: Optional[float] = None,
+        interval: Optional[int] = None,
+        progress: Optional[bool] = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Run instance to find coexisting phases. All keywords arguments can be used to
         temporarily overwrite the values during construction of the class.
 
         Args:
-            max_steps (float | None):
+            max_steps (float, Optional):
                 The maximum number of steps to find the coexisting phases. Defaults to
                 None.
-            tolerance (float | None):
+            tolerance (float, Optional):
                 The tolerance to determine convergence. None indicates that the default
                 value will be used. Defaults to None.
-            interval (int | None):
+            interval (int, Optional):
                 The interval of steps to check convergence. Defaults to None.
-            progress (bool | None):
+            progress (bool, Optional):
                 Flag determining whether to show a progress bar during the simulation.
                 Defaults to None.
 
