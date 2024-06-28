@@ -8,13 +8,10 @@
 """
 
 import logging
-
 import numpy as np
-
 from datetime import datetime
 from typing import Optional
 from tqdm.auto import tqdm
-
 from .cpfinder_impl import *
 
 
@@ -383,9 +380,9 @@ class CPFinder:
         pbar1 = tqdm(**bar_args, position=0, desc="Incompressibility")
         pbar2 = tqdm(**bar_args, position=1, desc="Field Error")
         pbar3 = tqdm(**bar_args, position=2, desc="Volume Error")
-        
-        bar_val_func = lambda a : max(0, min(round(-np.log10(max(a,1e-100)), 1), bar_max))
-        
+
+        bar_val_func = lambda a: max(0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max))
+
         for _ in range(steps_tracker):
             # do the inner steps
             (
@@ -458,16 +455,17 @@ class CPFinder:
             "phis": final_phis,
             "Js": final_Js,
         }
-        
+
         phases_volumes, phases_compositions = get_clusters(final_Js, final_phis)
 
         return phases_volumes, phases_compositions
-    
+
+
 def cpfinder(
     chis: np.ndarray,
     phi_means: np.ndarray,
     num_compartments: int,
-    ** kwargs,
+    **kwargs,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     The convenience version of `CPFinder`. This function will create the class `CPFinder` internally, and then conduct the random initialization, finally use self consistent iterations to find coexisting phases. `kwargs` is forwarded to `CPFinder`. See class `CPFinder` for all the possible options.

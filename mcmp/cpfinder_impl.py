@@ -17,7 +17,7 @@ from scipy import cluster, spatial
 def count_valid_phases(Js: np.ndarray, threshold: float) -> int:
     """
     Count how many entries in `Js` are larger than `threshold`
-    
+
     Args:
         Js (np.ndarray):
             Const. 1D array of values to check.
@@ -34,7 +34,7 @@ def count_valid_phases(Js: np.ndarray, threshold: float) -> int:
 def make_valid_phase_masks(Js: np.ndarray, threshold: float) -> np.ndarray:
     """
     Create masks for entries in `Js` are larger than `threshold`
-    
+
     Args:
         Js (np.ndarray):
             Const. 1D array of values to check.
@@ -59,7 +59,7 @@ def revive_compartments_by_random(
     Revive compartment randomly whose `J` (element of `Js`) is smaller than threshold. The
     revived values are randomly and uniformly sampled between the min and max value of
     `targets` across all compartments, which can be scaled by the scaler.
-    
+
     Args:
         Js (np.ndarray):
             Mutable. The 1D array values to determine whether a compartment is dead.
@@ -402,9 +402,11 @@ def multicomponent_self_consistent_metastep(
     )
 
 
-def sort_phases(Js_phases:np.ndarray, phis_phases:np.ndarray) -> tuple[np.ndarray,np.ndarray]:
+def sort_phases(
+    Js_phases: np.ndarray, phis_phases: np.ndarray
+) -> tuple[np.ndarray, np.ndarray]:
     """
-    Sort the phases according to the index of most concentrated components. 
+    Sort the phases according to the index of most concentrated components.
 
     Args:
         Js_phases (np.ndarray):
@@ -412,7 +414,7 @@ def sort_phases(Js_phases:np.ndarray, phis_phases:np.ndarray) -> tuple[np.ndarra
         phis_phases (np.ndarray):
             Const. 2D array containing the volume fractions of the components in each
             phase. The first dimension must be the same as `Js_phases`. Note that usually
-            this corresponds the transpose of `phis` in class `CPFinder`. 
+            this corresponds the transpose of `phis` in class `CPFinder`.
 
     Returns:
         np.ndarray: sorted `Js_phases`
@@ -422,7 +424,10 @@ def sort_phases(Js_phases:np.ndarray, phis_phases:np.ndarray) -> tuple[np.ndarra
     sorting_index = np.lexsort(np.transpose(enrich_indexes))
     return Js_phases[sorting_index], phis_phases[sorting_index]
 
-def get_clusters(Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2) -> tuple[int, np.ndarray,np.ndarray]:
+
+def get_clusters(
+    Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2
+) -> tuple[int, np.ndarray, np.ndarray]:
     """
     Return the concentrations in the distinct clusters
 
@@ -431,7 +436,7 @@ def get_clusters(Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2) -> tuple[
             Const. 1D array of the volumes of each phase.
         phis (np.ndarray):
             Const. 2D array containing the volume fractions of the components in each
-            phase. The second dimension must be the same as `Js`. 
+            phase. The second dimension must be the same as `Js`.
         dist (float): Cut-off distance for cluster analysis
     """
     # transpose to make the compartment index the first index
@@ -447,8 +452,6 @@ def get_clusters(Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2) -> tuple[
     cluster_phis = np.array(
         [phis[clusters == n, :].mean(axis=0) for n in np.unique(clusters)]
     )
-    cluster_Js = np.array(
-        [Js[clusters == n].sum(axis=0) for n in np.unique(clusters)]
-    )
+    cluster_Js = np.array([Js[clusters == n].sum(axis=0) for n in np.unique(clusters)])
     cluster_Js /= cluster_Js.sum()
     return sort_phases(cluster_Js, cluster_phis)
