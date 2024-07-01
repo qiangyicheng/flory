@@ -414,7 +414,7 @@ def sort_phases(
         phis_phases (np.ndarray):
             Const. 2D array containing the volume fractions of the components in each
             phase. The first dimension must be the same as `Js_phases`. Note that usually
-            this corresponds the transpose of `phis` in class `CPFinder`.
+            this corresponds the transpose of `phis` in class `CoexistingPhasesFinder`.
 
     Returns:
         np.ndarray: sorted `Js_phases`
