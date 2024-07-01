@@ -5,7 +5,7 @@
 import numpy as np
 import pytest
 
-import mcmp
+import flory
 
 
 @pytest.mark.parametrize("num_components", [4, 6, 8])
@@ -24,7 +24,7 @@ def test_cpfinder_symmetric(num_components: int, chi: float, size: float):
     volumes_ref = np.ones(num_components) / num_components
     phis_ref = phi_l + np.identity(num_components) * (phi_h - phi_l)
 
-    volumes_calc, phis_calc = mcmp.cpfinder(
+    volumes_calc, phis_calc = flory.cpfinder(
         chis, phi_means, num_compartments, sizes=sizes, tolerance=1e-7, progress=False
     )
     np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-2, atol=1e-5)
@@ -43,7 +43,7 @@ def test_cpfinder_asymmetric_ternary(num_compartments: int):
         [[0.07578904, 0.81377563, 0.11043533], [0.30555285, 0.09408195, 0.60036519]]
     )
 
-    volumes_calc, phis_calc = mcmp.cpfinder(
+    volumes_calc, phis_calc = flory.cpfinder(
         chis, phi_means, num_compartments, sizes=sizes, tolerance=1e-7, progress=False
     )
     np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-5)
@@ -60,7 +60,7 @@ def test_CPFinder_ODT():
     phi_means = np.ones(num_components) / num_components
     num_compartments = num_components * 4
 
-    finder = mcmp.CPFinder(
+    finder = flory.CPFinder(
         chis,
         phi_means,
         num_compartments,

@@ -34,12 +34,12 @@ jobs:
       env:
         NUMBA_DISABLE_JIT: 1
       run: |
-        python -m pytest --cov=mcmp --cov-report xml:.coverage_report.xml
+        python -m pytest --cov=flory --cov-report xml:.coverage_report.xml
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./.coverage_report.xml
         flags: Tests
-        name: codecov-mcmp
+        name: codecov-flory
         fail_ci_if_error: true

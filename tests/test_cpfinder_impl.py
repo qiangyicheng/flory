@@ -5,7 +5,7 @@
 import numpy as np
 import pytest
 
-from mcmp.cpfinder_impl import *
+from flory.cpfinder_impl import *
 
 
 def test_count_valid_phases():
