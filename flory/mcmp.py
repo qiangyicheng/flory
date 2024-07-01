@@ -12,7 +12,7 @@ import numpy as np
 from datetime import datetime
 from typing import Optional
 from tqdm.auto import tqdm
-from .cpfinder_impl import *
+from .detail.mcmp_impl import *
 
 
 class CPFinder:
