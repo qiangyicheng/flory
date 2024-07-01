@@ -3,3 +3,8 @@
 **/*.pytest_cache
 
 .coverage*
+
+docs/build
+docs/source/_autosummary
+
+.DS_Store

@@ -1,7 +1,4 @@
-"""
-
-.. autosummary::
-   :nosignatures:
+"""Modules for finding coexisting phases
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
@@ -16,6 +13,9 @@ from .detail.mcmp_impl import *
 
 
 class CoexistingPhasesFinder:
+    """
+    Create a finder for coexisting phases.
+    """
     def __init__(
         self,
         chis: np.ndarray,
@@ -39,87 +39,93 @@ class CoexistingPhasesFinder:
         additional_chis_shift: float = 1.0,
     ):
         """
-        Construct a CoexistingPhasesFinder for finding coexisting phases. This class is
-        recommended when multiple instances of chis matrix or phi_means vector need to be
-        calculated. The class will reuse all the options and the internal resources. Note
-        that reuse the instance of this class is only possible when all the system sizes
-        are not changed, including the number of components and the number of
-        compartments. Setting chis matrix and phi_means manually by the setters leads to
-        the reset of some internal states.
+        Construct a :class:`CoexistingPhasesFinder` for finding coexisting phases. This
+        class is recommended when multiple instances of chis matrix or phi_means vector
+        need to be calculated. The class will reuse all the options and the internal
+        resources. Note that reuse the instance of this class is only possible when all
+        the system sizes are not changed, including the number of components and the
+        number of compartments. Setting chis matrix and phi_means manually by the setters
+        leads to the reset of some internal states.
 
         Args:
-        chis (np.ndarray):
-            The interaction matrix. 2D array with size of num_components-by-num_components. This chi
-            matrix should be the full chi matrix of the system, including the solvent
-            component. Note that the symmetry is not checked, which should be guaranteed
-            externally.
-        phi_means (np.ndarray):
-            The average volume fraction of all the components of the system. 1D array with
-            size of num_components. Note that the volume fraction of the solvent is included as
-            well, therefore the sum of this array must be unity, which is not checked by
-            this function and should be guaranteed externally.
-        num_compartments (int):
-            Number of compartment in the system.
-        sizes (np.ndarray, optional):
-            The relative molecule volumes of the components. 1D array with size of
-            num_components. This sizes vector should be the full sizes vector of the system,
-            including the solvent component. None indicates a all-one vector. Defaults to
-            None.
-        rng (np.random.Generator, optional):
-            Random number generator for initialization and reviving. None indicates that a
-            new random number generator should be created by the class, seeded by current
-            timestamp. Defaults to None.
-        max_steps (int, optional):
-            The maximum number of steps in each run to find the coexisting phases. Default to 100000.
-        convergence_criterion (str, optional):
-            The criterion to determine convergence. Currently "standard" is the only
-            option, which requires checking of incompressibility, field error between
-            successive intervals and relative volume error between successive intervals.
-            Defaults to "standard".
-        tolerance (float, optional):
-            The tolerance to determine convergence. Defaults to 1e-5.
-        interval (int, optional):
-            The interval of steps to check convergence. Defaults to 1000.
-        progress (bool, optional):
-            Whether to show status when checking convergence. Defaults to True.
-        random_std (float, optional):
-            The amplitude of the randomly generated fields. Defaults to 5.0.
-        acceptance_Js (float, optional):
-            The acceptance of Js. This value determines the amount of changes accepted in
-            each step for the Js field. Typically this value can take the order of 10^-3,
-            or smaller when the system becomes larger or stiffer. Defaults to 0.0002.
-        Js_step_upper_bound (float, optional):
-            The maximum change of Js per step. This values determines the maximum amount
-            of changes accepted in each step for the Js field. If the intended amount is
-            larger this value, the changes will be scaled down to guarantee that the
-            maximum changes do not exceed this value. Typically this value can take the
-            order of 10^-3, or smaller when the system becomes larger or stiffer. Defaults
-            to 0.001.
-        acceptance_omega (float, optional):
-            The acceptance of omegas. This value determines the amount of changes accepted
-            in each step for the omega field. Note that if the iteration of Js is scaled
-            down due to parameter `Js_step_upper_bound`, the iteration of omega fields will
-            be scaled down simultaneously. Typically this value can take the order of
-            10^-2, or smaller when the system becomes larger or stiffer. Defaults to
-            0.002.
-        kill_threshold (float, optional):
-            The threshold of the Js for a compartment to be killed. Should be not less
-            than 0. In each iteration step, the Js array will be checked, for each element
-            smaller than this parameter, the corresponding compartment will be killed and
-            0 will be assigned to the corresponding mask. The dead compartment may be
-            revived, depending whether reviving is allowed or whether the `revive_tries`
-            has been exhausted. Defaults to 0.0.
-        revive_scaler (float, optional):
-            The factor for the conjugate fields when a dead compartment is revived. This
-            value determines the range of the random conjugate field generated by the
-            algorithm. Typically 1.0 or a value slightly larger than 1.0 will be a
-            reasonable choice. Defaults to 1.0.
-        max_revive_per_compartment (int, optional):
-            Number of tries per compartment to revive the dead compartment. 0 or negative
-            value indicates no reviving. When this value is exhausted, the revive will be
-            turned off.
-        additional_chis_shift (float, optional):
-            Shift of the entire chis matrix to improve the convergence. Defaults to 1.0.
+            chis (np.ndarray):
+                The interaction matrix. 2D array with size of
+                num_components-by-num_components. This chi matrix should be the full chi
+                matrix of the system, including the solvent component. Note that the
+                symmetry is not checked, which should be guaranteed externally.
+            phi_means (np.ndarray):
+                The average volume fraction of all the components of the system. 1D array
+                with size of num_components. Note that the volume fraction of the solvent
+                is included as well, therefore the sum of this array must be unity, which
+                is not checked by this function and should be guaranteed externally.
+            num_compartments (int):
+                Number of compartment in the system.
+            sizes (np.ndarray, optional):
+                The relative molecule volumes of the components. 1D array with size of
+                num_components. This sizes vector should be the full sizes vector of the
+                system, including the solvent component. None indicates a all-one vector.
+                Defaults to None.
+            rng (np.random.Generator, optional):
+                Random number generator for initialization and reviving. None indicates
+                that a new random number generator should be created by the class, seeded
+                by current timestamp. Defaults to None.
+            max_steps (int, optional):
+                The maximum number of steps in each run to find the coexisting phases.
+                Default to 100000.
+            convergence_criterion (str, optional):
+                The criterion to determine convergence. Currently "standard" is the only
+                option, which requires checking of incompressibility, field error between
+                successive intervals and relative volume error between successive
+                intervals. Defaults to "standard".
+            tolerance (float, optional):
+                The tolerance to determine convergence. Defaults to 1e-5.
+            interval (int, optional):
+                The interval of steps to check convergence. Defaults to 1000.
+            progress (bool, optional):
+                Whether to show status when checking convergence. Defaults to True.
+            random_std (float, optional):
+                The amplitude of the randomly generated fields. Defaults to 5.0.
+            acceptance_Js (float, optional):
+                The acceptance of Js. This value determines the amount of changes accepted
+                in each step for the Js field. Typically this value can take the order of
+                10^-3, or smaller when the system becomes larger or stiffer. Defaults to
+                0.0002.
+            Js_step_upper_bound (float, optional):
+                The maximum change of Js per step. This values determines the maximum
+                amount of changes accepted in each step for the Js field. If the intended
+                amount is larger this value, the changes will be scaled down to guarantee
+                that the maximum changes do not exceed this value. Typically this value
+                can take the order of 10^-3, or smaller when the system becomes larger or
+                stiffer. Defaults to 0.001.
+            acceptance_omega (float, optional):
+                The acceptance of omegas. This value determines the amount of changes
+                accepted in each step for the omega field. Note that if the iteration of
+                Js is scaled down due to parameter `Js_step_upper_bound`, the iteration of
+                omega fields will be scaled down simultaneously. Typically this value can
+                take the order of 10^-2, or smaller when the system becomes larger or
+                stiffer. Defaults to 0.002.
+            kill_threshold (float, optional):
+                The threshold of the Js for a compartment to be killed. Should be not less
+                than 0. In each iteration step, the Js array will be checked, for each
+                element smaller than this parameter, the corresponding compartment will be
+                killed and 0 will be assigned to the corresponding mask. The dead
+                compartment may be revived, depending whether reviving is allowed or
+                whether the `revive_tries` has been exhausted. Defaults to 0.0.
+            revive_scaler (float, optional):
+                The factor for the conjugate fields when a dead compartment is revived.
+                This value determines the range of the random conjugate field generated by
+                the algorithm. Typically 1.0 or a value slightly larger than 1.0 will be a
+                reasonable choice. Defaults to 1.0.
+            max_revive_per_compartment (int, optional):
+                Number of tries per compartment to revive the dead compartment. 0 or
+                negative value indicates no reviving. When this value is exhausted, the
+                revive will be turned off.
+            additional_chis_shift (float, optional):
+                Shift of the entire chis matrix to improve the convergence. Defaults to
+                1.0.
+            
+        Returns:
+            None
         """
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -210,6 +216,9 @@ class CoexistingPhasesFinder:
         self.reinitialize_random()
 
     def reinitialize_random(self):
+        """
+        Reinitialize the internal conjugate field randomly.
+        """
         self._omegas = self._rng.normal(
             0.0,
             self._random_std,
@@ -222,7 +231,7 @@ class CoexistingPhasesFinder:
 
     def reinitialize_from_omegas(self, omegas: np.ndarray):
         """
-        Reinitialize the internal conjugate field omegas from input.
+        Reinitialize the internal conjugate field omegas from input conjugate fields.
 
         Args:
             omegas (np.ndarray): New omegas field, must have the same size of (num_component, num_compartment)
@@ -241,6 +250,12 @@ class CoexistingPhasesFinder:
         )
 
     def reinitialize_from_phis(self, phis):
+        """
+        Reinitialize the internal conjugate field omegas from input volume fraction field.
+
+        Args:
+            phis (np.ndarray): New phis field, must have the same size of (num_component, num_compartment)
+        """
         if phis.shape == self._omegas.shape:
             self._omegas = -np.log(phis)
             for itr in range(self._num_components):
@@ -257,13 +272,18 @@ class CoexistingPhasesFinder:
 
     @property
     def chis(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._chis
 
     @chis.setter
     def chis(self, chis_new: np.ndarray):
         """
-        Reset interaction matrix `chis`. Note that this implies implicit reset of number of
-        revives, but not internal volume fractions and conjugate fields.
+        Reset interaction matrix :member:`chis`. Note that this implies implicit reset of number
+        of revives, but not internal volume fractions and conjugate fields.
         """
         chis_new = np.array(chis_new)
         if chis_new.shape == self._chis.shape:
@@ -279,6 +299,11 @@ class CoexistingPhasesFinder:
 
     @property
     def phi_means(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._phi_means
 
     @phi_means.setter
@@ -301,6 +326,11 @@ class CoexistingPhasesFinder:
 
     @property
     def sizes(self):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         return self._sizes
 
     @sizes.setter
