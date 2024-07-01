@@ -1,4 +1,4 @@
-import mcmp
+import flory
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -8,7 +8,7 @@ chi_end = 1.0
 chis = [[0., 0.], [0., 0.]]
 phi_means = [0.5, 0.5]
 
-finder = mcmp.CPFinder(chis, phi_means, 16, progress=False)
+finder = flory.CoexistingPhasesFinder(chis, phi_means, 16, progress=False)
 
 line_chi = []
 line_l = []

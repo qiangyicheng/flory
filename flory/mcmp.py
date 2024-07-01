@@ -12,10 +12,10 @@ import numpy as np
 from datetime import datetime
 from typing import Optional
 from tqdm.auto import tqdm
-from .cpfinder_impl import *
+from .detail.mcmp_impl import *
 
 
-class CPFinder:
+class CoexistingPhasesFinder:
     def __init__(
         self,
         chis: np.ndarray,
@@ -39,7 +39,7 @@ class CPFinder:
         additional_chis_shift: float = 1.0,
     ):
         """
-        Construct a CPFinder for finding coexisting phases. This class is
+        Construct a CoexistingPhasesFinder for finding coexisting phases. This class is
         recommended when multiple instances of chis matrix or phi_means vector need to be
         calculated. The class will reuse all the options and the internal resources. Note
         that reuse the instance of this class is only possible when all the system sizes
@@ -461,14 +461,18 @@ class CPFinder:
         return phases_volumes, phases_compositions
 
 
-def cpfinder(
+def coexisting_phases_finder(
     chis: np.ndarray,
     phi_means: np.ndarray,
     num_compartments: int,
     **kwargs,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
-    The convenience version of `CPFinder`. This function will create the class `CPFinder` internally, and then conduct the random initialization, finally use self consistent iterations to find coexisting phases. `kwargs` is forwarded to `CPFinder`. See class `CPFinder` for all the possible options.
+    The convenience version of `CoexistingPhasesFinder`. This function will create the
+    class `CoexistingPhasesFinder` internally, and then conduct the random initialization,
+    finally use self consistent iterations to find coexisting phases. `kwargs` is
+    forwarded to `CoexistingPhasesFinder`. See class `CoexistingPhasesFinder` for all the
+    possible options.
 
     Args:
         chis (np.ndarray):
@@ -490,5 +494,5 @@ def cpfinder(
             np.ndarray: Volume fractions of each phase. 1D array with the size of
             num_phases
     """
-    finder = CPFinder(chis, phi_means, num_compartments, **kwargs)
+    finder = CoexistingPhasesFinder(chis, phi_means, num_compartments, **kwargs)
     return finder.run()
