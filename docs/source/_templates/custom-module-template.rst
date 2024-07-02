@@ -1,6 +1,7 @@
 {{ fullname | escape | underline}}
 
 .. automodule:: {{ fullname }}
+   :members:
 
    {% block attributes %}
    {% if attributes %}
@@ -19,7 +20,6 @@
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
-      :toctree:
       :nosignatures:
    {% for item in functions %}
       {{ item }}
@@ -32,8 +32,6 @@
    .. rubric:: {{ _('Classes') }}
 
    .. autosummary::
-      :toctree:
-      :template: custom-class-template.rst
       :nosignatures:
    {% for item in classes %}
       {{ item }}
@@ -46,7 +44,6 @@
    .. rubric:: {{ _('Exceptions') }}
 
    .. autosummary::
-      :toctree:
    {% for item in exceptions %}
       {{ item }}
    {%- endfor %}
