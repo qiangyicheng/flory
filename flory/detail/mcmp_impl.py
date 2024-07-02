@@ -1,8 +1,6 @@
-"""
-The implementations for finding coexisting phases 
+""" The implementation details of the package :mod:`mcmp`. 
 
-.. autosummary::
-   :nosignatures:
+This module contains the following functions:
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>

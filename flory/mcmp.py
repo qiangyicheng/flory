@@ -1,4 +1,15 @@
-"""Modules for finding coexisting phases
+"""Module for finding coexisting phases of multicomponent mixtures
+
+:mod:`flory.mcmp` provides tools for finding equilibrium multiple coexisting phases in
+multicomponent mixtures in the canonical ensemble based on Flory-Huggins theory. The
+module provides both the function API :meth:`coexisting_phases_finder` and the class API
+:class:`CoexistingPhasesFinder`. The function :meth:`coexisting_phases_finder` aims at
+easing the calculation of the coexisting phases with a single system setting, namely one
+single point in the phase diagram. In contrast, The class :class:`CoexistingPhasesFinder`
+is designed for reuse over systems with the same number of components, which includes
+generating a coexisting curve or sampling a phase diagram. It creates a finder to maintain
+its internal data, and provides more control and diagnostics over the iteration. see ???
+for examples.
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>

@@ -1,12 +1,17 @@
 .. flory documentation master file
 
-Welcome to flory's documentation!
-=================================
+'flory' python package
+======================
+
+The :mod:`flory` python package provides tools for investigating phase separation in multicomponent mixtures based on Flory-Huggins theory.
+Extensions are possible in the future.
+
+**Contents**
 
 .. toctree::
-   :hidden:
+   :maxdepth: 2
+   :numbered:
    
-   Home Page <self>
    api
    detail
 
