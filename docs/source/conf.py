@@ -30,8 +30,10 @@ extensions = [
     'sphinx.ext.intersphinx',  # Link to other project's documentation (see mapping below)
     'sphinx.ext.viewcode',  # Add a link to the Python source code for classes, functions etc.
     "sphinx.ext.coverage",
-    "sphinx.ext.napoleon",
     "sphinx.ext.autosectionlabel",
+    'sphinx_paramlinks',
+    "sphinx_autodoc_typehints",
+    "sphinx.ext.napoleon", # load napoleon after sphinx_autodoc_typehints
 ]
 
 # Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
@@ -46,9 +48,12 @@ autosummary_generate = True  # Turn on sphinx.ext.autosummary
 autoclass_content = "both"  # Add __init__ doc (ie. params) to class summaries
 html_show_sourcelink = False  # Remove 'view source code' from top of page (for html, not python)
 autodoc_inherit_docstrings = True  # If no docstring, inherit from base class
-# set_type_checking_flag = True  # Enable 'expensive' imports for sphinx_autodoc_typehints
+set_type_checking_flag = True  # Enable 'expensive' imports for sphinx_autodoc_typehints
 autodoc_typehints = "description" # Sphinx-native method
 add_module_names = False # Remove namespaces from class/method signatures
+always_use_bars_union = True # display Union's using the | operator for sphinx_autodoc_typehints
+
+napoleon_custom_sections = [('Returns', 'params_style')]
 
 templates_path = ['_templates']
 exclude_patterns = []

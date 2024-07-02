@@ -10,7 +10,6 @@ Extensions are possible in the future.
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
    
    api
    detail

@@ -1,6 +1,7 @@
 """ The implementation details of the package :mod:`mcmp`. 
 
-This module contains the following functions:
+.. autosummary::
+    :nosignatures:
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
@@ -17,13 +18,13 @@ def count_valid_phases(Js: np.ndarray, threshold: float) -> int:
     Count how many entries in `Js` are larger than `threshold`
 
     Args:
-        Js (np.ndarray):
+        Js:
             Const. 1D array of values to check.
-        threshold (float):
+        threshold:
             Const.
 
     Returns:
-        int: Number of entries in `Js` larger than `threshold`
+        : Number of entries in `Js` larger than `threshold`
     """
     return (Js > threshold).sum()
 
@@ -34,13 +35,13 @@ def make_valid_phase_masks(Js: np.ndarray, threshold: float) -> np.ndarray:
     Create masks for entries in `Js` are larger than `threshold`
 
     Args:
-        Js (np.ndarray):
+        Js:
             Const. 1D array of values to check.
-        threshold (float):
+        threshold:
             Const.
 
     Returns:
-        np.ndarray: Masks of entries in `Js` larger than `threshold`
+        : Masks of entries in `Js` larger than `threshold`
     """
     return np.sign(Js - threshold).clip(0.0)
 
@@ -59,24 +60,24 @@ def revive_compartments_by_random(
     `targets` across all compartments, which can be scaled by the scaler.
 
     Args:
-        Js (np.ndarray):
+        Js:
             Mutable. The 1D array values to determine whether a compartment is dead.
-        targets (np.ndarray):
+        targets:
             Mutable. The 2D array of the values to be revived. The second dimension has to
             be the same as that of Js. Note that this is not checked.
-        threshold (float):
+        threshold:
             Const. The threshold of `Js` for a compartment to be considered dead. For each
             element of `Js` smaller than this parameter, the corresponding compartment
             will be considered as dead, and its targets values will then be randomly drawn
             between the corresponding min and max value of `targets` across all
             compartments. Corresponding `Js` will be set to be unity.
-        rng (np.random.Generator):
+        rng:
             Mutable. Random number generator for reviving.
-        scaler (float):
+        scaler:
             Const. The scaler for generating new values.
 
     Returns:
-        int: Number of revives
+        : Number of revives
     """
     revive_count = 0
     num_component, num_compartment = targets.shape
@@ -114,21 +115,21 @@ def revive_compartments_by_copy(
     values are randomly copied from other living compartments.
 
     Args:
-        Js (np.ndarray):
+        Js:
             Mutable. The 1D array values to determine whether a compartment is dead.
-        targets (np.ndarray):
+        targets:
             Mutable. The 2D array of the values to be revived. The second dimension has to
             be the same as that of Js. Note that this is not checked.
-        threshold (float):
+        threshold:
             Const. The threshold of `Js` for a compartment to be considered dead. For each
             element of `Js` smaller than this parameter, the corresponding compartment
             will be considered as dead, and its targets values will then be randomly
             copied from living compartments. Corresponding `Js` will be set to be unity.
-        rng (np.random.Generator):
+        rng:
             Mutable. Random number generator for reviving.
 
     Returns:
-        int: Number of revives
+        : Number of revives
     """
     revive_count = 0
     num_components, num_compartments = targets.shape
@@ -182,27 +183,27 @@ def calc_volume_fractions(
     returned through the parameter.
 
     Args:
-        phis (np.ndarray):
+        phis:
             Output. The 2D array of the volume fractions. The first dimension has to be
             the same as `sizes`. The second dimension has to be the same as that of `Js`.
             Note that these are not checked.
-        Js (np.ndarray):
+        Js:
             Const. The 1D array of volumes of compartments. Note that `Js` must be
             compatible with `masks`, which means `Js == Js * masks`.
-        sizes (np.ndarray):
+        sizes:
             Const. The 1D array of sizes of the components.
-        phi_means (np.ndarray):
+        phi_means:
             Const. The 1D array of the mean volume fractions of the components.
-        omegas (np.ndarray):
+        omegas:
             Const. The 2D array of the conjugate fields. The first dimension has to be the
             same as `sizes`. The second dimension has to be the same as that of `Js`. Note
             that these are not checked.
-        masks (np.ndarray):
+        masks:
             Const. The 1D array of masks of compartments.
 
     Returns:
-        np.ndarray: the single molecular partition functions of components np.ndarray: the
-        incompressibility
+        [0]: the single molecular partition functions of components 
+        [1]: the incompressibility
     """
 
     num_components, num_compartments = omegas.shape
@@ -243,80 +244,83 @@ def multicomponent_self_consistent_metastep(
     Flory-Huggins system.
 
     Args:
-        phi_means (np.ndarray):
+        phi_means:
             Const. The average volume fraction of all the components of the system. 1D
             array with size of num_components. Note that the volume fraction of the
             solvent is included as well, therefore the sum of this array must be unity,
             which is not checked by this function and should be guaranteed externally.
-        chis (np.ndarray):
+        chis:
             Const. The interaction matrix. 2D array with size of
             num_components-by-num_components. This `chis` matrix should be the full `chis`
             matrix of the system, including the solvent component. Note that the symmetry
             is not checked, which should be guaranteed externally.
-        sizes (np.ndarray):
+        sizes:
             Const. The relative molecule volumes of the components. 1D array with size of
             num_components. This `sizes` vector should be the full `sizes` vector of the
             system, including the solvent component.
-        omegas (np.ndarray):
+        omegas:
             Mutable. The conjugate fields of the volume fractions. 2D array with size of
             num_components-by-num_compartments. Note that this field is both used as input
             and output. num_components includes the solvent component. Note again that
             this function DO NOT initialize `omegas`, it should be initialized externally,
             and usually a random initialization will be a reasonable choice.
-        Js (np.ndarray):
+        Js:
             Mutable. The normalized volumes of the compartments. 1D array with size of
             num_compartments. The average value of `Js` will and should be unity. Note
             that this field is both used as input and output. An all-one array is usually
             a nice initialization, unless resume of a previous run is intended.
-        phis (np.ndarray):
+        phis:
             Output. The volume fractions. 2D array with size of
             num_components-by-num_compartments. num_components includes the solvent
             component.
-        steps_inner (int):
+        steps_inner:
             Constant. Number of steps in current routine. Within these steps, convergence
             is not checked and no output will be generated.
-        acceptance_Js (float):
+        acceptance_Js:
             Constant. The acceptance of `Js`. This value determines the amount of changes
             accepted in each step for the `Js` field. Typically this value can take the
             order of 10^-3, or smaller when the system becomes larger or stiffer.
-        Js_step_upper_bound (float):
+        Js_step_upper_bound:
             Constant. The maximum change of `Js` per step. This values determines the
             maximum amount of changes accepted in each step for the `Js` field. If the
             intended amount is larger this value, the changes will be scaled down to
             guarantee that the maximum changes do not exceed this value. Typically this
             value can take the order of 10^-3, or smaller when the system becomes larger
             or stiffer.
-        acceptance_omega (float):
+        acceptance_omega:
             Constant. The acceptance of `omegas`. This value determines the amount of
             changes accepted in each step for the `omegas` field. Note that if the
             iteration of `Js` is scaled down due to parameter `Js_step_upper_bound`, the
             iteration of `omegas` field will be scaled down simultaneously. Typically this
             value can take the order of 10^-2, or smaller when the system becomes larger
             or stiffer.
-        kill_threshold (float):
+        kill_threshold:
             Constant. The threshold of the `Js` for a compartment to be killed. The value
             should be not less than 0. In each iteration step, the `Js` array will be
             checked. For each element smaller than this parameter, the corresponding
             compartment will be killed and 0 will be assigned to the corresponding mask.
             The dead compartment may be revived, depending whether reviving is allowed or
             whether the `revive_tries` has been exhausted.
-        revive_tries (int):
+        revive_tries:
             Constant. Number of tries left to revive the dead phase. 0 or negative value
             indicates no reviving. WHen this value is exhausted, i.e. the number of revive
             in current function call exceeds this value, the revive will be turned off.
             Note that this function do not decrease this value, but return the number of
             revive after completion.
-        revive_scaler (float):
+        revive_scaler:
             Constant. The scaling factor for the conjugate fields when a dead phase is
             revived. This value determines the range of the random conjugate field
             generated by the algorithm. Typically 1.0 or some value slightly larger will
             be a reasonable choice.
-        rng (np.random.Generator):
+        rng:
             Mutable. random number generator for reviving.
 
     Returns:
-        Tuple[float, float, float, int, bool]: max incompressibility, max omega error, max
-        J error, number of revive, whether no phase is killed in the last step
+        [0]: max incompressibility
+        [1]: max omega error
+        [2]: max J error
+        [3]: number of revive
+        [4]: whether no phase is killed in the last step
     """
     num_components, num_compartments = omegas.shape
     chi_sum_sum = chis.sum()
@@ -407,16 +411,16 @@ def sort_phases(
     Sort the phases according to the index of most concentrated components.
 
     Args:
-        Js_phases (np.ndarray):
+        Js_phases:
             Const. 1D array of the volumes of each phase.
-        phis_phases (np.ndarray):
+        phis_phases:
             Const. 2D array containing the volume fractions of the components in each
             phase. The first dimension must be the same as `Js_phases`. Note that usually
             this corresponds the transpose of `phis` in class `CoexistingPhasesFinder`.
 
     Returns:
-        np.ndarray: sorted `Js_phases`
-        np.ndarray: sorted `phis_phases`
+        [0]: sorted `Js_phases`
+        [1]: sorted `phis_phases`
     """
     enrich_indexes = np.argsort(phis_phases)
     sorting_index = np.lexsort(np.transpose(enrich_indexes))
@@ -425,17 +429,22 @@ def sort_phases(
 
 def get_clusters(
     Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2
-) -> tuple[int, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Return the concentrations in the distinct clusters
 
     Args:
-        Js (np.ndarray):
+        Js:
             Const. 1D array of the volumes of each phase.
-        phis (np.ndarray):
+        phis:
             Const. 2D array containing the volume fractions of the components in each
             phase. The second dimension must be the same as `Js`.
-        dist (float): Cut-off distance for cluster analysis
+        dist: 
+            Cut-off distance for cluster analysis
+    
+    Returns:
+        [0]: sorted `Js_phases`
+        [1]: sorted `phis_phases`
     """
     # transpose to make the compartment index the first index
     phis = np.transpose(phis)
