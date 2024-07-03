@@ -64,10 +64,10 @@ class CoexistingPhasesFinder:
 
         Args:
             chis:
-                The interaction matrix. 2D array with size of
-                num_components-by-num_components. This chi matrix should be the full chi
-                matrix of the system, including the solvent component. Note that the
-                symmetry is not checked, which should be guaranteed externally.
+                The interaction matrix. 2D array with size of :math:`N_\\mathrm{c} \\times
+                N_\\mathrm{c}`. This matrix should be the full :math:`\\chi` matrix of the
+                system, including the solvent component. Note that the matrix must be
+                symmetric, which is not checked but should be guaranteed externally.
             phi_means:
                 The average volume fraction of all the components of the system. 1D array
                 with size of num_components. Note that the volume fraction of the solvent
@@ -79,11 +79,11 @@ class CoexistingPhasesFinder:
                 The relative molecule volumes of the components. 1D array with size of
                 num_components. This sizes vector should be the full sizes vector of the
                 system, including the solvent component. None indicates a all-one vector.
-                Defaults to None.
+                
             rng:
                 Random number generator for initialization and reviving. None indicates
                 that a new random number generator should be created by the class, seeded
-                by current timestamp. Defaults to None.
+                by current timestamp. 
             max_steps:
                 The maximum number of steps in each run to find the coexisting phases.
                 Default to 100000.
@@ -91,53 +91,51 @@ class CoexistingPhasesFinder:
                 The criterion to determine convergence. Currently "standard" is the only
                 option, which requires checking of incompressibility, field error between
                 successive intervals and relative volume error between successive
-                intervals. Defaults to "standard".
+                intervals. 
             tolerance:
-                The tolerance to determine convergence. Defaults to 1e-5.
+                The tolerance to determine convergence. 
             interval:
-                The interval of steps to check convergence. Defaults to 1000.
+                The interval of steps to check convergence. 
             progress:
-                Whether to show status when checking convergence. Defaults to True.
+                Whether to show status when checking convergence. 
             random_std:
-                The amplitude of the randomly generated fields. Defaults to 5.0.
+                The amplitude of the randomly generated fields. 
             acceptance_Js:
                 The acceptance of Js. This value determines the amount of changes accepted
                 in each step for the Js field. Typically this value can take the order of
-                10^-3, or smaller when the system becomes larger or stiffer. Defaults to
-                0.0002.
+                10^-3, or smaller when the system becomes larger or stiffer.
             Js_step_upper_bound:
                 The maximum change of Js per step. This values determines the maximum
                 amount of changes accepted in each step for the Js field. If the intended
                 amount is larger this value, the changes will be scaled down to guarantee
                 that the maximum changes do not exceed this value. Typically this value
                 can take the order of 10^-3, or smaller when the system becomes larger or
-                stiffer. Defaults to 0.001.
+                stiffer. 
             acceptance_omega:
                 The acceptance of omegas. This value determines the amount of changes
                 accepted in each step for the omega field. Note that if the iteration of
                 Js is scaled down due to parameter `Js_step_upper_bound`, the iteration of
                 omega fields will be scaled down simultaneously. Typically this value can
                 take the order of 10^-2, or smaller when the system becomes larger or
-                stiffer. Defaults to 0.002.
+                stiffer. 
             kill_threshold:
                 The threshold of the Js for a compartment to be killed. Should be not less
                 than 0. In each iteration step, the Js array will be checked, for each
                 element smaller than this parameter, the corresponding compartment will be
                 killed and 0 will be assigned to the corresponding mask. The dead
                 compartment may be revived, depending whether reviving is allowed or
-                whether the `revive_tries` has been exhausted. Defaults to 0.0.
+                whether the `revive_tries` has been exhausted. 
             revive_scaler:
                 The factor for the conjugate fields when a dead compartment is revived.
                 This value determines the range of the random conjugate field generated by
                 the algorithm. Typically 1.0 or a value slightly larger than 1.0 will be a
-                reasonable choice. Defaults to 1.0.
+                reasonable choice. 
             max_revive_per_compartment:
                 Number of tries per compartment to revive the dead compartment. 0 or
                 negative value indicates no reviving. When this value is exhausted, the
-                revive will be turned off.
+                revive will be turned off. 
             additional_chis_shift:
-                Shift of the entire chis matrix to improve the convergence. Defaults to
-                1.0.
+                Shift of the entire chis matrix to improve the convergence.
         """
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -379,16 +377,14 @@ class CoexistingPhasesFinder:
 
         Args:
             max_steps:
-                The maximum number of steps to find the coexisting phases. Defaults to
-                None.
+                The maximum number of steps to find the coexisting phases.
             tolerance:
                 The tolerance to determine convergence. None indicates that the default
-                value will be used. Defaults to None.
+                value will be used. 
             interval:
-                The interval of steps to check convergence. Defaults to None.
+                The interval of steps to check convergence. 
             progress:
-                Flag determining whether to show a progress bar during the simulation.
-                Defaults to None.
+                Flag determining whether to show a progress bar during the simulation.                
 
         Returns:
             [0]:
