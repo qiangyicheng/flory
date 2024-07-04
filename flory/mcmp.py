@@ -2,8 +2,8 @@
 
 :mod:`flory.mcmp` provides tools for finding equilibrium multiple coexisting phases in
 multicomponent mixtures in the canonical ensemble based on Flory-Huggins theory. The
-module provides both the function API :meth:`coexisting_phases_finder` and the class API
-:class:`CoexistingPhasesFinder`. The function :meth:`coexisting_phases_finder` aims at
+module provides both the function API :meth:`find_coexisting_phases` and the class API
+:class:`CoexistingPhasesFinder`. The function :meth:`find_coexisting_phases` aims at
 easing the calculation of the coexisting phases with a single system setting, namely one
 single point in the phase diagram. In contrast, The class :class:`CoexistingPhasesFinder`
 is designed for reuse over systems with the same system sizes such as the number of
@@ -578,7 +578,7 @@ class CoexistingPhasesFinder:
         return phases_volumes, phases_compositions
 
 
-def coexisting_phases_finder(
+def find_coexisting_phases(
     chis: np.ndarray,
     phi_means: np.ndarray,
     num_compartments: int,
