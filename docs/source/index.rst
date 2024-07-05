@@ -9,8 +9,9 @@ Extensions are possible in the future.
 **Contents**
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
+   examples
    api
    detail
 
