@@ -1,5 +1,5 @@
 Implementation Detail
-###########################
+======================
 
 .. rubric:: Modules
 
