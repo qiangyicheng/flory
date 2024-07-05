@@ -11,26 +11,26 @@ from flory.detail.mcmp_impl import *
 def test_count_valid_phases():
     """Test function count_valid_phases()"""
     Js = np.array([1.0, 0.3, 0.2, 0.8, -0.2])
-    assert count_valid_phases(Js, 1.0) == 0
-    assert count_valid_phases(Js, 0.1) == 4
-    assert count_valid_phases(Js, 0.2) == 3
-    assert count_valid_phases(Js, -0.4) == 5
+    assert count_valid_compartments(Js, 1.0) == 0
+    assert count_valid_compartments(Js, 0.1) == 4
+    assert count_valid_compartments(Js, 0.2) == 3
+    assert count_valid_compartments(Js, -0.4) == 5
 
 
 def test_make_valid_phase_masks():
     """Test function make_valid_phase_masks()"""
     Js = np.array([1.0, 0.3, 0.2, 0.8, -0.2])
     np.testing.assert_equal(
-        make_valid_phase_masks(Js, 1.0), np.array([False, False, False, False, False])
+        make_valid_compartment_masks(Js, 1.0), np.array([False, False, False, False, False])
     )
     np.testing.assert_equal(
-        make_valid_phase_masks(Js, 0.1), np.array([True, True, True, True, False])
+        make_valid_compartment_masks(Js, 0.1), np.array([True, True, True, True, False])
     )
     np.testing.assert_equal(
-        make_valid_phase_masks(Js, 0.2), np.array([True, True, False, True, False])
+        make_valid_compartment_masks(Js, 0.2), np.array([True, True, False, True, False])
     )
     np.testing.assert_equal(
-        make_valid_phase_masks(Js, -0.4), np.array([True, True, True, True, True])
+        make_valid_compartment_masks(Js, -0.4), np.array([True, True, True, True, True])
     )
 
 

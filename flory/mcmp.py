@@ -9,7 +9,7 @@ single point in the phase diagram. In contrast, The class :class:`CoexistingPhas
 is designed for reuse over systems with the same system sizes such as the number of
 components, which includes generating a coexisting curve or sampling a phase diagram. It
 creates a finder to maintain its internal data, and provides more control and diagnostics
-over the iteration. see ??? for examples.
+over the iteration. See :ref:`Examples` for examples.
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
@@ -371,7 +371,7 @@ class CoexistingPhasesFinder:
     @property
     def sizes(self) -> np.ndarray:
         """
-        The relative molecule sizes of all components :math:`l_i`with the size of
+        The relative molecule sizes of all components :math:`l_i` with the size of
         :math:`N_\\mathrm{c}`. Resetting this property requires that the new array has
         the same size with the internal one. Note that this implies implicit reset of the
         internal data, the number of revives, but not the others including volume
