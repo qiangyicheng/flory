@@ -22,7 +22,8 @@ from scipy import cluster, spatial
 @nb.njit()
 def count_valid_compartments(Js: np.ndarray, threshold: float) -> int:
     """
-    Count how many entries in :paramref:`Js` are larger than :paramref:`threshold`.
+    Count how many entries in :paramref:`~count_valid_compartments.Js` are larger than
+    :paramref:`~count_valid_compartments.threshold`.
 
     Args:
         Js:
@@ -39,8 +40,9 @@ def count_valid_compartments(Js: np.ndarray, threshold: float) -> int:
 @nb.njit()
 def make_valid_compartment_masks(Js: np.ndarray, threshold: float) -> np.ndarray:
     """
-    Create masks for entries in :paramref:`Js` are larger than :paramref:`threshold`.
-    Value of 1.0 or 0.0 indicates a valid or invalid mask, respectively.
+    Create masks for entries in :paramref:`~make_valid_compartment_masks.Js` are larger
+    than :paramref:`~make_valid_compartment_masks.threshold`. Value of 1.0 or 0.0
+    indicates a valid or invalid mask, respectively.
 
     Args:
         Js:
@@ -65,12 +67,13 @@ def revive_compartments_by_random(
     scaler: float,
 ) -> int:
     """
-    Randomly revive compartments whose relative volume (element of :paramref:`Js`) is
-    smaller than :paramref:`threshold`. The revived values are randomly and uniformly
-    sampled between the extreme values of :paramref:`targets` across all compartments. The
-    range can be scaled by the parameter :paramref:`scaler`. Note that this function does
-    not conserve the quantities in :paramref:`targets` across all compartments, since the
-    new values are randomly generated.
+    Randomly revive compartments whose relative volume (element of
+    :paramref:`~revive_compartments_by_random.Js`) is smaller than
+    :paramref:`~revive_compartments_by_random.threshold`. The revived values are randomly
+    and uniformly sampled between the extreme values of :paramref:`targets` across all
+    compartments. The range can be scaled by the parameter :paramref:`scaler`. Note that
+    this function does not conserve the quantities in :paramref:`targets` across all
+    compartments, since the new values are randomly generated.
 
     Args:
         Js:
@@ -127,10 +130,12 @@ def revive_compartments_by_copy(
     rng: np.random.Generator,
 ) -> int:
     """
-    Revive compartments whose relative volume (element of :paramref:`Js`) is smaller than
-    :paramref:`threshold`. The revived values are randomly copied from other living
-    compartments. Note that this function conserves the quantities in :paramref:`targets`
-    across all compartments by modifying the volumes :paramref:`Js` accordingly.
+    Revive compartments whose relative volume (element of
+    :paramref:`~revive_compartments_by_copy.Js`) is smaller than
+    :paramref:`~revive_compartments_by_copy.threshold`. The revived values are randomly
+    copied from other living compartments. Note that this function conserves the
+    quantities in :paramref:`targets` across all compartments by modifying the volumes
+    :paramref:`Js` accordingly.
 
     Args:
         Js:
@@ -273,8 +278,8 @@ def multicomponent_self_consistent_metastep(
     rng: np.random.Generator,
 ) -> tuple[float, float, float, int, bool]:
     """
-    The implementation of the core algorithm for finding coexisting states of
-    multicomponent systems with self-consistent iterations.
+    The core algorithm of finding coexisting states of multicomponent systems with
+    self-consistent iterations.
 
     Args:
         phi_means:
