@@ -60,7 +60,7 @@ We obtain the phase diagram
 
 Check the finite size effect
 --------------------------------------------
-The minimization process in our algorithm DO NOT guarantee that the equilibrium state is always find.
+The minimization process in our algorithm DO NOT guarantee that the equilibrium state is always found.
 Due to the multistability of the multicomponent mixture, tt is possible that the algorithm find a local minimum.
 For example, the true equilibrium state can be a 4-phase coexisting state, while the algorithm may find a metastable 3-phase coexisting state.
 This issue can be resolved by launching more compartments than phases.

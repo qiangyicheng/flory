@@ -1,4 +1,4 @@
-Implementation Detail
+Implementation detail
 ======================
 
 .. rubric:: Modules
