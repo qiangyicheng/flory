@@ -218,7 +218,7 @@ def calc_volume_fractions(
             as that of :paramref:`Js`. Note that these are not checked.
         Js:
             Const. The 1D array with the size of :math:`M`, containing the relative
-            volumes of compartments :math:`J_i`. Note that :paramref:`Js` must be
+            volumes of compartments :math:`J_m`. Note that :paramref:`Js` must be
             invariant under multiplication of :paramref:`masks`.
         sizes:
             Const. The 1D array with the size of :math:`M`, containing the relative
@@ -306,7 +306,7 @@ def multicomponent_self_consistent_metastep(
             should be initialized externally, and usually a random initialization will be
             a reasonable choice.
         Js:
-            Mutable. The relative volumes of the compartments :math:`J_i`. 1D array with
+            Mutable. The relative volumes of the compartments :math:`J_m`. 1D array with
             size of :math:`M`. The average value of `Js` will and should be unity. Note
             that this field is both used as input and output. An all-one array is usually
             a nice initialization, unless resume of a previous run is intended.
@@ -318,12 +318,12 @@ def multicomponent_self_consistent_metastep(
             is not checked and no output will be generated.
         acceptance_Js:
             Constant. The acceptance of :paramref:`Js` (the relative compartment size
-            :math:`J_i`). This value determines the amount of changes accepted in each
-            step for the :math:`J_i` field. Typically this value can take the order of
+            :math:`J_m`). This value determines the amount of changes accepted in each
+            step for the :math:`J_m` field. Typically this value can take the order of
             :math:`10^{-3}`, or smaller when the system becomes larger or stiffer.
         Js_step_upper_bound:
             Constant. The maximum change of :paramref:`Js` (the relative compartment size
-            :math:`J_i`) per step. This value is designed to reduce the risk that a the
+            :math:`J_m`) per step. This value is designed to reduce the risk that a the
             volume of a compartment changes too fast before it develops meaningful
             composition. If the intended change is larger this value, all the changes will
             be scaled down to guarantee that the maximum changes do not exceed this value.
@@ -333,15 +333,15 @@ def multicomponent_self_consistent_metastep(
             Constant. The acceptance of :paramref:`omegas`(the conjugate fields
             :math:`\\omega_i^{(m)}`). This value determines the amount of changes accepted
             in each step for the :math:`\\omega_i^{(m)}` field. Note that if the iteration
-            of :math:`J_i` is scaled down due to parameter
+            of :math:`J_m` is scaled down due to parameter
             :paramref:`Js_step_upper_bound`, the iteration of :math:`\\omega_i^{(m)}`
             fields will be scaled down simultaneously. Typically this value can take the
             order of :math:`10^{-2}`, or smaller when the system becomes larger or
             stiffer.         
         kill_threshold:
-            Constant. The threshold of the :math:`J_i` for a compartment to be considered
+            Constant. The threshold of the :math:`J_m` for a compartment to be considered
             dead and killed afterwards. Should be not less than 0. In each iteration step,
-            the :math:`J_i` array will be checked, for each element smaller than this
+            the :math:`J_m` array will be checked, for each element smaller than this
             parameter, the corresponding compartment will be killed and 0 will be assigned
             to the internal mask. The dead compartment may be revived, depending whether
             reviving is allowed or whether the number of the revive tries has been

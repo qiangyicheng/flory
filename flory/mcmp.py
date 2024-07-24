@@ -110,12 +110,12 @@ class CoexistingPhasesFinder:
                 During instantiation, the conjugate field is randomly generated according
                 to an normal distribution with standard deviation :paramref:`random_std`.
             acceptance_Js:
-                The acceptance of the relative compartment size :math:`J_i`. This value
-                determines the amount of changes accepted in each step for the :math:`J_i`
+                The acceptance of the relative compartment size :math:`J_m`. This value
+                determines the amount of changes accepted in each step for the :math:`J_m`
                 field. Typically this value can take the order of :math:`10^{-3}`, or
                 smaller when the system becomes larger or stiffer.
             Js_step_upper_bound:
-                The maximum change of the relative compartment size :math:`J_i` per step.
+                The maximum change of the relative compartment size :math:`J_m` per step.
                 This value is designed to reduce the risk that a the volume of a
                 compartment changes too fast before it develops meaningful composition. If
                 the intended change is larger this value, all the changes will be scaled
@@ -125,15 +125,15 @@ class CoexistingPhasesFinder:
             acceptance_omega:
                 The acceptance of the conjugate fields :math:`\\omega_i^{(m)}`. This value
                 determines the amount of changes accepted in each step for the
-                :math:`\\omega_i^{(m)}` field. Note that if the iteration of :math:`J_i` is
+                :math:`\\omega_i^{(m)}` field. Note that if the iteration of :math:`J_m` is
                 scaled down due to parameter :paramref:`Js_step_upper_bound`, the
                 iteration of :math:`\\omega_i^{(m)}` fields will be scaled down simultaneously.
                 Typically this value can take the order of :math:`10^{-2}`, or smaller
                 when the system becomes larger or stiffer. 
             kill_threshold:
-                The threshold of the :math:`J_i` for a compartment to be considered dead
+                The threshold of the :math:`J_m` for a compartment to be considered dead
                 and killed afterwards. Should be not less than 0. In each iteration step,
-                the :math:`J_i` array will be checked, for each element smaller than this
+                the :math:`J_m` array will be checked, for each element smaller than this
                 parameter, the corresponding compartment will be killed and 0 will be
                 assigned to the internal mask. The dead compartment may be revived,
                 depending whether reviving is allowed or whether the number of the revive
@@ -315,7 +315,7 @@ class CoexistingPhasesFinder:
     def chis(self) -> np.ndarray:
         """
         The full interaction matrix :math:`\\chi_{ij}`, with the size of
-        :math:`N_\\mathrm{c} \\times N_\\mathrm{c}`.. Resetting this property requires
+        :math:`N_\\mathrm{c} \\times N_\\mathrm{c}`. Resetting this property requires
         that the new matrix has the same size with the internal one. Note that this
         implies implicit reset of the internal data, the number of revives, but not the
         others including volume fractions :math:`\\phi_i^{(m)}` and conjugate fields
