@@ -79,3 +79,17 @@ We obtain
    :alt: phase diagram example
 
 showing that :math:`M=4` underestimates the number of phases in the final coexisting state, while larger :math:`M` values give the correct result. 
+
+Construct a ternary phase diagram
+--------------------------------------------
+Here we provide a simple example for generating a :math:`(\phi_B, \phi_A)` phase diagram for a simple ternary mixture with fixed interaction matrix: 
+
+.. literalinclude:: /../../examples/ternary_phase_diagram.py
+   :emphasize-lines: 6, 40-60
+   :linenos:
+
+We obtain the phase diagram
+
+.. figure:: /../../examples/ternary_phase_diagram.py.jpg
+   :scale: 80 %
+   :alt: phase diagram example
