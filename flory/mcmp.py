@@ -272,7 +272,7 @@ class CoexistingPhasesFinder:
                 New :math:`\\omega_i^{(m)}` field, must have the same size of
                 :math:`N_\\mathrm{c} \\times M`.
         """
-        omegas = np.ndarray(omegas)
+        omegas = np.array(omegas)
         if omegas.shape == self._omegas.shape:
             self._omegas = omegas
         else:
