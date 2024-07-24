@@ -415,13 +415,11 @@ class CoexistingPhasesFinder:
         The internal conjugate field :math:`\\omega_i^{(m)}`, with the size of
         :math:`N_\\mathrm{c} \\times M`. This property should not be reset in most cases.
         Resetting this property will change the state of the system, but skip necessary
-        reset of other internal states. also take no effect, since :math:`\\phi_i^{(m)}`
-        is not considered as the master internal state of the algorithm. Any set values
-        will be ignored. If you intend to initialize the system from a custom conjugate
-        field, please refer to :meth:`reinitialize_from_omegas`.
+        reset of other internal states. If you intend to initialize the system from a
+        custom conjugate field, please refer to :meth:`reinitialize_from_omegas`.
         """
 
-        return self._phis
+        return self._omegas
 
     @property
     def diagnostics(self) -> dict:
