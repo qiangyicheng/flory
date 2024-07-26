@@ -429,7 +429,7 @@ class CoexistingPhasesFinder:
         sorting algorithm is utilized to determine the unique phases. 
         """
 
-        return self._phis
+        return self._diagnostics
 
     def run(
         self,
