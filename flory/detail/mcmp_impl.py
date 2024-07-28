@@ -373,8 +373,8 @@ def multicomponent_self_consistent_metastep(
 
     n_valid_phase = 0
 
+    revive_count = 0
     for _ in range(steps_inner):
-        revive_count = 0
         # check if we are still allowed to revive compartments
         if revive_count < revive_tries:
             n_valid_phase = count_valid_compartments(Js, kill_threshold)
