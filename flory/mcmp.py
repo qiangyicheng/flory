@@ -27,6 +27,7 @@ class CoexistingPhasesFinder:
     """
     Create a finder for coexisting phases.
     """
+
     def __init__(
         self,
         chis: np.ndarray,
@@ -85,7 +86,7 @@ class CoexistingPhasesFinder:
             rng:
                 Random number generator for initialization and reviving. None indicates
                 that a new random number generator should be created by the class, seeded
-                by current timestamp. 
+                by current timestamp.
             max_steps:
                 The default maximum number of steps in each run to find the coexisting
                 phases. This value can be temporarily overwritten, see :meth:`run` for more
@@ -94,7 +95,7 @@ class CoexistingPhasesFinder:
                 The criterion to determine convergence. Currently "standard" is the only
                 option, which requires checking of incompressibility, field error and the
                 volume error. Note that all these metrics are state functions, namely they
-                are independent of iteration parameters. 
+                are independent of iteration parameters.
             tolerance:
                 The tolerance to determine convergence. This value can be temporarily
                 overwritten. See :paramref:`convergence_criterion` and :meth:`run` for
@@ -121,7 +122,7 @@ class CoexistingPhasesFinder:
                 the intended change is larger this value, all the changes will be scaled
                 down to guarantee that the maximum changes do not exceed this value.
                 Typically this value can take the order of :math:`10^{-3}`, or smaller
-                when the system becomes larger or stiffer. 
+                when the system becomes larger or stiffer.
             acceptance_omega:
                 The acceptance of the conjugate fields :math:`\\omega_i^{(m)}`. This value
                 determines the amount of changes accepted in each step for the
@@ -129,7 +130,7 @@ class CoexistingPhasesFinder:
                 scaled down due to parameter :paramref:`Js_step_upper_bound`, the
                 iteration of :math:`\\omega_i^{(m)}` fields will be scaled down simultaneously.
                 Typically this value can take the order of :math:`10^{-2}`, or smaller
-                when the system becomes larger or stiffer. 
+                when the system becomes larger or stiffer.
             kill_threshold:
                 The threshold of the :math:`J_m` for a compartment to be considered dead
                 and killed afterwards. Should be not less than 0. In each iteration step,
@@ -137,7 +138,7 @@ class CoexistingPhasesFinder:
                 parameter, the corresponding compartment will be killed and 0 will be
                 assigned to the internal mask. The dead compartment may be revived,
                 depending whether reviving is allowed or whether the number of the revive
-                tries has been exhausted. 
+                tries has been exhausted.
             revive_scaler:
                 The scaler for the value of the newly-generated conjugate fields when a
                 dead compartment is revived. The compartment is revived by drawing random
@@ -145,17 +146,17 @@ class CoexistingPhasesFinder:
                 maximum of the :math:`\\omega_i^{(m)}` their conjugate fields across all
                 compartments. This value determines whether this range should be enlarged
                 (a value larger than 1) or reduced (a value smaller than 1). Typically 1.0
-                or a value slightly larger than 1.0 will be a reasonable choice. 
+                or a value slightly larger than 1.0 will be a reasonable choice.
             max_revive_per_compartment:
                 Maximum average number of tries per compartment to revive the dead
                 compartments. 0 or negative value indicates no reviving. When this value
-                is exhausted, the revive will be turned off. 
+                is exhausted, the revive will be turned off.
             additional_chis_shift:
                 Shift of the entire chis matrix to improve the convergence by evolving
                 towards incompressible system faster. This value should be larger than 0.
                 Note that with very large value, the convergence will be slowed down,
                 since the algorithm no longer have enough ability to temporarily relax the
-                incompressibility. 
+                incompressibility.
         """
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -235,9 +236,9 @@ class CoexistingPhasesFinder:
         self._revive_scaler = revive_scaler
         self._max_revive_per_compartment = max_revive_per_compartment
         self._additional_chis_shift = additional_chis_shift
-        
+
         # diagnostics
-        self._diagnostics={}
+        self._diagnostics = {}
 
         ## initialize derived internal states
         self._Js = np.full(self._num_compartments, 0.0, float)
@@ -268,7 +269,7 @@ class CoexistingPhasesFinder:
         Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` from input.
 
         Args:
-            omegas: 
+            omegas:
                 New :math:`\\omega_i^{(m)}` field, must have the same size of
                 :math:`N_\\mathrm{c} \\times M`.
         """
@@ -293,7 +294,7 @@ class CoexistingPhasesFinder:
         as a guidance for the generation of :math:`\\omega_i^{(m)}` field.
 
         Args:
-            phis: 
+            phis:
                 New :math:`\\phi_i^{(m)}` field, must have the same size of :math:`N_\\mathrm{c}
                 \\times M`.
         """
@@ -395,7 +396,7 @@ class CoexistingPhasesFinder:
         self._revive_count_left = (
             self._max_revive_per_compartment * self._num_compartments
         )
-        
+
     @property
     def phis(self) -> np.ndarray:
         """
@@ -426,7 +427,7 @@ class CoexistingPhasesFinder:
         """
         The diagnostics of the most recent call of :meth:`run`. The diagnostics contain
         the convergence status and the original volume fractions before the clustering and
-        sorting algorithm is utilized to determine the unique phases. 
+        sorting algorithm is utilized to determine the unique phases.
         """
 
         return self._diagnostics
@@ -449,7 +450,7 @@ class CoexistingPhasesFinder:
 
         Args:
             max_steps:
-                The maximum number of steps to find the coexisting phases. 
+                The maximum number of steps to find the coexisting phases.
             tolerance:
                 The tolerance to determine convergence. See
                 :paramref:`~CoexistingPhasesFinder.convergence_criterion` for more
@@ -457,7 +458,7 @@ class CoexistingPhasesFinder:
             interval:
                 The interval of steps to check convergence.
             progress:
-                Whether to show progress bar when checking convergence. 
+                Whether to show progress bar when checking convergence.
 
         Returns:
             [0]:
@@ -465,7 +466,7 @@ class CoexistingPhasesFinder:
                 :math:`N_\\mathrm{p}`.
             [1]:
                 Volume fractions of components in each phase :math:`\\phi_i^{(\\alpha)}`.
-                2D array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`. 
+                2D array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`.
         """
 
         if max_steps is None:
@@ -492,9 +493,15 @@ class CoexistingPhasesFinder:
             "disable": not progress,
             "bar_format": bar_format,
         }
+        bar_text_args = {
+            "total": 1,
+            "disable": not progress,
+            "bar_format": "{desc}",
+        }
         pbar1 = tqdm(**bar_args, position=0, desc="Incompressibility")
         pbar2 = tqdm(**bar_args, position=1, desc="Field Error")
         pbar3 = tqdm(**bar_args, position=2, desc="Volume Error")
+        pbar4 = tqdm(**bar_text_args, position=3, desc="Revive Count Left")
 
         bar_val_func = lambda a: max(0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max))
 
@@ -523,16 +530,21 @@ class CoexistingPhasesFinder:
                 rng=self._rng,
             )
 
+            steps += steps_inner
+            self._revive_count_left -= revive_count
+
             if progress:
                 pbar1.n = bar_val_func(max_abs_incomp)
                 pbar2.n = bar_val_func(max_abs_omega_diff)
                 pbar3.n = bar_val_func(max_abs_Js_diff)
+                pbar4.n = 1
                 pbar1.refresh()
                 pbar2.refresh()
                 pbar3.refresh()
-
-            steps += steps_inner
-            self._revive_count_left -= revive_count
+                pbar4.set_description_str(
+                    "{:<20}: {}".format("Revive Count Left", self._revive_count_left)
+                )
+                pbar4.refresh()
 
             # check convergence
             if self._convergence_criterion == "standard":
@@ -554,6 +566,7 @@ class CoexistingPhasesFinder:
         pbar1.close()
         pbar2.close()
         pbar3.close()
+        pbar4.close()
 
         # get final result
         final_Js = self._Js.copy()
@@ -606,13 +619,13 @@ def find_coexisting_phases(
         kwargs:
             See class :class:`CoexistingPhasesFinder` for all the possible options.
 
-    Returns:         
+    Returns:
         [0]:
             Volume fractions of each phase :math:`J_\\alpha`. 1D array with the size of
             :math:`N_\\mathrm{p}`.
         [1]:
             Volume fractions of components in each phase :math:`\\phi_i^{(\\alpha)}`. 2D
-            array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`. 
+            array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`.
     """
     finder = CoexistingPhasesFinder(chis, phi_means, num_compartments, **kwargs)
     return finder.run()
