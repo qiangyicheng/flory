@@ -177,7 +177,7 @@ class CoexistingPhasesFinder:
         if phi_means.shape[0] == self._num_components:
             self._phi_means = phi_means
             if np.abs(self._phi_means.sum() - 1.0) > 1e-12:
-                self._logger.warn(
+                self._logger.warning(
                     f"Total phi_means is not 1.0. Iteration may never converge."
                 )
         else:
@@ -200,7 +200,7 @@ class CoexistingPhasesFinder:
             if sizes.shape[0] == self._num_components:
                 self._sizes = sizes
                 if np.sum(self._sizes <= 0):
-                    self._logger.warn(
+                    self._logger.warning(
                         f"Non-positive sizes detected. Iteration will probably fail."
                     )
             else:
