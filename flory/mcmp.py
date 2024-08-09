@@ -171,6 +171,9 @@ class CoexistingPhasesFinder:
         else:
             self._logger.error(f"chis matrix with size of {chis.shape} is not square.")
             raise ValueError("chis matrix must be square.")
+        if (chis != chis.transpose()).any():
+            self._logger.error(f"chis matrix is not symmetric.")
+            raise ValueError("chis matrix must be symmetric.")
 
         # phi_means
         phi_means = np.array(phi_means)
@@ -290,8 +293,8 @@ class CoexistingPhasesFinder:
         """
         Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` from volume fraction
         field :math:`\\phi_i^{(m)}`. Note that it is not guaranteed that the initial volume
-        fraction field :math:`\\phi_i^{(m)}` is fully respectively. The input is only considered
-        as a guidance for the generation of :math:`\\omega_i^{(m)}` field.
+        fraction field :math:`\\phi_i^{(m)}` is fully respected. The input is only considered
+        as a suggestion for the generation of :math:`\\omega_i^{(m)}` field.
 
         Args:
             phis:
@@ -331,6 +334,9 @@ class CoexistingPhasesFinder:
     def chis(self, chis_new: np.ndarray):
         chis_new = np.array(chis_new)
         if chis_new.shape == self._chis.shape:
+            if (chis_new != chis_new.transpose()).any():
+                self._logger.error(f"chis matrix is not symmetric.")
+                raise ValueError("chis matrix must be symmetric.")
             self._chis = chis_new
         else:
             self._logger.error(
@@ -360,6 +366,10 @@ class CoexistingPhasesFinder:
         phi_means_new = np.array(phi_means_new)
         if phi_means_new.shape == self._phi_means.shape:
             self._phi_means = phi_means_new
+            if np.abs(self._phi_means.sum() - 1.0) > 1e-12:
+                self._logger.warning(
+                    f"Total phi_means is not 1.0. Iteration may never converge."
+                )
         else:
             self._logger.error(
                 f"new phi_means with size of {phi_means_new.shape} is invalid. It must have the size of {self._phi_means.shape}."
