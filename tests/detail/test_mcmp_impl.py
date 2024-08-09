@@ -84,7 +84,7 @@ def test_revive_compartments_by_copy(threshold: float):
 def test_revive_compartments_by_copy_not_nice():
     """Test function revive_compartments_by_copy()"""
     amp = 3.0
-    threshold = 0.4
+    threshold = 0.1
     rng = np.random.default_rng()
     Js = np.array([0.2, 0.2, 0.1, -0.1, 1.8, 1.7, 1.9, 2.2])
     targets = rng.uniform(-amp, amp, (3, 8))
