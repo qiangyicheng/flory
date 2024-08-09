@@ -80,6 +80,29 @@ def test_revive_compartments_by_copy(threshold: float):
     np.testing.assert_allclose(
         np.dot(targets, Js), np.dot(targets_original, Js_original * mask)
     )
+    
+def test_revive_compartments_by_copy_not_nice():
+    """Test function revive_compartments_by_copy()"""
+    amp = 3.0
+    threshold = 0.4
+    rng = np.random.default_rng()
+    Js = np.array([0.2, 0.2, 0.1, -0.1, 1.8, 1.7, 1.9, 2.2])
+    targets = rng.uniform(-amp, amp, (3, 8))
+    mask = Js > threshold
+    Js_original = Js.copy()
+    targets_original = targets.copy()
+    oldlist = {str(targets_original[:, itr]) for itr, flag in enumerate(mask) if flag}
+    revive_compartments_by_copy(Js, targets, threshold, rng)
+    for itr, flag in enumerate(mask):
+        if flag:
+            assert Js_original[itr] >= Js[itr]
+            assert np.all(targets_original[:, itr] == targets[:, itr])
+        else:
+            assert str(targets[:, itr]) in oldlist
+    np.testing.assert_allclose(np.sum(Js), np.sum(Js_original * mask))
+    np.testing.assert_allclose(
+        np.dot(targets, Js), np.dot(targets_original, Js_original * mask)
+    )
 
 
 def test_calc_volume_fractions():
