@@ -10,12 +10,12 @@ Currently `flory` supports finding coexisting phases of arbitrary multicomponent
 $$\bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(\alpha)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(\alpha)}\}) \; ,$$
 
 where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_\alpha$ is the volume fraction of the phase $\alpha$ and $\phi_i^{(\alpha)}$ is the volume fraction of the component $i$ in the phase $\alpha$.
-Each phase is considered to be homogeneous with the a energy density
+Each phase is considered to be homogeneous with a energy density
 
 $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
 
 where $\chi_{ij}$ is the Flory-Huggins interaction between component $i$ and $j$, and $l_i$ is the relative molecule size of the component $i$.
-With given interaction matrix $\chi_{ij}$, average volume fractions of all components across the system $\bar{\phi}_i$ and the relative molecule sizes $l_i$, `flory` provides tools to find the coexisting phases in equillibrium.
+With given interaction matrix $\chi_{ij}$, average volume fractions of all components across the system $\bar{\phi}_i$ and the relative molecule sizes $l_i$, `flory` provides tools to find the coexisting phases in equilibrium.
 
 Installation
 ------------
