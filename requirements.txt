@@ -1,4 +1,4 @@
-numba>=0.58
+numba>=0.57
 numpy>=1.22
-scipy>=1.10
-tqdm>=4.66
+scipy>=1.7
+tqdm>=4.60
