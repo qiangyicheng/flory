@@ -4,6 +4,7 @@
 
 import numpy as np
 import pytest
+from numba.experimental import jitclass
 
 from flory.detail.mcmp_impl import *
 
@@ -84,15 +85,24 @@ def test_revive_compartments_by_copy(threshold: float):
 def test_revive_compartments_by_copy_not_nice():
     """Test function revive_compartments_by_copy()"""
     amp = 3.0
-    threshold = 0.1
+    threshold = 0.2
+    @jitclass()
+    class FakeRNG:
+        def __init__(self):
+            return
+        @staticmethod
+        def integers(arg1, arg2):
+            return 0
+            
     rng = np.random.default_rng()
-    Js = np.array([0.2, 0.2, 0.1, -0.1, 1.8, 1.7, 1.9, 2.2])
-    targets = rng.uniform(-amp, amp, (3, 8))
+    fakerng = FakeRNG()
+    Js = np.array([0.0,0.0,0.5,3.5])
+    targets = rng.uniform(-amp, amp, (3, len(Js)))
     mask = Js > threshold
     Js_original = Js.copy()
     targets_original = targets.copy()
     oldlist = {str(targets_original[:, itr]) for itr, flag in enumerate(mask) if flag}
-    revive_compartments_by_copy(Js, targets, threshold, rng)
+    revive_compartments_by_copy(Js, targets, threshold, fakerng)
     for itr, flag in enumerate(mask):
         if flag:
             assert Js_original[itr] >= Js[itr]
