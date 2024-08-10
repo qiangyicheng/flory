@@ -22,7 +22,8 @@ def test_make_valid_phase_masks():
     """Test function make_valid_phase_masks()"""
     Js = np.array([1.0, 0.3, 0.2, 0.8, -0.2])
     np.testing.assert_equal(
-        make_valid_compartment_masks(Js, 1.0), np.array([False, False, False, False, False])
+        make_valid_compartment_masks(Js, 1.0),
+        np.array([False, False, False, False, False]),
     )
     np.testing.assert_equal(
         make_valid_compartment_masks(Js, 0.1), np.array([True, True, True, True, False])
@@ -81,22 +82,25 @@ def test_revive_compartments_by_copy(threshold: float):
     np.testing.assert_allclose(
         np.dot(targets, Js), np.dot(targets_original, Js_original * mask)
     )
-    
+
+
 def test_revive_compartments_by_copy_not_nice():
     """Test function revive_compartments_by_copy()"""
     amp = 3.0
     threshold = 0.2
+
     @jitclass()
     class FakeRNG:
         def __init__(self):
             return
+
         @staticmethod
         def integers(arg1, arg2):
             return 0
-            
+
     rng = np.random.default_rng()
     fakerng = FakeRNG()
-    Js = np.array([0.0,0.0,0.5,3.5])
+    Js = np.array([0.0, 0.0, 0.5, 3.5])
     targets = rng.uniform(-amp, amp, (3, len(Js)))
     mask = Js > threshold
     Js_original = Js.copy()

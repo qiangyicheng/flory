@@ -49,6 +49,7 @@ def test_find_coexisting_phases_asymmetric_ternary(num_compartments: int):
     np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-5)
     np.testing.assert_allclose(phis_calc, phis_ref, rtol=1e-5)
 
+
 def test_CoexistingPhasesFinder_ODT():
     """Test class `CoexistingPhasesFinder` with ODT of a binary system"""
     num_components = 2
@@ -104,82 +105,85 @@ def test_CoexistingPhasesFinder_set_parameters():
     # not-square chi matrix
     with pytest.raises(ValueError):
         finder = flory.CoexistingPhasesFinder(chis[:-1], phi_means, num_compartments)
-   
+
     # asymmetric chi matrix
     achis = chis.copy()
-    achis[0,1] +=1
+    achis[0, 1] += 1
     with pytest.raises(ValueError):
         finder = flory.CoexistingPhasesFinder(achis, phi_means, num_compartments)
-    
+
     # incorrect phi_means shape
     with pytest.raises(ValueError):
         finder = flory.CoexistingPhasesFinder(chis, phi_means[:-1], num_compartments)
-        
+
     # incorrect total phi_means is allowed by warned
     finder = flory.CoexistingPhasesFinder(chis, phi_means + 0.001, num_compartments)
-    
+
     sizes = np.ones(num_components)
     # incorrect sizes shape
     with pytest.raises(ValueError):
-        finder = flory.CoexistingPhasesFinder(chis, phi_means, num_compartments, sizes=sizes[:-1])
-        
+        finder = flory.CoexistingPhasesFinder(
+            chis, phi_means, num_compartments, sizes=sizes[:-1]
+        )
+
     # incorrect sizes values are allowed by warned
-    finder = flory.CoexistingPhasesFinder(chis, phi_means, num_compartments, sizes=sizes - 2)
-    
+    finder = flory.CoexistingPhasesFinder(
+        chis, phi_means, num_compartments, sizes=sizes - 2
+    )
+
     # use custom generator
     mtg = np.random.PCG64()
-    finder = flory.CoexistingPhasesFinder(chis, phi_means, num_compartments, sizes=sizes, rng = np.random.Generator(mtg))
+    finder = flory.CoexistingPhasesFinder(
+        chis, phi_means, num_compartments, sizes=sizes, rng=np.random.Generator(mtg)
+    )
 
     omegas = finder.omegas.copy()
     # reinitialize with additional noise
-    newomegas = omegas + np.random.rand(omegas.shape[0],omegas.shape[1])
+    newomegas = omegas + np.random.rand(omegas.shape[0], omegas.shape[1])
     finder.reinitialize_from_omegas(newomegas)
     np.testing.assert_allclose(newomegas, finder.omegas)
-    
+
     # reinitialize with omegas with incorrect shape
     with pytest.raises(ValueError):
         finder.reinitialize_from_omegas(omegas[:-1])
-        
+
     phis = finder.phis.copy()
     # reinitialize with additional noise
-    newphis=phis + np.random.rand(phis.shape[0],phis.shape[1])
+    newphis = phis + np.random.rand(phis.shape[0], phis.shape[1])
     finder.reinitialize_from_phis(newphis)
-    
+
     # reinitialize with omegas with incorrect shape
     with pytest.raises(ValueError):
         finder.reinitialize_from_phis(phis[:-1])
-        
+
     # reset chis with asymmetric chis
     with pytest.raises(ValueError):
         finder.chis = achis
-    
+
     chis = finder.chis.copy()
     # reset chis with chis with incorrect shape
     with pytest.raises(ValueError):
         finder.chis = chis[:-1]
-        
+
     # shift chis by a constant, which takes no effect to the calculation
     finder.chis = chis + 1
     np.testing.assert_allclose(chis + 1, finder.chis)
-    
+
     phi_means = finder.phi_means.copy()
     # reset phi_means with incorrect shape
     with pytest.raises(ValueError):
         finder.phi_means = phi_means[:-1]
-        
+
     # incorrect total phi_means is allowed by warned
     finder.phi_means = phi_means + 0.1
     np.testing.assert_allclose(phi_means + 0.1, finder.phi_means)
-        
+
     sizes = finder.sizes.copy()
     # reset phi_means with incorrect shape
     with pytest.raises(ValueError):
         finder.sizes = sizes[:-1]
-        
+
     # incorrect total phi_means is allowed by warned
     sizes[0] = 3
     finder.sizes = sizes
     np.testing.assert_allclose(sizes, finder.sizes)
-
-
-
