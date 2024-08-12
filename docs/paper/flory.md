@@ -4,6 +4,7 @@ tags:
   - Python
   - physics
   - phase separation
+  - free energy
 authors:
   - name: Yicheng Qiang
     orcid: 0000-0003-2053-079X
