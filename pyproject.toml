@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flory"
+description = "Python package for finding coexisting phases in multicomponent mixtures"
+authors = [
+    {name = "Yicheng Qiang", email="yicheng.qiang@ds.mpg.de"}
+]
+license = {text = "MIT License"}
+readme = "README.md"
+requires-python = ">=3.9"
+dynamic = ["version","dependencies","optional-dependencies"]
+
+keywords = ["physics", "phase-separation", "free-energy"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "flory.__version__"}
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {dev = { file = ["tests/requirements.txt", "docs/requirements.txt"] }}
+
+[project.urls]
+homepage = "https://github.com/qiangyicheng/flory"
+repository = "https://github.com/qiangyicheng/flory"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["docs", "tests", "examples"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--strict-markers"
+testpaths = ["tests"]
