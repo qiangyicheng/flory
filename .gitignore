@@ -8,3 +8,7 @@ docs/build
 docs/source/_autosummary
 
 .DS_Store
+
+*.egg*
+build
+dist
