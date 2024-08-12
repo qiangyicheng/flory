@@ -25,14 +25,6 @@ Installation
 ```bash
 pip install flory
 ```
-As an alternative, you can install `flory` through [conda](https://docs.conda.io/en/latest/)
-using the [conda-forge](https://conda-forge.org/) channel:
-
-```bash
-conda install -c conda-forge flory
-```
-
-Installation with `conda` includes all dependencies of `flory`.
 
 Usage
 -----
