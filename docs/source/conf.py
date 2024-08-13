@@ -14,8 +14,8 @@ author = 'Yicheng Qiang'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 import os
-import sys
 import pathlib
+import sys
 
 proj_path=pathlib.Path(__file__).parent.parent.parent.resolve()
 sys.path.append(str(proj_path))

@@ -14,6 +14,10 @@ help:
 
 .PHONY: help Makefile
 
+# Define default target, which can be used in VS code
+.PHONY: default
+default: html
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile

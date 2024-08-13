@@ -16,10 +16,12 @@ over the iteration. See :ref:`Examples` for examples.
 """
 
 import logging
-import numpy as np
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
+
+import numpy as np
 from tqdm.auto import tqdm
+
 from .detail.mcmp_impl import *
 
 
@@ -241,11 +243,13 @@ class CoexistingPhasesFinder:
         self._additional_chis_shift = additional_chis_shift
 
         # diagnostics
-        self._diagnostics = {}
+        self._diagnostics: dict[str, Any] = {}
 
         ## initialize derived internal states
         self._Js = np.full(self._num_compartments, 0.0, float)
-        self._omegas = np.full((self._num_components, self._num_compartments), 0.0, float)
+        self._omegas = np.full(
+            (self._num_components, self._num_compartments), 0.0, float
+        )
         self._phis = np.full((self._num_components, self._num_compartments), 0.0, float)
         self._revive_count_left = (
             self._max_revive_per_compartment * self._num_compartments
@@ -513,7 +517,9 @@ class CoexistingPhasesFinder:
         pbar3 = tqdm(**bar_args, position=2, desc="Volume Error")
         pbar4 = tqdm(**bar_text_args, position=3, desc="Revive Count Left")
 
-        bar_val_func = lambda a: max(0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max))
+        bar_val_func = lambda a: max(
+            0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max)
+        )
 
         for _ in range(steps_tracker):
             # do the inner steps
@@ -581,7 +587,12 @@ class CoexistingPhasesFinder:
         # get final result
         final_Js = self._Js.copy()
         final_phis = self._phis.copy()
-        revive_compartments_by_copy(final_Js, final_phis, self._kill_threshold, self._rng)
+        revive_compartments_by_copy(
+            Js=final_Js,
+            targets=final_phis,
+            threshold=self._kill_threshold,
+            rng=self._rng,
+        )
 
         # store diagnostic output
         self._diagnostics = {

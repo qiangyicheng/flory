@@ -1,6 +1,7 @@
-import flory
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+
+import flory
 
 chi_start = 5.0
 chi_end = 1.0
