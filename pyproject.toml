@@ -38,9 +38,6 @@ repository = "https://github.com/qiangyicheng/flory"
 [tool.setuptools]
 include-package-data = true
 
-[tool.setuptools.packages.find]
-include = ["docs", "tests", "examples"]
-
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--strict-markers"
