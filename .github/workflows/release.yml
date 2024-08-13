@@ -37,5 +37,5 @@ jobs:
     - name: Build and publish
       env:
         TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
-      run: python -m twine upload --repository testpypi dist/*
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: python -m twine upload dist/*
