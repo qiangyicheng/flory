@@ -2,6 +2,7 @@
 
 [![Tests](https://github.com/qiangyicheng/flory/actions/workflows/python-package.yml/badge.svg)](https://github.com/qiangyicheng/flory/actions/workflows/python-package.yml)
 [![Codecov](https://codecov.io/github/qiangyicheng/flory/graph/badge.svg?token=YF3K9ST8XQ)](https://codecov.io/github/qiangyicheng/flory)
+[![Documentation Status](https://readthedocs.org/projects/flory/badge/?version=latest)](https://flory.readthedocs.io/en/latest/?badge=latest)
 
 `flory` is a Python package for determining multiple coexisting phases in multicomponent mixtures.
 Although finding coexisting phases of binary mixture is simple, finding multiple coexisting phases in many-component mixtures is challenging, mainly due to the coupling of lots of nolinear equations.
@@ -44,5 +45,5 @@ volumes, phis = flory.find_coexisting_phases(chis, phi_means, 16)   # obtain the
 More information
 ----------------
 * See examples in [examples folder](https://github.com/qiangyicheng/flory/tree/main/examples)
-
+* [Full documentation on readthedocs](https://flory.readthedocs.io/)
 
