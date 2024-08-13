@@ -27,9 +27,11 @@ classifiers = [
 ]
 
 [tool.setuptools.dynamic]
-version = {attr = "flory.__version__"}
 dependencies = {file = ["requirements.txt"]}
 optional-dependencies = {dev = { file = ["tests/requirements.txt", "docs/requirements.txt"] }}
+
+[tool.setuptools_scm]
+version_file = "pkg/_version.py"
 
 [project.urls]
 homepage = "https://github.com/qiangyicheng/flory"
