@@ -3,5 +3,3 @@ Package :mod:`flory` provides methods and classes for phase separation in multic
 """
 
 from .mcmp import CoexistingPhasesFinder, find_coexisting_phases
-
-__version__ = "0.1"
