@@ -36,7 +36,7 @@ jobs:
       run: |
         python -m pytest --cov=flory --cov-report xml:.coverage_report.xml
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.0.1
+      uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./.coverage_report.xml
