@@ -1,7 +1,9 @@
 import copy
-import flory
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+import flory
 
 chis = [[0.0, 2.4, 3.2], [2.4, 0.0, 2.8], [3.2, 2.8, 0.0]]
 # we guess this point is a three-phase coexistence point

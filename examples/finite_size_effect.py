@@ -1,6 +1,7 @@
-import flory
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+
+import flory
 
 N_comp = 8
 

@@ -1,4 +1,4 @@
-Implementation detail
+Implementation details
 ======================
 
 .. rubric:: Modules
@@ -11,4 +11,4 @@ Implementation detail
    flory.detail.mcmp_impl
 
 The modules here are the implementation details of the package, which may not be stable and are not intended for basic usage.
-See :ref:`API Reference` for the interfaces.
+See :ref:`API Reference` for the public interface.

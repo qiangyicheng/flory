@@ -51,7 +51,7 @@ def make_valid_compartment_masks(Js: np.ndarray, threshold: float) -> np.ndarray
             Const. The threshold value.
 
     Returns:
-        : 
+        :
             1D array with the size of :math:`M`, containing masks of entries in
             :paramref:`Js` larger than :paramref:`threshold`.
     """
@@ -236,10 +236,10 @@ def calc_volume_fractions(
             compartments. See :meth:`make_valid_compartment_masks` for more information.
 
     Returns:
-        [0]: 
+        [0]:
             1D array with the size of :math:`N_\\mathrm{c}`, containing the single
-            molecular partition functions of components :math:`Q_i`. 
-        [1]: 
+            molecular partition functions of components :math:`Q_i`.
+        [1]:
             1D array with the size of :math:`M`, containing the incompressibility
             :math:`\\sum_i \\phi_i^{(m)} - 1`.
     """
@@ -328,7 +328,7 @@ def multicomponent_self_consistent_metastep(
             composition. If the intended change is larger this value, all the changes will
             be scaled down to guarantee that the maximum changes do not exceed this value.
             Typically this value can take the order of :math:`10^{-3}`, or smaller when
-            the system becomes larger or stiffer. 
+            the system becomes larger or stiffer.
         acceptance_omega:
             Constant. The acceptance of :paramref:`omegas`(the conjugate fields
             :math:`\\omega_i^{(m)}`). This value determines the amount of changes accepted
@@ -337,7 +337,7 @@ def multicomponent_self_consistent_metastep(
             :paramref:`Js_step_upper_bound`, the iteration of :math:`\\omega_i^{(m)}`
             fields will be scaled down simultaneously. Typically this value can take the
             order of :math:`10^{-2}`, or smaller when the system becomes larger or
-            stiffer.         
+            stiffer.
         kill_threshold:
             Constant. The threshold of the :math:`J_m` for a compartment to be considered
             dead and killed afterwards. Should be not less than 0. In each iteration step,
@@ -345,7 +345,7 @@ def multicomponent_self_consistent_metastep(
             parameter, the corresponding compartment will be killed and 0 will be assigned
             to the internal mask. The dead compartment may be revived, depending whether
             reviving is allowed or whether the number of the revive tries has been
-            exhausted. 
+            exhausted.
         revive_tries:
             Constant. Number of tries left to revive the dead compartment. 0 or negative
             value indicates no reviving. When this value is exhausted, i.e. the number of
@@ -416,8 +416,8 @@ def multicomponent_self_consistent_metastep(
         max_abs_Js_diff = np.abs(Js_diff).max()
 
         # calculate additional factor to scale down iteration
-        Js_max_change = max_abs_Js_diff * acceptance_Js
-        additional_factor = Js_step_upper_bound / max(Js_max_change, Js_step_upper_bound)
+        Js_max_change = max(max_abs_Js_diff * acceptance_Js, Js_step_upper_bound)
+        additional_factor = Js_step_upper_bound / Js_max_change
 
         # update Js
         Js += additional_factor * acceptance_Js * Js_diff
@@ -494,14 +494,14 @@ def get_clusters(
             Const. 2D array with the size of :math:`N_\\mathrm{c} \\times M`, containing
             the volume fractions of the components in each phase :math:`\\phi_i^{(m)}`.
             The second dimension must be the same as :math:`Js`.
-        dist: 
+        dist:
             Cut-off distance for cluster analysis
-    
+
     Returns:
-        [0]: 
+        [0]:
             1D array with the size of :math:`N_\\mathrm{p}`, containing the volumes of the
             unique phases.
-        [1]: 
+        [1]:
             1D array with the size of :math:`N_\\mathrm{p} \\times  N_\\mathrm{c}`,
             containing the compositions of all unique phases. Note that the data structure
             is different from normal, see :meth:`sort_phases` for more information.

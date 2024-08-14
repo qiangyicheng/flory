@@ -5,13 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "flory"
 description = "Python package for finding coexisting phases in multicomponent mixtures"
-authors = [
-    {name = "Yicheng Qiang", email="yicheng.qiang@ds.mpg.de"}
-]
-license = {text = "MIT License"}
+authors = [{ name = "Yicheng Qiang", email = "yicheng.qiang@ds.mpg.de" }]
+license = { text = "MIT License" }
 readme = "README.md"
 requires-python = ">=3.9"
-dynamic = ["version","dependencies","optional-dependencies"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 keywords = ["physics", "phase-separation", "free-energy"]
 classifiers = [
@@ -27,8 +25,11 @@ classifiers = [
 ]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
-optional-dependencies = {dev = { file = ["tests/requirements.txt", "docs/requirements.txt"] }}
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies = { dev = { file = [
+    "tests/requirements.txt",
+    "docs/requirements.txt",
+] } }
 
 [tool.setuptools_scm]
 version_file = "flory/_version.py"
@@ -39,6 +40,22 @@ repository = "https://github.com/qiangyicheng/flory"
 
 [tool.setuptools]
 include-package-data = true
+
+[tool.black]
+target_version = ["py39"]
+
+[tool.isort]
+profile = "black"
+src_paths = ["flory", "examples", "tests"]
+known_self = ["flory"]
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "FIRSTPARTY",
+    "SELF",
+    "LOCALFOLDER",
+]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
