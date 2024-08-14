@@ -1,42 +1,46 @@
 .. flory documentation master file
 
-'flory' python package
+'flory' Python package
 ======================
 
-The :mod:`flory` python package provides tools for investigating phase separation in mixtures based on Flory-Huggins theory.
-Currently :mod:`flory` Contains:
+The :mod:`flory` Python package provides tools for investigating phase separation in
+multicomponent mixtures. In particular, it allows to determine equilibrium states of
+:math:`N_\mathrm{p}` coexisting phases, each described by the volume fractions
+:math:`\phi_i^{(\alpha)}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
 
-Module :mod:`~flory.mcmp`
-*******************************
-
-Module :mod:`~flory.mcmp` finds multiple coexisting phases of incompressible multicomponent mixtures in canonical ensemble, whose average free energy density is in the form
+We currently focus on incompressible systems with constant volume (cannonical ensemble),
+whose average free energy density is given by 
 
 .. math::
    \bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(\alpha)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(\alpha)}\}) \; ,
 
-where :math:`N_\mathrm{c}` is the number of components, :math:`N_\mathrm{p}` is the number of phases, :math:`J_\alpha` is the volume fraction of the phase :math:`\alpha` and :math:`\phi_i^{(\alpha)}` is the volume fraction of the component :math:`i` in the phase :math:`\alpha`.
-Each phase is considered to be homogeneous, a free energy density
+where :math:`J_\alpha` is the fraction of volume occupied by phase :math:`\alpha`.
+Each phase is described by a Flory-Huggins free energy
 
 .. math::
    f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,
 
-where :math:`\chi_{ij}` is the Flory-Huggins interaction between component :math:`i` and :math:`j`, and :math:`l_i` is the relative molecule size of the component :math:`i`.
-With given interaction matrix :math:`\chi_{ij}`, average volume fractions of all components across the system :math:`\bar{\phi}_i` and the relative molecule sizes :math:`l_i`, module :mod:`~flory.mcmp` provides tools to find the coexisting phases in equilibrium.
-
-For example:
+where :math:`\chi_{ij}` is the Flory interaction parameter between component :math:`i`
+and :math:`j`, and :math:`l_i` is the relative molecule size of the component :math:`i`.
+For a given interaction matrix :math:`\chi_{ij}`, average volume fractions of all
+components across the system :math:`\bar{\phi}_i`, and the relative molecule sizes
+:math:`l_i`, the coexisting phases are those configurations that minimize :math:`\bar f`,
+which is used by :mod:`flory`:
 
 .. literalinclude:: /../../examples/find_coexiting_phases.py
    :linenos:
    :lines: 1,3,4,6
 
-See :ref:`examples` for more use cases.
+The details are described in :func:`~flory.mcmp.find_coexisting_phases`, and
+:ref:`examples` lists more use cases.
 
 Contents
 ==================
 
 .. toctree::
    :maxdepth: 1
-   
+
+   self
    examples
    theory
    api

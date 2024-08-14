@@ -1,10 +1,10 @@
 Examples
 ======================
 
-Here we provide a few examples for using package :mod:`flory`.
+Here we provide a few examples for using package.
 
 Find coexisting phases once
---------------------------------------------
+---------------------------
 Since we only need to find the coexisting phases once, we assign values to the :math:`\chi_{ij}` matrix and the average volume fractions :math:`\bar{\phi}_i` , and call the wrapper function :meth:`~flory.mcmp.find_coexisting_phases` directly.
 Here we consider a symmetric two-component system, with :math:`\chi=4`:
 
@@ -41,7 +41,7 @@ which gives two phases:
    :linenos:
 
 Construct a 2D phase diagram
---------------------------------------------
+----------------------------
 When constructing a phase diagram, we usually need to find coexisting phases for multiple instances.
 To avoid the creation and the destruction of the internal data each time, we provide the class API :class:`~flory.mcmp.CoexistingPhasesFinder`.
 Using the class API usually involves three steps: creation of the finder instance, setting the system parameters and finding the coexisting states.
@@ -58,8 +58,8 @@ We obtain the phase diagram
    :scale: 80 %
    :alt: phase diagram example
 
-Check the finite size effect
---------------------------------------------
+Check finite size effect
+------------------------
 The minimization process in our algorithm DO NOT guarantee that the equilibrium state is always found.
 Due to the multistability of the multicomponent mixture, tt is possible that the algorithm find a local minimum.
 For example, the true equilibrium state can be a 4-phase coexisting state, while the algorithm may find a metastable 3-phase coexisting state.
@@ -81,7 +81,7 @@ We obtain
 showing that :math:`M=4` underestimates the number of phases in the final coexisting state, while larger :math:`M` values give the correct result. 
 
 Construct a ternary phase diagram
---------------------------------------------
+---------------------------------
 Here we provide a simple example for generating a :math:`(\phi_B, \phi_A)` phase diagram for a simple ternary mixture with fixed interaction matrix: 
 
 .. literalinclude:: /../../examples/ternary_phase_diagram.py

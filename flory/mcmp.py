@@ -26,9 +26,7 @@ from .detail.mcmp_impl import *
 
 
 class CoexistingPhasesFinder:
-    """
-    Create a finder for coexisting phases.
-    """
+    """Class implementing the algorithm for finding coexisting phases."""
 
     def __init__(
         self,
@@ -52,28 +50,26 @@ class CoexistingPhasesFinder:
         max_revive_per_compartment: int = 16,
         additional_chis_shift: float = 1.0,
     ):
-        """
-        Construct a :class:`CoexistingPhasesFinder` instance for finding coexisting
-        phases. This class is recommended when multiple instances of :paramref:`chis`
+        r"""This class is recommended when multiple instances of :paramref:`chis`
         matrix or :paramref:`phi_means` vector need to be calculated. The class will reuse
         all the options and the internal resources. Note that reuse the instance of this
         class is only possible when all the system sizes are not changed, including the
-        number of components :math:`N_\\mathrm{c}` and the number of compartments
-        :math:`M`. The the number of components :math:`N_\\mathrm{c}` is inferred from
-        :paramref:`chis` and :paramref:`phi_means`, while :math:`N_\\mathrm{c}` is set by
+        number of components :math:`N_\mathrm{c}` and the number of compartments
+        :math:`M`. The the number of components :math:`N_\mathrm{c}` is inferred from
+        :paramref:`chis` and :paramref:`phi_means`, while :math:`N_\mathrm{c}` is set by
         the parameter :paramref:`num_compartments`. Setting :paramref:`chis` matrix and
         :paramref:`phi_means` manually by the setters leads to the reset of the internal
         revive counters.
 
         Args:
             chis:
-                The interaction matrix. 2D array with size of :math:`N_\\mathrm{c} \\times
-                N_\\mathrm{c}`. This matrix should be the full :math:`\\chi_{ij}` matrix
+                The interaction matrix. 2D array with size of :math:`N_\mathrm{c} \times
+                N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}` matrix
                 of the system, including the solvent component. Note that the matrix must
                 be symmetric, which is not checked but should be guaranteed externally.
             phi_means:
-                The average volume fractions :math:`\\bar{\\phi}_i` of all the components
-                of the system. 1D array with size of :math:`N_\\mathrm{c}`. Note that the
+                The average volume fractions :math:`\bar{\phi}_i` of all the components
+                of the system. 1D array with size of :math:`N_\mathrm{c}`. Note that the
                 volume fraction of the solvent is included as well, therefore the sum of
                 this array must be unity, which is not checked by this function and should
                 be guaranteed externally.
@@ -81,7 +77,7 @@ class CoexistingPhasesFinder:
                 Number of compartments :math:`M` in the system.
             sizes:
                 The relative molecule volumes :math:`l_i` of the components. 1D array with
-                size of :math:`N_\\mathrm{c}`. This sizes vector should be the full sizes
+                size of :math:`N_\mathrm{c}`. This sizes vector should be the full sizes
                 vector of the system, including the solvent component. An element of one
                 indicates that the corresponding specie has the same volume as the
                 reference. None indicates a all-one vector.
@@ -126,11 +122,11 @@ class CoexistingPhasesFinder:
                 Typically this value can take the order of :math:`10^{-3}`, or smaller
                 when the system becomes larger or stiffer.
             acceptance_omega:
-                The acceptance of the conjugate fields :math:`\\omega_i^{(m)}`. This value
+                The acceptance of the conjugate fields :math:`\omega_i^{(m)}`. This value
                 determines the amount of changes accepted in each step for the
-                :math:`\\omega_i^{(m)}` field. Note that if the iteration of :math:`J_m` is
+                :math:`\omega_i^{(m)}` field. Note that if the iteration of :math:`J_m` is
                 scaled down due to parameter :paramref:`Js_step_upper_bound`, the
-                iteration of :math:`\\omega_i^{(m)}` fields will be scaled down simultaneously.
+                iteration of :math:`\omega_i^{(m)}` fields will be scaled down simultaneously.
                 Typically this value can take the order of :math:`10^{-2}`, or smaller
                 when the system becomes larger or stiffer.
             kill_threshold:
@@ -145,7 +141,7 @@ class CoexistingPhasesFinder:
                 The scaler for the value of the newly-generated conjugate fields when a
                 dead compartment is revived. The compartment is revived by drawing random
                 numbers for their conjugate fields in the range of the minimum and the
-                maximum of the :math:`\\omega_i^{(m)}` their conjugate fields across all
+                maximum of the :math:`\omega_i^{(m)}` their conjugate fields across all
                 compartments. This value determines whether this range should be enlarged
                 (a value larger than 1) or reduced (a value smaller than 1). Typically 1.0
                 or a value slightly larger than 1.0 will be a reasonable choice.
@@ -162,7 +158,7 @@ class CoexistingPhasesFinder:
         """
         self._logger = logging.getLogger(self.__class__.__name__)
 
-        # chis
+        # Check chis
         chis = np.array(chis)
         if chis.shape[0] == chis.shape[1]:
             self._chis = chis
@@ -173,15 +169,15 @@ class CoexistingPhasesFinder:
         else:
             self._logger.error(f"chis matrix with size of {chis.shape} is not square.")
             raise ValueError("chis matrix must be square.")
-        if (chis != chis.transpose()).any():
+        if not np.allclose(chis, chis.transpose()):
             self._logger.error(f"chis matrix is not symmetric.")
             raise ValueError("chis matrix must be symmetric.")
 
-        # phi_means
+        # Check phi_means
         phi_means = np.array(phi_means)
         if phi_means.shape[0] == self._num_components:
             self._phi_means = phi_means
-            if np.abs(self._phi_means.sum() - 1.0) > 1e-12:
+            if not np.isclose(self._phi_means.sum(), 1.0):
                 self._logger.warning(
                     f"Total phi_means is not 1.0. Iteration may never converge."
                 )
@@ -210,7 +206,8 @@ class CoexistingPhasesFinder:
                     )
             else:
                 self._logger.error(
-                    f"sizes vector with size of {sizes.shape} is invalid, since {self._num_components} is defined by chis matrix."
+                    f"sizes vector with size of {sizes.shape} is invalid, since "
+                    "{self._num_components} is defined by chis matrix."
                 )
                 raise ValueError(
                     "sizes vector must imply same component number as chis matrix."
@@ -257,9 +254,9 @@ class CoexistingPhasesFinder:
         self.reinitialize_random()
 
     def reinitialize_random(self):
-        """
-        Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` randomly. See parameter
-        :paramref:`CoexistingPhasesFinder.random_std` for more information.
+        """Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` randomly.
+
+        See parameter :paramref:`CoexistingPhasesFinder.random_std` for more information.
         """
         self._omegas = self._rng.normal(
             0.0,
@@ -272,13 +269,12 @@ class CoexistingPhasesFinder:
         )
 
     def reinitialize_from_omegas(self, omegas: np.ndarray):
-        """
-        Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` from input.
+        r"""Reinitialize the internal conjugate field :math:`\omega_i^{(m)}` from input.
 
         Args:
             omegas:
-                New :math:`\\omega_i^{(m)}` field, must have the same size of
-                :math:`N_\\mathrm{c} \\times M`.
+                New :math:`\omega_i^{(m)}` field, must have the same size of
+                :math:`N_\mathrm{c} \times M`.
         """
         omegas = np.array(omegas)
         if omegas.shape == self._omegas.shape:
@@ -294,16 +290,17 @@ class CoexistingPhasesFinder:
         )
 
     def reinitialize_from_phis(self, phis):
-        """
-        Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` from volume fraction
-        field :math:`\\phi_i^{(m)}`. Note that it is not guaranteed that the initial volume
-        fraction field :math:`\\phi_i^{(m)}` is fully respected. The input is only considered
-        as a suggestion for the generation of :math:`\\omega_i^{(m)}` field.
+        r"""Reinitialize the internal conjugate fields
+
+        The conjugated fields :math:`\omega_i^{(m)}` are initialized from volume fraction
+        fields :math:`\phi_i^{(m)}`. Note that it is not guaranteed that the initial volume
+        fraction field :math:`\phi_i^{(m)}` is fully respected. The input is only considered
+        as a suggestion for the generation of :math:`\omega_i^{(m)}` field.
 
         Args:
             phis:
-                New :math:`\\phi_i^{(m)}` field, must have the same size of :math:`N_\\mathrm{c}
-                \\times M`.
+                New :math:`\phi_i^{(m)}` field, must have the same size of :math:`N_\mathrm{c}
+                \times M`.
         """
         if phis.shape == self._omegas.shape:
             self._omegas = -np.log(phis)
@@ -321,13 +318,13 @@ class CoexistingPhasesFinder:
 
     @property
     def chis(self) -> np.ndarray:
-        """
-        The full interaction matrix :math:`\\chi_{ij}`, with the size of
-        :math:`N_\\mathrm{c} \\times N_\\mathrm{c}`. Resetting this property requires
-        that the new matrix has the same size with the internal one. Note that this
+        r"""Full interaction matrix :math:`\chi_{ij}`
+
+        The matrix has shape :math:`N_\mathrm{c} \times N_\mathrm{c}`. Setting this
+        property requires that the new matrix has the same shape. Note that this
         implies implicit reset of the internal data, the number of revives, but not the
-        others including volume fractions :math:`\\phi_i^{(m)}` and conjugate fields
-        :math:`\\omega_i^{(m)}`. See class parameters
+        others including volume fractions :math:`\phi_i^{(m)}` and conjugate fields
+        :math:`\omega_i^{(m)}`. See class parameters
         :paramref:`~CoexistingPhasesFinder.chis` and
         :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
         information.
@@ -353,12 +350,12 @@ class CoexistingPhasesFinder:
 
     @property
     def phi_means(self) -> np.ndarray:
-        """
-        The average volume fractions of all components :math:`\\bar{\\phi}_i`, with the
-        size of :math:`N_\\mathrm{c}`. Resetting this property requires that the new array
-        has the same size with the internal one. Note that this implies implicit reset of
+        r"""Average volume fractions of all components :math:`\bar{\phi}_i`.
+
+        The array has length :math:`N_\mathrm{c}`. Setting this property requires that
+        the new array has the same size. Note that this implies implicit reset of
         the internal data, the number of revives, but not the others including volume
-        fractions :math:`\\phi_i^{(m)}` and conjugate fields :math:`\\omega_i^{(m)}`. See
+        fractions :math:`\phi_i^{(m)}` and conjugate fields :math:`\omega_i^{(m)}`. See
         class parameters :paramref:`~CoexistingPhasesFinder.phis_mean` and
         :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
         information.
@@ -385,12 +382,12 @@ class CoexistingPhasesFinder:
 
     @property
     def sizes(self) -> np.ndarray:
-        """
-        The relative molecule sizes of all components :math:`l_i` with the size of
-        :math:`N_\\mathrm{c}`. Resetting this property requires that the new array has
-        the same size with the internal one. Note that this implies implicit reset of the
+        r"""Relative molecule sizes of all components :math:`l_i`.
+
+        Array of length :math:`N_\mathrm{c}`. Setting this property requires that the
+        new array has the same size. Note that this implies implicit reset of the
         internal data, the number of revives, but not the others including volume
-        fractions :math:`\\phi_i^{(m)}` and conjugate fields :math:`\\omega_i^{(m)}`. See
+        fractions :math:`\phi_i^{(m)}` and conjugate fields :math:`\omega_i^{(m)}`. See
         class parameters :paramref:`~CoexistingPhasesFinder.sizes` and
         :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
         information.
@@ -413,37 +410,31 @@ class CoexistingPhasesFinder:
 
     @property
     def phis(self) -> np.ndarray:
-        """
-        The volume fractions field :math:`\\phi_i^{(m)}`, with the size of
-        :math:`N_\\mathrm{c} \\times M`. This property should not be reset in most cases.
-        Resetting this property also takes no effect, since :math:`\\phi_i^{(m)}` is not
-        considered as the master internal state of the algorithm. Any set values will be
-        ignored. If you intend to initialize the system from certain volume fractions,
-        please refer to :meth:`reinitialize_from_phis`.
+        r"""Volume fractions fields :math:`\phi_i^{(m)}`
+
+        Read-only array of length :math:`N_\mathrm{c} \times M`. Use
+        :meth:`reinitialize_from_phis` to initialize the system from volume fractions.
         """
 
         return self._phis
 
     @property
     def omegas(self) -> np.ndarray:
-        """
-        The internal conjugate field :math:`\\omega_i^{(m)}`, with the size of
-        :math:`N_\\mathrm{c} \\times M`. This property should not be reset in most cases.
-        Resetting this property will change the state of the system, but skip necessary
-        reset of other internal states. If you intend to initialize the system from a
-        custom conjugate field, please refer to :meth:`reinitialize_from_omegas`.
-        """
+        r"""Internal conjugate fields :math:`\omega_i^{(m)}`.
 
+        Read-only array of length :math:`N_\mathrm{c} \times M`. Use
+        :meth:`reinitialize_from_phis` to initialize the system from volume fractions.
+        """
         return self._omegas
 
     @property
     def diagnostics(self) -> dict:
-        """
-        The diagnostics of the most recent call of :meth:`run`. The diagnostics contain
-        the convergence status and the original volume fractions before the clustering and
-        sorting algorithm is utilized to determine the unique phases.
-        """
+        """Diagnostic information  available after :meth:`run` finsihed.
 
+        The diagnostics dictionary contains the convergence status and the original
+        volume fractions before the clustering and sorting algorithm is used to
+        determine the unique phases.
+        """
         return self._diagnostics
 
     def run(
@@ -454,8 +445,9 @@ class CoexistingPhasesFinder:
         interval: Optional[int] = None,
         progress: Optional[bool] = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """
-        Run instance to find coexisting phases. The keywords arguments can be used to
+        """Run instance to find coexisting phases.
+
+        The keywords arguments can be used to
         temporarily overwrite the provided values during construction of the class. Note
         that this temporary values will not affect the defaults. See class
         :class:`CoexistingPhasesFinder` for other tunable parameters. After each call, the
@@ -482,7 +474,6 @@ class CoexistingPhasesFinder:
                 Volume fractions of components in each phase :math:`\\phi_i^{(\\alpha)}`.
                 2D array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`.
         """
-
         if max_steps is None:
             max_steps = self._max_steps
         if tolerance is None:
@@ -616,37 +607,37 @@ def find_coexisting_phases(
     num_compartments: int,
     **kwargs,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """
-    The convenience wrapper for class :class:`CoexistingPhasesFinder`. This function will
-    create the class :class:`CoexistingPhasesFinder` internally, and then conduct the
-    random initialization, finally use self consistent iterations to find coexisting
-    phases. :paramref:`kwargs` is forwarded to :class:`CoexistingPhasesFinder`. See class
-    :class:`CoexistingPhasesFinder` for all the possible options.
+    r"""Find coexisting phases of a multicomponent mixtures.
+
+    This function is a convenience wrapper for the class :class:`CoexistingPhasesFinder`.
+    This function will create the class :class:`CoexistingPhasesFinder` internally,
+    conduct the random initialization, and then use self consistent iterations to
+    find coexisting phases. See class :class:`CoexistingPhasesFinder` for more details
+    on the supported arguments.
 
     Args:
         chis:
-            The interaction matrix. 2D array with size of :math:`N_\\mathrm{c} \\times
-            N_\\mathrm{c}`. This matrix should be the full :math:`\\chi_{ij}` matrix of
-            the system, including the solvent component. Note that the matrix must be
-            symmetric, which is not checked but should be guaranteed externally.
+            The interaction matrix. Symmetric 2D array with size of :math:`N_\mathrm{c}
+            \times N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}`
+            matrix of the system, including the solvent component.
         phi_means:
-            The average volume fractions :math:`\\bar{\\phi}_i` of all the components of
-            the system. 1D array with size of :math:`N_\\mathrm{c}`. Note that the volume
-            fraction of the solvent is included as well, therefore the sum of this array
-            must be unity, which is not checked by this function and should be guaranteed
-            externally.
+            The average volume fractions :math:`\bar{\phi}_i` of all the components of
+            the system. 1D array of length :math:`N_\mathrm{c}`. Note that the volume
+            fraction of the solvent is included as well, so the sum of this array must
+            be one.
         num_compartments:
             Number of compartments :math:`M` in the system.
-        kwargs:
-            See class :class:`CoexistingPhasesFinder` for all the possible options.
+        \**kwargs:
+            All additional arguments are used directly to initialize
+            :class:`CoexistingPhasesFinder`.
 
     Returns:
         [0]:
-            Volume fractions of each phase :math:`J_\\alpha`. 1D array with the size of
-            :math:`N_\\mathrm{p}`.
+            Volume fractions of each phase :math:`J_\alpha`. 1D array with the size of
+            :math:`N_\mathrm{p}`.
         [1]:
-            Volume fractions of components in each phase :math:`\\phi_i^{(\\alpha)}`. 2D
-            array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`.
+            Volume fractions of components in each phase :math:`\phi_i^{(\alpha)}`. 2D
+            array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
     """
     finder = CoexistingPhasesFinder(chis, phi_means, num_compartments, **kwargs)
     return finder.run()

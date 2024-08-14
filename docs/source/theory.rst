@@ -17,7 +17,7 @@ The equilibrium coexisting states can be obtained by optimizing the average free
 
 over all possible phase counts :math:`N_\mathrm{p}`, phase volume fractions :math:`J_\alpha` and phase compositions :math:`\phi_i^{(\alpha)}`.
 To allow variable phase counts, we consider an ensemble of :math:`M` abstract compartments, where :math:`M` is much larger than the number of components :math:`N_\mathrm{p}`.
-Inspired by `polymeric field theories <https://doi.org/10.1088/0953-8984/10/37/002>`_, :mod:`mcmp` alleviates the problem of negative volume fractions during the relaxation dynamics and conserves the average volume fractions by extending the free energy into
+Inspired by `polymeric field theories <https://doi.org/10.1088/0953-8984/10/37/002>`_, :mod:`flory.mcmp` alleviates the problem of negative volume fractions during the relaxation dynamics and conserves the average volume fractions by extending the free energy into
 
 .. math::
     \bar{f} = 
@@ -89,4 +89,4 @@ To obey volume conservation, all other :math:`J_m` will be renormalized.
 The same scheme is used to initialize the simulation, i.e., all compartments are considered "dead" at the beginning of the simulation.
 
 Due to multistability, this algorithm does not guarantee that the true equilibrium state is always found.
-Therefore :mod:`mcmp` handles the problem of multistability by launching many more compartments than the number of components, :math:`M\gg{N_\mathrm{c}}`, see :paramref:`~flory.mcmp.CoexistingPhasesFinder.num_compartments`.
+Therefore, :mod:`flory.mcmp` handles the problem of multistability by launching many more compartments than the number of components, :math:`M\gg{N_\mathrm{c}}`, see :paramref:`~flory.mcmp.CoexistingPhasesFinder.num_compartments`.
