@@ -6,8 +6,16 @@ name: Codecov
 on:
   push:
     branches: [ "main" ]
+    paths-ignore: 
+      - 'docs/**'
+      - 'examples/**'
+      - '**.md'
   pull_request:
     branches: [ "main" ]
+    paths-ignore: 
+      - 'docs/**'
+      - 'examples/**'
+      - '**.md'
 
 jobs:
   build:
