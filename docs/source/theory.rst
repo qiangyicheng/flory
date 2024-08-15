@@ -89,4 +89,4 @@ To obey volume conservation, all other :math:`J_m` will be renormalized.
 The same scheme is used to initialize the simulation, i.e., all compartments are considered "dead" at the beginning of the simulation.
 
 Due to multistability, this algorithm does not guarantee that the true equilibrium state is always found.
-Therefore, :mod:`flory.mcmp` handles the problem of multistability by launching many more compartments than the number of components, :math:`M\gg{N_\mathrm{c}}`, see :paramref:`~flory.mcmp.CoexistingPhasesFinder.num_compartments`.
+Therefore, :mod:`flory.mcmp` handles the problem of multistability by launching many more compartments than the number of components, :math:`M\gg{N_\mathrm{c}}`, see :paramref:`~flory.mcmp.CoexistingPhasesFinder.num_part`.

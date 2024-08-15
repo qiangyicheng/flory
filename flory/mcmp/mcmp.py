@@ -33,7 +33,7 @@ class CoexistingPhasesFinder:
         self,
         free_energy: FreeEnergyBase,
         phi_means: np.ndarray,
-        num_compartments: int,
+        num_part: int,
         *,
         rng: Optional[np.random.Generator] = None,
         max_steps: int = 1000000,
@@ -57,7 +57,7 @@ class CoexistingPhasesFinder:
         number of components :math:`N_\mathrm{c}` and the number of compartments
         :math:`M`. The the number of components :math:`N_\mathrm{c}` is inferred from
         :paramref:`chis` and :paramref:`phi_means`, while :math:`N_\mathrm{c}` is set by
-        the parameter :paramref:`num_compartments`. Setting :paramref:`chis` matrix and
+        the parameter :paramref:`num_part`. Setting :paramref:`chis` matrix and
         :paramref:`phi_means` manually by the setters leads to the reset of the internal
         revive counters.
 
@@ -73,7 +73,7 @@ class CoexistingPhasesFinder:
                 volume fraction of the solvent is included as well, therefore the sum of
                 this array must be unity, which is not checked by this function and should
                 be guaranteed externally.
-            num_compartments:
+            num_part:
                 Number of compartments :math:`M` in the system.
             sizes:
                 The relative molecule volumes :math:`l_i` of the components. 1D array with
@@ -162,9 +162,9 @@ class CoexistingPhasesFinder:
         chis = np.array(chis)
         if chis.shape[0] == chis.shape[1]:
             self._chis = chis
-            self._num_components = chis.shape[0]
+            self._num_comp = chis.shape[0]
             self._logger.info(
-                f"We infer that there are {self._num_components} components in the system from the chis matrix."
+                f"We infer that there are {self._num_comp} components in the system from the chis matrix."
             )
         else:
             self._logger.error(f"chis matrix with size of {chis.shape} is not square.")
@@ -175,7 +175,7 @@ class CoexistingPhasesFinder:
 
         # Check phi_means
         phi_means = np.array(phi_means)
-        if phi_means.shape[0] == self._num_components:
+        if phi_means.shape[0] == self._num_comp:
             self._phi_means = phi_means
             if not np.isclose(self._phi_means.sum(), 1.0):
                 self._logger.warning(
@@ -183,22 +183,22 @@ class CoexistingPhasesFinder:
                 )
         else:
             self._logger.error(
-                f"phi_means vector with size of {phi_means.shape} is invalid, since {self._num_components} is defined by chis matrix."
+                f"phi_means vector with size of {phi_means.shape} is invalid, since {self._num_comp} is defined by chis matrix."
             )
             raise ValueError(
                 "phi_means vector must imply same component number as chis matrix."
             )
 
-        self._num_compartments = num_compartments
+        self._num_part = num_part
 
         ## optional arguments
 
         # sizes
         if sizes is None:
-            self._sizes = np.ones(self._num_components)
+            self._sizes = np.ones(self._num_comp)
         else:
             sizes = np.array(sizes)
-            if sizes.shape[0] == self._num_components:
+            if sizes.shape[0] == self._num_comp:
                 self._sizes = sizes
                 if np.sum(self._sizes <= 0):
                     self._logger.warning(
@@ -207,7 +207,7 @@ class CoexistingPhasesFinder:
             else:
                 self._logger.error(
                     f"sizes vector with size of {sizes.shape} is invalid, since "
-                    "{self._num_components} is defined by chis matrix."
+                    "{self._num_comp} is defined by chis matrix."
                 )
                 raise ValueError(
                     "sizes vector must imply same component number as chis matrix."
@@ -243,13 +243,13 @@ class CoexistingPhasesFinder:
         self._diagnostics: dict[str, Any] = {}
 
         ## initialize derived internal states
-        self._Js = np.full(self._num_compartments, 0.0, float)
+        self._Js = np.full(self._num_part, 0.0, float)
         self._omegas = np.full(
-            (self._num_components, self._num_compartments), 0.0, float
+            (self._num_comp, self._num_part), 0.0, float
         )
-        self._phis = np.full((self._num_components, self._num_compartments), 0.0, float)
+        self._phis = np.full((self._num_comp, self._num_part), 0.0, float)
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
         self.reinitialize_random()
 
@@ -261,11 +261,11 @@ class CoexistingPhasesFinder:
         self._omegas = self._rng.normal(
             0.0,
             self._random_std,
-            (self._num_components, self._num_compartments),
+            (self._num_comp, self._num_part),
         )
-        self._Js = np.full(self._num_compartments, 1.0, float)
+        self._Js = np.full(self._num_part, 1.0, float)
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
 
     def reinitialize_from_omegas(self, omegas: np.ndarray):
@@ -281,12 +281,12 @@ class CoexistingPhasesFinder:
             self._omegas = omegas
         else:
             self._logger.error(
-                f"new omegas with size of {omegas.shape} is invalid. It must have the size of {(self._num_components, self._num_compartments)}."
+                f"new omegas with size of {omegas.shape} is invalid. It must have the size of {(self._num_comp, self._num_part)}."
             )
             raise ValueError("New omegas must match the size of the old one.")
         self._Js = np.ones_like(self._Js)
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
 
     def reinitialize_from_phis(self, phis):
@@ -304,16 +304,16 @@ class CoexistingPhasesFinder:
         """
         if phis.shape == self._omegas.shape:
             self._omegas = -np.log(phis)
-            for itr in range(self._num_components):
+            for itr in range(self._num_comp):
                 self._omegas[itr] /= self._sizes[itr]
         else:
             self._logger.error(
-                f"phis with size of {phis.shape} is invalid. It must have the size of {(self._num_components, self._num_compartments)}."
+                f"phis with size of {phis.shape} is invalid. It must have the size of {(self._num_comp, self._num_part)}."
             )
             raise ValueError("phis must match the size of the omegas.")
         self._Js = np.ones_like(self._Js)
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
 
     @property
@@ -345,7 +345,7 @@ class CoexistingPhasesFinder:
             )
             raise ValueError("New chis must match the size of the old one.")
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
 
     @property
@@ -377,7 +377,7 @@ class CoexistingPhasesFinder:
             )
             raise ValueError("New phi_means must match the size of the old one.")
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
 
     @property
@@ -405,7 +405,7 @@ class CoexistingPhasesFinder:
             )
             raise ValueError("New sizes must match the size of the old one.")
         self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_compartments
+            self._max_revive_per_compartment * self._num_part
         )
 
     @property

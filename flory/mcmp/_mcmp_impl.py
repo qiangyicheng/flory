@@ -99,22 +99,22 @@ def revive_compartments_by_random(
         : Number of dead compartments that have been revived.
     """
     revive_count = 0
-    num_component, num_compartment = targets.shape
+    num_comp, num_part = targets.shape
 
-    target_centers = np.full(num_component, 0.0, float)
-    omega_widths = np.full(num_component, 0.0, float)
-    for itr_component in range(num_component):
+    target_centers = np.full(num_comp, 0.0, float)
+    omega_widths = np.full(num_comp, 0.0, float)
+    for itr_component in range(num_comp):
         current_target_max = targets[itr_component].max()
         current_target_min = targets[itr_component].min()
         target_centers[itr_component] = (current_target_max + current_target_min) * 0.5
         omega_widths[itr_component] = (current_target_max - current_target_min) * 0.5
 
     # revive the compartment with random conjugate field
-    for itr_compartment in range(num_compartment):
+    for itr_compartment in range(num_part):
         if Js[itr_compartment] <= threshold:
             Js[itr_compartment] = 1.0
             revive_count += 1
-            for itr_component in range(num_component):
+            for itr_component in range(num_comp):
                 targets[itr_component, itr_compartment] = target_centers[
                     itr_component
                 ] + omega_widths[itr_component] * scaler * rng.uniform(-1, 1)
@@ -159,13 +159,13 @@ def revive_compartments_by_copy(
         : Number of revives
     """
     revive_count = 0
-    num_components, num_compartments = targets.shape
+    num_comp, num_part = targets.shape
 
-    dead_indexes = np.full(num_compartments, -1, dtype=np.int32)
+    dead_indexes = np.full(num_part, -1, dtype=np.int32)
     dead_count = 0
-    living_nicely_indexes = np.full(num_compartments, -1, dtype=np.int32)
+    living_nicely_indexes = np.full(num_part, -1, dtype=np.int32)
     living_nicely_count = 0
-    for itr_compartment in range(num_compartments):
+    for itr_compartment in range(num_part):
         if Js[itr_compartment] > 2.0 * threshold:
             living_nicely_indexes[living_nicely_count] = itr_compartment
             living_nicely_count += 1
@@ -244,11 +244,11 @@ def calc_volume_fractions(
             :math:`\\sum_i \\phi_i^{(m)} - 1`.
     """
 
-    num_components, num_compartments = omegas.shape
-    Qs = np.full(num_components, 0.0, float)
-    incomp = np.full(num_compartments, -1.0, float)
+    num_comp, num_part = omegas.shape
+    Qs = np.full(num_comp, 0.0, float)
+    incomp = np.full(num_part, -1.0, float)
     total_Js = Js.sum()
-    for itr_comp in range(num_components):
+    for itr_comp in range(num_comp):
         phis[itr_comp] = np.exp(-omegas[itr_comp] * sizes[itr_comp])
         Qs[itr_comp] = (phis[itr_comp] * Js).sum()
         Qs[itr_comp] /= total_Js
@@ -368,7 +368,7 @@ def multicomponent_self_consistent_metastep(
         [3]: Number of revives.
         [4]: Whether no phase is killed in the last step.
     """
-    num_components, num_compartments = omegas.shape
+    num_comp, num_part = omegas.shape
     chi_sum_sum = chis.sum()
 
     n_valid_phase = 0
@@ -378,7 +378,7 @@ def multicomponent_self_consistent_metastep(
         # check if we are still allowed to revive compartments
         if revive_count < revive_tries:
             n_valid_phase = count_valid_compartments(Js, kill_threshold)
-            if n_valid_phase != num_compartments:
+            if n_valid_phase != num_part:
                 # revive dead compartments
                 revive_count += revive_compartments_by_random(
                     Js, omegas, kill_threshold, rng, revive_scaler
@@ -398,14 +398,14 @@ def multicomponent_self_consistent_metastep(
 
         # xi, the lagrangian multiplier
         xi = chi_sum_sum * incomp
-        for itr_comp in range(num_components):
+        for itr_comp in range(num_comp):
             xi += omegas[itr_comp] - omega_temp[itr_comp]
         xi *= masks
-        xi /= num_components
+        xi /= num_comp
 
         # local energy. i.e. energy of phases excluding the partition function part
         local_energy = xi * incomp
-        for itr_comp in range(num_components):
+        for itr_comp in range(num_comp):
             local_energy += (
                 -0.5 * omega_temp[itr_comp] - xi - 1.0 / sizes[itr_comp]
             ) * phis[itr_comp]
@@ -427,7 +427,7 @@ def multicomponent_self_consistent_metastep(
 
         # calculate difference of omega and update omega directly
         max_abs_omega_diff = 0
-        for itr_comp in range(num_components):
+        for itr_comp in range(num_comp):
             omega_temp[itr_comp] = omega_temp[itr_comp] + xi - omegas[itr_comp]
             omega_temp[itr_comp] *= masks
             omega_temp[itr_comp] -= omega_temp[itr_comp].sum() / n_valid_phase

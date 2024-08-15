@@ -8,31 +8,31 @@ import pytest
 import flory
 
 
-@pytest.mark.parametrize("num_components", [4, 6, 8])
+@pytest.mark.parametrize("num_comp", [4, 6, 8])
 @pytest.mark.parametrize("chi", [8, 9, 10])
 @pytest.mark.parametrize("size", [1.0, 1.2])
-def test_find_coexisting_phases_symmetric(num_components: int, chi: float, size: float):
+def test_find_coexisting_phases_symmetric(num_comp: int, chi: float, size: float):
     """Test function `find_coexisting_phases` with a symmetric system"""
-    chis = chi - np.identity(num_components) * chi
-    phi_means = np.ones(num_components) / num_components
-    sizes = np.ones(num_components) * size
-    num_compartments = num_components * 4
+    chis = chi - np.identity(num_comp) * chi
+    phi_means = np.ones(num_comp) / num_comp
+    sizes = np.ones(num_comp) * size
+    num_part = num_comp * 4
 
     phi_l = np.exp(-size * chi)
-    phi_h = 1.0 - (num_components - 1) * phi_l
+    phi_h = 1.0 - (num_comp - 1) * phi_l
 
-    volumes_ref = np.ones(num_components) / num_components
-    phis_ref = phi_l + np.identity(num_components) * (phi_h - phi_l)
+    volumes_ref = np.ones(num_comp) / num_comp
+    phis_ref = phi_l + np.identity(num_comp) * (phi_h - phi_l)
 
     volumes_calc, phis_calc = flory.find_coexisting_phases(
-        chis, phi_means, num_compartments, sizes=sizes, tolerance=1e-7, progress=True
+        chis, phi_means, num_part, sizes=sizes, tolerance=1e-7, progress=True
     )
     np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-2, atol=1e-5)
     np.testing.assert_allclose(phis_calc, phis_ref, rtol=1e-2, atol=1e-5)
 
 
-@pytest.mark.parametrize("num_compartments", [8, 16, 32])
-def test_find_coexisting_phases_asymmetric_ternary(num_compartments: int):
+@pytest.mark.parametrize("num_part", [8, 16, 32])
+def test_find_coexisting_phases_asymmetric_ternary(num_part: int):
     """Test function `find_coexisting_phases` with a symmetric system"""
     chis = np.array([[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]])
     phi_means = np.array([0.16, 0.55, 0.29])
@@ -44,7 +44,7 @@ def test_find_coexisting_phases_asymmetric_ternary(num_compartments: int):
     )
 
     volumes_calc, phis_calc = flory.find_coexisting_phases(
-        chis, phi_means, num_compartments, sizes=sizes, tolerance=1e-7, progress=False
+        chis, phi_means, num_part, sizes=sizes, tolerance=1e-7, progress=False
     )
     np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-5)
     np.testing.assert_allclose(phis_calc, phis_ref, rtol=1e-5)
@@ -52,18 +52,18 @@ def test_find_coexisting_phases_asymmetric_ternary(num_compartments: int):
 
 def test_CoexistingPhasesFinder_ODT():
     """Test class `CoexistingPhasesFinder` with ODT of a binary system"""
-    num_components = 2
+    num_comp = 2
     chi_start = 2.9999
     chi_end = 1.0
 
-    chis = chi_start - np.identity(num_components) * chi_start
-    phi_means = np.ones(num_components) / num_components
-    num_compartments = num_components * 4
+    chis = chi_start - np.identity(num_comp) * chi_start
+    phi_means = np.ones(num_comp) / num_comp
+    num_part = num_comp * 4
 
     finder = flory.CoexistingPhasesFinder(
         chis,
         phi_means,
-        num_compartments,
+        num_part,
         tolerance=1e-10,
         progress=False,
         additional_chis_shift=5,
@@ -77,7 +77,7 @@ def test_CoexistingPhasesFinder_ODT():
     line_h = []
     chi_ODT = 0.0
     for chi in np.arange(chi_start, chi_end, -0.1):
-        chis = chi - np.identity(num_components) * chi
+        chis = chi - np.identity(num_comp) * chi
         finder.chis = chis
         ans = finder.run()
         assert finder.diagnostics["max_abs_incomp"] < 1e-5
@@ -97,44 +97,44 @@ def test_CoexistingPhasesFinder_ODT():
 
 def test_CoexistingPhasesFinder_set_parameters():
     """Test class `CoexistingPhasesFinder`.s functionality of resetting parameters"""
-    num_components = 4
-    chis = 3 - np.identity(num_components) * 3
-    phi_means = np.ones(num_components) / num_components
-    num_compartments = num_components * 4
+    num_comp = 4
+    chis = 3 - np.identity(num_comp) * 3
+    phi_means = np.ones(num_comp) / num_comp
+    num_part = num_comp * 4
 
     # not-square chi matrix
     with pytest.raises(ValueError):
-        finder = flory.CoexistingPhasesFinder(chis[:-1], phi_means, num_compartments)
+        finder = flory.CoexistingPhasesFinder(chis[:-1], phi_means, num_part)
 
     # asymmetric chi matrix
     achis = chis.copy()
     achis[0, 1] += 1
     with pytest.raises(ValueError):
-        finder = flory.CoexistingPhasesFinder(achis, phi_means, num_compartments)
+        finder = flory.CoexistingPhasesFinder(achis, phi_means, num_part)
 
     # incorrect phi_means shape
     with pytest.raises(ValueError):
-        finder = flory.CoexistingPhasesFinder(chis, phi_means[:-1], num_compartments)
+        finder = flory.CoexistingPhasesFinder(chis, phi_means[:-1], num_part)
 
     # incorrect total phi_means is allowed by warned
-    finder = flory.CoexistingPhasesFinder(chis, phi_means + 0.001, num_compartments)
+    finder = flory.CoexistingPhasesFinder(chis, phi_means + 0.001, num_part)
 
-    sizes = np.ones(num_components)
+    sizes = np.ones(num_comp)
     # incorrect sizes shape
     with pytest.raises(ValueError):
         finder = flory.CoexistingPhasesFinder(
-            chis, phi_means, num_compartments, sizes=sizes[:-1]
+            chis, phi_means, num_part, sizes=sizes[:-1]
         )
 
     # incorrect sizes values are allowed by warned
     finder = flory.CoexistingPhasesFinder(
-        chis, phi_means, num_compartments, sizes=sizes - 2
+        chis, phi_means, num_part, sizes=sizes - 2
     )
 
     # use custom generator
     mtg = np.random.PCG64()
     finder = flory.CoexistingPhasesFinder(
-        chis, phi_means, num_compartments, sizes=sizes, rng=np.random.Generator(mtg)
+        chis, phi_means, num_part, sizes=sizes, rng=np.random.Generator(mtg)
     )
 
     omegas = finder.omegas.copy()

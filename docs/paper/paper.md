@@ -50,10 +50,10 @@ On top of this, function-style api is also provided for quick estimation.
 The main part of the `flory` package is the finder for coexisting phases that can be reused on different parameters once created, as soon as the system size is fixed, which is typical scenario while studying the phase behavior of mixtures.
 For instance, the following code find the two coexisting phases of a symmetric binary mixture with $\chi=4$:
 ```python
-finder = flory.CoexistingPhasesFinder(chis = [[0, 4.0], [4.0, 0]], phi_means = [0.5, 0.5], num_compartments = 16)
+finder = flory.CoexistingPhasesFinder(chis = [[0, 4.0], [4.0, 0]], phi_means = [0.5, 0.5], num_part = 16)
 volumes, phis = finder.run()
 ```
-where `num_compartments` is the main hyperparameter of the package, the number of compartments, which we will explain later.
+where `num_part` is the main hyperparameter of the package, the number of compartments, which we will explain later.
 Then the coexisting phases of another symmetric binary mixture with $\chi=3.5$ matrix can be obtained by:
 ```python
 finder.chis = [[0, 3.5], [3.5, 0]]

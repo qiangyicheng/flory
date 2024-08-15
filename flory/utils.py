@@ -29,7 +29,7 @@ def find_coexisting_phases(
             the system. 1D array of length :math:`N_\mathrm{c}`. Note that the volume
             fraction of the solvent is included as well, so the sum of this array must
             be one.
-        num_compartments:
+        num_part:
             Number of compartments :math:`M` in the system.
         \**kwargs:
             All additional arguments are used directly to initialize
