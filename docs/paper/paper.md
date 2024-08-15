@@ -9,11 +9,14 @@ authors:
   - name: Yicheng Qiang
     orcid: 0000-0003-2053-079X
     affiliation: 1
+  - name: David Zwicker
+    orcid: 0000-0002-3909-3334
+    affiliation: 1
 affiliations:
  - name: Max Planck Institute for Dynamics and Self-Organization, Göttingen, Germany
    index: 1
 date: 11 August 2024
-bibliography: flory.bib
+bibliography: paper.bib
 ---
 
 # Summary
