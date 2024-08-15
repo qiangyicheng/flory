@@ -16,3 +16,6 @@ dist
 flory/_version.py
 .pydevproject
 .project
+
+docs/paper/paper.pdf
+docs/paper/paper.crossref
