@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from numba.experimental import jitclass
 
-from flory.detail.mcmp_impl import *
+from flory.mcmp._mcmp_impl import *
 
 
 def test_count_valid_phases():
@@ -29,7 +29,8 @@ def test_make_valid_phase_masks():
         make_valid_compartment_masks(Js, 0.1), np.array([True, True, True, True, False])
     )
     np.testing.assert_equal(
-        make_valid_compartment_masks(Js, 0.2), np.array([True, True, False, True, False])
+        make_valid_compartment_masks(Js, 0.2),
+        np.array([True, True, False, True, False]),
     )
     np.testing.assert_equal(
         make_valid_compartment_masks(Js, -0.4), np.array([True, True, True, True, True])

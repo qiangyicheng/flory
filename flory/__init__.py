@@ -16,4 +16,6 @@ except ImportError:
         __version__ = "unknown"
     del PackageNotFoundError, version
 
-from .mcmp import CoexistingPhasesFinder, find_coexisting_phases
+from .free_energy import FloryHuggins
+from .mcmp import CoexistingPhasesFinder
+from .utils import find_coexisting_phases

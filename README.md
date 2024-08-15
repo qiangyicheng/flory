@@ -5,8 +5,9 @@
 [![Documentation Status](https://readthedocs.org/projects/flory/badge/?version=latest)](https://flory.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/flory.svg)](https://badge.fury.io/py/flory)
 
-`flory` is a Python package for determining multiple coexisting phases in multicomponent mixtures.
-This is a numerically challenging problem, since the thermodynamic coexistence conditions are many coupled non-linear equations.
+`flory` is a Python package for analyzing theories of multicomponent mixtures.
+In particular, the package provides routines to determine coexisting states numerically.
+This is a challenging problem, since the thermodynamic coexistence conditions are many coupled non-linear equations.
 Currently, `flory` supports finding coexisting phases in the canonical ensemble of system with an arbitrary number of components that interact according to Flory-Huggins theory.
 The associated average free energy density of the system reads
 
