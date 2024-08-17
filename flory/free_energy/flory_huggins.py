@@ -4,23 +4,12 @@ Module defining thermodynamic quantities of multicomponent phase separation.
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
-from __future__ import annotations
+from typing import Any, Union, Optional
 
-import logging
-from typing import Callable
-
-import numba as nb
+from numba.experimental import jitclass
+from numba import njit, float64, int32
 import numpy as np
-import scipy.linalg
-from scipy.cluster import hierarchy
-from scipy.spatial import distance
 from .base import FreeEnergyBase
-
-
-class SolventFractionError(RuntimeError):
-    """error indicating that the solvent fraction was not in [0, 1]"""
-
-    pass
 
 
 class FloryHuggins(FreeEnergyBase):
@@ -30,34 +19,34 @@ class FloryHuggins(FreeEnergyBase):
 
     .. math::
         f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}\biggl[
-            \phi_0\ln(\phi_0)
-            + \sum_{i=1}^N \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
-            + \!\sum_{i,j=1}^N \frac{\chi_{ij}}{2} \phi_i\phi_j
+            \sum_{i=1}^N \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
+            + \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
         \biggr]
 
-    where :math:`\phi_i` is the fraction of component :math:`i` and :math:`\phi_0 = 1 -
-    \sum_i \phi_i` is the fraction of the solvent. All components are assumed to have the
-    same molecular volume :math:`\nu` by default and the interactions are quantified by
-    the Flory matrix :math:`\chi_{ij}`. Note that components do not interact with the
-    solvent, which is thus completely inert. The relative molecular volume :math:`v_i` can
-    be changed by setting the optional parameter `sizes`, which always treats the volume
-    of the solvent molecular as unit.
+    where :math:`\phi_i` is the fraction of component :math:`i`. All components are
+    assumed to have the same molecular volume :math:`\nu` by default and the interactions
+    are quantified by the Flory matrix :math:`\chi_{ij}`. The relative molecular sizes
+    :math:`l_i=\nu_i/\nu` can be changed by setting the optional parameter `sizes`. Note
+    that no implicit solvent is assumed.
     """
 
     def __init__(
-        self,num_comp: int, 
-        chis: np.ndarray,
-        size: np.ndarray | None = None,
+        self,
+        num_comp: int,
+        chis: Union[np.ndarray, float],
+        sizes: Optional[np.ndarray] = None,
     ):
         """
         Args:
-            chis (:class:`~numpy.ndarray`):
-                The interaction matrix
-            sizes (:class:`~numpy.ndarray | None`):
-                The relative volumes with respect to the volume of the solvent molecular.
-                It is treated as all-one vector by default or passing `None`.
+            num_comp:
+                Number of components in the system
+            chis:
+                The Flory-Huggins interaction matrix
+            sizes:
+                The relative volumes with respect to the volume of an imaginary reference
+                molecular. It is treated as all-one vector by default or passing `None`.
         """
-        super().__init__(num_comp=num_comp, size=size)
+        super().__init__(num_comp=num_comp, sizes=sizes)
         chis = np.atleast_1d(chis)
 
         shape = (num_comp, num_comp)
@@ -65,19 +54,13 @@ class FloryHuggins(FreeEnergyBase):
 
         # ensure that the chi matrix is symmetric
         if not np.allclose(chis, chis.T):
-            logging.warning("Using symmetrized χ interaction-matrix")
+            self._logger.warning("Using symmetrized χ interaction-matrix")
         self.chis = 0.5 * (chis + chis.T)
-
-
-    def make_interaction(self):
-        @jitclass
-        ...
 
     @property
     def independent_entries(self) -> np.ndarray:
-        """:class:`~numpy.ndarray` entries of the upper triangle only"""
-        return self.chis[np.triu_indices_from(self.chis, k=0)]  # type: ignore
-
+        r"""entries of the upper triangle of the :math:`\chi_{ij}` matrix"""
+        return self.chis[np.triu_indices_from(self.chis, k=0)]
 
     @classmethod
     def from_uniform(
@@ -85,27 +68,26 @@ class FloryHuggins(FreeEnergyBase):
         num_comp: int,
         chi: float,
         *,
-        size: np.ndarray | None = None,
-        vanishing_diagonal:bool=True
-    ) -> FloryHuggins:
-        """create Flory-Huggins free energy with uniform chi matrix
+        sizes: Optional[np.ndarray] = None,
+        vanishing_diagonal: bool = True,
+    ):
+        r"""create Flory-Huggins free energy with uniform `chis` matrix
 
         Args:
-            num_comp (int):
+            num_comp:
                 The number of components
-            chi (float):
-                The value of all non-zero values in the interaction matrix
-            inert_solvent (bool):
-                Flag determining whether the solvent (species 0) is assumed inert or not.
-                For an inert solvent, the diagonal of the `chi` matrix must vanish.
-            sizes (:class:`~numpy.ndarray | None`):
-                The relative volumes with respect to the volume of the solvent molecular.
-                It is treated as all-one vector by default or passing `None`.
+            chi:
+                The value of all non-zero values in the interaction matrix :math:`\chi{i \ne j}`
+            sizes:
+                The relative volumes with respect to the volume of an imaginary reference
+                molecular. It is treated as all-one vector by default or passing `None`.
+            vanishing_diagonal:
+                Whether the diagonal elements of the `chis` matrix are set to be zero.
         """
         chis = np.full((num_comp, num_comp), chi)
         if vanishing_diagonal:
             chis[np.diag_indices_from(chis)] = 0
-        return cls(num_comp, chis, size=size)
+        return cls(num_comp, chis, size=sizes)
 
     @classmethod
     def from_random_normal(
@@ -114,42 +96,53 @@ class FloryHuggins(FreeEnergyBase):
         chi_mean: float = 0,
         chi_std: float = 1,
         *,
+        sizes: Optional[np.ndarray] = None,
         vanishing_diagonal: bool = True,
-        size: np.ndarray | None = None,
-        rng=None,
-    ) -> FloryHuggins:
-        """create random Flory-Huggins free energy density
+        rng: Optional[np.random.Generator] = None,
+    ):
+        r"""create Flory-Huggins free energy with random `chis` matrix
 
         Args:
-            num_comp (int):
-                Number of components (excluding the solvent)
-            chi_mean (float):
+            num_comp:
+                Number of components
+            chi_mean:
                 Mean interaction
-            chi_std (float):
+            chi_std:
                 Standard deviation of the interactions
-            inert_solvent (bool):
-                Flag determining whether the solvent (species 0) is assumed inert or not.
-                For an inert solvent, the diagonal of the `chi` matrix must vanish.
+            sizes:
+                The relative volumes with respect to the volume of an imaginary reference
+                molecular. It is treated as all-one vector by default or passing `None`.
+            vanishing_diagonal:
+                Whether the diagonal elements of the `chis` matrix are set to be zero.
             rng:
                 the random number generator
-            sizes (:class:`~numpy.ndarray | None`):
-                The relative volumes with respect to the volume of the solvent molecular.
-                It is treated as all-one vector by default or passing `None`.
+
         """
-        obj = cls(num_comp, 
-            np.zeros((num_comp, num_comp)), size=size
+        obj = cls(num_comp, 0, sizes=sizes)
+        obj.set_random_chis(
+            chi_mean, chi_std, vanishing_diagonal=vanishing_diagonal, rng=rng
         )
-        obj.set_random_chis(chi_mean, chi_std, vanishing_diagonal=vanishing_diagonal,rng=rng)
         return obj
 
-
-    def set_random_chis(self, chi_mean: float = 0, chi_std: float = 1, *, vanishing_diagonal: bool = True,rng=None):
+    def set_random_chis(
+        self,
+        chi_mean: float = 0,
+        chi_std: float = 1,
+        *,
+        vanishing_diagonal: bool = True,
+        rng=None,
+    ):
         """choose random interaction parameters
 
         Args:
-            chi_mean: Mean interaction
-            chi_std: Standard deviation of the interactions
-            rng: the random number generator
+            chi_mean:
+                Mean interaction
+            chi_std:
+                Standard deviation of the interactions
+            vanishing_diagonal:
+                Whether the diagonal elements of the `chis` matrix are set to be zero.
+            rng:
+                the random number generator
         """
         if rng is None:
             rng = np.random.default_rng()
@@ -167,47 +160,98 @@ class FloryHuggins(FreeEnergyBase):
         i, j = np.triu_indices(self.num_comp, 1 if vanishing_diagonal else 0)
         self.chis[i, j] = chi_vals
         self.chis[j, i] = chi_vals
+        
+    def _interaction_impl(self, *, additional_chis_shift: float = 1.0) -> object:
+        """make the interaction instance that can be used by the :mod:`mcmp` module.
 
+        Args:
+            additional_chis_shift:
+                Shift of the entire chis matrix to improve the convergence by evolving
+                towards incompressible system faster. This value should be larger than 0.
+                This value only affects the numerics, not the actual physical system. Note
+                that with very large value, the convergence will be slowed down, since the
+                algorithm no longer have enough ability to temporarily relax the
+                incompressibility.
+        Returns:
+            : An instance of :class:`FloryHugginsInteractions`.
+        """
 
-    def free_energy_density(
-        self, phis: np.ndarray, *, check: bool = True
-    ) -> np.ndarray:
+        @jitclass(
+            [
+                ("_num_comp", int32),  # a scalar
+                ("_chis", float64[:, ::1]),  # a C-continuous array
+                ("_incomp_coef", float64),  # a scalar
+            ]
+        )
+        class FloryHugginsInteractions(object):
+            def __init__(self, chis: np.ndarray, chis_shift: float):
+                self._num_comp = chis.shape[0]
+                self._chis = chis  # do not affect chis
+                self._incomp_coef = (
+                    chis.sum() + chis_shift * self._num_comp * self._num_comp
+                )
+
+            @property
+            def chis(self):
+                return self._chis
+
+            def energy(self, potential: np.ndarray, phis: np.ndarray) -> float:
+                # since Flory-Huggins free energy contains only 2nd-ordered interactions,
+                # the interaction energy is directly calculated from potential and phis
+                ans = np.zeros_like(potential[0])
+                for itr in range(self._num_comp):
+                    ans += potential[itr] * phis[itr]
+                ans *= 0.5
+                return ans
+
+            def potential(self, phis: np.ndarray) -> np.ndarray:
+                ans = np.zeros_like(phis)
+                for itr_i in range(self._num_comp):
+                    for itr_j in range(self._num_comp):
+                        current_chi = self._chis[itr_i][itr_j]
+                        if current_chi == 0.0:
+                            continue
+                        ans[itr_i] += current_chi * phis[itr_j]
+
+                return ans  # same as self._chis @ phis
+
+            def incomp_coef(self, phis: np.ndarray) -> float:
+                return self._incomp_coef
+
+        return FloryHugginsInteractions(
+            self.chis, -self.chis.min() + additional_chis_shift
+        )
+
+    def _free_energy_density_impl(self, phis: np.ndarray) -> np.ndarray:
         """returns free energy for a given composition
 
         Args:
-            phis (:class:`numpy.ndarray`): The composition of the phase(s)
-            check (bool): Whether the solvent fraction is checked to be positive
+            phis:
+                The composition of the phase(s). if multiple phases are included, the
+                index of the components must be the last dimension.
+
+        Returns:
+            : The free energy density
         """
-        phis = np.asanyarray(phis)
-        assert phis.shape[-1] == self.num_comp, "Wrong component count"
-
-        phi_sol = 1 - phis.sum(axis=-1)
-        if check and np.any(phi_sol < 0):
-            raise SolventFractionError("Solvent has negative concentration")
-
-        entropy_comp = np.einsum("...i,...i->...", phis / self.size, np.log(phis))
-        entropy_sol = phi_sol * np.log(phi_sol)
+        entropy_comp = np.einsum("...i,...i->...", phis / self.sizes, np.log(phis))
         enthalpy = 0.5 * np.einsum("...i,...j,ij->...", phis, phis, self.chis)
-        return entropy_comp + entropy_sol + enthalpy  # type: ignore
+        return entropy_comp + enthalpy
 
-    def chemical_potentials(self, phis: np.ndarray) -> np.ndarray:
-        """returns chemical potentials for a given composition"""
-        phis = np.asanyarray(phis)
-        phi_sol = 1 - phis.sum(axis=-1, keepdims=True)
-        if np.any(phi_sol < 0):
-            raise SolventFractionError("Solvent has negative concentration")
-        return (  # type: ignore
-            np.log(phis) / self.size
-            - np.log(phi_sol)
-            + (1.0 / self.size - 1.0)
+    def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
+        r"""returns full Jacobian :math:`\partial f/\partial \phi` for the given composition
+
+        Args:
+            phis:
+                The composition of the phase(s). if multiple phases are included, the
+                index of the components must be the last dimension.
+        """
+        return (
+            np.log(phis) / self.sizes
+            + 1.0 / self.sizes
             + np.einsum("...i,ij->...j", phis, self.chis)
         )
 
-    def hessian(self, phis: np.ndarray) -> np.ndarray:
+    def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         """returns Hessian for the given composition"""
-        phis = np.asanyarray(phis)
-        assert phis.shape == (self.num_comp,)
-        phi_sol = 1 - phis.sum(axis=-1, keepdims=True)
-        if np.any(phi_sol < 0):
-            raise SolventFractionError("Solvent has negative concentration")
-        return np.eye(self.num_comp) / (phis * self.sizes) + 1 / phi_sol + self.chis  # type: ignore
+        return np.eye(self.num_comp) / (phis * self.sizes)[..., None] + self.chis  # type: ignore
+

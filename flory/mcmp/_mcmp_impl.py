@@ -262,7 +262,7 @@ def calc_volume_fractions(
 @nb.njit()
 def multicomponent_self_consistent_metastep(
     phi_means: np.ndarray,
-    chis: np.ndarray,
+    interaction: object,
     sizes: np.ndarray,
     *,
     omegas: np.ndarray,
@@ -369,7 +369,6 @@ def multicomponent_self_consistent_metastep(
         [4]: Whether no phase is killed in the last step.
     """
     num_comp, num_part = omegas.shape
-    chi_sum_sum = chis.sum()
 
     n_valid_phase = 0
 
@@ -394,20 +393,22 @@ def multicomponent_self_consistent_metastep(
         max_abs_incomp = np.abs(incomp).max()
 
         # temp for omega, namely chi.phi
-        omega_temp = chis @ phis
+        potential = interaction.potential(phis)
 
         # xi, the lagrangian multiplier
-        xi = chi_sum_sum * incomp
+        xi = interaction.incomp_coef(phis) * incomp
         for itr_comp in range(num_comp):
-            xi += omegas[itr_comp] - omega_temp[itr_comp]
+            xi += omegas[itr_comp] - potential[itr_comp]
         xi *= masks
         xi /= num_comp
 
         # local energy. i.e. energy of phases excluding the partition function part
-        local_energy = xi * incomp
+        omega_temp = potential.copy()
+        local_energy = interaction.energy(potential, phis) + xi * incomp
         for itr_comp in range(num_comp):
+            omega_temp[itr_comp] += xi
             local_energy += (
-                -0.5 * omega_temp[itr_comp] - xi - 1.0 / sizes[itr_comp]
+                - omega_temp[itr_comp] - 1.0 / sizes[itr_comp]
             ) * phis[itr_comp]
 
         # calculate the difference of Js
@@ -428,15 +429,13 @@ def multicomponent_self_consistent_metastep(
         # calculate difference of omega and update omega directly
         max_abs_omega_diff = 0
         for itr_comp in range(num_comp):
-            omega_temp[itr_comp] = omega_temp[itr_comp] + xi - omegas[itr_comp]
+            omega_temp[itr_comp] -= omegas[itr_comp]
             omega_temp[itr_comp] *= masks
-            omega_temp[itr_comp] -= omega_temp[itr_comp].sum() / n_valid_phase
             max_abs_omega_diff = max(max_abs_omega_diff, omega_temp[itr_comp].max())
             omegas[itr_comp] += (
                 additional_factor * acceptance_omega * omega_temp[itr_comp]
             )
             omegas[itr_comp] *= masks
-            omegas[itr_comp] -= omegas[itr_comp].sum() / n_valid_phase
 
     # count the valid phases in the last step
     n_valid_phase_last = count_valid_compartments(Js, kill_threshold)

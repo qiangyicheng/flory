@@ -159,19 +159,24 @@ class CoexistingPhasesFinder:
         self._logger = logging.getLogger(self.__class__.__name__)
 
         # Check chis
-        chis = np.array(chis)
-        if chis.shape[0] == chis.shape[1]:
-            self._chis = chis
-            self._num_comp = chis.shape[0]
-            self._logger.info(
-                f"We infer that there are {self._num_comp} components in the system from the chis matrix."
-            )
-        else:
-            self._logger.error(f"chis matrix with size of {chis.shape} is not square.")
-            raise ValueError("chis matrix must be square.")
-        if not np.allclose(chis, chis.transpose()):
-            self._logger.error(f"chis matrix is not symmetric.")
-            raise ValueError("chis matrix must be symmetric.")
+        
+        self._num_comp = free_energy.num_comp
+        self._sizes = free_energy.sizes
+        self._interaction = free_energy.interaction()
+        
+        # chis = np.array(chis)
+        # if chis.shape[0] == chis.shape[1]:
+        #     self._chis = chis
+        #     self._num_comp = chis.shape[0]
+        #     self._logger.info(
+        #         f"We infer that there are {self._num_comp} components in the system from the chis matrix."
+        #     )
+        # else:
+        #     self._logger.error(f"chis matrix with size of {chis.shape} is not square.")
+        #     raise ValueError("chis matrix must be square.")
+        # if not np.allclose(chis, chis.transpose()):
+        #     self._logger.error(f"chis matrix is not symmetric.")
+        #     raise ValueError("chis matrix must be symmetric.")
 
         # Check phi_means
         phi_means = np.array(phi_means)
@@ -193,25 +198,25 @@ class CoexistingPhasesFinder:
 
         ## optional arguments
 
-        # sizes
-        if sizes is None:
-            self._sizes = np.ones(self._num_comp)
-        else:
-            sizes = np.array(sizes)
-            if sizes.shape[0] == self._num_comp:
-                self._sizes = sizes
-                if np.sum(self._sizes <= 0):
-                    self._logger.warning(
-                        f"Non-positive sizes detected. Iteration will probably fail."
-                    )
-            else:
-                self._logger.error(
-                    f"sizes vector with size of {sizes.shape} is invalid, since "
-                    "{self._num_comp} is defined by chis matrix."
-                )
-                raise ValueError(
-                    "sizes vector must imply same component number as chis matrix."
-                )
+        # # sizes
+        # if sizes is None:
+        #     self._sizes = np.ones(self._num_comp)
+        # else:
+        #     sizes = np.array(sizes)
+        #     if sizes.shape[0] == self._num_comp:
+        #         self._sizes = sizes
+        #         if np.sum(self._sizes <= 0):
+        #             self._logger.warning(
+        #                 f"Non-positive sizes detected. Iteration will probably fail."
+        #             )
+        #     else:
+        #         self._logger.error(
+        #             f"sizes vector with size of {sizes.shape} is invalid, since "
+        #             "{self._num_comp} is defined by chis matrix."
+        #         )
+        #         raise ValueError(
+        #             "sizes vector must imply same component number as chis matrix."
+        #         )
 
         # rng
         if rng is None:
@@ -316,37 +321,37 @@ class CoexistingPhasesFinder:
             self._max_revive_per_compartment * self._num_part
         )
 
-    @property
-    def chis(self) -> np.ndarray:
-        r"""Full interaction matrix :math:`\chi_{ij}`
+    # @property
+    # def chis(self) -> np.ndarray:
+    #     r"""Full interaction matrix :math:`\chi_{ij}`
 
-        The matrix has shape :math:`N_\mathrm{c} \times N_\mathrm{c}`. Setting this
-        property requires that the new matrix has the same shape. Note that this
-        implies implicit reset of the internal data, the number of revives, but not the
-        others including volume fractions :math:`\phi_i^{(m)}` and conjugate fields
-        :math:`\omega_i^{(m)}`. See class parameters
-        :paramref:`~CoexistingPhasesFinder.chis` and
-        :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
-        information.
-        """
-        return self._chis
+    #     The matrix has shape :math:`N_\mathrm{c} \times N_\mathrm{c}`. Setting this
+    #     property requires that the new matrix has the same shape. Note that this
+    #     implies implicit reset of the internal data, the number of revives, but not the
+    #     others including volume fractions :math:`\phi_i^{(m)}` and conjugate fields
+    #     :math:`\omega_i^{(m)}`. See class parameters
+    #     :paramref:`~CoexistingPhasesFinder.chis` and
+    #     :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
+    #     information.
+    #     """
+    #     return self._chis
 
-    @chis.setter
-    def chis(self, chis_new: np.ndarray):
-        chis_new = np.array(chis_new)
-        if chis_new.shape == self._chis.shape:
-            if (chis_new != chis_new.transpose()).any():
-                self._logger.error(f"chis matrix is not symmetric.")
-                raise ValueError("chis matrix must be symmetric.")
-            self._chis = chis_new
-        else:
-            self._logger.error(
-                f"new chis with size of {chis_new.shape} is invalid. It must have the size of {self._chis.shape}."
-            )
-            raise ValueError("New chis must match the size of the old one.")
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
+    # @chis.setter
+    # def chis(self, chis_new: np.ndarray):
+    #     chis_new = np.array(chis_new)
+    #     if chis_new.shape == self._chis.shape:
+    #         if (chis_new != chis_new.transpose()).any():
+    #             self._logger.error(f"chis matrix is not symmetric.")
+    #             raise ValueError("chis matrix must be symmetric.")
+    #         self._chis = chis_new
+    #     else:
+    #         self._logger.error(
+    #             f"new chis with size of {chis_new.shape} is invalid. It must have the size of {self._chis.shape}."
+    #         )
+    #         raise ValueError("New chis must match the size of the old one.")
+    #     self._revive_count_left = (
+    #         self._max_revive_per_compartment * self._num_part
+    #     )
 
     @property
     def phi_means(self) -> np.ndarray:
@@ -380,43 +385,19 @@ class CoexistingPhasesFinder:
             self._max_revive_per_compartment * self._num_part
         )
 
-    @property
-    def sizes(self) -> np.ndarray:
-        r"""Relative molecule sizes of all components :math:`l_i`.
+    # @property
+    # def sizes(self) -> np.ndarray:
+    #     r"""Relative molecule sizes of all components :math:`l_i`.
 
-        Array of length :math:`N_\mathrm{c}`. Setting this property requires that the
-        new array has the same size. Note that this implies implicit reset of the
-        internal data, the number of revives, but not the others including volume
-        fractions :math:`\phi_i^{(m)}` and conjugate fields :math:`\omega_i^{(m)}`. See
-        class parameters :paramref:`~CoexistingPhasesFinder.sizes` and
-        :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
-        information.
-        """
-        return self._sizes
-
-    @sizes.setter
-    def sizes(self, sizes_new):
-        sizes_new = np.array(sizes_new)
-        if sizes_new.shape == self._sizes.shape:
-            self._sizes = sizes_new
-        else:
-            self._logger.error(
-                f"new sizes with size of {sizes_new.shape} is invalid. It must have the size of {self._sizes.shape}."
-            )
-            raise ValueError("New sizes must match the size of the old one.")
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
-
-    @property
-    def phis(self) -> np.ndarray:
-        r"""Volume fractions fields :math:`\phi_i^{(m)}`
-
-        Read-only array of length :math:`N_\mathrm{c} \times M`. Use
-        :meth:`reinitialize_from_phis` to initialize the system from volume fractions.
-        """
-
-        return self._phis
+    #     Array of length :math:`N_\mathrm{c}`. Setting this property requires that the
+    #     new array has the same size. Note that this implies implicit reset of the
+    #     internal data, the number of revives, but not the others including volume
+    #     fractions :math:`\phi_i^{(m)}` and conjugate fields :math:`\omega_i^{(m)}`. See
+    #     class parameters :paramref:`~CoexistingPhasesFinder.sizes` and
+    #     :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
+    #     information.
+    #     """
+    #     return self._sizes
 
     @property
     def omegas(self) -> np.ndarray:
@@ -488,8 +469,8 @@ class CoexistingPhasesFinder:
 
         steps = 0
 
-        chis_shifted = self._chis.copy()
-        chis_shifted += -self._chis.min() + self._additional_chis_shift
+        # chis_shifted = self._chis.copy()
+        # chis_shifted += -self._chis.min() + self._additional_chis_shift
 
         bar_max = -np.log10(tolerance)
         bar_format = "{desc:<20}: {percentage:3.0f}%|{bar}{r_bar}"
@@ -522,7 +503,7 @@ class CoexistingPhasesFinder:
                 is_last_step_safe,
             ) = multicomponent_self_consistent_metastep(
                 self._phi_means,
-                chis_shifted,
+                self._interaction,
                 self._sizes,
                 omegas=self._omegas,
                 Js=self._Js,

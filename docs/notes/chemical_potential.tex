@@ -1,0 +1,54 @@
+\documentclass[reprint,onecolumn,groupedaddress,amsmath,amssymb]{revtex4-2}
+
+\usepackage[]{hyperref}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{xr}
+
+\hypersetup{
+  colorlinks   = true,
+  urlcolor     = blue,
+  linkcolor    = blue,
+  citecolor   = red
+}
+
+\begin{document}
+
+\title{Mapping between standard chemical potentials and exchange chemical potentials / osmotic pressure}
+
+\author{Yicheng Qiang}
+\affiliation{Max Planck Institute for Dynamics and Self-Organization, Am Fa{\ss}berg 17, 37077 G{\"o}ttingen, Germany}
+
+\maketitle
+\tableofcontents
+
+For a general free energy density of $N_\mathrm{c}$ components $f(\{\phi_i\}_{i=1}^{N_\mathrm{c}})$, with the volume fractions defined as
+\begin{align}
+    \phi_i = \nu_i  N_i / V\;, \quad \quad \quad V = \sum_j^{N_\mathrm{c}} \nu_j N_j + V_0 \;.
+\end{align}
+The total free energy is $F = V f$.
+Then the (original) chemical potentials are
+\begin{align}
+    \mu_i 
+    &= \frac{\partial F}{\partial N_i}
+    = \nu_i f + V \frac{\partial f}{\partial N_i}
+    = \nu_i f + V \sum_{j=1}^{N_\mathrm{c}} \frac{\partial \phi_j}{\partial N_i} \frac{\partial f}{\partial \phi_j}
+    = \nu_i f + V \sum_{j=1}^{N_\mathrm{c}} \frac{\nu_j \delta_{ij} V - \nu_j N_j \nu_i}{V^2} \frac{\partial f}{\partial \phi_j} \notag \\
+    &= \nu_i \left( f - \sum_j \phi_j \frac{\partial f}{\partial \phi_j} + \frac{\partial f}{\partial \phi_i} \right) \;.
+\end{align}
+Since the dimensionless free energy density is defined by $f = \tilde{f} k_\mathrm{B} T / \nu$, while $\nu$ is a reference molecule volume, the dimensionless chemical potentials become
+\begin{align}
+    \tilde{\mu}_i = l_i \left(\tilde{f} - \sum_j \phi_j \frac{\partial \tilde{f}}{\partial \phi_j} + \frac{\partial \tilde{f}}{\partial \phi_i} \right) \;,
+\end{align} 
+where $l_i = \nu_i / \nu$ is the relative molecule volumes.
+Then the exchange chemical potentials with respect to component $s$ is simply $\tilde{\mu}_i - \tilde{\mu}_s$.
+The osmotic pressure $P_i$, defined by the balance $P_i \nu_i + \partial F/\partial N_i = 0$, reads
+\begin{align}
+    P_i = - \mu_i / \nu_i, 
+\end{align} 
+while the dimensionless version $\tilde{P}_i$, defined by $P_i = \tilde{P}_i k_\mathrm{B} T / \nu$, reads
+\begin{align}
+    \tilde{P}_i = - \tilde{\mu}_i / l_i \;.
+\end{align}
+
+\end{document}
