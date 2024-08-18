@@ -9,7 +9,7 @@ def find_coexisting_phases(
     num_comp: int,
     chis: np.ndarray,
     phi_means: np.ndarray,
-    size: Optional[np.ndarray] = None,
+    sizes: Optional[np.ndarray] = None,
     **kwargs,
 ) -> tuple[np.ndarray, np.ndarray]:
     r"""Find coexisting phases of a Flory-Huggins mixtures.
@@ -44,6 +44,6 @@ def find_coexisting_phases(
             Volume fractions of components in each phase :math:`\phi_i^{(\alpha)}`. 2D
             array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
     """
-    free_energy = FloryHuggins(num_comp, chis, size)
+    free_energy = FloryHuggins(num_comp, chis, sizes)
     finder = CoexistingPhasesFinder(free_energy, phi_means, num_comp*8 ,**kwargs)
     return finder.run()

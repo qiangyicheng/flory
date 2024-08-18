@@ -4,70 +4,49 @@ from typing import Optional, Union
 import numpy as np
 
 from ..commom import *
+from ..interaction import InteractionBase
+from ..entropy import EntropyBase
+
 
 class FreeEnergyBase:
-    def __init__(self, num_comp: int, sizes: Optional[np.ndarray] = None):
-        """Base class for a general free energy of mixture.
-
-        Args:
-            num_comp:
-                number of components in the mixture
-            sizes:
-                Relative molecule volumes of the components.
-        """
+    def __init__(self, interaction: InteractionBase, entropy: EntropyBase):
+        """Base class for a general free energy of mixture."""
         self._logger = logging.getLogger(self.__class__.__name__)
-        self.num_comp = num_comp
-        if sizes is None:
-            self.sizes = np.ones(num_comp)
-        else:
-            self.sizes = np.array(sizes)
-            if self.sizes.shape != (self.num_comp,):
-                self._logger.error(
-                    f"sizes vector with size of {self.sizes.shape} is invalid for {self.num_comp}-component system."
-                )
-                raise ValueError("length of explicit sizes vector must be the num_comp.")
+        if interaction.num_comp != entropy.num_comp:
+            self._logger.error(
+                f"Interactions requires {interaction.num_comp} components while entropy requires {entropy.num_comp}."
+            )
+            raise ComponentNumberError(
+                "Number of component mismatch between interaction and entropy."
+            )
+        self.interaction = interaction
+        self.entropy = entropy
+        self.num_comp = interaction.num_comp
+    
+    def interaction_compiled(self, **kwargs_full) ->object:
+        return self.interaction.compiled(**kwargs_full)
+    
+    def entropy_compiled(self, **kwargs_full) ->object:
+        return self.entropy.compiled(**kwargs_full)
 
-    def _interaction_impl(self, **kwargs) -> object:
-        """returns interaction instance containing necessary member functions for iteration.
-        """
-        raise NotImplementedError
-
-    def _free_energy_density_impl(self, phis: np.ndarray) -> np.ndarray:
+    def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         """returns free energy for a given composition"""
-        raise NotImplementedError
+        return self.interaction._energy_impl(phis) + self.entropy._energy_impl(phis)
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""returns full Jacobian :math:`\partial f/\partial \phi` for the given composition"""
-        raise NotImplementedError
+        return self.interaction._jacobian_impl(phis) + self.entropy._jacobian_impl(phis)
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""returns full Hessian :math:`\partial^2 f/\partial \phi^2` for the given composition"""
-        raise NotImplementedError
-
-    def interaction(self, **kwargs_full) ->object:
-        """Create the interaction instance containing necessary member functions for iteration
-        This function requires the implementation of :meth:`_interaction_impl`. The
-        interaction instance is a compiled class, which must implement following compiled
-        functions:
-        
-        Detailed documentation required here.
-        
-        Args:
-            kwargs_full:
-                The keyword arguments which allow additional unused arguments.
-
-        Returns:
-            : The compiler interaction instance.
-        """
-        kwargs = filter_kwargs(kwargs_full, self._interaction_impl)
-        return self._interaction_impl(**kwargs)
+        return self.interaction._hessian_impl(phis) + self.entropy._hessian_impl(phis)
 
     def check_volume_fractions(self, phis: np.ndarray, axis: int = -1) -> np.ndarray:
         """Check whether volume fractions are valid.
         If the shape of :paramref:`phis` or it has non-positive values, an exception will be raised.
         Note that this function do not forbid volume fractions to be larger than 1.
         Args:
-            phis: 
+            phis:
                 Volume fractions of the components. Multiple compositions can be included.
             axis:
                 The axis of the index of components. By the default the last dimension of
@@ -75,10 +54,10 @@ class FreeEnergyBase:
 
         Returns:
             : The volume fractions :paramref:`phis`
-        """        
+        """
         phis = np.asanyarray(phis)
 
-        if phis.shape[-1] != self.num_comp:
+        if phis.shape[axis] != self.num_comp:
             self._logger.error(
                 f"The shape of f{phis.shape} of volume fractions is incompatible with the number of components {self.num_comp}."
             )
@@ -101,7 +80,7 @@ class FreeEnergyBase:
             : Free energy density of each phase.
         """
         phis = self.check_volume_fractions(phis)
-        return self.free_energy_density(phis)
+        return self._energy_impl(phis)
 
     def jacobian(self, phis: np.ndarray, index: Optional[int] = None) -> np.ndarray:
         """Calculate the Jacobian with/without volume conservation.
@@ -257,4 +236,3 @@ class FreeEnergyBase:
             : The number of negative eigenvalues of the Hessian.
         """
         return self.num_unstable_modes(phis, conserved) == 0
-

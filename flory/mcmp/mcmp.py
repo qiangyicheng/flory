@@ -161,8 +161,8 @@ class CoexistingPhasesFinder:
         # Check chis
         
         self._num_comp = free_energy.num_comp
-        self._sizes = free_energy.sizes
-        self._interaction = free_energy.interaction()
+        self._sizes = free_energy.entropy.sizes
+        self._interaction = free_energy.interaction_compiled()
         
         # chis = np.array(chis)
         # if chis.shape[0] == chis.shape[1]:

@@ -3,3 +3,8 @@ class VolumeFractionError(ValueError):
 
     pass
 
+class ComponentNumberError(ValueError):
+    """Error indicating mismatch of number of component."""
+
+    pass
+
