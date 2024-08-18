@@ -4,7 +4,12 @@ class VolumeFractionError(ValueError):
     pass
 
 class ComponentNumberError(ValueError):
-    """Error indicating mismatch of number of component."""
+    """Error indicating mismatch of number of components."""
+
+    pass
+
+class FeatureNumberError(ValueError):
+    """Error indicating mismatch of number of features."""
 
     pass
 

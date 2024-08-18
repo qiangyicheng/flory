@@ -1,2 +1,2 @@
-from .exceptions import VolumeFractionError, ComponentNumberError
+from .exceptions import VolumeFractionError, ComponentNumberError, FeatureNumberError
 from .utilities import filter_kwargs

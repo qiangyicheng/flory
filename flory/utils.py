@@ -1,7 +1,8 @@
 import numpy as np
 from typing import Optional
 
-from .free_energy.flory_huggins import FloryHuggins
+from .free_energy import FloryHuggins
+from .ensemble import CanonicalEnsemble
 from .mcmp import CoexistingPhasesFinder
 
 
@@ -45,5 +46,12 @@ def find_coexisting_phases(
             array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
     """
     free_energy = FloryHuggins(num_comp, chis, sizes)
-    finder = CoexistingPhasesFinder(free_energy, phi_means, num_comp*8 ,**kwargs)
+    ensemble = CanonicalEnsemble(num_comp, phi_means)
+    finder = CoexistingPhasesFinder(
+        free_energy.interaction,
+        free_energy.entropy,
+        ensemble,
+        num_comp * 8,
+        **kwargs,
+    )
     return finder.run()

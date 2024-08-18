@@ -8,4 +8,4 @@ volumes, phis = flory.find_coexisting_phases(chis, phi_means, 16, sizes = sizes)
 
 with open(__file__ + ".out", "w") as f:
     print("Volumes:", volumes, file=f)
-    print("Compositons:", phis, file=f)
+    print("Compositions:", phis, file=f)

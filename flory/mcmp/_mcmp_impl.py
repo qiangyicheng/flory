@@ -195,79 +195,80 @@ def revive_compartments_by_copy(
     return revive_count
 
 
-@nb.njit()
-def calc_volume_fractions(
-    phis: np.ndarray,
-    Js: np.ndarray,
-    sizes: np.ndarray,
-    phi_means: np.ndarray,
-    omegas: np.ndarray,
-    masks: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray]:
-    """
-    Calculate the volume fractions of components :math:`\\phi_i^{(m)}` from the conjugate
-    fields :math:`\\omega_i^{(m)}`. The single molecular partition functions $Q_i$ and the
-    incompressibility :math:`\\sum_i \\phi_i^{(m)} - 1` are also calculated. Note that the
-    volume fractions :math:`\\phi_i^{(m)}` are returned through the parameter.
+# @nb.njit()
+# def calc_volume_fractions(
+#     phis: np.ndarray,
+#     Js: np.ndarray,
+#     sizes: np.ndarray,
+#     phi_means: np.ndarray,
+#     omegas: np.ndarray,
+#     masks: np.ndarray,
+# ) -> tuple[np.ndarray, np.ndarray]:
+#     """
+#     Calculate the volume fractions of components :math:`\\phi_i^{(m)}` from the conjugate
+#     fields :math:`\\omega_i^{(m)}`. The single molecular partition functions $Q_i$ and the
+#     incompressibility :math:`\\sum_i \\phi_i^{(m)} - 1` are also calculated. Note that the
+#     volume fractions :math:`\\phi_i^{(m)}` are returned through the parameter.
 
-    Args:
-        phis:
-            Output. The 2D array with the size of :math:`N_\\mathrm{c} \\times M`,
-            containing the volume fractions :math:`\\phi_i^{(m)}`. The first dimension has
-            to be the same as :paramref:`sizes`. The second dimension has to be the same
-            as that of :paramref:`Js`. Note that these are not checked.
-        Js:
-            Const. The 1D array with the size of :math:`M`, containing the relative
-            volumes of compartments :math:`J_m`. Note that :paramref:`Js` must be
-            invariant under multiplication of :paramref:`masks`.
-        sizes:
-            Const. The 1D array with the size of :math:`M`, containing the relative
-            molecule volumes of the components :math:`l_i`.
-        phi_means:
-            Const. The 1D array with the size of :math:`N_\\mathrm{c}`, containing the
-            mean volume fractions of the components :math:`\\bar{\\phi}_i`.
-        omegas:
-            Const. The 2D array with the size of :math:`N_\\mathrm{c} \\times M`,
-            containing the conjugate field :math:`\\omega_i^{(m)}`. The first dimension
-            has to be the same as :paramref:`sizes`. The second dimension has to be the
-            same as that of :paramref:`Js`. Note that these are not checked.
-        masks:
-            Const. The 1D array with the size of :math:`M`, containing the masks of
-            compartments. See :meth:`make_valid_compartment_masks` for more information.
+#     Args:
+#         phis:
+#             Output. The 2D array with the size of :math:`N_\\mathrm{c} \\times M`,
+#             containing the volume fractions :math:`\\phi_i^{(m)}`. The first dimension has
+#             to be the same as :paramref:`sizes`. The second dimension has to be the same
+#             as that of :paramref:`Js`. Note that these are not checked.
+#         Js:
+#             Const. The 1D array with the size of :math:`M`, containing the relative
+#             volumes of compartments :math:`J_m`. Note that :paramref:`Js` must be
+#             invariant under multiplication of :paramref:`masks`.
+#         sizes:
+#             Const. The 1D array with the size of :math:`M`, containing the relative
+#             molecule volumes of the components :math:`l_i`.
+#         phi_means:
+#             Const. The 1D array with the size of :math:`N_\\mathrm{c}`, containing the
+#             mean volume fractions of the components :math:`\\bar{\\phi}_i`.
+#         omegas:
+#             Const. The 2D array with the size of :math:`N_\\mathrm{c} \\times M`,
+#             containing the conjugate field :math:`\\omega_i^{(m)}`. The first dimension
+#             has to be the same as :paramref:`sizes`. The second dimension has to be the
+#             same as that of :paramref:`Js`. Note that these are not checked.
+#         masks:
+#             Const. The 1D array with the size of :math:`M`, containing the masks of
+#             compartments. See :meth:`make_valid_compartment_masks` for more information.
 
-    Returns:
-        [0]:
-            1D array with the size of :math:`N_\\mathrm{c}`, containing the single
-            molecular partition functions of components :math:`Q_i`.
-        [1]:
-            1D array with the size of :math:`M`, containing the incompressibility
-            :math:`\\sum_i \\phi_i^{(m)} - 1`.
-    """
+#     Returns:
+#         [0]:
+#             1D array with the size of :math:`N_\\mathrm{c}`, containing the single
+#             molecular partition functions of components :math:`Q_i`.
+#         [1]:
+#             1D array with the size of :math:`M`, containing the incompressibility
+#             :math:`\\sum_i \\phi_i^{(m)} - 1`.
+#     """
 
-    num_comp, num_part = omegas.shape
-    Qs = np.full(num_comp, 0.0, float)
-    incomp = np.full(num_part, -1.0, float)
-    total_Js = Js.sum()
-    for itr_comp in range(num_comp):
-        phis[itr_comp] = np.exp(-omegas[itr_comp] * sizes[itr_comp])
-        Qs[itr_comp] = (phis[itr_comp] * Js).sum()
-        Qs[itr_comp] /= total_Js
-        factor = phi_means[itr_comp] / Qs[itr_comp]
-        phis[itr_comp] = factor * phis[itr_comp] * masks
-        incomp += phis[itr_comp]
-    incomp *= masks
-    return Qs, incomp
+#     num_comp, num_part = omegas.shape
+#     Qs = np.full(num_comp, 0.0, float)
+#     incomp = np.full(num_part, -1.0, float)
+#     total_Js = Js.sum()
+#     for itr_comp in range(num_comp):
+#         phis[itr_comp] = np.exp(-omegas[itr_comp] * sizes[itr_comp])
+#         Qs[itr_comp] = (phis[itr_comp] * Js).sum()
+#         Qs[itr_comp] /= total_Js
+#         factor = phi_means[itr_comp] / Qs[itr_comp]
+#         phis[itr_comp] = factor * phis[itr_comp] * masks
+#         incomp += phis[itr_comp]
+#     incomp *= masks
+#     return Qs, incomp
 
 
 @nb.njit()
 def multicomponent_self_consistent_metastep(
-    phi_means: np.ndarray,
     interaction: object,
-    sizes: np.ndarray,
+    entropy: object,
+    ensemble: object,
     *,
     omegas: np.ndarray,
     Js: np.ndarray,
-    phis: np.ndarray,
+    phis_comp: np.ndarray,
+    phis_feat: np.ndarray,
     steps_inner: int,
     acceptance_Js: float,
     Js_step_upper_bound: float,
@@ -368,7 +369,7 @@ def multicomponent_self_consistent_metastep(
         [3]: Number of revives.
         [4]: Whether no phase is killed in the last step.
     """
-    num_comp, num_part = omegas.shape
+    num_feat, num_part = omegas.shape
 
     n_valid_phase = 0
 
@@ -389,27 +390,31 @@ def multicomponent_self_consistent_metastep(
         Js *= masks
 
         # calculate volume fractions, single molecular partition function Q and incompressibility
-        (Qs, incomp) = calc_volume_fractions(phis, Js, sizes, phi_means, omegas, masks)
+        Qs = entropy.partition(phis_comp, omegas, Js)
+        incomp = ensemble.normalize(phis_comp, Qs, masks)
+        entropy.comp_to_feat(phis_feat, phis_comp)
         max_abs_incomp = np.abs(incomp).max()
 
         # temp for omega, namely chi.phi
-        potential = interaction.potential(phis)
+        potential = interaction.potential(phis_feat)
 
         # xi, the lagrangian multiplier
-        xi = interaction.incomp_coef(phis) * incomp
-        for itr_comp in range(num_comp):
+        xi = interaction.incomp_coef(phis_feat) * incomp
+        for itr_comp in range(num_feat):
             xi += omegas[itr_comp] - potential[itr_comp]
         xi *= masks
-        xi /= num_comp
+        xi /= num_feat
 
         # local energy. i.e. energy of phases excluding the partition function part
         omega_temp = potential.copy()
-        local_energy = interaction.energy(potential, phis) + xi * incomp
-        for itr_comp in range(num_comp):
+        local_energy = (
+            interaction.energy(potential, phis_feat)
+            + entropy.volume_derivative(phis_comp)
+            + xi * incomp
+        )
+        for itr_comp in range(num_feat):
             omega_temp[itr_comp] += xi
-            local_energy += (
-                - omega_temp[itr_comp] - 1.0 / sizes[itr_comp]
-            ) * phis[itr_comp]
+            local_energy -= omega_temp[itr_comp] * phis_feat[itr_comp]
 
         # calculate the difference of Js
         local_energy_mean = (local_energy * Js).sum() / n_valid_phase
@@ -428,7 +433,7 @@ def multicomponent_self_consistent_metastep(
 
         # calculate difference of omega and update omega directly
         max_abs_omega_diff = 0
-        for itr_comp in range(num_comp):
+        for itr_comp in range(num_feat):
             omega_temp[itr_comp] -= omegas[itr_comp]
             omega_temp[itr_comp] *= masks
             max_abs_omega_diff = max(max_abs_omega_diff, omega_temp[itr_comp].max())

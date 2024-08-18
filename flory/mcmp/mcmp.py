@@ -23,7 +23,10 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from ._mcmp_impl import *
-from ..free_energy.base import FreeEnergyBase
+from ..commom import *
+from ..interaction import InteractionBase
+from ..entropy import EntropyBase
+from ..ensemble import EnsembleBase
 
 
 class CoexistingPhasesFinder:
@@ -31,8 +34,9 @@ class CoexistingPhasesFinder:
 
     def __init__(
         self,
-        free_energy: FreeEnergyBase,
-        phi_means: np.ndarray,
+        interaction: InteractionBase,
+        entropy: EntropyBase,
+        ensemble: EnsembleBase,
         num_part: int,
         *,
         rng: Optional[np.random.Generator] = None,
@@ -158,12 +162,33 @@ class CoexistingPhasesFinder:
         """
         self._logger = logging.getLogger(self.__class__.__name__)
 
-        # Check chis
-        
-        self._num_comp = free_energy.num_comp
-        self._sizes = free_energy.entropy.sizes
-        self._interaction = free_energy.interaction_compiled()
-        
+        self._interaction = interaction.compiled()
+        self._entropy = entropy.compiled()
+        self._ensemble = ensemble.compiled()
+
+        if not (self._entropy.num_comp == self._ensemble.num_comp):
+            self._logger.error(
+                f""""number of components obtained from compiled objects must be identical,
+                however ({self._entropy.num_comp}, {self._ensemble.num_comp}) are obtained.
+                """
+            )
+            raise ComponentNumberError
+        self._num_comp = self._entropy.num_comp
+
+        if not (
+            self._interaction.num_feat
+            == self._entropy.num_feat
+            == self._ensemble.num_feat
+        ):
+            self._logger.error(
+                f""""number of features obtained from compiled objects must be identical,
+                however ({self._interaction.num_feat}, {self._entropy.num_feat},
+                {self._ensemble.num_feat}) are obtained.
+                """
+            )
+            raise FeatureNumberError
+        self._num_feat = self._interaction.num_feat
+
         # chis = np.array(chis)
         # if chis.shape[0] == chis.shape[1]:
         #     self._chis = chis
@@ -179,20 +204,20 @@ class CoexistingPhasesFinder:
         #     raise ValueError("chis matrix must be symmetric.")
 
         # Check phi_means
-        phi_means = np.array(phi_means)
-        if phi_means.shape[0] == self._num_comp:
-            self._phi_means = phi_means
-            if not np.isclose(self._phi_means.sum(), 1.0):
-                self._logger.warning(
-                    f"Total phi_means is not 1.0. Iteration may never converge."
-                )
-        else:
-            self._logger.error(
-                f"phi_means vector with size of {phi_means.shape} is invalid, since {self._num_comp} is defined by chis matrix."
-            )
-            raise ValueError(
-                "phi_means vector must imply same component number as chis matrix."
-            )
+        # phi_means = np.array(phi_means)
+        # if phi_means.shape[0] == self._num_comp:
+        #     self._phi_means = phi_means
+        #     if not np.isclose(self._phi_means.sum(), 1.0):
+        #         self._logger.warning(
+        #             f"Total phi_means is not 1.0. Iteration may never converge."
+        #         )
+        # else:
+        #     self._logger.error(
+        #         f"phi_means vector with size of {phi_means.shape} is invalid, since {self._num_comp} is defined by chis matrix."
+        #     )
+        #     raise ValueError(
+        #         "phi_means vector must imply same component number as chis matrix."
+        #     )
 
         self._num_part = num_part
 
@@ -249,13 +274,10 @@ class CoexistingPhasesFinder:
 
         ## initialize derived internal states
         self._Js = np.full(self._num_part, 0.0, float)
-        self._omegas = np.full(
-            (self._num_comp, self._num_part), 0.0, float
-        )
-        self._phis = np.full((self._num_comp, self._num_part), 0.0, float)
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
+        self._omegas = np.full((self._num_feat, self._num_part), 0.0, float)
+        self._phis_feat = np.full((self._num_feat, self._num_part), 0.0, float)
+        self._phis_comp = np.full((self._num_comp, self._num_part), 0.0, float)
+        self._revive_count_left = self._max_revive_per_compartment * self._num_part
         self.reinitialize_random()
 
     def reinitialize_random(self):
@@ -266,12 +288,10 @@ class CoexistingPhasesFinder:
         self._omegas = self._rng.normal(
             0.0,
             self._random_std,
-            (self._num_comp, self._num_part),
+            (self._num_feat, self._num_part),
         )
         self._Js = np.full(self._num_part, 1.0, float)
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
+        self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
     def reinitialize_from_omegas(self, omegas: np.ndarray):
         r"""Reinitialize the internal conjugate field :math:`\omega_i^{(m)}` from input.
@@ -286,40 +306,36 @@ class CoexistingPhasesFinder:
             self._omegas = omegas
         else:
             self._logger.error(
-                f"new omegas with size of {omegas.shape} is invalid. It must have the size of {(self._num_comp, self._num_part)}."
+                f"new omegas with size of {omegas.shape} is invalid. It must have the size of {(self._num_feat, self._num_part)}."
             )
             raise ValueError("New omegas must match the size of the old one.")
         self._Js = np.ones_like(self._Js)
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
+        self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
-    def reinitialize_from_phis(self, phis):
-        r"""Reinitialize the internal conjugate fields
+    # def reinitialize_from_phis(self, phis):
+    #     r"""Reinitialize the internal conjugate fields
 
-        The conjugated fields :math:`\omega_i^{(m)}` are initialized from volume fraction
-        fields :math:`\phi_i^{(m)}`. Note that it is not guaranteed that the initial volume
-        fraction field :math:`\phi_i^{(m)}` is fully respected. The input is only considered
-        as a suggestion for the generation of :math:`\omega_i^{(m)}` field.
+    #     The conjugated fields :math:`\omega_i^{(m)}` are initialized from volume fraction
+    #     fields :math:`\phi_i^{(m)}`. Note that it is not guaranteed that the initial volume
+    #     fraction field :math:`\phi_i^{(m)}` is fully respected. The input is only considered
+    #     as a suggestion for the generation of :math:`\omega_i^{(m)}` field.
 
-        Args:
-            phis:
-                New :math:`\phi_i^{(m)}` field, must have the same size of :math:`N_\mathrm{c}
-                \times M`.
-        """
-        if phis.shape == self._omegas.shape:
-            self._omegas = -np.log(phis)
-            for itr in range(self._num_comp):
-                self._omegas[itr] /= self._sizes[itr]
-        else:
-            self._logger.error(
-                f"phis with size of {phis.shape} is invalid. It must have the size of {(self._num_comp, self._num_part)}."
-            )
-            raise ValueError("phis must match the size of the omegas.")
-        self._Js = np.ones_like(self._Js)
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
+    #     Args:
+    #         phis:
+    #             New :math:`\phi_i^{(m)}` field, must have the same size of :math:`N_\mathrm{c}
+    #             \times M`.
+    #     """
+    #     if phis.shape == self._omegas.shape:
+    #         self._omegas = -np.log(phis)
+    #         for itr in range(self._num_comp):
+    #             self._omegas[itr] /= self._sizes[itr]
+    #     else:
+    #         self._logger.error(
+    #             f"phis with size of {phis.shape} is invalid. It must have the size of {(self._num_comp, self._num_part)}."
+    #         )
+    #         raise ValueError("phis must match the size of the omegas.")
+    #     self._Js = np.ones_like(self._Js)
+    #     self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
     # @property
     # def chis(self) -> np.ndarray:
@@ -353,37 +369,35 @@ class CoexistingPhasesFinder:
     #         self._max_revive_per_compartment * self._num_part
     #     )
 
-    @property
-    def phi_means(self) -> np.ndarray:
-        r"""Average volume fractions of all components :math:`\bar{\phi}_i`.
+    # @property
+    # def phi_means(self) -> np.ndarray:
+    #     r"""Average volume fractions of all components :math:`\bar{\phi}_i`.
 
-        The array has length :math:`N_\mathrm{c}`. Setting this property requires that
-        the new array has the same size. Note that this implies implicit reset of
-        the internal data, the number of revives, but not the others including volume
-        fractions :math:`\phi_i^{(m)}` and conjugate fields :math:`\omega_i^{(m)}`. See
-        class parameters :paramref:`~CoexistingPhasesFinder.phis_mean` and
-        :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
-        information.
-        """
-        return self._phi_means
+    #     The array has length :math:`N_\mathrm{c}`. Setting this property requires that
+    #     the new array has the same size. Note that this implies implicit reset of
+    #     the internal data, the number of revives, but not the others including volume
+    #     fractions :math:`\phi_i^{(m)}` and conjugate fields :math:`\omega_i^{(m)}`. See
+    #     class parameters :paramref:`~CoexistingPhasesFinder.phis_mean` and
+    #     :paramref:`~CoexistingPhasesFinder.max_revive_per_compartment` for more
+    #     information.
+    #     """
+    #     return self._phi_means
 
-    @phi_means.setter
-    def phi_means(self, phi_means_new):
-        phi_means_new = np.array(phi_means_new)
-        if phi_means_new.shape == self._phi_means.shape:
-            self._phi_means = phi_means_new
-            if np.abs(self._phi_means.sum() - 1.0) > 1e-12:
-                self._logger.warning(
-                    f"Total phi_means is not 1.0. Iteration may never converge."
-                )
-        else:
-            self._logger.error(
-                f"new phi_means with size of {phi_means_new.shape} is invalid. It must have the size of {self._phi_means.shape}."
-            )
-            raise ValueError("New phi_means must match the size of the old one.")
-        self._revive_count_left = (
-            self._max_revive_per_compartment * self._num_part
-        )
+    # @phi_means.setter
+    # def phi_means(self, phi_means_new):
+    #     phi_means_new = np.array(phi_means_new)
+    #     if phi_means_new.shape == self._phi_means.shape:
+    #         self._phi_means = phi_means_new
+    #         if np.abs(self._phi_means.sum() - 1.0) > 1e-12:
+    #             self._logger.warning(
+    #                 f"Total phi_means is not 1.0. Iteration may never converge."
+    #             )
+    #     else:
+    #         self._logger.error(
+    #             f"new phi_means with size of {phi_means_new.shape} is invalid. It must have the size of {self._phi_means.shape}."
+    #         )
+    #         raise ValueError("New phi_means must match the size of the old one.")
+    #     self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
     # @property
     # def sizes(self) -> np.ndarray:
@@ -489,9 +503,7 @@ class CoexistingPhasesFinder:
         pbar3 = tqdm(**bar_args, position=2, desc="Volume Error")
         pbar4 = tqdm(**bar_text_args, position=3, desc="Revive Count Left")
 
-        bar_val_func = lambda a: max(
-            0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max)
-        )
+        bar_val_func = lambda a: max(0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max))
 
         for _ in range(steps_tracker):
             # do the inner steps
@@ -502,12 +514,13 @@ class CoexistingPhasesFinder:
                 revive_count,
                 is_last_step_safe,
             ) = multicomponent_self_consistent_metastep(
-                self._phi_means,
                 self._interaction,
-                self._sizes,
+                self._entropy,
+                self._ensemble,
                 omegas=self._omegas,
                 Js=self._Js,
-                phis=self._phis,
+                phis_feat=self._phis_feat,
+                phis_comp=self._phis_comp,
                 steps_inner=steps_inner,
                 acceptance_Js=self._acceptance_Js,
                 Js_step_upper_bound=self._Js_step_upper_bound,
@@ -558,10 +571,11 @@ class CoexistingPhasesFinder:
 
         # get final result
         final_Js = self._Js.copy()
-        final_phis = self._phis.copy()
+        final_phis_feat = self._phis_feat.copy()
+        final_phis_comp = self._phis_comp.copy()
         revive_compartments_by_copy(
             Js=final_Js,
-            targets=final_phis,
+            targets=final_phis_comp,
             threshold=self._kill_threshold,
             rng=self._rng,
         )
@@ -573,10 +587,10 @@ class CoexistingPhasesFinder:
             "max_abs_omega_diff": max_abs_omega_diff,
             "max_abs_js_diff": max_abs_Js_diff,
             "revive_count_left": self._revive_count_left,
-            "phis": final_phis,
+            "phis": final_phis_comp,
             "Js": final_Js,
         }
 
-        phases_volumes, phases_compositions = get_clusters(final_Js, final_phis)
+        phases_volumes, phases_compositions = get_clusters(final_Js, final_phis_comp)
 
         return phases_volumes, phases_compositions

@@ -15,7 +15,7 @@ from .base import InteractionBase
 
 @jitclass(
     [
-        ("_num_comp", int32),  # a scalar
+        ("_num_feat", int32),  # a scalar
         ("_chis", float64[:, ::1]),  # a C-continuous array
         ("_incomp_coef", float64),  # a scalar
     ]
@@ -26,18 +26,18 @@ class FloryHugginsInteractionCompiled(object):
 
         Args:
             chis:
-                The Flory-Huggins matrix :math:`\chi_{ij}`. The number of components is
+                The Flory-Huggins matrix :math:`\chi_{ij}`. The number of features is
                 inferred from this matrix.
             chis_shift:
                 The shift of entire Flory-Huggins matrix for the calculation.
         """
-        self._num_comp = chis.shape[0]
+        self._num_feat = chis.shape[0]
         self._chis = chis  # do not affect chis
-        self._incomp_coef = chis.sum() + chis_shift * self._num_comp * self._num_comp
+        self._incomp_coef = chis.sum() + chis_shift * self._num_feat * self._num_feat
 
     @property
-    def num_comp(self):
-        return self._num_comp
+    def num_feat(self):
+        return self._num_feat
 
     @property
     def chis(self):
@@ -47,15 +47,15 @@ class FloryHugginsInteractionCompiled(object):
         # since Flory-Huggins free energy contains only 2nd-ordered interactions,
         # the interaction energy is directly calculated from potential and phis
         ans = np.zeros_like(potential[0])
-        for itr in range(self._num_comp):
+        for itr in range(self._num_feat):
             ans += potential[itr] * phis[itr]
         ans *= 0.5
         return ans
 
     def potential(self, phis: np.ndarray) -> np.ndarray:
         ans = np.zeros_like(phis)
-        for itr_i in range(self._num_comp):
-            for itr_j in range(self._num_comp):
+        for itr_i in range(self._num_feat):
+            for itr_j in range(self._num_feat):
                 current_chi = self._chis[itr_i][itr_j]
                 if current_chi == 0.0:
                     continue
@@ -68,22 +68,20 @@ class FloryHugginsInteractionCompiled(object):
 
 
 class FloryHugginsInteraction(InteractionBase):
-    r"""represents the interaction energy of a Flory-Huggins multicomponent mixture
-
-    The particular implementation of the interaction energy density reads
-
-    .. math::
-        f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
-            \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
-    where :math:`\phi_i` is the fraction of component :math:`i`.
-    """
-
     def __init__(
         self,
         num_comp: int,
         chis: Union[np.ndarray, float],
     ):
-        """
+        r"""represents the interaction energy of a Flory-Huggins multicomponent mixture
+
+        The particular implementation of the interaction energy density reads
+
+        .. math::
+            f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
+                \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+        where :math:`\phi_i` is the fraction of component :math:`i`.
+
         Args:
             num_comp:
                 Number of components :math:`N_\mathrm{c}`. In the cases with degenerate
@@ -102,7 +100,7 @@ class FloryHugginsInteraction(InteractionBase):
 
         # ensure that the chi matrix is symmetric
         if not np.allclose(chis, chis.T):
-            logging.warning("Using symmetrized χ interaction-matrix")
+            self._logger.warning("Using symmetrized χ interaction-matrix")
         self.chis = 0.5 * (chis + chis.T)
 
     @property
@@ -265,7 +263,7 @@ class FloryHugginsInteraction(InteractionBase):
         return ans
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
-        """returns Hessian :math:`\partial^2 f/\partial \phi^2` for the given composition
+        r"""returns Hessian :math:`\partial^2 f/\partial \phi^2` for the given composition
 
         Args:
             phis:
