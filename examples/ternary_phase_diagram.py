@@ -1,21 +1,23 @@
-import copy
-
 import matplotlib.pyplot as plt
 import numpy as np
 
 import flory
 
+num_comp = 3
 chis = [[0.0, 2.4, 3.2], [2.4, 0.0, 2.8], [3.2, 2.8, 0.0]]
 # we guess this point is a three-phase coexistence point
 phi_means = [0.33, 0.33, 0.34]
 
-finder = flory.CoexistingPhasesFinder(
-    chis,
-    phi_means,
-    8,
-    progress=False,
-    max_steps=10000000,  # disable progress bar, allow more steps
-)  # create a finder
+free_energy = flory.FloryHuggins(num_comp, chis)
+interaction = free_energy.interaction
+entropy = free_energy.entropy
+ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
+options = {
+    "num_part": 8,
+    "progress": False,
+    "max_steps": 10000000,  # disable progress bar, allow more steps
+}
+finder = flory.CoexistingPhasesFinder(interaction, entropy, ensemble, **options)
 
 # determine the three phase coexistence
 volumes, phis = finder.run()
@@ -32,7 +34,13 @@ def find_p2_boundaries(
     scan_step: float = 0.02,
     scan_step_min: float = 0.000001,
 ):
-    internal_finder = copy.deepcopy(finder)
+    internal_finder = flory.CoexistingPhasesFinder(
+        interaction, entropy, ensemble, **options
+    )
+
+    internal_finder.reinitialize_from_omegas(
+        finder.omegas.copy()
+    )  # use previous internal fields to accelerate
 
     previous = start_point
     current_tie = init_tie
@@ -47,9 +55,12 @@ def find_p2_boundaries(
         next_dir = next_dir - np.dot(next_dir, tie_dir) * tie_dir
         next_dir = next_dir / np.linalg.norm(next_dir)
         next_phis = tie_center + step * next_dir
-        internal_finder.phi_means = next_phis
+        
+        ensemble.phi_means = np.array(next_phis)
+        internal_finder.set_ensemble(ensemble)
         backup_omegas = internal_finder.omegas.copy()
         volumes, phis = internal_finder.run()
+        
         if volumes.shape[0] == 2 and np.all(phis > 0):
             ties.append(phis)
             previous = tie_center
@@ -62,6 +73,7 @@ def find_p2_boundaries(
                 break
 
     return np.array(ties)
+
 
 p2_ties = [find_p2_boundaries(edge, p3_center, finder) for edge in p3_edges]
 

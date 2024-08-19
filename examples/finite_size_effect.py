@@ -19,7 +19,7 @@ line_N_compartment = []
 line_N_phase = []
 for N_compartment in range(4, 16, 2): # use different compartment number
     volumes, phis = flory.find_coexisting_phases(
-        chis, phi_means, N_compartment, progress=False
+        N_comp, chis, phi_means, num_part = N_compartment, progress=True
     )
     line_N_compartment.append(N_compartment)
     line_N_phase.append(volumes.shape[0])

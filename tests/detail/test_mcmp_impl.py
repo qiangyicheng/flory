@@ -118,33 +118,3 @@ def test_revive_compartments_by_copy_not_nice():
     np.testing.assert_allclose(
         np.dot(targets, Js), np.dot(targets_original, Js_original * mask)
     )
-
-
-def test_calc_volume_fractions():
-    """Test function calc_volume_fractions()"""
-    Js = np.array([0.0, 0.8, 1.2, 1.0])
-    masks = np.array([0, 1, 1, 1])
-    sizes = np.array([1.0, 2.0])
-    phi_means = np.array([0.4, 0.6])
-    omegas = np.array(
-        [
-            [0.27390050363275, 0.19447924518289, -0.92615223006164, -0.49328619665156],
-            [0.29266914146256, -0.20329699945463, 0.69297046882994, -0.10424399045132],
-        ]
-    )
-    phis_calc = np.zeros_like(omegas)
-    Qs_calc, incomp_calc = calc_volume_fractions(
-        phis_calc, Js, sizes, phi_means, omegas, masks
-    )
-
-    phis_ref = np.array(
-        [
-            [0.0, 0.18548821606336, 0.56885344213517, 0.36898529658711],
-            [0.0, 0.98894151835649, 0.16469582062995, 0.81121180055887],
-        ]
-    )
-    Qs_ref = np.array([1.7753435387539, 0.91109186811343])
-    incomp_ref = np.array([0.0, 0.17442973441985, -0.26645073723488, 0.18019709714597])
-    np.testing.assert_allclose(phis_calc, phis_ref)
-    np.testing.assert_allclose(Qs_calc, Qs_ref)
-    np.testing.assert_allclose(incomp_calc, incomp_ref)

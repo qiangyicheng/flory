@@ -6,18 +6,29 @@ import flory
 chi_start = 5.0
 chi_end = 1.0
 
+num_comp = 2
 chis = [[0.0, 0.0], [0.0, 0.0]]
 phi_means = [0.5, 0.5]
 
+free_energy = flory.FloryHuggins(num_comp, chis)
+interaction = free_energy.interaction
+entropy = free_energy.entropy
+ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
 finder = flory.CoexistingPhasesFinder(
-    chis, phi_means, 16, progress=False  # disable progress bar
-)  # create a finder
+    interaction,
+    entropy,
+    ensemble,
+    num_part=16,
+    progress=False,
+)
+
 
 line_chi = []
 line_l = []
 line_h = []
 for chi in np.arange(chi_start, chi_end, -0.1):  # scan chi from high value to low value
-    finder.chis = [[0, chi], [chi, 0]]  # set chi matrix of the finder
+    interaction.chis = np.array([[0, chi], [chi, 0]])  # set chi matrix of the finder
+    finder.set_interaction(interaction)
     volumes, phis = finder.run()  # get coexisting phases
     if phis.shape[0] == 1:  # stop scanning if no phase separation
         break
