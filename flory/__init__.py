@@ -16,6 +16,9 @@ except ImportError:
         __version__ = "unknown"
     del PackageNotFoundError, version
 
+from .interaction import FloryHugginsInteraction
+from .entropy import IdealGasEntropy
+from .ensemble import CanonicalEnsemble
 from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
 from .utils import find_coexisting_phases

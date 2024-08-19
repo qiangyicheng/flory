@@ -51,7 +51,6 @@ def find_coexisting_phases(
         free_energy.interaction,
         free_energy.entropy,
         ensemble,
-        num_comp * 8,
         **kwargs,
     )
     return finder.run()

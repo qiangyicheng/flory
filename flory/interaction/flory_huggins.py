@@ -53,15 +53,7 @@ class FloryHugginsInteractionCompiled(object):
         return ans
 
     def potential(self, phis: np.ndarray) -> np.ndarray:
-        ans = np.zeros_like(phis)
-        for itr_i in range(self._num_feat):
-            for itr_j in range(self._num_feat):
-                current_chi = self._chis[itr_i][itr_j]
-                if current_chi == 0.0:
-                    continue
-                ans[itr_i] += current_chi * phis[itr_j]
-
-        return ans  # same as self._chis @ phis
+        return self._chis @ phis
 
     def incomp_coef(self, phis: np.ndarray) -> float:
         return self._incomp_coef
