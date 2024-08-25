@@ -120,7 +120,7 @@ class IdealGasEntropy(EntropyBase):
     
     .. math::
         f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
-            \sum_{i=1}^N_\mathrm{c} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i),
+            \sum_{i=1}^{N_\mathrm{c}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i),
 
     where :math:`\phi_i` is the fraction of component :math:`i`. All components are
     assumed to have the same molecular volume :math:`\nu` by default. The relative
