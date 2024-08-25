@@ -13,17 +13,17 @@ from ..entropy import EntropyBase
 
 class FreeEnergyBase:
     """Base class for a general free energy of mixture.
-    A free energy is constructed by an interactions energy and a entropic energy. Once the energy, Jacobian and Hessian of both interactions energy and entropic energy are implemented, class :class:`FreeEnergyBase` provides methods such as the chemical potential of the components. 
+    A free energy is constructed by an interactions energy and a entropic energy. Once the energy, Jacobian and Hessian of both interactions energy and entropic energy are implemented, class :class:`FreeEnergyBase` provides methods such as the chemical potential of the components.
     """
 
     def __init__(self, interaction: InteractionBase, entropy: EntropyBase):
         """
         Args:
-            interaction: 
+            interaction:
                 The interaction energy instance.
             entropy:
                 The entropic energy instance.
-        """        
+        """
         self._logger = logging.getLogger(self.__class__.__name__)
         if interaction.num_comp != entropy.num_comp:
             self._logger.error(
@@ -38,25 +38,25 @@ class FreeEnergyBase:
 
     def interaction_compiled(self, **kwargs_full) -> object:
         """Get the compiled instance of the interaction.
-        
+
         Args:
             kwargs_full:
                 The keyword arguments for method
                 :meth:`~flory.interaction.base.InteractionBase.compiled` of the
                 interaction instance but allowing redundant arguments.
-        
+
         """
         return self.interaction.compiled(**kwargs_full)
 
     def entropy_compiled(self, **kwargs_full) -> object:
         """Get the compiled instance of the entropy.
-        
+
         Args:
             kwargs_full:
                 The keyword arguments for method
                 :meth:`~flory.entropy.base.EntropyBase.compiled` of the
                 entropy instance but allowing redundant arguments.
-        
+
         """
 
         return self.entropy.compiled(**kwargs_full)
@@ -224,7 +224,7 @@ class FreeEnergyBase:
             return np.delete(np.delete(h_reduced_full, index, axis=-1), index, axis=-2)
 
     def chemical_potentials(self, phis: np.ndarray) -> np.ndarray:
-        """Calculate original chemical potentials.
+        """Calculate original chemical potentials by unit volume.
 
         Args:
             phis:
@@ -236,7 +236,8 @@ class FreeEnergyBase:
         """
         f = self.free_energy_density(phis)
         j = self.jacobian(phis)
-        return np.atleast_1d(f)[..., None] - np.einsum("...i,...i->...", phis, j) + j
+        ans = np.atleast_1d(f)[..., None] - np.einsum("...i,...i->...", phis, j) + j
+        return ans
 
     def exchange_chemical_potentials(self, phis: np.ndarray, index: int) -> np.ndarray:
         """Calculate exchange chemical potentials.
@@ -260,7 +261,7 @@ class FreeEnergyBase:
         return mus - mus[..., index, None]
 
     def pressure(self, phis: np.ndarray, index: int) -> np.ndarray:
-        """Calculate osmotic pressure of the solvent. 
+        """Calculate osmotic pressure of the solvent.
         Component :paramref:`index` is treated as the solvent. The osmotic pressure of the
         solvent is proportional to the original chemical potential of the solvent.
 
@@ -275,7 +276,7 @@ class FreeEnergyBase:
             : The osmotic pressure of the solvent component `index`.
         """
         mus = self.chemical_potentials(phis)
-        return -mus[..., index] / self.sizes[index]
+        return -mus[..., index]
 
     def num_unstable_modes(
         self, phis: np.ndarray, conserved: bool = True
