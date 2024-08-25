@@ -1,1 +1,1 @@
-from .mcmp import CoexistingPhasesFinder
+from .finder import CoexistingPhasesFinder

@@ -1,7 +1,4 @@
-"""
-Module defining thermodynamic quantities of multicomponent phase separation.
-
-.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
+"""Module for Flory-Huggins interaction energy of mixture.
 """
 
 import logging
@@ -21,9 +18,19 @@ from .base import InteractionBase
     ]
 )
 class FloryHugginsInteractionCompiled(object):
-    def __init__(self, chis: np.ndarray, chis_shift: float):
-        r"""The compiled FLory-Huggins interaction.
+    r"""Compiled class for Flory-Huggins interaction energy.
+    Flory-Huggins interaction is the second-ordered interaction, whose energy reads,
 
+    .. math::
+        f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
+                \!\sum_{i,j=1}^{N_\mathrm{f}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+
+    Note that here we use describe the system by features.
+
+    """
+
+    def __init__(self, chis: np.ndarray, chis_shift: float):
+        r"""
         Args:
             chis:
                 The Flory-Huggins matrix :math:`\chi_{ij}`. The number of features is
@@ -37,50 +44,84 @@ class FloryHugginsInteractionCompiled(object):
 
     @property
     def num_feat(self):
+        r"""Number of features :math:`N_\mathrm{f}`."""
         return self._num_feat
 
     @property
     def chis(self):
+        r"""Flory-Huggins parameters for features :math:`\chi_{ij}`."""
         return self._chis
 
-    def energy(self, potential: np.ndarray, phis: np.ndarray) -> float:
+    def energy(self, potential: np.ndarray, phis_feat: np.ndarray) -> np.ndarray:
+        r"""Calculate the Flory-Huggins interaction energy.
+
+        Args:
+            potential:
+                Constant. The fields :math:`w_i^{(\alpha)}` that the features felt.
+                Usually this is the returned value of :meth:`potential`. This parameter is
+                passed in since usually the calculation of energy can be accelerated by
+                directly using the potential.
+            phis_feat:
+                Constant. Volume fractions of features :math:`\phi_i^{(\alpha)}`.
+
+        Returns:
+            : The interaction energy.
+        """
         # since Flory-Huggins free energy contains only 2nd-ordered interactions,
         # the interaction energy is directly calculated from potential and phis
         ans = np.zeros_like(potential[0])
         for itr in range(self._num_feat):
-            ans += potential[itr] * phis[itr]
+            ans += potential[itr] * phis_feat[itr]
         ans *= 0.5
         return ans
 
-    def potential(self, phis: np.ndarray) -> np.ndarray:
-        return self._chis @ phis
+    def potential(self, phis_feat: np.ndarray) -> np.ndarray:
+        r"""Calculate the potential :math:`w_i^{(\alpha)}` that the features feel.
 
-    def incomp_coef(self, phis: np.ndarray) -> float:
+        Args:
+            phis_feat:
+                Constant. Volume fractions of features :math:`\phi_i^{(\alpha)}`.
+
+        Returns:
+            : The potential :math:`w_i^{(\alpha)}`.
+        """
+        return self._chis @ phis_feat
+
+    def incomp_coef(self, phis_feat: np.ndarray) -> float:
+        r"""Calculate the coefficient for incompressibility.
+
+        Args:
+            phis_feat:
+                Constant. Volume fractions of features :math:`\phi_i^{(\alpha)}`.
+
+        Returns:
+            float: The coefficient for incompressibility.
+        """
         return self._incomp_coef
 
 
 class FloryHugginsInteraction(InteractionBase):
+    r"""Class for Flory-Huggins interaction energy of mixture.
+    The particular form of interaction energy reads
+
+        .. math::
+            f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
+                \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+
+        where :math:`\phi_i` is the fraction of component :math:`i`.
+    """
+
     def __init__(
         self,
         num_comp: int,
         chis: Union[np.ndarray, float],
     ):
-        r"""represents the interaction energy of a Flory-Huggins multicomponent mixture
-
-        The particular implementation of the interaction energy density reads
-
-        .. math::
-            f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
-                \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
-        where :math:`\phi_i` is the fraction of component :math:`i`.
-
+        r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`. In the cases with degenerate
-                components, this value should be interpreted as number of features
-                :math:`N_\mathrm{f}`.
+                Number of components :math:`N_\mathrm{c}`.
             chis:
-                The Flory-Huggins interaction matrix
+                The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`.
         """
         super().__init__(num_comp=num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -97,7 +138,7 @@ class FloryHugginsInteraction(InteractionBase):
 
     @property
     def independent_entries(self) -> np.ndarray:
-        r"""entries of the upper triangle of the :math:`\chi_{ij}` matrix"""
+        r"""Entries of the upper triangle of the :math:`\chi_{ij}` matrix"""
         return self.chis[np.triu_indices_from(self.chis, k=0)]
 
     @classmethod
@@ -108,15 +149,17 @@ class FloryHugginsInteraction(InteractionBase):
         *,
         vanishing_diagonal: bool = True,
     ):
-        r"""create Flory-Huggins free energy with uniform `chis` matrix
+        r"""Create Flory-Huggins interaction with uniform :math:`\chi_{ij}` matrix.
 
         Args:
             num_comp:
-                The number of components
+                Number of components :math:`N_\mathrm{c}`.
             chi:
-                The value of all non-zero values in the interaction matrix :math:`\chi{i \ne j}`
+                The value of all non-zero values in the interaction matrix :math:`\chi{i
+                \ne j}`
             vanishing_diagonal:
-                Whether the diagonal elements of the `chis` matrix are set to be zero.
+                Whether the diagonal elements of the :math:`\chi_{ij}` matrix are set to
+                be zero.
         """
         obj = cls(num_comp, 0)
         obj.set_uniform_chis(chi, vanishing_diagonal=vanishing_diagonal)
@@ -132,19 +175,20 @@ class FloryHugginsInteraction(InteractionBase):
         vanishing_diagonal: bool = True,
         rng: Optional[np.random.Generator] = None,
     ):
-        r"""create Flory-Huggins free energy with random `chis` matrix
+        r"""Create Flory-Huggins interaction with random :math:`\chi_{ij}` matrix.
 
         Args:
             num_comp:
-                Number of components
+                Number of components :math:`N_\mathrm{c}`.
             chi_mean:
-                Mean interaction
+                Mean interaction :math:`\bar{\chi}`.
             chi_std:
-                Standard deviation of the interactions
+                Standard deviation of the interactions :math:`\sigma_{\chi}`.
             vanishing_diagonal:
-                Whether the diagonal elements of the `chis` matrix are set to be zero.
+                Whether the diagonal elements of the :math:`\chi_{ij}` matrix are set to
+                be zero.
             rng:
-                the random number generator
+                The random number generator.
 
         """
         obj = cls(num_comp, 0)
@@ -159,13 +203,15 @@ class FloryHugginsInteraction(InteractionBase):
         *,
         vanishing_diagonal: bool = True,
     ):
-        r"""choose random interaction parameters
+        r"""Set Flory-Huggins interaction with uniform :math:`\chi_{ij}` matrix.
 
         Args:
             chi:
-                The value of all non-zero values in the interaction matrix :math:`\chi{i \ne j}`
+                The value of all non-zero values in the interaction matrix :math:`\chi{i
+                \ne j}`
             vanishing_diagonal:
-                Whether the diagonal elements of the `chis` matrix are set to be zero.
+                Whether the diagonal elements of the :math:`\chi_{ij}` matrix are set to
+                be zero.
         """
         self.chis = np.full((self.num_comp, self.num_comp), chi)
         if vanishing_diagonal:
@@ -179,17 +225,18 @@ class FloryHugginsInteraction(InteractionBase):
         vanishing_diagonal: bool = True,
         rng=None,
     ):
-        """choose random interaction parameters
+        r"""Set Flory-Huggins interaction with random :math:`\chi_{ij}` matrix.
 
         Args:
             chi_mean:
-                Mean interaction
+                Mean interaction :math:`\bar{\chi}`.
             chi_std:
-                Standard deviation of the interactions
+                Standard deviation of the interactions :math:`\sigma_{\chi}`.
             vanishing_diagonal:
-                Whether the diagonal elements of the `chis` matrix are set to be zero.
+                Whether the diagonal elements of the :math:`\chi_{ij}` matrix are set to
+                be zero.
             rng:
-                the random number generator
+                The random number generator.
         """
         if rng is None:
             rng = np.random.default_rng()
@@ -209,7 +256,10 @@ class FloryHugginsInteraction(InteractionBase):
         self.chis[j, i] = chi_vals
 
     def _compiled_impl(self, *, additional_chis_shift: float = 1.0) -> object:
-        """make the interaction instance that can be used by the :mod:`mcmp` module.
+        """Implementation of creating a compiled interaction instance.
+        This function overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._compiled_impl` in
+        :class:`~flory.entropy.base.InteractionBase`. 
 
         Args:
             additional_chis_shift:
@@ -219,8 +269,9 @@ class FloryHugginsInteraction(InteractionBase):
                 that with very large value, the convergence will be slowed down, since the
                 algorithm no longer have enough ability to temporarily relax the
                 incompressibility.
+                
         Returns:
-            : An instance of :class:`FloryHugginsInteractionCompiled`.
+            : Instance of :class:`FloryHugginsInteractionCompiled`.
         """
 
         return FloryHugginsInteractionCompiled(
@@ -228,7 +279,10 @@ class FloryHugginsInteraction(InteractionBase):
         )
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
-        """returns interaction energy density for a given composition
+        """Implementation of calculating interaction energy.
+        This function overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._energy_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
 
         Args:
             phis:
@@ -242,7 +296,10 @@ class FloryHugginsInteraction(InteractionBase):
         return ans
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""returns full Jacobian :math:`\partial f/\partial \phi` for the given composition
+        r"""Implementation of calculating Jacobian :math:`\partial f/\partial \phi`.
+        This function overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._jacobian_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
 
         Args:
             phis:
@@ -255,7 +312,10 @@ class FloryHugginsInteraction(InteractionBase):
         return ans
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""returns Hessian :math:`\partial^2 f/\partial \phi^2` for the given composition
+        r"""Implementation of calculating Hessian :math:`\partial^2 f/\partial \phi^2`.
+        This function overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._hessian_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
 
         Args:
             phis:

@@ -1,3 +1,6 @@
+"""Module for a general free energy of mixture.
+"""
+
 import logging
 from typing import Optional, Union
 
@@ -9,8 +12,18 @@ from ..entropy import EntropyBase
 
 
 class FreeEnergyBase:
+    """Base class for a general free energy of mixture.
+    A free energy is constructed by an interactions energy and a entropic energy. Once the energy, Jacobian and Hessian of both interactions energy and entropic energy are implemented, class :class:`FreeEnergyBase` provides methods such as the chemical potential of the components. 
+    """
+
     def __init__(self, interaction: InteractionBase, entropy: EntropyBase):
-        """Base class for a general free energy of mixture."""
+        """
+        Args:
+            interaction: 
+                The interaction energy instance.
+            entropy:
+                The entropic energy instance.
+        """        
         self._logger = logging.getLogger(self.__class__.__name__)
         if interaction.num_comp != entropy.num_comp:
             self._logger.error(
@@ -22,29 +35,94 @@ class FreeEnergyBase:
         self.interaction = interaction
         self.entropy = entropy
         self.num_comp = interaction.num_comp
-    
-    def interaction_compiled(self, **kwargs_full) ->object:
+
+    def interaction_compiled(self, **kwargs_full) -> object:
+        """Get the compiled instance of the interaction.
+        
+        Args:
+            kwargs_full:
+                The keyword arguments for method
+                :meth:`~flory.interaction.base.InteractionBase.compiled` of the
+                interaction instance but allowing redundant arguments.
+        
+        """
         return self.interaction.compiled(**kwargs_full)
-    
-    def entropy_compiled(self, **kwargs_full) ->object:
+
+    def entropy_compiled(self, **kwargs_full) -> object:
+        """Get the compiled instance of the entropy.
+        
+        Args:
+            kwargs_full:
+                The keyword arguments for method
+                :meth:`~flory.entropy.base.EntropyBase.compiled` of the
+                entropy instance but allowing redundant arguments.
+        
+        """
+
         return self.entropy.compiled(**kwargs_full)
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
-        """returns free energy for a given composition"""
+        """Implementation of calculating free energy.
+        This method is general, thus does not need to be overwritten. The method makes use
+        of :meth:`~flory.interaction.base.InteractionBase._energy_impl` in
+        :class:`~flory.interaction.base.InteractionBase` and
+        :meth:`~flory.entropy.base.EntropyBase._energy_impl` in
+        :class:`~flory.entropy.base.EntropyBase`. Consider define custom interaction or
+        entropy if a custom free energy is needed.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s). if multiple phases are included, the
+                index of the components must be the last dimension.
+
+        Returns:
+            : The free energy density.
+        """
         return self.interaction._energy_impl(phis) + self.entropy._energy_impl(phis)
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""returns full Jacobian :math:`\partial f/\partial \phi` for the given composition"""
+        r"""Implementation of calculating Jacobian :math:`\partial f/\partial \phi`.
+        This method is general, thus does not need to be overwritten. The method makes use
+        of :meth:`~flory.interaction.base.InteractionBase._jacobian_impl` in
+        :class:`~flory.interaction.base.InteractionBase` and
+        :meth:`~flory.entropy.base.EntropyBase._jacobian_impl` in
+        :class:`~flory.entropy.base.EntropyBase`. Consider define custom interaction or
+        entropy if a custom free energy is needed.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s). if multiple phases are included, the
+                index of the components must be the last dimension.
+
+        Returns:
+            : The The full Jacobian.
+        """
         return self.interaction._jacobian_impl(phis) + self.entropy._jacobian_impl(phis)
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""returns full Hessian :math:`\partial^2 f/\partial \phi^2` for the given composition"""
+        r"""Implementation of calculating Hessian :math:`\partial^2 f/\partial \phi^2`.
+        This method is general, thus does not need to be overwritten. The method makes use
+        of :meth:`~flory.interaction.base.InteractionBase._hessian_impl` in
+        :class:`~flory.interaction.base.InteractionBase` and
+        :meth:`~flory.entropy.base.EntropyBase._hessian_impl` in
+        :class:`~flory.entropy.base.EntropyBase`. Consider define custom interaction or
+        entropy if a custom free energy is needed.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s). if multiple phases are included, the
+                index of the components must be the last dimension.
+
+        Returns:
+            : The full Hessian.
+        """
         return self.interaction._hessian_impl(phis) + self.entropy._hessian_impl(phis)
 
     def check_volume_fractions(self, phis: np.ndarray, axis: int = -1) -> np.ndarray:
         """Check whether volume fractions are valid.
         If the shape of :paramref:`phis` or it has non-positive values, an exception will be raised.
-        Note that this function do not forbid volume fractions to be larger than 1.
+        Note that this method does not forbid volume fractions to be larger than 1.
+
         Args:
             phis:
                 Volume fractions of the components. Multiple compositions can be included.
@@ -69,7 +147,7 @@ class FreeEnergyBase:
         return phis
 
     def free_energy_density(self, phis: np.ndarray) -> np.ndarray:
-        """Calculate the free energy density for a given composition
+        """Calculate the free energy density.
 
         Args:
             phis:
@@ -146,7 +224,7 @@ class FreeEnergyBase:
             return np.delete(np.delete(h_reduced_full, index, axis=-1), index, axis=-2)
 
     def chemical_potentials(self, phis: np.ndarray) -> np.ndarray:
-        """Calculate original chemical potentials
+        """Calculate original chemical potentials.
 
         Args:
             phis:
@@ -161,11 +239,12 @@ class FreeEnergyBase:
         return np.atleast_1d(f)[..., None] - np.einsum("...i,...i->...", phis, j) + j
 
     def exchange_chemical_potentials(self, phis: np.ndarray, index: int) -> np.ndarray:
-        """Calculate exchange chemical potentials, treating component `index` as the solvent.
-        The exchange chemical potentials is obtained by removing chemical potential of the
-        solvent. The exchange chemical potential of the solvent is always zero and kept in
-        the result. The nonzero values are identical to the conserved Jacobian, see
-        :meth:`jacobian` for more information.
+        """Calculate exchange chemical potentials.
+        Component :paramref:`index` is treated as the solvent. The exchange chemical
+        potentials is obtained by removing chemical potential of the solvent. The exchange
+        chemical potential of the solvent is always zero and kept in the result. The
+        nonzero values are identical to the conserved Jacobian, see :meth:`jacobian` for
+        more information.
 
         Args:
             phis:
@@ -181,9 +260,9 @@ class FreeEnergyBase:
         return mus - mus[..., index, None]
 
     def pressure(self, phis: np.ndarray, index: int) -> np.ndarray:
-        """Calculate osmotic pressure of the solvent by treating component `index` as the solvent.
-        The osmotic pressure of the solvent is proportional to the original chemical
-        potential of the solvent.
+        """Calculate osmotic pressure of the solvent. 
+        Component :paramref:`index` is treated as the solvent. The osmotic pressure of the
+        solvent is proportional to the original chemical potential of the solvent.
 
         Args:
             phis:

@@ -1,7 +1,6 @@
-"""
-Module defining thermodynamic quantities of multicomponent phase separation.
-
-.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
+"""Module for Flory-Huggins free energy.
+Flory-Huggins free energy is a combination of Flory-Huggins interaction energy and ideal
+gas entropy.
 """
 
 from typing import Union, Optional
@@ -37,15 +36,16 @@ class FloryHuggins(FreeEnergyBase):
         chis: Union[np.ndarray, float],
         sizes: Optional[np.ndarray] = None,
     ):
-        """
+        r"""
         Args:
             num_comp:
-                Number of components in the system
+                Number of components :math:`N_\mathrm{c}`.
             chis:
-                The Flory-Huggins interaction matrix
+                The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`.
             sizes:
-                The relative volumes with respect to the volume of an imaginary reference
-                molecular. It is treated as all-one vector by default or passing `None`.
+                The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
+                volume of a reference molecule :math:`\nu`. It is treated as all-one
+                vector by default.
         """
         interaction = FloryHugginsInteraction(num_comp, chis=chis)
         entropy = IdealGasEntropy(num_comp, sizes=sizes)
@@ -60,18 +60,9 @@ class FloryHuggins(FreeEnergyBase):
         sizes: Optional[np.ndarray] = None,
         vanishing_diagonal: bool = True,
     ):
-        r"""create Flory-Huggins free energy with uniform `chis` matrix
-
-        Args:
-            num_comp:
-                The number of components
-            chi:
-                The value of all non-zero values in the interaction matrix :math:`\chi{i \ne j}`
-            sizes:
-                The relative volumes with respect to the volume of an imaginary reference
-                molecular. It is treated as all-one vector by default or passing `None`.
-            vanishing_diagonal:
-                Whether the diagonal elements of the `chis` matrix are set to be zero.
+        r"""Create Flory-Huggins interaction with uniform :math:`\chi_{ij}` matrix.
+        See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_uniform`
+        for parameter details.
         """
         obj = cls(num_comp, 0, sizes=sizes)
         obj.interaction.set_uniform_chis(chi, vanishing_diagonal=vanishing_diagonal)
@@ -88,23 +79,9 @@ class FloryHuggins(FreeEnergyBase):
         vanishing_diagonal: bool = True,
         rng: Optional[np.random.Generator] = None,
     ):
-        r"""create Flory-Huggins free energy with random `chis` matrix
-
-        Args:
-            num_comp:
-                Number of components
-            chi_mean:
-                Mean interaction
-            chi_std:
-                Standard deviation of the interactions
-            sizes:
-                The relative volumes with respect to the volume of an imaginary reference
-                molecular. It is treated as all-one vector by default or passing `None`.
-            vanishing_diagonal:
-                Whether the diagonal elements of the `chis` matrix are set to be zero.
-            rng:
-                the random number generator
-
+        r"""Create Flory-Huggins interaction with random :math:`\chi_{ij}` matrix.
+        See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_random_normal`
+        for parameter details.
         """
         obj = cls(num_comp, 0, sizes=sizes)
         obj.interaction.set_random_chis(

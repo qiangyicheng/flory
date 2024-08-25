@@ -19,6 +19,9 @@ import sys
 
 proj_path = pathlib.Path(__file__).parent.parent.parent.resolve()
 sys.path.append(str(proj_path))
+sys.path.insert(0, os.path.abspath("./ext/"))
+
+os.environ["NUMBA_DISABLE_JIT"] = "1"
 
 print(f"Import project from {proj_path}")
 
@@ -34,6 +37,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx_autodoc_typehints",
     "sphinx_paramlinks",
+    "autoclasstoc"
 ]
 
 # Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
@@ -62,7 +66,6 @@ napoleon_custom_sections = [("Returns", "params_style")]
 
 templates_path = ["_templates"]
 exclude_patterns = []
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

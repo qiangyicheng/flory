@@ -2,13 +2,14 @@ API reference
 =============
 
 This page summarizes the public API of :mod:`flory`, which should be used by most users.
-The most important objects are
+The most objects and functions are
 
 .. autosummary::
    :nosignatures:
+   :template: custom-class-template.rst
 
-   ~flory.mcmp.find_coexisting_phases
-   ~flory.mcmp.CoexistingPhasesFinder
+   ~flory.utils.find_coexisting_phases
+   ~flory.mcmp.finder.CoexistingPhasesFinder
 
 
 .. rubric:: Modules
@@ -21,4 +22,4 @@ functions can be found in :ref:`Implementation Details`.
    :template: custom-module-template.rst
    :recursive:
 
-   flory.mcmp
+   flory

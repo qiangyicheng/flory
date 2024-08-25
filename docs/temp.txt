@@ -1,0 +1,847 @@
+~flory.mcmp.finder.CoexistingPhasesFinder
+~flory.ensemble.base.EnsembleBase
+~flory.ensemble.base.EnsembleBase
+~flory.ensemble.canonical.CanonicalEnsemble
+~flory.ensemble.base.EnsembleBase
+~flory.ensemble.canonical.CanonicalEnsemble
+~flory.ensemble.base.EnsembleBase
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+~flory.entropy.base.EntropyBase
+~flory.entropy.base.EntropyBase
+~flory.entropy.ideal_gas.IdealGasEntropy
+~flory.entropy.base.EntropyBase
+~flory.entropy.ideal_gas.IdealGasEntropy
+~flory.entropy.base.EntropyBase
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+~flory.free_energy.base.FreeEnergyBase
+~flory.free_energy.base.FreeEnergyBase
+~flory.free_energy.flory_huggins.FloryHuggins
+~flory.free_energy.base.FreeEnergyBase
+~flory.free_energy.base.FreeEnergyBase
+~flory.interaction.base.InteractionBase
+~flory.interaction.base.InteractionBase
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+~flory.interaction.base.InteractionBase
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+~flory.interaction.base.InteractionBase
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+~flory.mcmp.finder.CoexistingPhasesFinder
+~flory.mcmp.finder.CoexistingPhasesFinder
+~EnsembleBase
+~EnsembleBase
+~CanonicalEnsemble
+~EnsembleBase
+~CanonicalEnsemble
+~EnsembleBase
+~CanonicalEnsembleCompiled
+~CanonicalEnsembleCompiled
+~EntropyBase
+~EntropyBase
+~IdealGasEntropy
+~EntropyBase
+~IdealGasEntropy
+~EntropyBase
+~IdealGasEntropyCompiled
+~IdealGasEntropyCompiled
+~FreeEnergyBase
+~FreeEnergyBase
+~FloryHuggins
+~FreeEnergyBase
+~FreeEnergyBase
+~InteractionBase
+~InteractionBase
+~FloryHugginsInteraction
+~FloryHugginsInteraction
+~InteractionBase
+~FloryHugginsInteraction
+~InteractionBase
+~FloryHugginsInteractionCompiled
+~FloryHugginsInteractionCompiled
+~CoexistingPhasesFinder
+~CoexistingPhasesFinder
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1081583a0>, 'compiled': <function EnsembleBase.compiled at 0x1081584c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x108158430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x108158820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1081583a0>, 'compiled': <function EnsembleBase.compiled at 0x1081584c0>}
+~CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x108158b80>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x108158430>}
+~CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x108155ae0>, 'num_feat': <property object at 0x108155b30>, 'phi_means': <property object at 0x108155b80>}
+~CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x1081588b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x108158af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x1081535e0>, 'compiled': <function EntropyBase.compiled at 0x1081538b0>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x108153670>, '_energy_impl': <function EntropyBase._energy_impl at 0x108153700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x108153790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x108153820>}
+~IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x108153af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x1081535e0>, 'compiled': <function EntropyBase.compiled at 0x1081538b0>}
+~IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x108153f70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x108158040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x1081580d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x108158160>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x108153670>, '_energy_impl': <function EntropyBase._energy_impl at 0x108153700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x108153790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x108153820>}
+~IdealGasEntropyCompiled
+{'num_comp': <property object at 0x108155270>, 'num_feat': <property object at 0x1081552c0>, 'sizes': <property object at 0x108155310>}
+~IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x108153b80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x108153dc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x108153e50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x108153ee0>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x108158dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x108158e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x108158ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x108162160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x1081621f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x108162280>, 'hessian': <function FreeEnergyBase.hessian at 0x108162310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x1081623a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x108162430>, 'pressure': <function FreeEnergyBase.pressure at 0x1081624c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x108162550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x1081625e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x108158f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x108162040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x1081620d0>}
+~FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x108162670>, 'from_uniform': <classmethod object at 0x10815d9d0>, 'from_random_normal': <classmethod object at 0x10815da00>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x108158dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x108158e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x108158ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x108162160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x1081621f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x108162280>, 'hessian': <function FreeEnergyBase.hessian at 0x108162310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x1081623a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x108162430>, 'pressure': <function FreeEnergyBase.pressure at 0x1081624c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x108162550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x1081625e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x108158f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x108162040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x1081620d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x1073f0040>, 'compiled': <function InteractionBase.compiled at 0x1073f04c0>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x1073f0280>, '_energy_impl': <function InteractionBase._energy_impl at 0x1073f0310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1073f03a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x1073f0430>}
+~FloryHugginsInteraction
+{'independent_entries': <property object at 0x10814f720>}
+~FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x1073f0550>, 'from_uniform': <classmethod object at 0x1073e23d0>, 'from_random_normal': <classmethod object at 0x1073e2430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x108153040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x1081530d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x1073f0040>, 'compiled': <function InteractionBase.compiled at 0x1073f04c0>}
+~FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x108153160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x1081531f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x108153280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x108153310>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x1073f0280>, '_energy_impl': <function InteractionBase._energy_impl at 0x1073f0310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1073f03a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x1073f0430>}
+~FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x10814f770>, 'chis': <property object at 0x10814f7c0>}
+~FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x10814daf0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x10814dca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x10814dd30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x10814ddc0>}
+~CoexistingPhasesFinder
+{'omegas': <property object at 0x108167c70>, 'diagnostics': <property object at 0x10816f5e0>}
+~CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x109a409d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x12a7adee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x12a7adf70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x12a7af040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x12a7af0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x12a7af160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x12a7af1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x12a7af280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x12a7af310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x12a7af3a0>, 'run': <function CoexistingPhasesFinder.run at 0x12a7af550>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1162443a0>, 'compiled': <function EnsembleBase.compiled at 0x1162444c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x116244430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x116244820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1162443a0>, 'compiled': <function EnsembleBase.compiled at 0x1162444c0>}
+~CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x116244b80>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x116244430>}
+~CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x1162419f0>, 'num_feat': <property object at 0x116241a40>, 'phi_means': <property object at 0x116241a90>}
+~CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x1162448b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x116244af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x11623f5e0>, 'compiled': <function EntropyBase.compiled at 0x11623f8b0>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x11623f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x11623f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x11623f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x11623f820>}
+~IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x11623faf0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x11623f5e0>, 'compiled': <function EntropyBase.compiled at 0x11623f8b0>}
+~IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x11623ff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x116244040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x1162440d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x116244160>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x11623f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x11623f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x11623f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x11623f820>}
+~IdealGasEntropyCompiled
+{'num_comp': <property object at 0x116241180>, 'num_feat': <property object at 0x1162411d0>, 'sizes': <property object at 0x116241220>}
+~IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x11623fb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x11623fdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x11623fe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x11623fee0>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x116244dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x116244e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x116244ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11624e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11624e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11624e280>, 'hessian': <function FreeEnergyBase.hessian at 0x11624e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11624e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11624e430>, 'pressure': <function FreeEnergyBase.pressure at 0x11624e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11624e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11624e5e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x116244f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11624e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11624e0d0>}
+~FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x11624e670>, 'from_uniform': <classmethod object at 0x1162499d0>, 'from_random_normal': <classmethod object at 0x116249a00>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x116244dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x116244e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x116244ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11624e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11624e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11624e280>, 'hessian': <function FreeEnergyBase.hessian at 0x11624e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11624e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11624e430>, 'pressure': <function FreeEnergyBase.pressure at 0x11624e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11624e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11624e5e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x116244f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11624e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11624e0d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x104c84040>, 'compiled': <function InteractionBase.compiled at 0x104c844c0>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x104c84280>, '_energy_impl': <function InteractionBase._energy_impl at 0x104c84310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x104c843a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x104c84430>}
+~FloryHugginsInteraction
+{'independent_entries': <property object at 0x11623b680>}
+~FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x104c84550>, 'from_uniform': <classmethod object at 0x104c753d0>, 'from_random_normal': <classmethod object at 0x104c75430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x11623f040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x11623f0d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x104c84040>, 'compiled': <function InteractionBase.compiled at 0x104c844c0>}
+~FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x11623f160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x11623f1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x11623f280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x11623f310>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x104c84280>, '_energy_impl': <function InteractionBase._energy_impl at 0x104c84310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x104c843a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x104c84430>}
+~FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x102b9a630>, 'chis': <property object at 0x11623b6d0>}
+~FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x116239af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x116239ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x116239d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x116239dc0>}
+~CoexistingPhasesFinder
+{'omegas': <property object at 0x116253b80>, 'diagnostics': <property object at 0x11625a4f0>}
+~CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x1164c49d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x1172d9ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x1172d9f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x1172db040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x1172db0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x1172db160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x1172db1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x1172db280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x1172db310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x1172db3a0>, 'run': <function CoexistingPhasesFinder.run at 0x1172db550>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x11ae843a0>, 'compiled': <function EnsembleBase.compiled at 0x11ae844c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x11ae84430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x11ae84820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x11ecc43a0>, 'compiled': <function EnsembleBase.compiled at 0x11ecc44c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x11ecc4430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x11ecc4820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x11ecc43a0>, 'compiled': <function EnsembleBase.compiled at 0x11ecc44c0>}
+~CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x11ecc4b80>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x11ecc4430>}
+~CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x11ecc1ae0>, 'num_feat': <property object at 0x11ecc1b30>, 'phi_means': <property object at 0x11ecc1b80>}
+~CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x11ecc48b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x11ecc4af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x11ecbf5e0>, 'compiled': <function EntropyBase.compiled at 0x11ecbf8b0>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x11ecbf670>, '_energy_impl': <function EntropyBase._energy_impl at 0x11ecbf700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x11ecbf790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x11ecbf820>}
+~IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x11ecbfaf0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x11ecbf5e0>, 'compiled': <function EntropyBase.compiled at 0x11ecbf8b0>}
+~IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x11ecbff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x11ecc4040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x11ecc40d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x11ecc4160>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x11ecbf670>, '_energy_impl': <function EntropyBase._energy_impl at 0x11ecbf700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x11ecbf790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x11ecbf820>}
+~IdealGasEntropyCompiled
+{'num_comp': <property object at 0x11ecc1270>, 'num_feat': <property object at 0x11ecc12c0>, 'sizes': <property object at 0x11ecc1310>}
+~IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x11ecbfb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x11ecbfdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x11ecbfe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x11ecbfee0>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x11ecc4dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x11ecc4e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x11ecc4ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11ecce160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11ecce1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11ecce280>, 'hessian': <function FreeEnergyBase.hessian at 0x11ecce310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11ecce3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11ecce430>, 'pressure': <function FreeEnergyBase.pressure at 0x11ecce4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11ecce550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11ecce5e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x11ecc4f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11ecce040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11ecce0d0>}
+~FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x11ecce670>, 'from_uniform': <classmethod object at 0x11ecc99d0>, 'from_random_normal': <classmethod object at 0x11ecc9a00>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x11ecc4dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x11ecc4e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x11ecc4ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11ecce160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11ecce1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11ecce280>, 'hessian': <function FreeEnergyBase.hessian at 0x11ecce310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11ecce3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11ecce430>, 'pressure': <function FreeEnergyBase.pressure at 0x11ecce4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11ecce550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11ecce5e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x11ecc4f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11ecce040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11ecce0d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x105090040>, 'compiled': <function InteractionBase.compiled at 0x1050904c0>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x105090280>, '_energy_impl': <function InteractionBase._energy_impl at 0x105090310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1050903a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x105090430>}
+~FloryHugginsInteraction
+{'independent_entries': <property object at 0x11ecbb180>}
+~FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x105090550>, 'from_uniform': <classmethod object at 0x1050823d0>, 'from_random_normal': <classmethod object at 0x105082430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x11ecbf040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x11ecbf0d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x105090040>, 'compiled': <function InteractionBase.compiled at 0x1050904c0>}
+~FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x11ecbf160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x11ecbf1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x11ecbf280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x11ecbf310>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x105090280>, '_energy_impl': <function InteractionBase._energy_impl at 0x105090310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1050903a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x105090430>}
+~FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x11ecbb770>, 'chis': <property object at 0x11ecbb7c0>}
+~FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x11ecb9af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x11ecb9ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x11ecb9d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x11ecb9dc0>}
+~CoexistingPhasesFinder
+{'omegas': <property object at 0x11ecd3c70>, 'diagnostics': <property object at 0x11ecdb5e0>}
+~CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x11ef449d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x12eb39ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x12eb39f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x12eb3b040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x12eb3b0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x12eb3b160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x12eb3b1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x12eb3b280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x12eb3b310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x12eb3b3a0>, 'run': <function CoexistingPhasesFinder.run at 0x12eb3b550>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1074043a0>, 'compiled': <function EnsembleBase.compiled at 0x1074044c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x107404430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x107404820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1074043a0>, 'compiled': <function EnsembleBase.compiled at 0x1074044c0>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x10d94c3a0>, 'compiled': <function EnsembleBase.compiled at 0x10d94c4c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x10d94c430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x10d94c820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x10d94c3a0>, 'compiled': <function EnsembleBase.compiled at 0x10d94c4c0>}
+~CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x10d94cb80>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x10d94c430>}
+~CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x10d949a40>, 'num_feat': <property object at 0x10d949a90>, 'phi_means': <property object at 0x10d949ae0>}
+~CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x10d94c8b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x10d94caf0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10d9475e0>, 'compiled': <function EntropyBase.compiled at 0x10d9478b0>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10d947670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10d947700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10d947790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10d947820>}
+~IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x10d947af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10d9475e0>, 'compiled': <function EntropyBase.compiled at 0x10d9478b0>}
+~IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x10d947f70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x10d94c040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x10d94c0d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x10d94c160>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10d947670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10d947700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10d947790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10d947820>}
+~IdealGasEntropyCompiled
+{'num_comp': <property object at 0x10d9491d0>, 'num_feat': <property object at 0x10d949220>, 'sizes': <property object at 0x10d949270>}
+~IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x10d947b80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x10d947dc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x10d947e50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x10d947ee0>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x10d94cdc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x10d94ce50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x10d94cee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10d956160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10d9561f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10d956280>, 'hessian': <function FreeEnergyBase.hessian at 0x10d956310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10d9563a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10d956430>, 'pressure': <function FreeEnergyBase.pressure at 0x10d9564c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10d956550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10d9565e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x10d94cf70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10d956040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10d9560d0>}
+~FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x10d956670>, 'from_uniform': <classmethod object at 0x10d9519d0>, 'from_random_normal': <classmethod object at 0x10d951a00>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x10d94cdc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x10d94ce50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x10d94cee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10d956160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10d9561f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10d956280>, 'hessian': <function FreeEnergyBase.hessian at 0x10d956310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10d9563a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10d956430>, 'pressure': <function FreeEnergyBase.pressure at 0x10d9564c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10d956550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10d9565e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x10d94cf70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10d956040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10d9560d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x108518040>, 'compiled': <function InteractionBase.compiled at 0x1085184c0>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x108518280>, '_energy_impl': <function InteractionBase._energy_impl at 0x108518310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1085183a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x108518430>}
+~FloryHugginsInteraction
+{'independent_entries': <property object at 0x10d943680>}
+~FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x108518550>, 'from_uniform': <classmethod object at 0x1085093d0>, 'from_random_normal': <classmethod object at 0x108509430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x10d947040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x10d9470d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x108518040>, 'compiled': <function InteractionBase.compiled at 0x1085184c0>}
+~FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x10d947160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x10d9471f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x10d947280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x10d947310>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x108518280>, '_energy_impl': <function InteractionBase._energy_impl at 0x108518310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1085183a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x108518430>}
+~FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x10d9436d0>, 'chis': <property object at 0x10d943720>}
+~FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x10d941af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x10d941ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x10d941d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x10d941dc0>}
+~CoexistingPhasesFinder
+{'omegas': <property object at 0x10d95bbd0>, 'diagnostics': <property object at 0x10d962540>}
+~CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x10db989d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x10fe31ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x10fe31f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x10fe33040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x10fe330d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x10fe33160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x10fe331f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x10fe33280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x10fe33310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x10fe333a0>, 'run': <function CoexistingPhasesFinder.run at 0x10fe33550>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1175043a0>, 'compiled': <function EnsembleBase.compiled at 0x1175044c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x117504430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x117504820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1175043a0>, 'compiled': <function EnsembleBase.compiled at 0x1175044c0>}
+~CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x117504b80>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x117504430>}
+~CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x1175029f0>, 'num_feat': <property object at 0x117502a40>, 'phi_means': <property object at 0x117502a90>}
+~CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x1175048b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x117504af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x1173eb5e0>, 'compiled': <function EntropyBase.compiled at 0x1173eb8b0>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x1173eb670>, '_energy_impl': <function EntropyBase._energy_impl at 0x1173eb700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x1173eb790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x1173eb820>}
+~IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x1173ebaf0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x1173eb5e0>, 'compiled': <function EntropyBase.compiled at 0x1173eb8b0>}
+~IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x1173ebf70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x117504040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x1175040d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x117504160>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x1173eb670>, '_energy_impl': <function EntropyBase._energy_impl at 0x1173eb700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x1173eb790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x1173eb820>}
+~IdealGasEntropyCompiled
+{'num_comp': <property object at 0x117502180>, 'num_feat': <property object at 0x1175021d0>, 'sizes': <property object at 0x117502220>}
+~IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x1173ebb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x1173ebdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x1173ebe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x1173ebee0>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x117504dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x117504e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x117504ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11750e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11750e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11750e280>, 'hessian': <function FreeEnergyBase.hessian at 0x11750e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11750e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11750e430>, 'pressure': <function FreeEnergyBase.pressure at 0x11750e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11750e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11750e5e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x117504f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11750e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11750e0d0>}
+~FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x11750e670>, 'from_uniform': <classmethod object at 0x1175099d0>, 'from_random_normal': <classmethod object at 0x117509a00>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x117504dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x117504e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x117504ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11750e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11750e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11750e280>, 'hessian': <function FreeEnergyBase.hessian at 0x11750e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11750e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11750e430>, 'pressure': <function FreeEnergyBase.pressure at 0x11750e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11750e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11750e5e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x117504f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11750e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11750e0d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x1108f0040>, 'compiled': <function InteractionBase.compiled at 0x1108f04c0>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x1108f0280>, '_energy_impl': <function InteractionBase._energy_impl at 0x1108f0310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1108f03a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x1108f0430>}
+~FloryHugginsInteraction
+{'independent_entries': <property object at 0x1173e7630>}
+~FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x1108f0550>, 'from_uniform': <classmethod object at 0x1108e13d0>, 'from_random_normal': <classmethod object at 0x1108e1430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x1173eb040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x1173eb0d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x1108f0040>, 'compiled': <function InteractionBase.compiled at 0x1108f04c0>}
+~FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x1173eb160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x1173eb1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x1173eb280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x1173eb310>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x1108f0280>, '_energy_impl': <function InteractionBase._energy_impl at 0x1108f0310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1108f03a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x1108f0430>}
+~FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x1173e7680>, 'chis': <property object at 0x1173e76d0>}
+~FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x1173e5af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x1173e5ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x1173e5d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x1173e5dc0>}
+~CoexistingPhasesFinder
+{'omegas': <property object at 0x117513b80>, 'diagnostics': <property object at 0x11751a4f0>}
+~CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x1177b89d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x1206bdee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x1206bdf70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x1206bf040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x1206bf0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x1206bf160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x1206bf1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x1206bf280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x1206bf310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x1206bf3a0>, 'run': <function CoexistingPhasesFinder.run at 0x1206bf550>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1084903a0>, 'compiled': <function EnsembleBase.compiled at 0x1084904c0>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x108490430>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x108490820>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1084903a0>, 'compiled': <function EnsembleBase.compiled at 0x1084904c0>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x108490b80>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x108490430>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x10848da40>, 'num_feat': <property object at 0x10848da90>, 'phi_means': <property object at 0x10848dae0>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x1084908b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x108490af0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10848b5e0>, 'compiled': <function EntropyBase.compiled at 0x10848b8b0>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10848b670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10848b700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10848b790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10848b820>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x10848baf0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10848b5e0>, 'compiled': <function EntropyBase.compiled at 0x10848b8b0>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x10848bf70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x108490040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x1084900d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x108490160>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10848b670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10848b700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10848b790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10848b820>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'num_comp': <property object at 0x10848d1d0>, 'num_feat': <property object at 0x10848d220>, 'sizes': <property object at 0x10848d270>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x10848bb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x10848bdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x10848be50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x10848bee0>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x108490dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x108490e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x108490ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10849a160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10849a1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10849a280>, 'hessian': <function FreeEnergyBase.hessian at 0x10849a310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10849a3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10849a430>, 'pressure': <function FreeEnergyBase.pressure at 0x10849a4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10849a550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10849a5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x108490f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10849a040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10849a0d0>}
+~flory.free_energy.flory_huggins.FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x10849a670>, 'from_uniform': <classmethod object at 0x1084959d0>, 'from_random_normal': <classmethod object at 0x108495a00>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x108490dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x108490e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x108490ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10849a160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10849a1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10849a280>, 'hessian': <function FreeEnergyBase.hessian at 0x10849a310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10849a3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10849a430>, 'pressure': <function FreeEnergyBase.pressure at 0x10849a4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10849a550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10849a5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x108490f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10849a040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10849a0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x107725040>, 'compiled': <function InteractionBase.compiled at 0x1077254c0>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x107725280>, '_energy_impl': <function InteractionBase._energy_impl at 0x107725310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1077253a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x107725430>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'independent_entries': <property object at 0x108487680>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x107725550>, 'from_uniform': <classmethod object at 0x1077193d0>, 'from_random_normal': <classmethod object at 0x107719430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x10848b040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x10848b0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x107725040>, 'compiled': <function InteractionBase.compiled at 0x1077254c0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x10848b160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x10848b1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x10848b280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x10848b310>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x107725280>, '_energy_impl': <function InteractionBase._energy_impl at 0x107725310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1077253a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x107725430>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x1084876d0>, 'chis': <property object at 0x108487720>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x108485af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x108485ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x108485d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x108485dc0>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'omegas': <property object at 0x10849fbd0>, 'diagnostics': <property object at 0x1084a6540>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x117f909d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x122f15ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x122f15f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x122f17040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x122f170d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x122f17160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x122f171f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x122f17280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x122f17310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x122f173a0>, 'run': <function CoexistingPhasesFinder.run at 0x122f17550>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x10ffc43a0>, 'compiled': <function EnsembleBase.compiled at 0x10ffc44c0>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x10ffc4430>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x10ffc4820>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x10ffc43a0>, 'compiled': <function EnsembleBase.compiled at 0x10ffc44c0>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x10ffc4b80>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x10ffc4430>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x10ffc1860>, 'num_feat': <property object at 0x10ffc18b0>, 'phi_means': <property object at 0x10ffc1900>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x10ffc48b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x10ffc4af0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10ffbf5e0>, 'compiled': <function EntropyBase.compiled at 0x10ffbf8b0>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10ffbf670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10ffbf700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10ffbf790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10ffbf820>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x10ffbfaf0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10ffbf5e0>, 'compiled': <function EntropyBase.compiled at 0x10ffbf8b0>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x10ffbff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x10ffc4040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x10ffc40d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x10ffc4160>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10ffbf670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10ffbf700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10ffbf790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10ffbf820>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'num_comp': <property object at 0x10ffbbf90>, 'num_feat': <property object at 0x10ffc1040>, 'sizes': <property object at 0x10ffc1090>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x10ffbfb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x10ffbfdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x10ffbfe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x10ffbfee0>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x10ffc4dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x10ffc4e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x10ffc4ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10ffce160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10ffce1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10ffce280>, 'hessian': <function FreeEnergyBase.hessian at 0x10ffce310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10ffce3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10ffce430>, 'pressure': <function FreeEnergyBase.pressure at 0x10ffce4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10ffce550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10ffce5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x10ffc4f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10ffce040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10ffce0d0>}
+~flory.free_energy.flory_huggins.FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x10ffce670>, 'from_uniform': <classmethod object at 0x10ffc99d0>, 'from_random_normal': <classmethod object at 0x10ffc9a00>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x10ffc4dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x10ffc4e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x10ffc4ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10ffce160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10ffce1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10ffce280>, 'hessian': <function FreeEnergyBase.hessian at 0x10ffce310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10ffce3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10ffce430>, 'pressure': <function FreeEnergyBase.pressure at 0x10ffce4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10ffce550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10ffce5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x10ffc4f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10ffce040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10ffce0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x108267040>, 'compiled': <function InteractionBase.compiled at 0x1082674c0>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x108267280>, '_energy_impl': <function InteractionBase._energy_impl at 0x108267310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1082673a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x108267430>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'independent_entries': <property object at 0x10ffbb4a0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x108267550>, 'from_uniform': <classmethod object at 0x10825a3d0>, 'from_random_normal': <classmethod object at 0x10825a430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x10ffbf040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x10ffbf0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x108267040>, 'compiled': <function InteractionBase.compiled at 0x1082674c0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x10ffbf160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x10ffbf1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x10ffbf280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x10ffbf310>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x108267280>, '_energy_impl': <function InteractionBase._energy_impl at 0x108267310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1082673a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x108267430>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x10ffbb4f0>, 'chis': <property object at 0x10ffbb540>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x10ffb9af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x10ffb9ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x10ffb9d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x10ffb9dc0>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'omegas': <property object at 0x10ffd39f0>, 'diagnostics': <property object at 0x10ffd3a40>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x11c2449d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x11d105ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x11d105f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x11d107040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x11d1070d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x11d107160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x11d1071f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x11d107280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x11d107310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x11d1073a0>, 'run': <function CoexistingPhasesFinder.run at 0x11d107550>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x10797c3a0>, 'compiled': <function EnsembleBase.compiled at 0x10797c4c0>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x10797c430>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x10797c820>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x10797c3a0>, 'compiled': <function EnsembleBase.compiled at 0x10797c4c0>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x10797cb80>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x10797c430>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x1079799a0>, 'num_feat': <property object at 0x1079799f0>, 'phi_means': <property object at 0x107979a40>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x10797c8b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x10797caf0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10432f5e0>, 'compiled': <function EntropyBase.compiled at 0x10432f8b0>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10432f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10432f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10432f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10432f820>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x10432faf0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10432f5e0>, 'compiled': <function EntropyBase.compiled at 0x10432f8b0>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x10432ff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x10797c040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x10797c0d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x10797c160>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10432f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10432f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10432f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10432f820>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'num_comp': <property object at 0x107979130>, 'num_feat': <property object at 0x107979180>, 'sizes': <property object at 0x1079791d0>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x10432fb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x10432fdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x10432fe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x10432fee0>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x10797cdc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x10797ce50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x10797cee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x107986160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x1079861f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x107986280>, 'hessian': <function FreeEnergyBase.hessian at 0x107986310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x1079863a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x107986430>, 'pressure': <function FreeEnergyBase.pressure at 0x1079864c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x107986550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x1079865e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x10797cf70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x107986040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x1079860d0>}
+~flory.free_energy.flory_huggins.FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x107986670>, 'from_uniform': <classmethod object at 0x1079819d0>, 'from_random_normal': <classmethod object at 0x107981a00>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x10797cdc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x10797ce50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x10797cee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x107986160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x1079861f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x107986280>, 'hessian': <function FreeEnergyBase.hessian at 0x107986310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x1079863a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x107986430>, 'pressure': <function FreeEnergyBase.pressure at 0x1079864c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x107986550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x1079865e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x10797cf70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x107986040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x1079860d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x10365f040>, 'compiled': <function InteractionBase.compiled at 0x10365f4c0>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x10365f280>, '_energy_impl': <function InteractionBase._energy_impl at 0x10365f310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x10365f3a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x10365f430>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'independent_entries': <property object at 0x10432b5e0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x10365f550>, 'from_uniform': <classmethod object at 0x1036513d0>, 'from_random_normal': <classmethod object at 0x103651430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x10432f040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x10432f0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x10365f040>, 'compiled': <function InteractionBase.compiled at 0x10365f4c0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x10432f160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x10432f1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x10432f280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x10432f310>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x10365f280>, '_energy_impl': <function InteractionBase._energy_impl at 0x10365f310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x10365f3a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x10365f430>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x10432b630>, 'chis': <property object at 0x10432b680>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x104329af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x104329ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x104329d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x104329dc0>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'omegas': <property object at 0x10798bb30>, 'diagnostics': <property object at 0x10798bb80>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x107f389d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x127091ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x127091f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x127093040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x1270930d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x127093160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x1270931f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x127093280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x127093310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x1270933a0>, 'run': <function CoexistingPhasesFinder.run at 0x127093550>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x12acdc3a0>, 'compiled': <function EnsembleBase.compiled at 0x12acdc4c0>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x12acdc430>}
+~CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x12acdc820>}
+~EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x12acdc3a0>, 'compiled': <function EnsembleBase.compiled at 0x12acdc4c0>}
+~CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x12acdcb80>}
+~EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x12acdc430>}
+~CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x12acd9a90>, 'num_feat': <property object at 0x12acd9ae0>, 'phi_means': <property object at 0x12acd9b30>}
+~CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x12acdc8b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x12acdcaf0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x12acc35e0>, 'compiled': <function EntropyBase.compiled at 0x12acc38b0>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x12acc3670>, '_energy_impl': <function EntropyBase._energy_impl at 0x12acc3700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x12acc3790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x12acc3820>}
+~IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x12acc3af0>}
+~EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x12acc35e0>, 'compiled': <function EntropyBase.compiled at 0x12acc38b0>}
+~IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x12acc3f70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x12acdc040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x12acdc0d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x12acdc160>}
+~EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x12acc3670>, '_energy_impl': <function EntropyBase._energy_impl at 0x12acc3700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x12acc3790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x12acc3820>}
+~IdealGasEntropyCompiled
+{'num_comp': <property object at 0x12acd9220>, 'num_feat': <property object at 0x12acd9270>, 'sizes': <property object at 0x12acd92c0>}
+~IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x12acc3b80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x12acc3dc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x12acc3e50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x12acc3ee0>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x12acdcdc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x12acdce50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x12acdcee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x12ace6160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x12ace61f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x12ace6280>, 'hessian': <function FreeEnergyBase.hessian at 0x12ace6310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x12ace63a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x12ace6430>, 'pressure': <function FreeEnergyBase.pressure at 0x12ace64c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x12ace6550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x12ace65e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x12acdcf70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x12ace6040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x12ace60d0>}
+~FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x12ace6670>, 'from_uniform': <classmethod object at 0x12ace19d0>, 'from_random_normal': <classmethod object at 0x12ace1a00>}
+~FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x12acdcdc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x12acdce50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x12acdcee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x12ace6160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x12ace61f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x12ace6280>, 'hessian': <function FreeEnergyBase.hessian at 0x12ace6310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x12ace63a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x12ace6430>, 'pressure': <function FreeEnergyBase.pressure at 0x12ace64c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x12ace6550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x12ace65e0>}
+~FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x12acdcf70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x12ace6040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x12ace60d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x11b6ec040>, 'compiled': <function InteractionBase.compiled at 0x11b6ec4c0>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x11b6ec280>, '_energy_impl': <function InteractionBase._energy_impl at 0x11b6ec310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x11b6ec3a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x11b6ec430>}
+~FloryHugginsInteraction
+{'independent_entries': <property object at 0x12acbf720>}
+~FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x11b6ec550>, 'from_uniform': <classmethod object at 0x11b6dd3d0>, 'from_random_normal': <classmethod object at 0x11b6dd430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x12acc3040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x12acc30d0>}
+~InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x11b6ec040>, 'compiled': <function InteractionBase.compiled at 0x11b6ec4c0>}
+~FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x12acc3160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x12acc31f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x12acc3280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x12acc3310>}
+~InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x11b6ec280>, '_energy_impl': <function InteractionBase._energy_impl at 0x11b6ec310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x11b6ec3a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x11b6ec430>}
+~FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x12acbf770>, 'chis': <property object at 0x12acbf7c0>}
+~FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x12acbdaf0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x12acbdca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x12acbdd30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x12acbddc0>}
+~CoexistingPhasesFinder
+{'omegas': <property object at 0x12acebc20>, 'diagnostics': <property object at 0x12acf3590>}
+~CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x12af909d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x12c959ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x12c959f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x12c95b040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x12c95b0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x12c95b160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x12c95b1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x12c95b280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x12c95b310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x12c95b3a0>, 'run': <function CoexistingPhasesFinder.run at 0x12c95b550>}
+EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x109f843a0>, 'compiled': <function EnsembleBase.compiled at 0x109f844c0>}
+EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x109f84430>}
+CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x109f84820>}
+EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x109f843a0>, 'compiled': <function EnsembleBase.compiled at 0x109f844c0>}
+CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x109f84b80>}
+EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x109f84430>}
+CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x109f819f0>, 'num_feat': <property object at 0x109f81a40>, 'phi_means': <property object at 0x109f81a90>}
+CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x109f848b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x109f84af0>}
+EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x109f7f5e0>, 'compiled': <function EntropyBase.compiled at 0x109f7f8b0>}
+EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x109f7f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x109f7f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x109f7f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x109f7f820>}
+IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x109f7faf0>}
+EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x109f7f5e0>, 'compiled': <function EntropyBase.compiled at 0x109f7f8b0>}
+IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x109f7ff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x109f84040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x109f840d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x109f84160>}
+EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x109f7f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x109f7f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x109f7f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x109f7f820>}
+IdealGasEntropyCompiled
+{'num_comp': <property object at 0x109f81180>, 'num_feat': <property object at 0x109f811d0>, 'sizes': <property object at 0x109f81220>}
+IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x109f7fb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x109f7fdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x109f7fe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x109f7fee0>}
+FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x109f84dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x109f84e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x109f84ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x109f8e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x109f8e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x109f8e280>, 'hessian': <function FreeEnergyBase.hessian at 0x109f8e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x109f8e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x109f8e430>, 'pressure': <function FreeEnergyBase.pressure at 0x109f8e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x109f8e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x109f8e5e0>}
+FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x109f84f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x109f8e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x109f8e0d0>}
+FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x109f8e670>, 'from_uniform': <classmethod object at 0x109f899d0>, 'from_random_normal': <classmethod object at 0x109f89a00>}
+FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x109f84dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x109f84e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x109f84ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x109f8e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x109f8e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x109f8e280>, 'hessian': <function FreeEnergyBase.hessian at 0x109f8e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x109f8e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x109f8e430>, 'pressure': <function FreeEnergyBase.pressure at 0x109f8e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x109f8e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x109f8e5e0>}
+FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x109f84f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x109f8e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x109f8e0d0>}
+InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x107a67040>, 'compiled': <function InteractionBase.compiled at 0x107a674c0>}
+InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x107a67280>, '_energy_impl': <function InteractionBase._energy_impl at 0x107a67310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x107a673a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x107a67430>}
+FloryHugginsInteraction
+{'independent_entries': <property object at 0x109f7b630>}
+FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x107a67550>, 'from_uniform': <classmethod object at 0x107a5a3d0>, 'from_random_normal': <classmethod object at 0x107a5a430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x109f7f040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x109f7f0d0>}
+InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x107a67040>, 'compiled': <function InteractionBase.compiled at 0x107a674c0>}
+FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x109f7f160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x109f7f1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x109f7f280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x109f7f310>}
+InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x107a67280>, '_energy_impl': <function InteractionBase._energy_impl at 0x107a67310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x107a673a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x107a67430>}
+FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x109f7b680>, 'chis': <property object at 0x109f7b6d0>}
+FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x109f79af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x109f79ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x109f79d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x109f79dc0>}
+CoexistingPhasesFinder
+{'omegas': <property object at 0x109f93b80>, 'diagnostics': <property object at 0x109f93bd0>}
+CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x10a2d09d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x10f955ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x10f955f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x10f957040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x10f9570d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x10f957160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x10f9571f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x10f957280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x10f957310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x10f9573a0>, 'run': <function CoexistingPhasesFinder.run at 0x10f957550>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1143443a0>, 'compiled': <function EnsembleBase.compiled at 0x1143444c0>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x114344430>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x114344820>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1143443a0>, 'compiled': <function EnsembleBase.compiled at 0x1143444c0>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x114344b80>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x114344430>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x114341a90>, 'num_feat': <property object at 0x114341ae0>, 'phi_means': <property object at 0x114341b30>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x1143448b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x114344af0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x11433f5e0>, 'compiled': <function EntropyBase.compiled at 0x11433f8b0>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x11433f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x11433f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x11433f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x11433f820>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x11433faf0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x11433f5e0>, 'compiled': <function EntropyBase.compiled at 0x11433f8b0>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x11433ff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x114344040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x1143440d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x114344160>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x11433f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x11433f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x11433f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x11433f820>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'num_comp': <property object at 0x114341220>, 'num_feat': <property object at 0x114341270>, 'sizes': <property object at 0x1143412c0>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x11433fb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x11433fdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x11433fe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x11433fee0>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x114344dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x114344e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x114344ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11434e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11434e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11434e280>, 'hessian': <function FreeEnergyBase.hessian at 0x11434e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11434e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11434e430>, 'pressure': <function FreeEnergyBase.pressure at 0x11434e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11434e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11434e5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x114344f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11434e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11434e0d0>}
+~flory.free_energy.flory_huggins.FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x11434e670>, 'from_uniform': <classmethod object at 0x1143499d0>, 'from_random_normal': <classmethod object at 0x114349a00>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x114344dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x114344e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x114344ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x11434e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x11434e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x11434e280>, 'hessian': <function FreeEnergyBase.hessian at 0x11434e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x11434e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x11434e430>, 'pressure': <function FreeEnergyBase.pressure at 0x11434e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x11434e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x11434e5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x114344f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x11434e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x11434e0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x104f10040>, 'compiled': <function InteractionBase.compiled at 0x104f104c0>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x104f10280>, '_energy_impl': <function InteractionBase._energy_impl at 0x104f10310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x104f103a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x104f10430>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'independent_entries': <property object at 0x11433b6d0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x104f10550>, 'from_uniform': <classmethod object at 0x104f013d0>, 'from_random_normal': <classmethod object at 0x104f01430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x11433f040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x11433f0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x104f10040>, 'compiled': <function InteractionBase.compiled at 0x104f104c0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x11433f160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x11433f1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x11433f280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x11433f310>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x104f10280>, '_energy_impl': <function InteractionBase._energy_impl at 0x104f10310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x104f103a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x104f10430>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x11433b720>, 'chis': <property object at 0x11433b770>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x114339af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x114339ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x114339d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x114339dc0>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'omegas': <property object at 0x114353c20>, 'diagnostics': <property object at 0x11435a590>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x1145909d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x1220adee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x1220adf70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x1220af040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x1220af0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x1220af160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x1220af1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x1220af280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x1220af310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x1220af3a0>, 'run': <function CoexistingPhasesFinder.run at 0x1220af550>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1078443a0>, 'compiled': <function EnsembleBase.compiled at 0x1078444c0>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x107844430>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'__init__': <function CanonicalEnsemble.__init__ at 0x107844820>}
+~flory.ensemble.base.EnsembleBase
+{'__init__': <function EnsembleBase.__init__ at 0x1078443a0>, 'compiled': <function EnsembleBase.compiled at 0x1078444c0>}
+~flory.ensemble.canonical.CanonicalEnsemble
+{'_compiled_impl': <function CanonicalEnsemble._compiled_impl at 0x107844b80>}
+~flory.ensemble.base.EnsembleBase
+{'_compiled_impl': <function EnsembleBase._compiled_impl at 0x107844430>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'num_comp': <property object at 0x107841a40>, 'num_feat': <property object at 0x107841a90>, 'phi_means': <property object at 0x107841ae0>}
+~flory.ensemble.canonical.CanonicalEnsembleCompiled
+{'__init__': <function CanonicalEnsembleCompiled.__init__ at 0x1078448b0>, 'normalize': <function CanonicalEnsembleCompiled.normalize at 0x107844af0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10783f5e0>, 'compiled': <function EntropyBase.compiled at 0x10783f8b0>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10783f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10783f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10783f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10783f820>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'__init__': <function IdealGasEntropy.__init__ at 0x10783faf0>}
+~flory.entropy.base.EntropyBase
+{'__init__': <function EntropyBase.__init__ at 0x10783f5e0>, 'compiled': <function EntropyBase.compiled at 0x10783f8b0>}
+~flory.entropy.ideal_gas.IdealGasEntropy
+{'_compiled_impl': <function IdealGasEntropy._compiled_impl at 0x10783ff70>, '_energy_impl': <function IdealGasEntropy._energy_impl at 0x107844040>, '_jacobian_impl': <function IdealGasEntropy._jacobian_impl at 0x1078440d0>, '_hessian_impl': <function IdealGasEntropy._hessian_impl at 0x107844160>}
+~flory.entropy.base.EntropyBase
+{'_compiled_impl': <function EntropyBase._compiled_impl at 0x10783f670>, '_energy_impl': <function EntropyBase._energy_impl at 0x10783f700>, '_jacobian_impl': <function EntropyBase._jacobian_impl at 0x10783f790>, '_hessian_impl': <function EntropyBase._hessian_impl at 0x10783f820>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'num_comp': <property object at 0x1078411d0>, 'num_feat': <property object at 0x107841220>, 'sizes': <property object at 0x107841270>}
+~flory.entropy.ideal_gas.IdealGasEntropyCompiled
+{'__init__': <function IdealGasEntropyCompiled.__init__ at 0x10783fb80>, 'partition': <function IdealGasEntropyCompiled.partition at 0x10783fdc0>, 'comp_to_feat': <function IdealGasEntropyCompiled.comp_to_feat at 0x10783fe50>, 'volume_derivative': <function IdealGasEntropyCompiled.volume_derivative at 0x10783fee0>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x107844dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x107844e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x107844ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10784e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10784e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10784e280>, 'hessian': <function FreeEnergyBase.hessian at 0x10784e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10784e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10784e430>, 'pressure': <function FreeEnergyBase.pressure at 0x10784e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10784e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10784e5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x107844f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10784e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10784e0d0>}
+~flory.free_energy.flory_huggins.FloryHuggins
+{'__init__': <function FloryHuggins.__init__ at 0x10784e670>, 'from_uniform': <classmethod object at 0x1078499d0>, 'from_random_normal': <classmethod object at 0x107849a00>}
+~flory.free_energy.base.FreeEnergyBase
+{'__init__': <function FreeEnergyBase.__init__ at 0x107844dc0>, 'interaction_compiled': <function FreeEnergyBase.interaction_compiled at 0x107844e50>, 'entropy_compiled': <function FreeEnergyBase.entropy_compiled at 0x107844ee0>, 'check_volume_fractions': <function FreeEnergyBase.check_volume_fractions at 0x10784e160>, 'free_energy_density': <function FreeEnergyBase.free_energy_density at 0x10784e1f0>, 'jacobian': <function FreeEnergyBase.jacobian at 0x10784e280>, 'hessian': <function FreeEnergyBase.hessian at 0x10784e310>, 'chemical_potentials': <function FreeEnergyBase.chemical_potentials at 0x10784e3a0>, 'exchange_chemical_potentials': <function FreeEnergyBase.exchange_chemical_potentials at 0x10784e430>, 'pressure': <function FreeEnergyBase.pressure at 0x10784e4c0>, 'num_unstable_modes': <function FreeEnergyBase.num_unstable_modes at 0x10784e550>, 'is_stable': <function FreeEnergyBase.is_stable at 0x10784e5e0>}
+~flory.free_energy.base.FreeEnergyBase
+{'_energy_impl': <function FreeEnergyBase._energy_impl at 0x107844f70>, '_jacobian_impl': <function FreeEnergyBase._jacobian_impl at 0x10784e040>, '_hessian_impl': <function FreeEnergyBase._hessian_impl at 0x10784e0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x1052d8040>, 'compiled': <function InteractionBase.compiled at 0x1052d84c0>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x1052d8280>, '_energy_impl': <function InteractionBase._energy_impl at 0x1052d8310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1052d83a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x1052d8430>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'independent_entries': <property object at 0x10783b680>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'__init__': <function FloryHugginsInteraction.__init__ at 0x1052d8550>, 'from_uniform': <classmethod object at 0x1052ca3d0>, 'from_random_normal': <classmethod object at 0x1052ca430>, 'set_uniform_chis': <function FloryHugginsInteraction.set_uniform_chis at 0x10783f040>, 'set_random_chis': <function FloryHugginsInteraction.set_random_chis at 0x10783f0d0>}
+~flory.interaction.base.InteractionBase
+{'__init__': <function InteractionBase.__init__ at 0x1052d8040>, 'compiled': <function InteractionBase.compiled at 0x1052d84c0>}
+~flory.interaction.flory_huggins.FloryHugginsInteraction
+{'_compiled_impl': <function FloryHugginsInteraction._compiled_impl at 0x10783f160>, '_energy_impl': <function FloryHugginsInteraction._energy_impl at 0x10783f1f0>, '_jacobian_impl': <function FloryHugginsInteraction._jacobian_impl at 0x10783f280>, '_hessian_impl': <function FloryHugginsInteraction._hessian_impl at 0x10783f310>}
+~flory.interaction.base.InteractionBase
+{'_compiled_impl': <function InteractionBase._compiled_impl at 0x1052d8280>, '_energy_impl': <function InteractionBase._energy_impl at 0x1052d8310>, '_jacobian_impl': <function InteractionBase._jacobian_impl at 0x1052d83a0>, '_hessian_impl': <function InteractionBase._hessian_impl at 0x1052d8430>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'num_feat': <property object at 0x10783b6d0>, 'chis': <property object at 0x10783b720>}
+~flory.interaction.flory_huggins.FloryHugginsInteractionCompiled
+{'__init__': <function FloryHugginsInteractionCompiled.__init__ at 0x107839af0>, 'energy': <function FloryHugginsInteractionCompiled.energy at 0x107839ca0>, 'potential': <function FloryHugginsInteractionCompiled.potential at 0x107839d30>, 'incomp_coef': <function FloryHugginsInteractionCompiled.incomp_coef at 0x107839dc0>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'omegas': <property object at 0x107853bd0>, 'diagnostics': <property object at 0x10785a4f0>}
+~flory.mcmp.finder.CoexistingPhasesFinder
+{'__init__': <function CoexistingPhasesFinder.__init__ at 0x107a909d0>, 'check_instance': <function CoexistingPhasesFinder.check_instance at 0x117f19ee0>, 'check_field': <function CoexistingPhasesFinder.check_field at 0x117f19f70>, 'set_interaction': <function CoexistingPhasesFinder.set_interaction at 0x117f1b040>, 'set_entropy': <function CoexistingPhasesFinder.set_entropy at 0x117f1b0d0>, 'set_ensemble': <function CoexistingPhasesFinder.set_ensemble at 0x117f1b160>, 'reset_revive': <function CoexistingPhasesFinder.reset_revive at 0x117f1b1f0>, 'reinitialize_random': <function CoexistingPhasesFinder.reinitialize_random at 0x117f1b280>, 'reinitialize_from_omegas': <function CoexistingPhasesFinder.reinitialize_from_omegas at 0x117f1b310>, 'reinitialize_from_phis': <function CoexistingPhasesFinder.reinitialize_from_phis at 0x117f1b3a0>, 'run': <function CoexistingPhasesFinder.run at 0x117f1b550>}

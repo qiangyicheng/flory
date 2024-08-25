@@ -1,6 +1,10 @@
-"""
+"""Package for finding coexisting phases of multicomponent mixtures.
 Package :mod:`flory` provides methods and classes for analyzing phase separation in
-multicomponent mixtures based on Flory-Huggins theory.
+general multicomponent mixtures. The package is inspired by the widely-used Flory-Huggins
+model, but not limited to it. Package :mod:`flory` describes a general free energy by four
+parts, :mod:`~flory.interaction`, :mod:`~flory.entropy`, :mod:`~flory.ensemble` and
+:mod:`~flory.constraint`, and use a improved Gibbs ensemble method to obtain the
+coexisting phases.
 """
 
 try:
@@ -16,9 +20,9 @@ except ImportError:
         __version__ = "unknown"
     del PackageNotFoundError, version
 
-from .interaction import FloryHugginsInteraction
-from .entropy import IdealGasEntropy
-from .ensemble import CanonicalEnsemble
-from .free_energy import FloryHuggins
+from .interaction import InteractionBase, FloryHugginsInteraction
+from .entropy import EntropyBase, IdealGasEntropy
+from .ensemble import EnsembleBase, CanonicalEnsemble
+from .free_energy import FreeEnergyBase, FloryHuggins
 from .mcmp import CoexistingPhasesFinder
 from .utils import find_coexisting_phases

@@ -31,8 +31,6 @@
       :private-members:
       :inherited-members:
       :show-inheritance:
-
-      .. autoclasstoc::
    {%- endfor %}
    {% endif %}
    {% endblock %}

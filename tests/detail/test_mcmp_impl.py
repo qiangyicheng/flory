@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from numba.experimental import jitclass
 
-from flory.mcmp._mcmp_impl import *
+from flory.mcmp._finder_impl import *
 
 
 def test_count_valid_phases():
