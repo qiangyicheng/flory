@@ -23,7 +23,7 @@ from typing import Any, Optional
 import numpy as np
 from tqdm.auto import tqdm
 
-from ._mcmp_impl import *
+from ._finder_impl import *
 from ..commom import *
 from ..interaction import InteractionBase
 from ..entropy import EntropyBase
@@ -168,7 +168,7 @@ class CoexistingPhasesFinder:
         self._ensemble = ensemble.compiled(**kwargs)
 
         self._num_comp = self._entropy.num_comp
-        self._num_feat = self._interaction.num_feat
+        self._num_feat = self._entropy.num_feat
         self._num_part = num_part if num_part else self._num_comp * 8
 
         self.check_instance(self._interaction)

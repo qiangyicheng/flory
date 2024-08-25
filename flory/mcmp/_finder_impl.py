@@ -1,6 +1,6 @@
 """ The implementation details of the module :mod:`~flory.mcmp`. 
 
-:mod:`flory.detail.mcmp_impl` contains the implementation details of the module
+:mod:`flory.mcmp._mcmp_impl` contains the implementation details of the module
 :mod:`~flory.mcmp`. The main components of the module is the function
 :meth:`multicomponent_self_consistent_metastep`, which implements the self consistent
 iterations for minimizing the extended free energy functional, and the function
