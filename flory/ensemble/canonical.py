@@ -51,7 +51,7 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
     ) -> np.ndarray:
         incomp = -1.0 * np.ones_like(phis_comp[0])
         for itr_comp in range(self._num_comp):
-            factor = self.phi_means[itr_comp] / Qs[itr_comp]
+            factor = self._phi_means[itr_comp] / Qs[itr_comp]
             phis_comp[itr_comp] = factor * phis_comp[itr_comp] * masks
             incomp += phis_comp[itr_comp]
         incomp *= masks
