@@ -74,12 +74,20 @@ Here we collect the common symbols used in the user interface.
       - Storage Convention
     * - :math:`\phi_i`
       - 1
-      - Volume fractions of component :math:`i`.
+      - Volume fraction of component :math:`i`.
       - :math:`N_\mathrm{c}` array
     * - :math:`\phi_{p,i}`
       - 1
-      - Volume fractions of component :math:`i` in compartment :math:`p`.
+      - Volume fraction of component :math:`i` in compartment :math:`p`.
       - :math:`N_\mathrm{p} \times N_\mathrm{c}` array
+    * - :math:`\bar{phi}_i`
+      - 1
+      - Average volume fraction of component :math:`i`.
+      - :math:`N_\mathrm{c}` array
+    * - :math:`J_p`
+      - Total :math:`V`
+      - Relative volume of phase :math:`i`.
+      - :math:`N_\mathrm{p}` array
 
 Advanced Variables
 ---------------------------
@@ -107,6 +115,10 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
       - 1
       - Conjugate variable of (mean field felt by) :math:`\phi_r^{(m)}`.
       - :math:`N_\mathrm{r} \times M` array
+    * - :math:`J_m`
+      - Arbitrary volume
+      - Relative volume of compartment :math:`m`.
+      - :math:`M` array
     * - :math:`C_{\alpha,r}`
       - 1
       - Coefficients of features for linear constraint :math:`\alpha`.

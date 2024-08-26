@@ -158,7 +158,7 @@ class IdealGasEntropy(EntropyBase):
         :class:`~flory.entropy.base.EntropyBase`. 
         
         Returns:
-            Instance of :class:`IdealGasEntropyCompiled`.
+            : Instance of :class:`IdealGasEntropyCompiled`.
         """
 
         return IdealGasEntropyCompiled(self.sizes)

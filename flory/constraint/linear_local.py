@@ -177,7 +177,7 @@ class LinearLocalConstraint(ConstraintBase):
                 Elasticity :math:`\kappa` of the constraints.
 
         Returns:
-            :Instance of :class:`LinearLocalConstraintCompiled`.
+            : Instance of :class:`LinearLocalConstraintCompiled`.
         """
         return LinearLocalConstraintCompiled(
             self.Cs, self.Ts, constraint_acceptance_ratio, constraint_elasticity

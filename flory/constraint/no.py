@@ -1,4 +1,4 @@
-"""Module for linear local constraint.
+"""Module for no constraint.
 
 """
 

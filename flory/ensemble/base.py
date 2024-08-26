@@ -2,7 +2,55 @@
 
 """
 
+import numpy as np
+
 from ..commom import *
+
+
+class EnsembleBaseCompiled(object):
+    r"""Abstract base class for a general compiled ensemble.
+    This abstract class defines the necessary members of a compiled constraint instance.
+    This abstract class does not inherit from :class:`abc.ABC`, since the
+    :func:`numba.experimental.jitclass` currently does not support some members of
+    :class:`abc.ABC`. A compiled class derived from :class:`EnsembleBaseCompiled` is in
+    general stateless. In other words, the compiled ensemble instance never managers its
+    own data. Note that the methods may change the input arrays inplace to avoid creating
+    them each time.
+    """
+
+    @property
+    def num_comp(self):
+        r"""Number of components :math:`N_\mathrm{c}`."""
+        raise NotImplementedError
+
+    def normalize(
+        self, phis_comp: np.ndarray, Qs: np.ndarray, masks: np.ndarray
+    ) -> np.ndarray:
+        r"""Normalize the volume fractions of components.
+        This method normalizes the Boltzmann factor stored in :paramref:`phis_comp` into
+        volume fractions of all components :math:`\phi_i^{(m)}` and save it back to
+        :paramref:`phis_comp`, making use of the single molecule partition function in
+        :paramref:`Qs`. The exact form of such normalization depends on the emsemble. This
+        method must report the incompressibility :math:`\sum_i \phi_i^{(m)} -1`. Note that
+        this function is only aware of the number of components :math:`N_\mathrm{c}`.
+        Mapping from/to features are handled by :mod:`~flory.entropy`.
+
+        Args:
+            phis_comp:
+                Mutable. The 2D array with the size of :math:`N_\mathrm{c} \times M`, containing
+                Boltzmann factors of the components, which are proportional
+                to resulting volume fractions.
+            Qs:
+                Constant. The 1D array with the size of :math:`N_\mathrm{c}`, containing
+                single molecule partition functions of the components.
+            masks:
+                Constant. The 1D array with the size of :math:`M`, containing the masks to
+                mark whether the compartment is living or not.
+
+        Returns:
+            : The incompressibility.
+        """
+        raise NotImplementedError
 
 
 class EnsembleBase:
@@ -26,23 +74,10 @@ class EnsembleBase:
     def compiled(self, **kwargs_full) -> object:
         r"""Make a compiled ensemble instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
         This function requires the implementation of :meth:`_compiled_impl`. The ensemble
-        instance is a compiled class, which must implement:
-
-            - property :samp:`num_comp`, which reports the number of components
-              :math:`N_\mathrm{c}`.
-            - method :samp:`normalize(phis_comp, Qs, masks)`, which normalizes the
-              Boltzmann factor stored in :samp:`phis_comp` into volume fractions of all
-              components :math:`\phi_i^{(m)}` and save it back to :samp:`phis_comp`,
-              making use of the single molecule partition function in :samp:`Qs`. The
-              leading dimension of :samp:`phis_comp` and :samp:`Qs` must be both
-              :samp:`num_comp`. :samp:`masks` is array with the same size as
-              :samp:`phis_comp[0]`, using 0/1 to mark whether the compartment is alive.
-              This method must report the incompressibility :math:`\sum_i
-              \phi_i^{(m)} -1`. Note that this function is only aware of the number
-              of components :math:`N_\mathrm{c}`. Mapping from/to features are handled by
-              :mod:`~flory.entropy`.
-
-        See :class:`~flory.ensemble.canonical.CanonicalEnsembleCompiled` for an example.
+        instance is a compiled class, which must implement a list of methods or
+        properties. See :class:`EnsembleBaseCompiled` for the list and the detailed
+        information. Also see :class:`~flory.ensemble.canonical.CanonicalEnsembleCompiled`
+        for an example.
 
         Args:
             kwargs_full:
