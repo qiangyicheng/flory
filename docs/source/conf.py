@@ -43,7 +43,7 @@ extensions = [
 # Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
-    "numba": ("https://numba.readthedocs.io/en/stable/", None),
+    "numba": ("https://numba.readthedocs.io/en/latest/", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }

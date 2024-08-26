@@ -18,7 +18,7 @@ over the iteration. See :ref:`Examples` for examples.
 import logging
 import time
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, Union, Iterable
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -28,6 +28,7 @@ from ..commom import *
 from ..interaction import InteractionBase
 from ..entropy import EntropyBase
 from ..ensemble import EnsembleBase
+from ..constraint import ConstraintBase, NoConstraintCompiled
 
 
 class CoexistingPhasesFinder:
@@ -38,6 +39,7 @@ class CoexistingPhasesFinder:
         interaction: InteractionBase,
         entropy: EntropyBase,
         ensemble: EnsembleBase,
+        constraints: Union[ConstraintBase, Tuple[ConstraintBase], None] = None,
         *,
         num_part: Optional[int] = None,
         rng: Optional[np.random.Generator] = None,
@@ -171,9 +173,21 @@ class CoexistingPhasesFinder:
         self._num_feat = self._entropy.num_feat
         self._num_part = num_part if num_part else self._num_comp * 8
 
+        self._constraints = []
+        if constraints:
+            if isinstance(constraints, ConstraintBase):
+                self._constraints.append(constraints.compiled(**kwargs))
+            elif isinstance(constraints, Iterable):
+                for cons in constraints:
+                    self._constraints.append(cons.compiled(**kwargs))
+        else:
+            self._constraints.append(NoConstraintCompiled(self._num_feat))
+
         self.check_instance(self._interaction)
         self.check_instance(self._entropy)
         self.check_instance(self._ensemble)
+        for cons in self._constraints:
+            self.check_instance(cons)
 
         # rng
         if rng is None:
@@ -229,8 +243,8 @@ class CoexistingPhasesFinder:
                     """
                 )
                 raise FeatureNumberError
-            
-    def check_field(self, field: np.ndarray) ->np.ndarray:
+
+    def check_field(self, field: np.ndarray) -> np.ndarray:
         field = np.array(field)
         if field.shape != self._omegas.shape:
             self._logger.error(
@@ -242,7 +256,9 @@ class CoexistingPhasesFinder:
     def set_interaction(
         self, interaction: InteractionBase, if_reset_revive: bool = True, **kwargs
     ):
-        self._interaction = interaction.compiled(**{**self._kwargs_for_instances, **kwargs})
+        self._interaction = interaction.compiled(
+            **{**self._kwargs_for_instances, **kwargs}
+        )
         self.check_instance(self._interaction)
         if if_reset_revive:
             self.reset_revive()
@@ -264,6 +280,10 @@ class CoexistingPhasesFinder:
     def reset_revive(self):
         self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
+    def reinitialize_constraint(self):
+        for cons in self._constraints:
+            cons.initialize(self._num_part)
+
     def reinitialize_random(self):
         """Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` randomly.
 
@@ -275,7 +295,8 @@ class CoexistingPhasesFinder:
             (self._num_feat, self._num_part),
         )
         self._Js = np.full(self._num_part, 1.0, float)
-        self._revive_count_left = self._max_revive_per_compartment * self._num_part
+        self.reset_revive()
+        self.reinitialize_constraint()
 
     def reinitialize_from_omegas(self, omegas: np.ndarray):
         r"""Reinitialize the internal conjugate field :math:`\omega_i^{(m)}` from input.
@@ -288,6 +309,7 @@ class CoexistingPhasesFinder:
         self._omegas = self.check_field(omegas)
         self._Js = np.ones_like(self._Js)
         self.reset_revive()
+        self.reinitialize_constraint()
 
     def reinitialize_from_phis(self, phis: np.ndarray):
         r"""Reinitialize the internal conjugate fields
@@ -306,6 +328,7 @@ class CoexistingPhasesFinder:
         self._omegas = self._interaction.potential(phis)
         self._Js = np.ones_like(self._Js)
         self.reset_revive()
+        self.reinitialize_constraint()
 
     @property
     def omegas(self) -> np.ndarray:
@@ -315,7 +338,7 @@ class CoexistingPhasesFinder:
         :meth:`reinitialize_from_omegas` to initialize the system from given :math:`\omega_i^{(m)}`.
         """
         return self._omegas
-    
+
     @property
     def diagnostics(self) -> dict:
         """Diagnostic information  available after :meth:`run` finished.
@@ -395,7 +418,8 @@ class CoexistingPhasesFinder:
         pbar1 = tqdm(**bar_args, position=0, desc="Incompressibility")
         pbar2 = tqdm(**bar_args, position=1, desc="Field Error")
         pbar3 = tqdm(**bar_args, position=2, desc="Volume Error")
-        pbar4 = tqdm(**bar_text_args, position=3, desc="Revive Count Left")
+        pbar4 = tqdm(**bar_args, position=3, desc="Constraint Residue")
+        pbar5 = tqdm(**bar_text_args, position=4, desc="Revive Count Left")
 
         bar_val_func = lambda a: max(0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max))
 
@@ -407,12 +431,14 @@ class CoexistingPhasesFinder:
                 max_abs_incomp,
                 max_abs_omega_diff,
                 max_abs_Js_diff,
+                max_constraint_residue,
                 revive_count,
                 is_last_step_safe,
             ) = multicomponent_self_consistent_metastep(
                 self._interaction,
                 self._entropy,
                 self._ensemble,
+                tuple(self._constraints),
                 omegas=self._omegas,
                 Js=self._Js,
                 phis_feat=self._phis_feat,
@@ -434,14 +460,16 @@ class CoexistingPhasesFinder:
                 pbar1.n = bar_val_func(max_abs_incomp)
                 pbar2.n = bar_val_func(max_abs_omega_diff)
                 pbar3.n = bar_val_func(max_abs_Js_diff)
-                pbar4.n = 1
+                pbar4.n = bar_val_func(max_constraint_residue)
+                pbar5.n = 1
                 pbar1.refresh()
                 pbar2.refresh()
                 pbar3.refresh()
-                pbar4.set_description_str(
+                pbar4.refresh()
+                pbar5.set_description_str(
                     "{:<20}: {}".format("Revive Count Left", self._revive_count_left)
                 )
-                pbar4.refresh()
+                pbar5.refresh()
 
             # check convergence
             if self._convergence_criterion == "standard":
@@ -450,6 +478,7 @@ class CoexistingPhasesFinder:
                     and tolerance > max_abs_incomp
                     and tolerance > max_abs_omega_diff
                     and tolerance > max_abs_Js_diff
+                    and tolerance > max_constraint_residue
                 ):
                     self._logger.info(
                         f"Composition and volumes reached stationary state after {steps} steps"
@@ -464,6 +493,7 @@ class CoexistingPhasesFinder:
         pbar2.close()
         pbar3.close()
         pbar4.close()
+        pbar5.close()
 
         # get final result
         final_Js = self._Js.copy()
@@ -478,10 +508,11 @@ class CoexistingPhasesFinder:
         # store diagnostic output
         self._diagnostics = {
             "steps": steps,
-            "time" : time.time() - start_time,
+            "time": time.time() - start_time,
             "max_abs_incomp": max_abs_incomp,
             "max_abs_omega_diff": max_abs_omega_diff,
             "max_abs_js_diff": max_abs_Js_diff,
+            "max_constraint_residue": max_constraint_residue,
             "revive_count_left": self._revive_count_left,
             "phis": final_phis_comp,
             "Js": final_Js,

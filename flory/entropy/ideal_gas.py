@@ -144,7 +144,6 @@ class IdealGasEntropy(EntropyBase):
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
-        self.num_comp = num_comp
         if sizes is None:
             self.sizes = np.ones(num_comp)
         else:

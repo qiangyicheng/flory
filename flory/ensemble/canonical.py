@@ -14,7 +14,6 @@ from .base import EnsembleBase
 @jitclass(
     [
         ("_num_comp", int32),  # a scalar
-        ("_num_feat", int32),  # a scalar
         ("_phi_means", float64[::1]),  # a C-continuous array
     ]
 )
@@ -39,7 +38,6 @@ class CanonicalEnsembleCompiled(object):
                 components is inferred from this matrix.
         """
         self._num_comp = phi_means.shape[0]
-        self._num_feat = phi_means.shape[0]
         self._phi_means = phi_means  # do not affect chis
 
     @property
@@ -104,7 +102,6 @@ class CanonicalEnsemble(EnsembleBase):
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
-        self.num_comp = num_comp
 
         phi_means = np.atleast_1d(phi_means)
 

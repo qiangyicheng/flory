@@ -14,9 +14,14 @@ or reused.
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
+from typing import Tuple
+
 import numba as nb
 import numpy as np
 from scipy import cluster, spatial
+from numba import literal_unroll
+
+from ..constraint.base import ConstraintBaseCompiled
 
 
 @nb.njit()
@@ -264,6 +269,7 @@ def multicomponent_self_consistent_metastep(
     interaction: object,
     entropy: object,
     ensemble: object,
+    constraints: Tuple[ConstraintBaseCompiled],
     *,
     omegas: np.ndarray,
     Js: np.ndarray,
@@ -395,13 +401,21 @@ def multicomponent_self_consistent_metastep(
         entropy.comp_to_feat(phis_feat, phis_comp)
         max_abs_incomp = np.abs(incomp).max()
 
+        # prepare constraints
+        if constraints:
+            for cons in literal_unroll(constraints):
+                cons.prepare(phis_feat, masks)
+
         # temp for omega, namely chi.phi
         potential = interaction.potential(phis_feat)
 
         # xi, the lagrangian multiplier
         xi = interaction.incomp_coef(phis_feat) * incomp
-        for itr_comp in range(num_feat):
-            xi += omegas[itr_comp] - potential[itr_comp]
+        for itr_feat in range(num_feat):
+            xi += omegas[itr_feat] - potential[itr_feat]
+        for cons in literal_unroll(constraints):
+            for itr_feat in range(num_feat):
+                xi -= cons.field[itr_feat]
         xi *= masks
         xi /= num_feat
 
@@ -412,9 +426,12 @@ def multicomponent_self_consistent_metastep(
             + entropy.volume_derivative(phis_comp)
             + xi * incomp
         )
-        for itr_comp in range(num_feat):
-            omega_temp[itr_comp] += xi
-            local_energy -= omega_temp[itr_comp] * phis_feat[itr_comp]
+        for cons in literal_unroll(constraints):
+            local_energy += cons.volume_derivative
+            omega_temp += cons.field
+        for itr_feat in range(num_feat):
+            omega_temp[itr_feat] += xi
+            local_energy -= omega_temp[itr_feat] * phis_feat[itr_feat]
 
         # calculate the difference of Js
         local_energy_mean = (local_energy * Js).sum() / n_valid_phase
@@ -442,6 +459,13 @@ def multicomponent_self_consistent_metastep(
             )
             omegas[itr_comp] *= masks
 
+        max_constraint_residue = 0
+        for cons in literal_unroll(constraints):
+            max_constraint_residue = max(
+                max_constraint_residue,
+                cons.evolve(additional_factor * acceptance_omega, masks),
+            )
+
     # count the valid phases in the last step
     n_valid_phase_last = count_valid_compartments(Js, kill_threshold)
 
@@ -449,6 +473,7 @@ def multicomponent_self_consistent_metastep(
         max_abs_incomp,
         max_abs_omega_diff,
         max_abs_Js_diff,
+        max_constraint_residue,
         revive_count,
         n_valid_phase == n_valid_phase_last,
     )
