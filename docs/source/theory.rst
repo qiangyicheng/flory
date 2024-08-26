@@ -10,12 +10,12 @@ Instead of solving the balance equations of chemical potentials and osmotic pres
 The equilibrium coexisting states can be obtained by optimizing the average free energy 
 
 .. math::
-   \bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(\alpha)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(\alpha)}\}) \; ,
+   \bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(m)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(m)}\}) \; ,
 
 .. math::
    f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,
 
-over all possible phase counts :math:`N_\mathrm{p}`, phase volume fractions :math:`J_\alpha` and phase compositions :math:`\phi_i^{(\alpha)}`.
+over all possible phase counts :math:`N_\mathrm{p}`, phase volume fractions :math:`J_\alpha` and phase compositions :math:`\phi_i^{(m)}`.
 To allow variable phase counts, we consider an ensemble of :math:`M` abstract compartments, where :math:`M` is much larger than the number of components :math:`N_\mathrm{p}`.
 Inspired by `polymeric field theories <https://doi.org/10.1088/0953-8984/10/37/002>`_, :mod:`flory.mcmp` alleviates the problem of negative volume fractions during the relaxation dynamics and conserves the average volume fractions by extending the free energy into
 

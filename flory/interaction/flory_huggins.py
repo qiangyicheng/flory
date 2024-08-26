@@ -23,7 +23,7 @@ class FloryHugginsInteractionCompiled(object):
 
     .. math::
         f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
-                \!\sum_{i,j=1}^{N_\mathrm{f}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+                \!\sum_{i,j=1}^{N_\mathrm{s}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
     Note that here we use describe the system by features.
 
@@ -44,7 +44,7 @@ class FloryHugginsInteractionCompiled(object):
 
     @property
     def num_feat(self):
-        r"""Number of features :math:`N_\mathrm{f}`."""
+        r"""Number of features :math:`N_\mathrm{s}`."""
         return self._num_feat
 
     @property
@@ -57,12 +57,12 @@ class FloryHugginsInteractionCompiled(object):
 
         Args:
             potential:
-                Constant. The fields :math:`w_i^{(\alpha)}` that the features felt.
+                Constant. The fields :math:`w_r^{(m)}` that the features felt.
                 Usually this is the returned value of :meth:`potential`. This parameter is
                 passed in since usually the calculation of energy can be accelerated by
                 directly using the potential.
             phis_feat:
-                Constant. Volume fractions of features :math:`\phi_i^{(\alpha)}`.
+                Constant. Volume fractions of features :math:`\phi_i^{(m)}`.
 
         Returns:
             : The interaction energy.
@@ -76,14 +76,14 @@ class FloryHugginsInteractionCompiled(object):
         return ans
 
     def potential(self, phis_feat: np.ndarray) -> np.ndarray:
-        r"""Calculate the potential :math:`w_i^{(\alpha)}` that the features feel.
+        r"""Calculate the potential :math:`w_r^{(m)}` that the features feel.
 
         Args:
             phis_feat:
-                Constant. Volume fractions of features :math:`\phi_i^{(\alpha)}`.
+                Constant. Volume fractions of features :math:`\phi_i^{(m)}`.
 
         Returns:
-            : The potential :math:`w_i^{(\alpha)}`.
+            : The potential :math:`w_r^{(m)}`.
         """
         return self._chis @ phis_feat
 
@@ -92,7 +92,7 @@ class FloryHugginsInteractionCompiled(object):
 
         Args:
             phis_feat:
-                Constant. Volume fractions of features :math:`\phi_i^{(\alpha)}`.
+                Constant. Volume fractions of features :math:`\phi_i^{(m)}`.
 
         Returns:
             float: The coefficient for incompressibility.

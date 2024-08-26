@@ -42,7 +42,7 @@ def find_coexisting_phases(
             Volume fractions of each phase :math:`J_\alpha`. 1D array with the size of
             :math:`N_\mathrm{p}`.
         [1]:
-            Volume fractions of components in each phase :math:`\phi_i^{(\alpha)}`. 2D
+            Volume fractions of components in each phase :math:`\phi_i^{(m)}`. 2D
             array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
     """
     free_energy = FloryHuggins(num_comp, chis, sizes)

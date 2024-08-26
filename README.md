@@ -11,9 +11,9 @@ This is a challenging problem, since the thermodynamic coexistence conditions ar
 Currently, `flory` supports finding coexisting phases in the canonical ensemble of system with an arbitrary number of components that interact according to Flory-Huggins theory.
 The associated average free energy density of the system reads
 
-$$\bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(\alpha)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(\alpha)}\}) \; ,$$
+$$\bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(m)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(m)}\}) \; ,$$
 
-where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_\alpha$ is the fraction of the system volume occupied by phase $\alpha$, and $\phi_i^{(\alpha)}$ is the volume fraction of component $i$ in phase $\alpha$.
+where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_\alpha$ is the fraction of the system volume occupied by phase $\alpha$, and $\phi_i^{(m)}$ is the volume fraction of component $i$ in phase $\alpha$.
 The free energy density of each homogeneous phase reads
 
 $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$

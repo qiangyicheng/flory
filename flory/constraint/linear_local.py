@@ -27,12 +27,27 @@ from .base import ConstraintBase, ConstraintBaseCompiled
 )
 class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
     r"""Compiled class for linear local constraint.
-    Linear local constraint requires that the certain linear combination of feature volume fractions are constant,
+    Linear local constraint requires that the certain linear combination of feature volume
+    fractions :math:`\phi_r^{(m)}` are constant,
 
         .. math::
-            \sum_i C_i^s \phi_i^{(\alpha)} &= T_s,
+            \sum_r C_{\alpha,r} \phi_r^{(m)} = T_\alpha,
 
-    where :math:`s` is the index of constraint.
+    where :math:`\alpha` is the index of constraint. This effectively means an additional
+    term in the free energy,
+
+        .. math::
+            f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
+
+    However, such form usually suffers from numerical instability since the Lagrangian
+    multiplier only delivers good guidance when the constraint is almost satisfied.
+    We thus extend the term further into,
+
+        .. math::
+            f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \left[ \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) + \kappa \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right)^2 \right],
+
+    where we term :math:`\kappa` as the elasticity of constraints. Note that when the
+    constraints are satisfied, these additional terms vanish.
     """
 
     def __init__(
@@ -40,6 +55,19 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
     ):
         r"""
         Args:
+            Cs:
+                2D array with the size of :math:`A \times N_\mathrm{f}`,
+                containing coefficients of features for linear constraints. Note that both
+                number of features :math:`N_\mathrm{s}` and number of constraints
+                :math:`A` are inferred from this parameter.
+            Ts:
+                1D vector with the size of :math:`A`, containing the
+                targets of the constraints.
+            acceptance_ratio:
+                The relative acceptance during :meth:`evolve`.
+            elasticity:
+                The additional elastic constant to guide when the Lagrangian multiplier is
+                inefficient.
         """
         self._num_cons = Cs.shape[0]
         self._num_feat = Cs.shape[1]
@@ -54,7 +82,6 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
 
     @property
     def num_feat(self):
-        r"""Number of features :math:`N_\mathrm{f}`."""
         return self._num_feat
 
     @property
@@ -92,13 +119,28 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
 
 
 class LinearLocalConstraint(ConstraintBase):
-    r""" """
+    r"""Class for for linear local constraints.
+    The linear local constraints require that
+
+    .. math::
+            \sum_r C_{\alpha,r} \phi_r^{(m)} = T_\alpha,
+
+    where :math:`\alpha` is the index of constraint.
+    """
 
     def __init__(self, num_feat: int, Cs: np.ndarray, Ts: np.ndarray):
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{f}`.
+                Number of features :math:`N_\mathrm{s}`.
+            Cs:
+                2D array with the size of :math:`A \times N_\mathrm{f}`,
+                containing coefficients of features for linear constraints. Note that both
+                number of features :math:`N_\mathrm{s}` and number of constraints
+                :math:`A` are inferred from this parameter.
+            Ts:
+                1D vector with the size of :math:`A`, containing the
+                targets of the constraints.
         """
         super().__init__(num_feat)
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -119,16 +161,24 @@ class LinearLocalConstraint(ConstraintBase):
         self.Ts = np.broadcast_to(Ts, shape).astype(float)
 
     def _compiled_impl(
-        self, constraint_acceptance: float = 1.0, constraint_elasticity: float = 1.0
+        self, constraint_acceptance_ratio: float = 1.0, constraint_elasticity: float = 1.0
     ) -> object:
         """Implementation of creating a compiled constraint instance.
         This function overwrites the interface
-        :meth:`~flory.ensemble.base.ConstraintBase._compiled_impl` in
-        :class:`~flory.ensemble.base.ConstraintBase`.
+        :meth:`~flory.constraint.base.ConstraintBase._compiled_impl` in
+        :class:`~flory.constraint.base.ConstraintBase`.
+        
+        Args:
+            constraint_acceptance_ratio:
+                Relative acceptance for the evolution of the Lagrangian multipliers of the
+                constraints. A value of 1 indicates the multipliers are evolved in the
+                same pace as the conjugate fields :math:`w_r^{(m)}`.
+            constraint_elasticity:
+                Elasticity :math:`\kappa` of the constraints.
 
         Returns:
-            Instance of :class:`LinearLocalConstraintCompiled`.
+            :Instance of :class:`LinearLocalConstraintCompiled`.
         """
         return LinearLocalConstraintCompiled(
-            self.Cs, self.Ts, constraint_acceptance, constraint_elasticity
+            self.Cs, self.Ts, constraint_acceptance_ratio, constraint_elasticity
         )

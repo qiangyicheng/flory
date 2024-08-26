@@ -62,7 +62,7 @@ class InteractionBase:
         instance is a compiled class, which must implement:
         
             - property :samp:`num_feat`, which reports the number of features
-              :math:`N_\mathrm{f}`.
+              :math:`N_\mathrm{s}`.
             - method :samp:`energy(potential, phis_feat)`, which calculates the
               interaction energy from the volume fractions of the features. Note that the
               index of features is the first dimension of :samp:`phis_feat`, different

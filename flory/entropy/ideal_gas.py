@@ -20,16 +20,16 @@ from .base import EntropyBase
 )
 class IdealGasEntropyCompiled(object):
     r"""Compiled class for the entropic energy of mixture of ideal gas.
-    For ideal gas, the Boltzmann factor :math:`p_i^{(\alpha)}` is determined by the
+    For ideal gas, the Boltzmann factor :math:`p_i^{(m)}` is determined by the
     relative volumes of the molecules :math:`l_i = \nu_i/\nu` and the external fields it
-    feel, :math:`w_i^{(\alpha)}`,
+    feel, :math:`w_r^{(m)}`,
 
         .. math::
-            p_i^{(\alpha)} = \exp(-l_i w_i^{(\alpha)}).
+            p_i^{(m)} = \exp(-l_i w_r^{(m)}).
 
     Note that this class assumes that there's no degeneracy of the components' features,
     namely all components have their own external fields. Therefore the number of features
-    :math:`N_\mathrm{f}` are the same as the number of components :math:`N_\mathrm{c}`.
+    :math:`N_\mathrm{s}` are the same as the number of components :math:`N_\mathrm{c}`.
     """
 
     def __init__(self, sizes: np.ndarray):
@@ -38,7 +38,7 @@ class IdealGasEntropyCompiled(object):
             sizes:
                 The relative molecule volumes :math:`l_i = \nu_i/\nu`. The number of
                 components :math:`N_\mathrm{c}` is inferred from this matrix. The number
-                of features :math:`N_\mathrm{f}` is set to be same as
+                of features :math:`N_\mathrm{s}` is set to be same as
                 :math:`N_\mathrm{c}`.
         """
         self._num_comp = sizes.shape[0]
@@ -52,7 +52,7 @@ class IdealGasEntropyCompiled(object):
 
     @property
     def num_feat(self):
-        r"""Number of features :math:`N_\mathrm{f}`."""
+        r"""Number of features :math:`N_\mathrm{s}`."""
         return self._num_feat
 
     @property

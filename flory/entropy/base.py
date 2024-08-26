@@ -54,7 +54,7 @@ class EntropyBase:
             - property :samp:`num_comp`, which reports the number of components
               :math:`N_\mathrm{c}`.
             - property :samp:`num_feat`, which reports the number of features
-              :math:`N_\mathrm{f}`.
+              :math:`N_\mathrm{s}`.
             - method :samp:`partition(phis_comp, omegas, Js)`, which calculates the
               Boltzmann factors of the components under the mean fields :samp:`omegas` and
               stores them in :samp:`phis_comp` as the unnormalized volume fractions of

@@ -24,7 +24,7 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{f}`.
+                Number of features :math:`N_\mathrm{s}`.
         """
         self._num_feat = num_feat
         self._field = np.zeros((self._num_feat, 1))
@@ -32,7 +32,6 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
 
     @property
     def num_feat(self) -> int:
-        r"""Number of features :math:`N_\mathrm{f}`."""
         return self._num_feat
 
     @property

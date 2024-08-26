@@ -85,7 +85,7 @@ def revive_compartments_by_random(
             Mutable. 1D array with the size of :math:`M`, containing values to determine
             whether a compartment is dead.
         targets:
-            Mutable. 2D array with the size of :math:`N_\\mathrm{c} \\times M`, containing
+            Mutable. 2D array with the size of :math:`N_\mathrm{c} \times M`, containing
             the values to be revived. The second dimension has to be the same as that of
             Js. Note that this is not checked.
         threshold:
@@ -147,7 +147,7 @@ def revive_compartments_by_copy(
             Mutable. 1D array with the size of :math:`M`, containing values to determine
             whether a compartment is dead.
         targets:
-            Mutable. 2D array with the size of :math:`N_\\mathrm{c} \\times M`, containing the
+            Mutable. 2D array with the size of :math:`N_\mathrm{c} \times M`, containing the
             values to be revived. The second dimension has to be the same as that of Js.
             Note that this is not checked.
         threshold:
@@ -217,7 +217,7 @@ def revive_compartments_by_copy(
 
 #     Args:
 #         phis:
-#             Output. The 2D array with the size of :math:`N_\\mathrm{c} \\times M`,
+#             Output. The 2D array with the size of :math:`N_\mathrm{c} \times M`,
 #             containing the volume fractions :math:`\\phi_i^{(m)}`. The first dimension has
 #             to be the same as :paramref:`sizes`. The second dimension has to be the same
 #             as that of :paramref:`Js`. Note that these are not checked.
@@ -229,10 +229,10 @@ def revive_compartments_by_copy(
 #             Const. The 1D array with the size of :math:`M`, containing the relative
 #             molecule volumes of the components :math:`l_i`.
 #         phi_means:
-#             Const. The 1D array with the size of :math:`N_\\mathrm{c}`, containing the
+#             Const. The 1D array with the size of :math:`N_\mathrm{c}`, containing the
 #             mean volume fractions of the components :math:`\\bar{\\phi}_i`.
 #         omegas:
-#             Const. The 2D array with the size of :math:`N_\\mathrm{c} \\times M`,
+#             Const. The 2D array with the size of :math:`N_\mathrm{c} \times M`,
 #             containing the conjugate field :math:`\\omega_i^{(m)}`. The first dimension
 #             has to be the same as :paramref:`sizes`. The second dimension has to be the
 #             same as that of :paramref:`Js`. Note that these are not checked.
@@ -242,7 +242,7 @@ def revive_compartments_by_copy(
 
 #     Returns:
 #         [0]:
-#             1D array with the size of :math:`N_\\mathrm{c}`, containing the single
+#             1D array with the size of :math:`N_\mathrm{c}`, containing the single
 #             molecular partition functions of components :math:`Q_i`.
 #         [1]:
 #             1D array with the size of :math:`M`, containing the incompressibility
@@ -290,25 +290,25 @@ def multicomponent_self_consistent_metastep(
 
     Args:
         phi_means:
-            Const. The interaction matrix. 2D array with size of :math:`N_\\mathrm{c}
-            \\times N_\\mathrm{c}`. This matrix should be the full :math:`\\chi_{ij}`
+            Const. The interaction matrix. 2D array with size of :math:`N_\mathrm{c}
+            \times N_\mathrm{c}`. This matrix should be the full :math:`\\chi_{ij}`
             matrix of the system, including the solvent component. Note that the matrix
             must be symmetric, which is not checked but should be guaranteed externally.
         chis:
             Const. The average volume fractions :math:`\\bar{\\phi}_i` of all the
-            components of the system. 1D array with size of :math:`N_\\mathrm{c}`. Note
+            components of the system. 1D array with size of :math:`N_\mathrm{c}`. Note
             that the volume fraction of the solvent is included as well, therefore the sum
             of this array must be unity, which is not checked by this function and should
             be guaranteed externally.
         sizes:
             Const. The relative molecule volumes :math:`l_i` of the components. 1D array
-            with size of :math:`N_\\mathrm{c}`. This sizes vector should be the full sizes
+            with size of :math:`N_\mathrm{c}`. This sizes vector should be the full sizes
             vector of the system, including the solvent component. An element of one
             indicates that the corresponding specie has the same volume as the reference.
             None indicates a all-one vector.
         omegas:
             Mutable. The conjugate field :math:`\\omega_i^{(m)}`. 2D array with size of
-            :math:`N_\\mathrm{c} \\times M`. Note that this field is both used as input
+            :math:`N_\mathrm{c} \times M`. Note that this field is both used as input
             and output. Note again that this function DO NOT initialize `omegas`, it
             should be initialized externally, and usually a random initialization will be
             a reasonable choice.
@@ -319,7 +319,7 @@ def multicomponent_self_consistent_metastep(
             a nice initialization, unless resume of a previous run is intended.
         phis:
             Output. The volume fractions :math:`\\phi_i^{(m)}`. 2D array with size of
-            :math:`N_\\mathrm{c} \\times M`.
+            :math:`N_\mathrm{c} \times M`.
         steps_inner:
             Constant. Number of steps in current routine. Within these steps, convergence
             is not checked and no output will be generated.
@@ -489,10 +489,10 @@ def sort_phases(
 
     Args:
         Js_phases:
-            Const. 1D array with the size of :math:`N_\\mathrm{p}`, containing the volumes
+            Const. 1D array with the size of :math:`N_\mathrm{p}`, containing the volumes
             of each phase.
         phis_phases:
-            Const. 2D array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`,
+            Const. 2D array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`,
             containing the volume fractions of the components in each phase. The first
             dimension must be the same as :paramref:`Js_phases`. Note that this usually
             corresponds to the transpose of the arrays of :math:`\\phi_i^{(m)}`, for
@@ -520,7 +520,7 @@ def get_clusters(
             Const. 1D array with the size of :math:`M`, containing the volumes of each
             compartment.
         phis:
-            Const. 2D array with the size of :math:`N_\\mathrm{c} \\times M`, containing
+            Const. 2D array with the size of :math:`N_\mathrm{c} \times M`, containing
             the volume fractions of the components in each phase :math:`\\phi_i^{(m)}`.
             The second dimension must be the same as :math:`Js`.
         dist:
@@ -528,10 +528,10 @@ def get_clusters(
 
     Returns:
         [0]:
-            1D array with the size of :math:`N_\\mathrm{p}`, containing the volumes of the
+            1D array with the size of :math:`N_\mathrm{p}`, containing the volumes of the
             unique phases.
         [1]:
-            1D array with the size of :math:`N_\\mathrm{p} \\times  N_\\mathrm{c}`,
+            1D array with the size of :math:`N_\mathrm{p} \times  N_\mathrm{c}`,
             containing the compositions of all unique phases. Note that the data structure
             is different from normal, see :meth:`sort_phases` for more information.
     """

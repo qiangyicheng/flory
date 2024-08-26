@@ -30,15 +30,15 @@ The `flory` python package presented in this paper provides convenient tools for
 The package focuses on the coexisting phases in thermodynamically large systems, where the interfaces between phases can be safely ignored.
 The package finds the coexisting phases by minimization the following average free energy density,
 
-$$\bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(\alpha)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(\alpha)}\}) \; ,$$
+$$\bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(m)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(m)}\}) \; ,$$
 
-where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_\alpha$ is the volume fraction of the phase $\alpha$ and $\phi_i^{(\alpha)}$ is the volume fraction of the component $i$ within the phase $\alpha$.
+where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_\alpha$ is the volume fraction of the phase $\alpha$ and $\phi_i^{(m)}$ is the volume fraction of the component $i$ within the phase $\alpha$.
 Each phase is considered to be homogeneous with a energy density
 
 $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
 
 where $\chi_{ij}$ is the Flory-Huggins interaction between component $i$ and $j$, and $l_i$ is the relative molecule size of the component $i$.
-The package has the direct control over the average volume fractions of all components $\bar{\phi}_i = \sum_\alpha J_\alpha \phi_i^{(\alpha)}$, allows the researchers to find coexisting phases at a fixed system composition.
+The package has the direct control over the average volume fractions of all components $\bar{\phi}_i = \sum_\alpha J_\alpha \phi_i^{(m)}$, allows the researchers to find coexisting phases at a fixed system composition.
 
 The main aim of `flory` package is to find the coexisting phases in multicomponent mixtures in a way that is efficient enough for constructing phase diagrams or sampling phase diagrams in high dimensions.
 To reduce overhead, solver instances can be created and reused for multiple sets of parameters.

@@ -25,8 +25,8 @@ class CanonicalEnsembleCompiled(object):
     fractions,
     
         .. math::
-            \phi_i^{(\alpha)} &= \frac{\bar{\phi}_i}{Q_i} p_i^{(\alpha)} \\
-            Q_i &= \sum_\alpha p_i^{(\alpha)} J_\alpha .
+            \phi_i^{(m)} &= \frac{\bar{\phi}_i}{Q_i} p_i^{(m)} \\
+            Q_i &= \sum_\alpha p_i^{(m)} J_\alpha .
         
     """
     def __init__(self, phi_means: np.ndarray):
@@ -84,7 +84,7 @@ class CanonicalEnsemble(EnsembleBase):
     r"""Class for an canonical ensemble that the volume fractions are conserved,
     
     .. math::
-        \bar{\phi}_i = \frac{\sum_\alpha \phi_i^{(\alpha)} J_\alpha }{\sum_\alpha J_\alpha}.
+        \bar{\phi}_i = \frac{\sum_\alpha \phi_i^{(m)} J_\alpha }{\sum_\alpha J_\alpha}.
 
     """
 

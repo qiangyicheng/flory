@@ -32,13 +32,13 @@ class EnsembleBase:
               :math:`N_\mathrm{c}`.
             - method :samp:`normalize(phis_comp, Qs, masks)`, which normalizes the
               Boltzmann factor stored in :samp:`phis_comp` into volume fractions of all
-              components :math:`\phi_i^{(\alpha)}` and save it back to :samp:`phis_comp`,
+              components :math:`\phi_i^{(m)}` and save it back to :samp:`phis_comp`,
               making use of the single molecule partition function in :samp:`Qs`. The
               leading dimension of :samp:`phis_comp` and :samp:`Qs` must be both
               :samp:`num_comp`. :samp:`masks` is array with the same size as
               :samp:`phis_comp[0]`, using 0/1 to mark whether the compartment is alive.
               This method must report the incompressibility :math:`\sum_i
-              \phi_i^{(\alpha)} -1`. Note that this function is only aware of the number
+              \phi_i^{(m)} -1`. Note that this function is only aware of the number
               of components :math:`N_\mathrm{c}`. Mapping from/to features are handled by
               :mod:`~flory.entropy`.
 

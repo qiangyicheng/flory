@@ -6,13 +6,13 @@
 The :mod:`flory` Python package provides tools for investigating phase separation in
 multicomponent mixtures. In particular, it allows to determine equilibrium states of
 :math:`N_\mathrm{p}` coexisting phases, each described by the volume fractions
-:math:`\phi_i^{(\alpha)}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
+:math:`\phi_i^{(m)}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
 
 We currently focus on incompressible systems with constant volume (cannonical ensemble),
 whose average free energy density is given by 
 
 .. math::
-   \bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(\alpha)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(\alpha)}\}) \; ,
+    \bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(m)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(m)}\}) \; ,
 
 where :math:`J_\alpha` is the fraction of volume occupied by phase :math:`\alpha`.
 Each phase is described by a Flory-Huggins free energy
@@ -43,6 +43,7 @@ Contents
    self
    examples
    theory
+   symbol
    api
    detail
 

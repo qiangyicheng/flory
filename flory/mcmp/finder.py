@@ -304,7 +304,7 @@ class CoexistingPhasesFinder:
         Args:
             omegas:
                 New :math:`\omega_i^{(m)}` field, must have the same size of
-                :math:`N_\mathrm{f} \times M`.
+                :math:`N_\mathrm{s} \times M`.
         """
         self._omegas = self.check_field(omegas)
         self._Js = np.ones_like(self._Js)
@@ -321,7 +321,7 @@ class CoexistingPhasesFinder:
 
         Args:
             phis:
-                New :math:`\phi_i^{(m)}` field, must have the same size of :math:`N_\mathrm{f}
+                New :math:`\phi_i^{(m)}` field, must have the same size of :math:`N_\mathrm{s}
                 \times M`.
         """
         phis = self.check_field(phis)
@@ -334,7 +334,7 @@ class CoexistingPhasesFinder:
     def omegas(self) -> np.ndarray:
         r"""Internal conjugate fields :math:`\omega_i^{(m)}`.
 
-        Read-only array of length :math:`N_\mathrm{f} \times M`. Use
+        Read-only array of length :math:`N_\mathrm{s} \times M`. Use
         :meth:`reinitialize_from_omegas` to initialize the system from given :math:`\omega_i^{(m)}`.
         """
         return self._omegas
@@ -381,10 +381,10 @@ class CoexistingPhasesFinder:
         Returns:
             [0]:
                 Volume fractions of each phase :math:`J_\\alpha`. 1D array with the size of
-                :math:`N_\\mathrm{p}`.
+                :math:`N_\mathrm{p}`.
             [1]:
                 Volume fractions of components in each phase :math:`\\phi_i^{(\\alpha)}`.
-                2D array with the size of :math:`N_\\mathrm{p} \\times N_\\mathrm{c}`.
+                2D array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
         """
         if max_steps is None:
             max_steps = self._max_steps
