@@ -21,6 +21,9 @@ import numpy as np
 from scipy import cluster, spatial
 from numba import literal_unroll
 
+from ..interaction.base import InteractionBaseCompiled
+from ..entropy.base import EntropyBaseCompiled
+from ..ensemble.base import EnsembleBaseCompiled
 from ..constraint.base import ConstraintBaseCompiled
 
 
@@ -71,7 +74,7 @@ def revive_compartments_by_random(
     rng: np.random.Generator,
     scaler: float,
 ) -> int:
-    """
+    r"""
     Randomly revive compartments whose relative volume (element of
     :paramref:`~revive_compartments_by_random.Js`) is smaller than
     :paramref:`~revive_compartments_by_random.threshold`. The revived values are randomly
@@ -134,7 +137,7 @@ def revive_compartments_by_copy(
     threshold: float,
     rng: np.random.Generator,
 ) -> int:
-    """
+    r"""
     Revive compartments whose relative volume (element of
     :paramref:`~revive_compartments_by_copy.Js`) is smaller than
     :paramref:`~revive_compartments_by_copy.threshold`. The revived values are randomly
@@ -199,76 +202,11 @@ def revive_compartments_by_copy(
                 living_nicely_indexes[living_nicely_count] = -1
     return revive_count
 
-
-# @nb.njit()
-# def calc_volume_fractions(
-#     phis: np.ndarray,
-#     Js: np.ndarray,
-#     sizes: np.ndarray,
-#     phi_means: np.ndarray,
-#     omegas: np.ndarray,
-#     masks: np.ndarray,
-# ) -> tuple[np.ndarray, np.ndarray]:
-#     """
-#     Calculate the volume fractions of components :math:`\\phi_i^{(m)}` from the conjugate
-#     fields :math:`\\omega_i^{(m)}`. The single molecular partition functions $Q_i$ and the
-#     incompressibility :math:`\\sum_i \\phi_i^{(m)} - 1` are also calculated. Note that the
-#     volume fractions :math:`\\phi_i^{(m)}` are returned through the parameter.
-
-#     Args:
-#         phis:
-#             Output. The 2D array with the size of :math:`N_\mathrm{c} \times M`,
-#             containing the volume fractions :math:`\\phi_i^{(m)}`. The first dimension has
-#             to be the same as :paramref:`sizes`. The second dimension has to be the same
-#             as that of :paramref:`Js`. Note that these are not checked.
-#         Js:
-#             Const. The 1D array with the size of :math:`M`, containing the relative
-#             volumes of compartments :math:`J_m`. Note that :paramref:`Js` must be
-#             invariant under multiplication of :paramref:`masks`.
-#         sizes:
-#             Const. The 1D array with the size of :math:`M`, containing the relative
-#             molecule volumes of the components :math:`l_i`.
-#         phi_means:
-#             Const. The 1D array with the size of :math:`N_\mathrm{c}`, containing the
-#             mean volume fractions of the components :math:`\\bar{\\phi}_i`.
-#         omegas:
-#             Const. The 2D array with the size of :math:`N_\mathrm{c} \times M`,
-#             containing the conjugate field :math:`\\omega_i^{(m)}`. The first dimension
-#             has to be the same as :paramref:`sizes`. The second dimension has to be the
-#             same as that of :paramref:`Js`. Note that these are not checked.
-#         masks:
-#             Const. The 1D array with the size of :math:`M`, containing the masks of
-#             compartments. See :meth:`make_valid_compartment_masks` for more information.
-
-#     Returns:
-#         [0]:
-#             1D array with the size of :math:`N_\mathrm{c}`, containing the single
-#             molecular partition functions of components :math:`Q_i`.
-#         [1]:
-#             1D array with the size of :math:`M`, containing the incompressibility
-#             :math:`\\sum_i \\phi_i^{(m)} - 1`.
-#     """
-
-#     num_comp, num_part = omegas.shape
-#     Qs = np.full(num_comp, 0.0, float)
-#     incomp = np.full(num_part, -1.0, float)
-#     total_Js = Js.sum()
-#     for itr_comp in range(num_comp):
-#         phis[itr_comp] = np.exp(-omegas[itr_comp] * sizes[itr_comp])
-#         Qs[itr_comp] = (phis[itr_comp] * Js).sum()
-#         Qs[itr_comp] /= total_Js
-#         factor = phi_means[itr_comp] / Qs[itr_comp]
-#         phis[itr_comp] = factor * phis[itr_comp] * masks
-#         incomp += phis[itr_comp]
-#     incomp *= masks
-#     return Qs, incomp
-
-
 @nb.njit()
 def multicomponent_self_consistent_metastep(
-    interaction: object,
-    entropy: object,
-    ensemble: object,
+    interaction: InteractionBaseCompiled,
+    entropy: EntropyBaseCompiled,
+    ensemble: EnsembleBaseCompiled,
     constraints: Tuple[ConstraintBaseCompiled],
     *,
     omegas: np.ndarray,
@@ -284,18 +222,18 @@ def multicomponent_self_consistent_metastep(
     revive_scaler: float,
     rng: np.random.Generator,
 ) -> tuple[float, float, float, int, bool]:
-    """
+    r"""
     The core algorithm of finding coexisting states of multicomponent systems with
     self-consistent iterations.
 
     Args:
         phi_means:
             Const. The interaction matrix. 2D array with size of :math:`N_\mathrm{c}
-            \times N_\mathrm{c}`. This matrix should be the full :math:`\\chi_{ij}`
+            \times N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}`
             matrix of the system, including the solvent component. Note that the matrix
             must be symmetric, which is not checked but should be guaranteed externally.
         chis:
-            Const. The average volume fractions :math:`\\bar{\\phi}_i` of all the
+            Const. The average volume fractions :math:`\bar{\phi}_i` of all the
             components of the system. 1D array with size of :math:`N_\mathrm{c}`. Note
             that the volume fraction of the solvent is included as well, therefore the sum
             of this array must be unity, which is not checked by this function and should
@@ -307,7 +245,7 @@ def multicomponent_self_consistent_metastep(
             indicates that the corresponding specie has the same volume as the reference.
             None indicates a all-one vector.
         omegas:
-            Mutable. The conjugate field :math:`\\omega_i^{(m)}`. 2D array with size of
+            Mutable. The conjugate field :math:`w_i^{(m)}`. 2D array with size of
             :math:`N_\mathrm{c} \times M`. Note that this field is both used as input
             and output. Note again that this function DO NOT initialize `omegas`, it
             should be initialized externally, and usually a random initialization will be
@@ -318,7 +256,7 @@ def multicomponent_self_consistent_metastep(
             that this field is both used as input and output. An all-one array is usually
             a nice initialization, unless resume of a previous run is intended.
         phis:
-            Output. The volume fractions :math:`\\phi_i^{(m)}`. 2D array with size of
+            Output. The volume fractions :math:`\phi_i^{(m)}`. 2D array with size of
             :math:`N_\mathrm{c} \times M`.
         steps_inner:
             Constant. Number of steps in current routine. Within these steps, convergence
@@ -338,10 +276,10 @@ def multicomponent_self_consistent_metastep(
             the system becomes larger or stiffer.
         acceptance_omega:
             Constant. The acceptance of :paramref:`omegas`(the conjugate fields
-            :math:`\\omega_i^{(m)}`). This value determines the amount of changes accepted
-            in each step for the :math:`\\omega_i^{(m)}` field. Note that if the iteration
+            :math:`w_i^{(m)}`). This value determines the amount of changes accepted
+            in each step for the :math:`w_i^{(m)}` field. Note that if the iteration
             of :math:`J_m` is scaled down due to parameter
-            :paramref:`Js_step_upper_bound`, the iteration of :math:`\\omega_i^{(m)}`
+            :paramref:`Js_step_upper_bound`, the iteration of :math:`w_i^{(m)}`
             fields will be scaled down simultaneously. Typically this value can take the
             order of :math:`10^{-2}`, or smaller when the system becomes larger or
             stiffer.
@@ -360,7 +298,7 @@ def multicomponent_self_consistent_metastep(
             off. Note that this function does not decrease this value, but returns the number
             of revives that have happened after completion.
         revive_scaler:
-            Constant. The scaling factor for the conjugate fields :math:`\\omega_i^{(m)}`
+            Constant. The scaling factor for the conjugate fields :math:`w_i^{(m)}`
             when a dead compartment is revived. This value determines the range of the
             random conjugate field generated by the algorithm. Typically 1.0 or some value
             slightly larger will be a reasonable choice. See
@@ -415,20 +353,20 @@ def multicomponent_self_consistent_metastep(
             xi += omegas[itr_feat] - potential[itr_feat]
         for cons in literal_unroll(constraints):
             for itr_feat in range(num_feat):
-                xi -= cons.field[itr_feat]
+                xi -= cons.potential[itr_feat]
         xi *= masks
         xi /= num_feat
 
         # local energy. i.e. energy of phases excluding the partition function part
         omega_temp = potential.copy()
         local_energy = (
-            interaction.energy(potential, phis_feat)
+            interaction.volume_derivative(potential, phis_feat)
             + entropy.volume_derivative(phis_comp)
             + xi * incomp
         )
         for cons in literal_unroll(constraints):
             local_energy += cons.volume_derivative
-            omega_temp += cons.field
+            omega_temp += cons.potential
         for itr_feat in range(num_feat):
             omega_temp[itr_feat] += xi
             local_energy -= omega_temp[itr_feat] * phis_feat[itr_feat]
@@ -495,7 +433,7 @@ def sort_phases(
             Const. 2D array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`,
             containing the volume fractions of the components in each phase. The first
             dimension must be the same as :paramref:`Js_phases`. Note that this usually
-            corresponds to the transpose of the arrays of :math:`\\phi_i^{(m)}`, for
+            corresponds to the transpose of the arrays of :math:`\phi_i^{(m)}`, for
             example :attr:`~flory.mcmp.CoexistingPhasesFinder.phis` in class
             :class:`~flory.mcmp.CoexistingPhasesFinder`.
 
@@ -521,7 +459,7 @@ def get_clusters(
             compartment.
         phis:
             Const. 2D array with the size of :math:`N_\mathrm{c} \times M`, containing
-            the volume fractions of the components in each phase :math:`\\phi_i^{(m)}`.
+            the volume fractions of the components in each phase :math:`\phi_i^{(m)}`.
             The second dimension must be the same as :math:`Js`.
         dist:
             Cut-off distance for cluster analysis

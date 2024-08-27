@@ -91,7 +91,7 @@ class EntropyBaseCompiled(object):
         raise NotImplementedError
 
     def volume_derivative(self, phis_comp: np.ndarray) -> np.ndarray:
-        r"""Calculate the volume derivatives.
+        r"""Calculate the volume derivatives of entropic energy.
         This method calculates the partial derivative of partition function part of the
         free energy with respect to the volumes of the compartments :math:`\partial
         f_\mathrm{entropy}/\partial J_m`.

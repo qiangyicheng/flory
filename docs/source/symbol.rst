@@ -111,6 +111,10 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
       - Unit
       - Physical Meaning
       - Convention
+    * - :math:`\phi_r`
+      - 1
+      - Volume fraction of feature :math:`r`.
+      - :math:`N_\mathrm{s}`
     * - :math:`\phi_i^{(m)}`
       - 1
       - Volume fractions of component :math:`i` in compartment :math:`m`.

@@ -7,7 +7,7 @@ from typing import Any, Union, Optional
 from numba.experimental import jitclass
 from numba import float64, int32
 import numpy as np
-from .base import InteractionBase
+from .base import InteractionBase, InteractionBaseCompiled
 
 
 @jitclass(
@@ -17,13 +17,12 @@ from .base import InteractionBase
         ("_incomp_coef", float64),  # a scalar
     ]
 )
-class FloryHugginsInteractionCompiled(object):
+class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
     r"""Compiled class for Flory-Huggins interaction energy.
     Flory-Huggins interaction is the second-ordered interaction, whose energy reads,
 
     .. math::
-        f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
-                \!\sum_{i,j=1}^{N_\mathrm{s}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+        f(\{\phi_r\}) = \sum_{r,s=1}^{N_\mathrm{s}} \frac{\chi_{rs}}{2} \phi_r\phi_s .
 
     Note that here we use describe the system by features.
 
@@ -33,40 +32,24 @@ class FloryHugginsInteractionCompiled(object):
         r"""
         Args:
             chis:
-                The Flory-Huggins matrix :math:`\chi_{ij}`. The number of features is
-                inferred from this matrix.
+                2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{s}`,
+                containing the Flory-Huggins interaction matrix :math:`\chi_{rs}` for
+                features. The number of features :math:`N_\mathrm{s}` is inferred from
+                this matrix.
             chis_shift:
-                The shift of entire Flory-Huggins matrix for the calculation.
+                The shift of entire Flory-Huggins matrix for the :meth:`incomp_coef`.
         """
         self._num_feat = chis.shape[0]
         self._chis = chis  # do not affect chis
         self._incomp_coef = chis.sum() + chis_shift * self._num_feat * self._num_feat
 
     @property
-    def num_feat(self):
-        r"""Number of features :math:`N_\mathrm{s}`."""
+    def num_feat(self) ->int:
         return self._num_feat
 
-    @property
-    def chis(self):
-        r"""Flory-Huggins parameters for features :math:`\chi_{ij}`."""
-        return self._chis
-
-    def energy(self, potential: np.ndarray, phis_feat: np.ndarray) -> np.ndarray:
-        r"""Calculate the Flory-Huggins interaction energy.
-
-        Args:
-            potential:
-                Constant. The fields :math:`w_r^{(m)}` that the features felt.
-                Usually this is the returned value of :meth:`potential`. This parameter is
-                passed in since usually the calculation of energy can be accelerated by
-                directly using the potential.
-            phis_feat:
-                Constant. Volume fractions of features :math:`\phi_i^{(m)}`.
-
-        Returns:
-            : The interaction energy.
-        """
+    def volume_derivative(
+        self, potential: np.ndarray, phis_feat: np.ndarray
+    ) -> np.ndarray:
         # since Flory-Huggins free energy contains only 2nd-ordered interactions,
         # the interaction energy is directly calculated from potential and phis
         ans = np.zeros_like(potential[0])
@@ -76,37 +59,18 @@ class FloryHugginsInteractionCompiled(object):
         return ans
 
     def potential(self, phis_feat: np.ndarray) -> np.ndarray:
-        r"""Calculate the potential :math:`w_r^{(m)}` that the features feel.
-
-        Args:
-            phis_feat:
-                Constant. Volume fractions of features :math:`\phi_i^{(m)}`.
-
-        Returns:
-            : The potential :math:`w_r^{(m)}`.
-        """
         return self._chis @ phis_feat
 
     def incomp_coef(self, phis_feat: np.ndarray) -> float:
-        r"""Calculate the coefficient for incompressibility.
-
-        Args:
-            phis_feat:
-                Constant. Volume fractions of features :math:`\phi_i^{(m)}`.
-
-        Returns:
-            float: The coefficient for incompressibility.
-        """
         return self._incomp_coef
 
 
 class FloryHugginsInteraction(InteractionBase):
     r"""Class for Flory-Huggins interaction energy of mixture.
-    The particular form of interaction energy reads
+    The particular form of interaction energy density reads
 
         .. math::
-            f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}
-                \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+            f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
         where :math:`\phi_i` is the fraction of component :math:`i`.
     """
@@ -138,7 +102,7 @@ class FloryHugginsInteraction(InteractionBase):
 
     @property
     def independent_entries(self) -> np.ndarray:
-        r"""Entries of the upper triangle of the :math:`\chi_{ij}` matrix"""
+        r"""Entries of the upper triangle of the :math:`\chi_{ij}`"""
         return self.chis[np.triu_indices_from(self.chis, k=0)]
 
     @classmethod
@@ -259,7 +223,7 @@ class FloryHugginsInteraction(InteractionBase):
         """Implementation of creating a compiled interaction instance.
         This function overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._compiled_impl` in
-        :class:`~flory.entropy.base.InteractionBase`. 
+        :class:`~flory.entropy.base.InteractionBase`.
 
         Args:
             additional_chis_shift:
@@ -269,7 +233,7 @@ class FloryHugginsInteraction(InteractionBase):
                 that with very large value, the convergence will be slowed down, since the
                 algorithm no longer have enough ability to temporarily relax the
                 incompressibility.
-                
+
         Returns:
             : Instance of :class:`FloryHugginsInteractionCompiled`.
         """
@@ -286,8 +250,9 @@ class FloryHugginsInteraction(InteractionBase):
 
         Args:
             phis:
-                The composition of the phase(s). if multiple phases are included, the
-                index of the components must be the last dimension.
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
 
         Returns:
             : The interaction energy density
@@ -296,15 +261,17 @@ class FloryHugginsInteraction(InteractionBase):
         return ans
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""Implementation of calculating Jacobian :math:`\partial f/\partial \phi`.
+        r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{interaction}/\partial \phi_i`.
         This function overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._jacobian_impl` in
         :class:`~flory.entropy.base.InteractionBase`.
 
         Args:
             phis:
-                The composition of the phase(s). if multiple phases are included, the
-                index of the components must be the last dimension.
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+                
         Returns:
             : The full Jacobian
         """
@@ -312,15 +279,17 @@ class FloryHugginsInteraction(InteractionBase):
         return ans
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""Implementation of calculating Hessian :math:`\partial^2 f/\partial \phi^2`.
+        r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{interaction}/\partial \phi_i^2`.
         This function overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._hessian_impl` in
         :class:`~flory.entropy.base.InteractionBase`.
 
         Args:
             phis:
-                The composition of the phase(s). if multiple phases are included, the
-                index of the components must be the last dimension.
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+
         Returns:
             : The full Hessian
         """

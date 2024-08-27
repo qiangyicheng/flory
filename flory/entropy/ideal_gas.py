@@ -47,11 +47,11 @@ class IdealGasEntropyCompiled(EntropyBaseCompiled):
         self._sizes = sizes
 
     @property
-    def num_comp(self):
+    def num_comp(self) -> int:
         return self._num_comp
 
     @property
-    def num_feat(self):
+    def num_feat(self) -> int:
         return self._num_feat
 
     def partition(
@@ -65,7 +65,7 @@ class IdealGasEntropyCompiled(EntropyBaseCompiled):
             Qs[itr_comp] /= total_Js
         return Qs
 
-    def comp_to_feat(self, phis_feat: np.ndarray, phis_comp: np.ndarray):
+    def comp_to_feat(self, phis_feat: np.ndarray, phis_comp: np.ndarray) -> None:
         for itr_feat in range(self._num_feat):
             itr_comp = itr_feat
             phis_feat[itr_feat] = phis_comp[itr_comp]
@@ -82,7 +82,7 @@ class IdealGasEntropy(EntropyBase):
     The particular form of dimensionless entropic energy reads
 
     .. math::
-        f_\mathrm{entropy}(\{\phi_i\}) = 
+        f_\mathrm{entropy}(\{\phi_i\}) =
             \sum_{i=1}^{N_\mathrm{c}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i),
 
     where :math:`\phi_i` is the fraction of component :math:`i`. All components are

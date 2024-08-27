@@ -285,7 +285,7 @@ class CoexistingPhasesFinder:
             cons.initialize(self._num_part)
 
     def reinitialize_random(self):
-        """Reinitialize the internal conjugate field :math:`\\omega_i^{(m)}` randomly.
+        """Reinitialize the internal conjugate field :math:`w_i^{(m)}` randomly.
 
         See parameter :paramref:`CoexistingPhasesFinder.random_std` for more information.
         """
@@ -380,10 +380,10 @@ class CoexistingPhasesFinder:
 
         Returns:
             [0]:
-                Volume fractions of each phase :math:`J_\\alpha`. 1D array with the size of
+                Volume fractions of each phase :math:`J_\alpha`. 1D array with the size of
                 :math:`N_\mathrm{p}`.
             [1]:
-                Volume fractions of components in each phase :math:`\\phi_i^{(\\alpha)}`.
+                Volume fractions of components in each phase :math:`\phi_i^{(\alpha)}`.
                 2D array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
         """
         if max_steps is None:

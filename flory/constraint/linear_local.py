@@ -19,7 +19,7 @@ from .base import ConstraintBase, ConstraintBaseCompiled
         ("_Ts", float64[::1]),  # a C-continuous array
         ("_multiplier", float64[:, ::1]),  # a C-continuous array
         ("_residue", float64[:, ::1]),  # a C-continuous array
-        ("_field", float64[:, ::1]),  # a C-continuous array
+        ("_potential", float64[:, ::1]),  # a C-continuous array
         ("_volume_derivative", float64[::1]),  # a C-continuous array
         ("_acceptance_ratio", float64),  # a C-continuous array
         ("_elasticity", float64),  # a C-continuous array
@@ -76,31 +76,31 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         self._acceptance_ratio = acceptance_ratio
         self._elasticity = elasticity
         self._multiplier = np.zeros((self._num_cons, 1))
-        self._field = np.zeros((self._num_feat, 1))
+        self._potential = np.zeros((self._num_feat, 1))
         self._residue = np.zeros((self._num_cons, 1))
         self._volume_derivative = np.zeros((1,))
 
     @property
-    def num_feat(self):
+    def num_feat(self) -> int:
         return self._num_feat
 
     @property
-    def field(self):
-        return self._field
+    def potential(self) -> np.ndarray:
+        return self._potential
 
     @property
-    def volume_derivative(self):
+    def volume_derivative(self) -> np.ndarray:
         return self._volume_derivative
 
-    def initialize(self, num_part: int):
+    def initialize(self, num_part: int) -> None:
         self._multiplier = np.zeros((self._num_cons, num_part))
 
-    def prepare(self, phis_feat: np.ndarray, masks: np.ndarray):
+    def prepare(self, phis_feat: np.ndarray, masks: np.ndarray) -> None:
         self._residue = self._Cs @ phis_feat
         for itr_cons in range(self._num_cons):
             self._residue[itr_cons] -= self._Ts[itr_cons]
 
-        self._field = self._Cs.T @ (
+        self._potential = self._Cs.T @ (
             self._multiplier + 2 * self._elasticity * self._residue
         )
         self._volume_derivative = np.zeros_like(self._residue[0])
@@ -108,7 +108,7 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
             self._volume_derivative += self._residue[itr_cons] * (
                 self._multiplier[itr_cons] + self._residue[itr_cons] * self._elasticity
             )
-        self._field *= masks
+        self._potential *= masks
         self._residue *= masks
         self._volume_derivative *= masks
 
@@ -167,7 +167,7 @@ class LinearLocalConstraint(ConstraintBase):
         This function overwrites the interface
         :meth:`~flory.constraint.base.ConstraintBase._compiled_impl` in
         :class:`~flory.constraint.base.ConstraintBase`.
-        
+
         Args:
             constraint_acceptance_ratio:
                 Relative acceptance for the evolution of the Lagrange multipliers of the

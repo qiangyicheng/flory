@@ -13,7 +13,7 @@ from .base import ConstraintBase, ConstraintBaseCompiled
 @jitclass(
     [
         ("_num_feat", int32),  # a scalar
-        ("_field", float64[:, ::1]),  # a C-continuous array
+        ("_potential", float64[:, ::1]),  # a C-continuous array
         ("_volume_derivative", float64[::1]),  # a C-continuous array
     ]
 )
@@ -27,7 +27,7 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
                 Number of features :math:`N_\mathrm{s}`.
         """
         self._num_feat = num_feat
-        self._field = np.zeros((self._num_feat, 1))
+        self._potential = np.zeros((self._num_feat, 1))
         self._volume_derivative = np.zeros((1,))
 
     @property
@@ -35,15 +35,15 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
         return self._num_feat
 
     @property
-    def field(self) -> np.ndarray:
-        return self._field
+    def potential(self) -> np.ndarray:
+        return self._potential
 
     @property
     def volume_derivative(self) -> np.ndarray:
         return self._volume_derivative
 
     def initialize(self, num_part: int) -> None:
-        self._field = np.zeros((self._num_feat, num_part))
+        self._potential = np.zeros((self._num_feat, num_part))
         self._volume_derivative = np.zeros((num_part,))
         pass
 
