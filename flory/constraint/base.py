@@ -21,7 +21,7 @@ class ConstraintBaseCompiled(object):
     """
 
     @property
-    def num_feat(self):
+    def num_feat(self) -> int:
         r"""Number of features :math:`N_\mathrm{s}`."""
         raise NotImplementedError
 

@@ -19,7 +19,7 @@ class EnsembleBaseCompiled(object):
     """
 
     @property
-    def num_comp(self):
+    def num_comp(self) -> int:
         r"""Number of components :math:`N_\mathrm{c}`."""
         raise NotImplementedError
 

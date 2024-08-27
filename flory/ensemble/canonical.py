@@ -35,9 +35,9 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
         r"""
         Args:
             phi_means:
-                The 1D array with the size of :math:`N_\mathrm{c}`, containing the mean
-                volume fractions of the components :math:`i`, :math:`\bar{\phi}_i`. The
-                number of components :math:`N_\mathrm{c}` is inferred from this matrix.
+                1D array with the size of :math:`N_\mathrm{c}`, containing the mean volume
+                fractions of the components :math:`i`, :math:`\bar{\phi}_i`. The number of
+                components :math:`N_\mathrm{c}` is inferred from this array.
         """
         self._num_comp = phi_means.shape[0]
         self._phi_means = phi_means  # do not affect chis
@@ -60,7 +60,8 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
 
 
 class CanonicalEnsemble(EnsembleBase):
-    r"""Class for an canonical ensemble that the average volume fractions are conserved,
+    r"""Class for an canonical ensemble that the average volume fractions are conserved.
+    The particular form of the conservation law reads
     
     .. math::
         \bar{\phi}_i = \frac{\sum_m \phi_i^{(m)} J_m }{\sum_m J_m}.

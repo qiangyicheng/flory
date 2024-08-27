@@ -2,7 +2,7 @@ Symbols and Conventions
 ========================
 
 Here we collect the physical meaning of the symbols and the corresponding storage
-convention use in package :mod:`flory`.
+convention use in package :mod:`flory`. Note that the first column is always dimensionless.
 
 Counts
 ---------------------------
@@ -14,7 +14,7 @@ Counts
     * - Symbol
       - Unit
       - Physical Meaning
-      - Storage Convention
+      - Convention
     * - :math:`N_\mathrm{c}`
       - 1
       - Number of components
@@ -71,7 +71,7 @@ Here we collect the common symbols used in the user interface.
     * - Symbol
       - Unit
       - Physical Meaning
-      - Storage Convention
+      - Convention
     * - :math:`\phi_i`
       - 1
       - Volume fraction of component :math:`i`.
@@ -84,9 +84,17 @@ Here we collect the common symbols used in the user interface.
       - 1
       - Average volume fraction of component :math:`i`.
       - :math:`N_\mathrm{c}`
+    * - :math:`l_i`
+      - :math:`\nu`
+      - Relative molecule volume of component :math:`i`.
+      - :math:`N_\mathrm{c}`
     * - :math:`J_p`
       - Total :math:`V`
-      - Relative volume of phase :math:`i`.
+      - Relative volume of phase :math:`p`.
+      - :math:`N_\mathrm{p}`
+    * - :math:`f`
+      - :math:`k_\mathrm{B}T/\nu`
+      - Energy density.
       - :math:`N_\mathrm{p}`
 
 Advanced Variables
@@ -102,7 +110,7 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - Symbol
       - Unit
       - Physical Meaning
-      - Storage Convention
+      - Convention
     * - :math:`\phi_i^{(m)}`
       - 1
       - Volume fractions of component :math:`i` in compartment :math:`m`.
@@ -110,11 +118,15 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`\phi_r^{(m)}`
       - 1
       - Volume fractions of feature :math:`r` in compartment :math:`m`.
-      - :math:`N_\mathrm{r} \times M`
+      - :math:`N_\mathrm{s} \times M`
     * - :math:`w_r^{(m)}`
       - 1
       - Conjugate variable of (mean field felt by) :math:`\phi_r^{(m)}`.
-      - :math:`N_\mathrm{r} \times M`
+      - :math:`N_\mathrm{s} \times M`
+    * - :math:`p_i^{(m)}`
+      - 1
+      - Boltzmann factor of component :math:`i` in compartment :math:`m`.
+      - :math:`N_\mathrm{c} \times M`
     * - :math:`Q_i`
       - 1
       - Single molecule partition function of component :math:`i`.
@@ -126,7 +138,7 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`C_{\alpha,r}`
       - 1
       - Coefficients of features for linear constraint :math:`\alpha`.
-      - :math:`A \times N_\mathrm{f}`
+      - :math:`A \times N_\mathrm{s}`
     * - :math:`T_\alpha`
       - 1
       - Target (right-hand-side) of constraint :math:`\alpha`.

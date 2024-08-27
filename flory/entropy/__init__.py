@@ -1,4 +1,4 @@
 """Module containing several common entropic energies.
 """
-from .base import EntropyBase
-from .ideal_gas import IdealGasEntropy
+from .base import EntropyBase, EntropyBaseCompiled
+from .ideal_gas import IdealGasEntropy, IdealGasEntropyCompiled
