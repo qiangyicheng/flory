@@ -1,4 +1,4 @@
-"""Module for constrains of the compositions.
+"""Module containing several constrains.
 """
 
 from .base import ConstraintBase, ConstraintBaseCompiled

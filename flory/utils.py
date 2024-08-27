@@ -39,7 +39,7 @@ def find_coexisting_phases(
 
     Returns:
         [0]:
-            Volume fractions of each phase :math:`J_\alpha`. 1D array with the size of
+            Volume fractions of each phase :math:`J_p`. 1D array with the size of
             :math:`N_\mathrm{p}`.
         [1]:
             Volume fractions of components in each phase :math:`\phi_i^{(m)}`. 2D

@@ -1,15 +1,25 @@
-"""Module for finding coexisting phases of multicomponent mixtures.
+"""Module for a general finder of coexisting phases.
 
-:mod:`flory.mcmp` provides tools for finding equilibrium multiple coexisting phases in
-multicomponent mixtures in the canonical ensemble based on Flory-Huggins theory. The
-module provides both the function API :meth:`find_coexisting_phases` and the class API
-:class:`CoexistingPhasesFinder`. The function :meth:`find_coexisting_phases` aims at
-easing the calculation of the coexisting phases with a single system setting, namely one
-single point in the phase diagram. In contrast, The class :class:`CoexistingPhasesFinder`
-is designed for reuse over systems with the same system sizes such as the number of
-components, which includes generating a coexisting curve or sampling a phase diagram. It
-creates a finder to maintain its internal data, and provides more control and diagnostics
-over the iteration. See :ref:`Examples` for examples.
+:mod:`flory.mcmp` provides the general tool for finding equilibrium multiple coexisting
+phases in multicomponent mixtures with defined :mod:`~flory.interaction`,
+:mod:`~flory.entropy`, :mod:`~flory.ensemble` and :mod:`~flory.constraint`. The finder is
+provided through the class :class:`CoexistingPhasesFinder`, which is designed to be
+flexible, reusable, independent and efficient: - flexible: :class:`CoexistingPhasesFinder`
+can be applied to different interaction, entropy, ensemble and constraint, as soon as the
+they implement the a minimal set of methods. - reusable: :class:`CoexistingPhasesFinder`
+tries every possibility to avoid recreation of objects as soon as the system size is
+unchanged, making it ideal to be reused for different parameters. - independent:
+:class:`CoexistingPhasesFinder` owns all the data it needs once created. Therefore
+multiple instances can be created and stored freely. - efficient:
+:class:`CoexistingPhasesFinder` use :func:`numba.jit` to compile all of its core
+algorithms.
+
+The usage of :class:`CoexistingPhasesFinder` usually follows the creation-and-run manner
+for new instance, or reinitialization-and-run for existing instance. The reinitialization
+might be skipped in the case that the previous result in the existing instance provides
+good initial guess for next run, which is a typical case when constructing phase diagram. 
+
+See :ref:`Examples` for examples.
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
@@ -18,7 +28,7 @@ over the iteration. See :ref:`Examples` for examples.
 import logging
 import time
 from datetime import datetime
-from typing import Any, Optional, Union, Iterable
+from typing import Any, Optional, Union, Iterable, Dict
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -32,7 +42,15 @@ from ..constraint import ConstraintBase, NoConstraintCompiled
 
 
 class CoexistingPhasesFinder:
-    """Class implementing the algorithm for finding coexisting phases."""
+    """Class for a general finder of coexisting phases.
+
+    This class is recommended when multiple instances of :paramref:`interaction`,
+    :paramref:`entropy`, :paramref:`ensemble` or :paramref:`constraints` need to be
+    calculated. The class will reuse all the options and the internal resources. Note that
+    reuse the instance of this class is only possible when all the system sizes are not
+    changed, including the number of components :math:`N_\mathrm{c}`, the number of
+    features :math:`N_\mathrm{s}` and the number of compartments :math:`M`.
+    """
 
     def __init__(
         self,
@@ -57,45 +75,32 @@ class CoexistingPhasesFinder:
         max_revive_per_compartment: int = 16,
         **kwargs,
     ):
-        r"""This class is recommended when multiple instances of :paramref:`chis`
-        matrix or :paramref:`phi_means` vector need to be calculated. The class will reuse
-        all the options and the internal resources. Note that reuse the instance of this
-        class is only possible when all the system sizes are not changed, including the
-        number of components :math:`N_\mathrm{c}` and the number of compartments
-        :math:`M`. The the number of components :math:`N_\mathrm{c}` is inferred from
-        :paramref:`chis` and :paramref:`phi_means`, while :math:`N_\mathrm{c}` is set by
-        the parameter :paramref:`num_part`. Setting :paramref:`chis` matrix and
-        :paramref:`phi_means` manually by the setters leads to the reset of the internal
-        revive counters.
-
+        r"""
         Args:
-            chis:
-                The interaction matrix. 2D array with size of :math:`N_\mathrm{c} \times
-                N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}` matrix
-                of the system, including the solvent component. Note that the matrix must
-                be symmetric, which is not checked but should be guaranteed externally.
-            phi_means:
-                The average volume fractions :math:`\bar{\phi}_i` of all the components
-                of the system. 1D array with size of :math:`N_\mathrm{c}`. Note that the
-                volume fraction of the solvent is included as well, therefore the sum of
-                this array must be unity, which is not checked by this function and should
-                be guaranteed externally.
+            interaction:
+                The interaction instance that can provide a compiled interaction instance.
+                See :class:`~flory.interaction.base.InteractionBase` for more information.
+            entropy:
+                The entropy instance that can provide a compiled entropy instance. See
+                :class:`~flory.entropy.base.EntropyBase` for more information.
+            ensemble:
+                The ensemble instance that can provide a compiled ensemble instance. See
+                :class:`~flory.ensemble.base.EnsembleBase` for more information.
+            constraints:
+                The constraint instance or a list of constrain instances, each of which
+                can provide a compiled constraint instance. See
+                :class:`~flory.constraint.base.ConstraintBase` for more information.
             num_part:
-                Number of compartments :math:`M` in the system.
-            sizes:
-                The relative molecule volumes :math:`l_i` of the components. 1D array with
-                size of :math:`N_\mathrm{c}`. This sizes vector should be the full sizes
-                vector of the system, including the solvent component. An element of one
-                indicates that the corresponding specie has the same volume as the
-                reference. None indicates a all-one vector.
+                Number of compartments :math:`M` in the system. By default this is set to
+                be :math:`8 N_\mathrm{c}`.
             rng:
                 Random number generator for initialization and reviving. None indicates
                 that a new random number generator should be created by the class, seeded
                 by current timestamp.
             max_steps:
                 The default maximum number of steps in each run to find the coexisting
-                phases. This value can be temporarily overwritten, see :meth:`run` for more
-                information.
+                phases. This value can be temporarily overwritten, see :meth:`run` for
+                more information.
             convergence_criterion:
                 The criterion to determine convergence. Currently "standard" is the only
                 option, which requires checking of incompressibility, field error and the
@@ -129,11 +134,11 @@ class CoexistingPhasesFinder:
                 Typically this value can take the order of :math:`10^{-3}`, or smaller
                 when the system becomes larger or stiffer.
             acceptance_omega:
-                The acceptance of the conjugate fields :math:`\omega_i^{(m)}`. This value
+                The acceptance of the conjugate fields :math:`w_r^{(m)}`. This value
                 determines the amount of changes accepted in each step for the
-                :math:`\omega_i^{(m)}` field. Note that if the iteration of :math:`J_m` is
+                :math:`w_r^{(m)}` field. Note that if the iteration of :math:`J_m` is
                 scaled down due to parameter :paramref:`Js_step_upper_bound`, the
-                iteration of :math:`\omega_i^{(m)}` fields will be scaled down simultaneously.
+                iteration of :math:`w_r^{(m)}` fields will be scaled down simultaneously.
                 Typically this value can take the order of :math:`10^{-2}`, or smaller
                 when the system becomes larger or stiffer.
             kill_threshold:
@@ -148,7 +153,7 @@ class CoexistingPhasesFinder:
                 The scaler for the value of the newly-generated conjugate fields when a
                 dead compartment is revived. The compartment is revived by drawing random
                 numbers for their conjugate fields in the range of the minimum and the
-                maximum of the :math:`\omega_i^{(m)}` their conjugate fields across all
+                maximum of the their conjugate fields :math:`w_r^{(m)}` across all
                 compartments. This value determines whether this range should be enlarged
                 (a value larger than 1) or reduced (a value smaller than 1). Typically 1.0
                 or a value slightly larger than 1.0 will be a reasonable choice.
@@ -156,12 +161,10 @@ class CoexistingPhasesFinder:
                 Maximum average number of tries per compartment to revive the dead
                 compartments. 0 or negative value indicates no reviving. When this value
                 is exhausted, the revive will be turned off.
-            additional_chis_shift:
-                Shift of the entire chis matrix to improve the convergence by evolving
-                towards incompressible system faster. This value should be larger than 0.
-                Note that with very large value, the convergence will be slowed down,
-                since the algorithm no longer have enough ability to temporarily relax the
-                incompressibility.
+            kwargs:
+                Additional keyword arguments that will be forwarded to the compile method
+                in :paramref:`interaction`, :paramref:`entropy`, :paramref:`ensemble` or
+                :paramref:`constraints`. Redundant arguments are allowed and ignored.
         """
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -226,7 +229,19 @@ class CoexistingPhasesFinder:
         self._kwargs_for_instances = kwargs
         self.reinitialize_random()
 
-    def check_instance(self, compiled_instance: object):
+    def check_instance(self, compiled_instance: object) -> None:
+        """Check the size of the compiled instance.
+        This method checks whether the compiled instance from
+        :class:`~flory.interaction.base.InteractionBase`,
+        :class:`~flory.entropy.base.EntropyBase`,
+        :class:`~flory.ensemble.base.EnsembleBase` or
+        :class:`~flory.constraint.base.ConstraintBase` has the correct system size with
+        the finder. An exception will be raised on failure.
+
+        Args:
+            compiled_instance:
+                The instance to check.
+        """
         if hasattr(compiled_instance, "num_comp"):
             if not (compiled_instance.num_comp == self._num_comp):
                 self._logger.error(
@@ -245,6 +260,19 @@ class CoexistingPhasesFinder:
                 raise FeatureNumberError
 
     def check_field(self, field: np.ndarray) -> np.ndarray:
+        r"""Check the size of a field.
+        This method checks whether the :paramref:`field` has the same size as the
+        :attr:`omegas`, which contains the conjugate field of the volume fractions of the
+        features, :math:`w_r^{(m)}`, which has the size of :math:`N_\mathrm{s} \times M`.
+        An exception will be raise on failure.
+
+        Args:
+            field :
+                The field to check.
+
+        Returns:
+            : The field converted to :class:`np.ndarray`.
+        """
         field = np.array(field)
         if field.shape != self._omegas.shape:
             self._logger.error(
@@ -254,8 +282,20 @@ class CoexistingPhasesFinder:
         return field
 
     def set_interaction(
-        self, interaction: InteractionBase, if_reset_revive: bool = True, **kwargs
-    ):
+        self, interaction: InteractionBase, *, if_reset_revive: bool = True, **kwargs
+    ) -> None:
+        """Set a new interaction instance.
+        This method sets a new interaction instance, using the updated keyword arguments.
+        Note that this method does not change the default.
+
+        Args:
+            interaction:
+                New interaction instance.
+            if_reset_revive:
+                Whether the revive count is reset.
+            kwargs:
+                The keyword arguments to update the default.
+        """
         self._interaction = interaction.compiled(
             **{**self._kwargs_for_instances, **kwargs}
         )
@@ -263,29 +303,106 @@ class CoexistingPhasesFinder:
         if if_reset_revive:
             self.reset_revive()
 
-    def set_entropy(self, entropy: EntropyBase, if_reset_revive: bool = True, **kwargs):
+    def set_entropy(
+        self, entropy: EntropyBase, *, if_reset_revive: bool = True, **kwargs
+    ) -> None:
+        """Set a new entropy instance.
+        This method sets a new entropy instance, using the updated keyword arguments. Note
+        that this method does not change the default.
+
+        Args:
+            entropy:
+                New entropy instance.
+            if_reset_revive:
+                Whether the revive count is reset.
+            kwargs:
+                The keyword arguments to update the default.
+        """
+
         self._entropy = entropy.compiled(**{**self._kwargs_for_instances, **kwargs})
         self.check_instance(self._entropy)
         if if_reset_revive:
             self.reset_revive()
 
     def set_ensemble(
-        self, ensemble: EnsembleBase, if_reset_revive: bool = True, **kwargs
-    ):
+        self, ensemble: EnsembleBase, *, if_reset_revive: bool = True, **kwargs
+    ) -> None:
+        """Set a new ensemble instance.
+        This method sets a new ensemble instance, using the updated keyword arguments.
+        Note that this method does not change the default.
+
+        Args:
+            ensemble:
+                New ensemble instance.
+            if_reset_revive:
+                Whether the revive count is reset.
+            kwargs:
+                The keyword arguments to update the default.
+        """
+
         self._ensemble = ensemble.compiled(**{**self._kwargs_for_instances, **kwargs})
         self.check_instance(self._ensemble)
         if if_reset_revive:
             self.reset_revive()
 
+    def set_constraints(
+        self,
+        constraints: Union[ConstraintBase, Tuple[ConstraintBase], None] = None,
+        *,
+        if_reset_revive: bool = True,
+        kwargs_individual: Union[Dict, Tuple[Dict], None] = None,
+        **kwargs,
+    ) -> None:
+        """Set a new set of constraint instances.
+        This method sets a new set of constraint instances, using the updated keyword
+        arguments. Note that this method does not change the default.
+
+        Args:
+            constraints:
+                New set of constraint instances.
+            if_reset_revive:
+                Whether the revive count is reset.
+            kwargs_individual:
+                The keyword arguments to update the default for each constraint. This
+                parameter has higher priority than :paramref:`kwargs`.
+            kwargs:
+                The keyword arguments to update the default.
+        """
+
+        self._constraints = []
+        if constraints:
+            if isinstance(constraints, ConstraintBase):
+                self._constraints.append(
+                    constraints.compiled(
+                        **{**self._kwargs_for_instances, **kwargs, **kwargs_individual}
+                    )
+                )
+            elif isinstance(constraints, Iterable):
+                for cons, current_args in zip(constraints, kwargs_individual):
+                    self._constraints.append(
+                        cons.compiled(
+                            **{**self._kwargs_for_instances, **kwargs, **current_args}
+                        )
+                    )
+        else:
+            self._constraints.append(NoConstraintCompiled(self._num_feat))
+
+        for cons in self._constraints:
+            self.check_instance(cons)
+        if if_reset_revive:
+            self.reset_revive()
+
     def reset_revive(self):
+        """Reset the internal revive count."""
         self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
     def reinitialize_constraint(self):
+        """Reinitialize the constraints"""
         for cons in self._constraints:
             cons.initialize(self._num_part)
 
     def reinitialize_random(self):
-        """Reinitialize the internal conjugate field :math:`w_i^{(m)}` randomly.
+        """Reinitialize :math:`w_r^{(m)}` randomly.
 
         See parameter :paramref:`CoexistingPhasesFinder.random_std` for more information.
         """
@@ -299,12 +416,12 @@ class CoexistingPhasesFinder:
         self.reinitialize_constraint()
 
     def reinitialize_from_omegas(self, omegas: np.ndarray):
-        r"""Reinitialize the internal conjugate field :math:`\omega_i^{(m)}` from input.
+        r"""Reinitialize :math:`w_r^{(m)}` from input.
 
         Args:
             omegas:
-                New :math:`\omega_i^{(m)}` field, must have the same size of
-                :math:`N_\mathrm{s} \times M`.
+                New :math:`w_r^{(m)}` field, must have the size of :math:`N_\mathrm{s}
+                \times M`.
         """
         self._omegas = self.check_field(omegas)
         self._Js = np.ones_like(self._Js)
@@ -312,17 +429,17 @@ class CoexistingPhasesFinder:
         self.reinitialize_constraint()
 
     def reinitialize_from_phis(self, phis: np.ndarray):
-        r"""Reinitialize the internal conjugate fields
+        r"""Reinitialize :math:`w_r^{(m)}` from :math:`\phi_r^{(m)}`.
 
-        The conjugated fields :math:`\omega_i^{(m)}` are initialized from volume fraction
-        fields :math:`\phi_i^{(m)}`. Note that it is not guaranteed that the initial volume
-        fraction field :math:`\phi_i^{(m)}` is fully respected. The input is only considered
-        as a suggestion for the generation of :math:`\omega_i^{(m)}` field.
+        The conjugated fields :math:`w_r^{(m)}` are initialized from volume fraction
+        fields :math:`\phi_r^{(m)}`. Note that it is not guaranteed that the initial
+        volume fractions :math:`\phi_r^{(m)}` are fully respected. The input is only
+        considered as a suggestion for the generation of :math:`w_r^{(m)}` field.
 
         Args:
             phis:
-                New :math:`\phi_i^{(m)}` field, must have the same size of :math:`N_\mathrm{s}
-                \times M`.
+                New :math:`\phi_r^{(m)}`, must have the size of :math:`N_\mathrm{s} \times
+                M`.
         """
         phis = self.check_field(phis)
         self._omegas = self._interaction.potential(phis)
@@ -332,10 +449,11 @@ class CoexistingPhasesFinder:
 
     @property
     def omegas(self) -> np.ndarray:
-        r"""Internal conjugate fields :math:`\omega_i^{(m)}`.
+        r"""Internal conjugate fields :math:`w_r^{(m)}`.
 
         Read-only array of length :math:`N_\mathrm{s} \times M`. Use
-        :meth:`reinitialize_from_omegas` to initialize the system from given :math:`\omega_i^{(m)}`.
+        :meth:`reinitialize_from_omegas` to initialize the system from given
+        :math:`w_r^{(m)}`.
         """
         return self._omegas
 
@@ -343,9 +461,9 @@ class CoexistingPhasesFinder:
     def diagnostics(self) -> dict:
         """Diagnostic information  available after :meth:`run` finished.
 
-        The diagnostics dictionary contains the convergence status and the original
-        volume fractions before the clustering and sorting algorithm is used to
-        determine the unique phases.
+        The diagnostics dictionary contains the convergence status and the original volume
+        fractions before the clustering and sorting algorithm is used to determine the
+        unique phases.
         """
         return self._diagnostics
 
@@ -357,14 +475,14 @@ class CoexistingPhasesFinder:
         interval: Optional[int] = None,
         progress: Optional[bool] = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Run instance to find coexisting phases.
+        r"""Run instance to find coexisting phases.
 
-        The keywords arguments can be used to
-        temporarily overwrite the provided values during construction of the class. Note
-        that this temporary values will not affect the defaults. See class
-        :class:`CoexistingPhasesFinder` for other tunable parameters. After each call, the
-        diagnostics will be updated, which can be used to, for example, inspecting whether
-        the iteration really converges. See :attr:`diagnostics` for more information.
+        The keywords arguments can be used to temporarily overwrite the provided values
+        during construction of the class. Note that this temporary values will not affect
+        the defaults. See class :class:`CoexistingPhasesFinder` for other tunable
+        parameters. After each call, the diagnostics will be updated, which can be used
+        to, for example, inspecting whether the iteration really converges. See
+        :attr:`diagnostics` for more information.
 
         Args:
             max_steps:
@@ -380,11 +498,11 @@ class CoexistingPhasesFinder:
 
         Returns:
             [0]:
-                Volume fractions of each phase :math:`J_\alpha`. 1D array with the size of
+                Volume fractions of each phase :math:`J_p`. 1D array with the size of
                 :math:`N_\mathrm{p}`.
             [1]:
-                Volume fractions of components in each phase :math:`\phi_i^{(\alpha)}`.
-                2D array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
+                Volume fractions of components in each phase :math:`\phi_{p,i}`. 2D array
+                with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
         """
         if max_steps is None:
             max_steps = self._max_steps
@@ -399,9 +517,6 @@ class CoexistingPhasesFinder:
         steps_inner = max(1, int(np.ceil(max_steps)) // steps_tracker)
 
         steps = 0
-
-        # chis_shifted = self._chis.copy()
-        # chis_shifted += -self._chis.min() + self._additional_chis_shift
 
         bar_max = -np.log10(tolerance)
         bar_format = "{desc:<20}: {percentage:3.0f}%|{bar}{r_bar}"
