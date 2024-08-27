@@ -18,10 +18,9 @@ class FloryHuggins(FreeEnergyBase):
     The particular implementation of the free energy density reads
 
     .. math::
-        f(\{\phi_i\}) = \frac{k_\mathrm{B}T}{\nu}\biggl[
-            \sum_{i=1}^N \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
-            + \!\sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
-        \biggr]
+        f(\{\phi_i\}) = 
+            \sum_{i=1}^{N_\mathrm{c}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
+            + \sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
     where :math:`\phi_i` is the fraction of component :math:`i`. All components are
     assumed to have the same molecular volume :math:`\nu` by default and the interactions
@@ -60,7 +59,7 @@ class FloryHuggins(FreeEnergyBase):
         sizes: Optional[np.ndarray] = None,
         vanishing_diagonal: bool = True,
     ):
-        r"""Create Flory-Huggins interaction with uniform :math:`\chi_{ij}` matrix.
+        r"""Create Flory-Huggins free energy with uniform :math:`\chi_{ij}` matrix.
         See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_uniform`
         for parameter details.
         """
@@ -79,7 +78,7 @@ class FloryHuggins(FreeEnergyBase):
         vanishing_diagonal: bool = True,
         rng: Optional[np.random.Generator] = None,
     ):
-        r"""Create Flory-Huggins interaction with random :math:`\chi_{ij}` matrix.
+        r"""Create Flory-Huggins free energy with random :math:`\chi_{ij}` matrix.
         See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_random_normal`
         for parameter details.
         """

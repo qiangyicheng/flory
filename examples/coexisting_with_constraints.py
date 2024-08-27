@@ -17,10 +17,15 @@ ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
 constraint = flory.LinearLocalConstraint(num_comp, Cs, Ts)
 
 finder = flory.CoexistingPhasesFinder(
-    fh.interaction, fh.entropy, ensemble, [constraint, constraint], max_steps=1000000, progress=True
+    fh.interaction,
+    fh.entropy,
+    ensemble,
+    [constraint],
+    max_steps=1000000,
+    progress=True,
 )
 volumes, phis = finder.run()
 
 with open(__file__ + ".out", "w") as f:
-    print("Volumes:", volumes)
-    print("Compositions:", phis)
+    print("Volumes:", volumes, file=f)
+    print("Compositions:", phis, file=f)

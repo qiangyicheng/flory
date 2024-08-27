@@ -86,7 +86,7 @@ class InteractionBaseCompiled(object):
 
 
 class InteractionBase:
-    """Base class for a general interaction energy of mixture.
+    r"""Base class for a general interaction energy of mixture.
     The class :class:`InteractionBase` is designed to use number of components
     :math:`N_\mathrm{c}` since this is the more physically comprehensive way to describe a
     mixture, even though there might be redundancies in such definition. For example, in a
@@ -111,14 +111,14 @@ class InteractionBase:
         self.num_comp = num_comp
 
     def _compiled_impl(self, **kwargs) -> object:
-        """Implementation of creating a compiled interaction instance (Interface).
+        r"""Implementation of creating a compiled interaction instance (Interface).
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled interaction instance.
         """
         raise NotImplementedError
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
-        """Implementation of calculating interaction energy :math:`f_\mathrm{interaction}` (Interface).
+        r"""Implementation of calculating interaction energy :math:`f_\mathrm{interaction}` (Interface).
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
         

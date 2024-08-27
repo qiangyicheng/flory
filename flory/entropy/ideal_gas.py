@@ -127,7 +127,7 @@ class IdealGasEntropy(EntropyBase):
         return IdealGasEntropyCompiled(self.sizes)
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
-        """Implementation of calculating entropic energy :math:`f_\mathrm{entropy}`.
+        r"""Implementation of calculating entropic energy :math:`f_\mathrm{entropy}`.
         This function overwrites the interface
         :meth:`~flory.entropy.base.EntropyBase._energy_impl` in
         :class:`~flory.entropy.base.EntropyBase`.

@@ -94,7 +94,7 @@ Here we collect the common symbols used in the user interface.
       - :math:`N_\mathrm{p}`
     * - :math:`f`
       - :math:`k_\mathrm{B}T/\nu`
-      - Energy density.
+      - Free energy density.
       - :math:`N_\mathrm{p}`
 
 Advanced Variables
