@@ -14,7 +14,7 @@ class ConstraintBaseCompiled(object):
     :func:`numba.experimental.jitclass` currently does not support some members of
     :class:`abc.ABC`. Due to the variety of constraints, a compiled class derived from
     :class:`ConstraintBaseCompiled` is in general stateful. In other words, the compiled
-    constraint instance must manage its own data such as the Lagrangian multiplier.
+    constraint instance must manage its own data such as the Lagrange multiplier.
     Besides, it can also keep other data to avoid repeating certain calculation.
     Therefore, the class :class:`~flory.mcmp.finder.CoexistingPhasesFinder` uses the
     constraint instances in the manner of a prepare-access-evolve triplet.
@@ -47,7 +47,7 @@ class ConstraintBaseCompiled(object):
 
     def initialize(self, num_part: int) -> None:
         r"""Initialize the internal data of the constraint.
-        Typically this function initialize the Lagrangian multiplier according to the
+        Typically this function initialize the Lagrange multiplier according to the
         number of compartments.
 
         Args:

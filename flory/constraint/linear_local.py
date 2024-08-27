@@ -39,7 +39,7 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         .. math::
             f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
 
-    However, such form usually suffers from numerical instability since the Lagrangian
+    However, such form usually suffers from numerical instability since the Lagrange
     multiplier only delivers good guidance when the constraint is almost satisfied.
     We thus extend the term further into,
 
@@ -66,7 +66,7 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
             acceptance_ratio:
                 The relative acceptance during :meth:`evolve`.
             elasticity:
-                The additional elastic constant to guide when the Lagrangian multiplier is
+                The additional elastic constant to guide when the Lagrange multiplier is
                 inefficient.
         """
         self._num_cons = Cs.shape[0]
@@ -170,7 +170,7 @@ class LinearLocalConstraint(ConstraintBase):
         
         Args:
             constraint_acceptance_ratio:
-                Relative acceptance for the evolution of the Lagrangian multipliers of the
+                Relative acceptance for the evolution of the Lagrange multipliers of the
                 constraints. A value of 1 indicates the multipliers are evolved in the
                 same pace as the conjugate fields :math:`w_r^{(m)}`.
             constraint_elasticity:

@@ -60,7 +60,7 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
 
 
 class CanonicalEnsemble(EnsembleBase):
-    r"""Class for an canonical ensemble that the volume fractions are conserved,
+    r"""Class for an canonical ensemble that the average volume fractions are conserved,
     
     .. math::
         \bar{\phi}_i = \frac{\sum_m \phi_i^{(m)} J_m }{\sum_m J_m}.
@@ -77,7 +77,7 @@ class CanonicalEnsemble(EnsembleBase):
             num_comp:
                 Number of components :math:`N_\mathrm{c}`.
             phi_means:
-                The mean volume fractions of the components :math:`\bar{\phi}_i`.
+                The average volume fractions of the components :math:`\bar{\phi}_i`.
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)

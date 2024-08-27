@@ -409,7 +409,7 @@ def multicomponent_self_consistent_metastep(
         # temp for omega, namely chi.phi
         potential = interaction.potential(phis_feat)
 
-        # xi, the lagrangian multiplier
+        # xi, the Lagrange multiplier
         xi = interaction.incomp_coef(phis_feat) * incomp
         for itr_feat in range(num_feat):
             xi += omegas[itr_feat] - potential[itr_feat]

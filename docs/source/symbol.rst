@@ -75,19 +75,19 @@ Here we collect the common symbols used in the user interface.
     * - :math:`\phi_i`
       - 1
       - Volume fraction of component :math:`i`.
-      - :math:`N_\mathrm{c}` array
+      - :math:`N_\mathrm{c}`
     * - :math:`\phi_{p,i}`
       - 1
       - Volume fraction of component :math:`i` in compartment :math:`p`.
-      - :math:`N_\mathrm{p} \times N_\mathrm{c}` array
-    * - :math:`\bar{phi}_i`
+      - :math:`N_\mathrm{p} \times N_\mathrm{c}`
+    * - :math:`\bar{\phi}_i`
       - 1
       - Average volume fraction of component :math:`i`.
-      - :math:`N_\mathrm{c}` array
+      - :math:`N_\mathrm{c}`
     * - :math:`J_p`
       - Total :math:`V`
       - Relative volume of phase :math:`i`.
-      - :math:`N_\mathrm{p}` array
+      - :math:`N_\mathrm{p}`
 
 Advanced Variables
 ---------------------------
@@ -106,27 +106,31 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`\phi_i^{(m)}`
       - 1
       - Volume fractions of component :math:`i` in compartment :math:`m`.
-      - :math:`N_\mathrm{c} \times M` array
+      - :math:`N_\mathrm{c} \times M`
     * - :math:`\phi_r^{(m)}`
       - 1
       - Volume fractions of feature :math:`r` in compartment :math:`m`.
-      - :math:`N_\mathrm{r} \times M` array
+      - :math:`N_\mathrm{r} \times M`
     * - :math:`w_r^{(m)}`
       - 1
       - Conjugate variable of (mean field felt by) :math:`\phi_r^{(m)}`.
-      - :math:`N_\mathrm{r} \times M` array
+      - :math:`N_\mathrm{r} \times M`
+    * - :math:`Q_i`
+      - 1
+      - Single molecule partition function of component :math:`i`.
+      - :math:`N_\mathrm{c}`
     * - :math:`J_m`
       - Arbitrary volume
       - Relative volume of compartment :math:`m`.
-      - :math:`M` array
+      - :math:`M`
     * - :math:`C_{\alpha,r}`
       - 1
       - Coefficients of features for linear constraint :math:`\alpha`.
-      - :math:`A \times N_\mathrm{f}` array
+      - :math:`A \times N_\mathrm{f}`
     * - :math:`T_\alpha`
       - 1
-      - Target (constant on the right-hand-side) of constraint :math:`\alpha`.
-      - :math:`A` array
+      - Target (right-hand-side) of constraint :math:`\alpha`.
+      - :math:`A`
     * - :math:`\kappa`
       - 1
       - Elasticity of constraints.
