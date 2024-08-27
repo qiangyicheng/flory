@@ -19,6 +19,7 @@ from .base import InteractionBase, InteractionBaseCompiled
 )
 class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
     r"""Compiled class for Flory-Huggins interaction energy.
+
     Flory-Huggins interaction is the second-ordered interaction, whose energy reads,
 
     .. math::
@@ -67,6 +68,7 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
 
 class FloryHugginsInteraction(InteractionBase):
     r"""Class for Flory-Huggins interaction energy of mixture.
+
     The particular form of interaction energy density reads
 
         .. math::
@@ -103,6 +105,7 @@ class FloryHugginsInteraction(InteractionBase):
     @property
     def independent_entries(self) -> np.ndarray:
         r"""Entries of the upper triangle of the :math:`\chi_{ij}`"""
+
         return self.chis[np.triu_indices_from(self.chis, k=0)]
 
     @classmethod
@@ -221,7 +224,8 @@ class FloryHugginsInteraction(InteractionBase):
 
     def _compiled_impl(self, *, additional_chis_shift: float = 1.0) -> object:
         """Implementation of creating a compiled interaction instance.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._compiled_impl` in
         :class:`~flory.entropy.base.InteractionBase`.
 
@@ -244,7 +248,8 @@ class FloryHugginsInteraction(InteractionBase):
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         """Implementation of calculating interaction energy.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._energy_impl` in
         :class:`~flory.entropy.base.InteractionBase`.
 
@@ -262,7 +267,8 @@ class FloryHugginsInteraction(InteractionBase):
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{interaction}/\partial \phi_i`.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._jacobian_impl` in
         :class:`~flory.entropy.base.InteractionBase`.
 
@@ -280,7 +286,8 @@ class FloryHugginsInteraction(InteractionBase):
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{interaction}/\partial \phi_i^2`.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._hessian_impl` in
         :class:`~flory.entropy.base.InteractionBase`.
 

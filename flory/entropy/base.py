@@ -9,6 +9,7 @@ from ..commom import *
 
 class EntropyBaseCompiled(object):
     r"""Abstract base class for a general compiled entropy.
+
     This abstract class defines the necessary members of a compiled constraint instance.
     This abstract class does not inherit from :class:`abc.ABC`, since the
     :func:`numba.experimental.jitclass` currently does not support some members of
@@ -41,6 +42,7 @@ class EntropyBaseCompiled(object):
         self, phis_comp: np.ndarray, omegas: np.ndarray, Js: np.ndarray
     ) -> np.ndarray:
         r"""Calculate the partition function and Boltzmann factors.
+
         This method calculates the Boltzmann factors :math:`p_i^{(m)}` of the components
         under the mean fields :paramref:`omegas` and stores them in :paramref:`phis_comp`
         as the volume fractions of components before normalization. This method must
@@ -74,6 +76,7 @@ class EntropyBaseCompiled(object):
 
     def comp_to_feat(self, phis_feat: np.ndarray, phis_comp: np.ndarray) -> None:
         r"""Convert the fractions of components into features.
+
         This method converts the volume fractions of components :math:`\phi_i^{(m)}` in
         :paramref:`phis_comp` to the volume fractions of features :math:`\phi_r^{(m)}` in
         :paramref:`phis_feat`. Note that this method should modify :paramref:`phis_feat`
@@ -92,6 +95,7 @@ class EntropyBaseCompiled(object):
 
     def volume_derivative(self, phis_comp: np.ndarray) -> np.ndarray:
         r"""Calculate the volume derivatives of entropic energy.
+
         This method calculates the partial derivative of partition function part of the
         free energy with respect to the volumes of the compartments :math:`\partial
         f_\mathrm{entropy}/\partial J_m`.
@@ -121,6 +125,7 @@ class EntropyBase:
 
     def _compiled_impl(self, **kwargs) -> object:
         """Implementation of creating a compiled entropy instance (Interface).
+
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled entropy instance.
         """
@@ -128,6 +133,7 @@ class EntropyBase:
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating entropic energy :math:`f_\mathrm{entropy}` (Interface).
+
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
 
@@ -144,6 +150,7 @@ class EntropyBase:
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{entropy}/\partial \phi_i` (Interface).
+
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
         
@@ -160,6 +167,7 @@ class EntropyBase:
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{entropy}/\partial \phi_i^2` (Interface).
+
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
         
@@ -176,6 +184,7 @@ class EntropyBase:
 
     def compiled(self, **kwargs_full) -> object:
         r"""Make a compiled entropy instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
+
         This function requires the implementation of :meth:`_compiled_impl`. The entropy
         instance is a compiled class, which must implement a list of methods or
         properties. See :class:`EntropyBaseCompiled` for the list and the detailed

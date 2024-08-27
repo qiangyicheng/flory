@@ -27,6 +27,7 @@ from .base import ConstraintBase, ConstraintBaseCompiled
 )
 class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
     r"""Compiled class for linear local constraint.
+
     Linear local constraint requires that the certain linear combination of feature volume
     fractions :math:`\phi_r^{(m)}` are constant,
 
@@ -120,6 +121,7 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
 
 class LinearLocalConstraint(ConstraintBase):
     r"""Class for for linear local constraints.
+
     The linear local constraints require that
 
     .. math::
@@ -164,7 +166,8 @@ class LinearLocalConstraint(ConstraintBase):
         self, constraint_acceptance_ratio: float = 1.0, constraint_elasticity: float = 1.0
     ) -> object:
         """Implementation of creating a compiled constraint instance.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.constraint.base.ConstraintBase._compiled_impl` in
         :class:`~flory.constraint.base.ConstraintBase`.
 

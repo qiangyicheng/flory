@@ -231,6 +231,7 @@ class CoexistingPhasesFinder:
 
     def check_instance(self, compiled_instance: object) -> None:
         """Check the size of the compiled instance.
+
         This method checks whether the compiled instance from
         :class:`~flory.interaction.base.InteractionBase`,
         :class:`~flory.entropy.base.EntropyBase`,
@@ -261,6 +262,7 @@ class CoexistingPhasesFinder:
 
     def check_field(self, field: np.ndarray) -> np.ndarray:
         r"""Check the size of a field.
+
         This method checks whether the :paramref:`field` has the same size as the
         :attr:`omegas`, which contains the conjugate field of the volume fractions of the
         features, :math:`w_r^{(m)}`, which has the size of :math:`N_\mathrm{s} \times M`.
@@ -285,6 +287,7 @@ class CoexistingPhasesFinder:
         self, interaction: InteractionBase, *, if_reset_revive: bool = True, **kwargs
     ) -> None:
         """Set a new interaction instance.
+
         This method sets a new interaction instance, using the updated keyword arguments.
         Note that this method does not change the default.
 
@@ -307,6 +310,7 @@ class CoexistingPhasesFinder:
         self, entropy: EntropyBase, *, if_reset_revive: bool = True, **kwargs
     ) -> None:
         """Set a new entropy instance.
+
         This method sets a new entropy instance, using the updated keyword arguments. Note
         that this method does not change the default.
 
@@ -328,6 +332,7 @@ class CoexistingPhasesFinder:
         self, ensemble: EnsembleBase, *, if_reset_revive: bool = True, **kwargs
     ) -> None:
         """Set a new ensemble instance.
+
         This method sets a new ensemble instance, using the updated keyword arguments.
         Note that this method does not change the default.
 
@@ -354,6 +359,7 @@ class CoexistingPhasesFinder:
         **kwargs,
     ) -> None:
         """Set a new set of constraint instances.
+
         This method sets a new set of constraint instances, using the updated keyword
         arguments. Note that this method does not change the default.
 
@@ -394,10 +400,12 @@ class CoexistingPhasesFinder:
 
     def reset_revive(self):
         """Reset the internal revive count."""
+
         self._revive_count_left = self._max_revive_per_compartment * self._num_part
 
     def reinitialize_constraint(self):
         """Reinitialize the constraints"""
+
         for cons in self._constraints:
             cons.initialize(self._num_part)
 

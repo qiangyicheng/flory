@@ -19,6 +19,7 @@ from .base import EnsembleBase, EnsembleBaseCompiled
 )
 class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
     r"""Compiled class for canonical ensemble.
+
     In canonical ensemble, the average volume fractions of the components are fixed.
     Therefore, the volume fractions distribution of the components in compartments can be
     obtained by normalizing the Boltzmann factors according to the average volume
@@ -61,6 +62,7 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
 
 class CanonicalEnsemble(EnsembleBase):
     r"""Class for an canonical ensemble that the average volume fractions are conserved.
+
     The particular form of the conservation law reads
     
     .. math::
@@ -95,7 +97,8 @@ class CanonicalEnsemble(EnsembleBase):
 
     def _compiled_impl(self) -> object:
         """Implementation of creating a compiled ensemble instance.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.ensemble.base.EnsembleBase._compiled_impl` in
         :class:`~flory.ensemble.base.EnsembleBase`. 
         

@@ -9,6 +9,7 @@ from ..commom import *
 
 class EnsembleBaseCompiled(object):
     r"""Abstract base class for a general compiled ensemble.
+
     This abstract class defines the necessary members of a compiled constraint instance.
     This abstract class does not inherit from :class:`abc.ABC`, since the
     :func:`numba.experimental.jitclass` currently does not support some members of
@@ -27,6 +28,7 @@ class EnsembleBaseCompiled(object):
         self, phis_comp: np.ndarray, Qs: np.ndarray, masks: np.ndarray
     ) -> np.ndarray:
         r"""Normalize the volume fractions of components.
+
         This method normalizes the Boltzmann factor stored in :paramref:`phis_comp` into
         volume fractions of all components :math:`\phi_i^{(m)}` and save it back to
         :paramref:`phis_comp`, making use of the single molecule partition function in
@@ -66,6 +68,7 @@ class EnsembleBase:
 
     def _compiled_impl(self, **kwargs) -> object:
         """Implementation of creating a compiled ensemble instance (Interface).
+
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled ensemble instance.
         """
@@ -73,6 +76,7 @@ class EnsembleBase:
 
     def compiled(self, **kwargs_full) -> object:
         r"""Make a compiled ensemble instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
+
         This function requires the implementation of :meth:`_compiled_impl`. The ensemble
         instance is a compiled class, which must implement a list of methods or
         properties. See :class:`EnsembleBaseCompiled` for the list and the detailed

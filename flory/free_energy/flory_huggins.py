@@ -60,6 +60,7 @@ class FloryHuggins(FreeEnergyBase):
         vanishing_diagonal: bool = True,
     ):
         r"""Create Flory-Huggins free energy with uniform :math:`\chi_{ij}` matrix.
+
         See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_uniform`
         for parameter details.
         """
@@ -79,6 +80,7 @@ class FloryHuggins(FreeEnergyBase):
         rng: Optional[np.random.Generator] = None,
     ):
         r"""Create Flory-Huggins free energy with random :math:`\chi_{ij}` matrix.
+
         See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_random_normal`
         for parameter details.
         """

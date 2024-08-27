@@ -9,6 +9,7 @@ from ..commom import *
 
 class InteractionBaseCompiled(object):
     r"""Abstract base class for a general compiled interaction.
+
     This abstract class defines the necessary members of a compiled constraint instance.
     This abstract class does not inherit from :class:`abc.ABC`, since the
     :func:`numba.experimental.jitclass` currently does not support some members of
@@ -21,12 +22,14 @@ class InteractionBaseCompiled(object):
     @property
     def num_feat(self) -> int:
         r"""Number of features :math:`N_\mathrm{s}`."""
+
         raise NotImplementedError
 
     def volume_derivative(
         self, potential: np.ndarray, phis_feat: np.ndarray
     ) -> np.ndarray:
         r"""Calculate the volume derivatives of interaction energy.
+
         This method calculates the partial derivative of interaction part of the free
         energy with respect to the volumes of the compartments :math:`\partial
         f_\mathrm{interaction}/\partial J_m`. In most of the cases, this is just the
@@ -50,6 +53,7 @@ class InteractionBaseCompiled(object):
 
     def potential(self, phis_feat: np.ndarray) -> np.ndarray:
         r"""Calculate part of :math:`w_r^{(m)}` from interaction.
+
         This method calculates the part of mean field :math:`w_r^{(m)}` contributed by the
         interaction. Usually this is just the Jacobian of the interaction energy with
         respect to the volume fractions of features in each compartment. This method
@@ -67,6 +71,7 @@ class InteractionBaseCompiled(object):
 
     def incomp_coef(self, phis_feat: np.ndarray) -> Union[float, np.ndarray]:
         r"""Calculate the coefficient for incompressibility.
+
         This method calculates the coefficient for incompressibility during iteration.
         This coefficient is derived heuristically. The most common way is to partially
         make use of the incompressibility in the expression of :meth:`potential`, and then
@@ -87,6 +92,7 @@ class InteractionBaseCompiled(object):
 
 class InteractionBase:
     r"""Base class for a general interaction energy of mixture.
+
     The class :class:`InteractionBase` is designed to use number of components
     :math:`N_\mathrm{c}` since this is the more physically comprehensive way to describe a
     mixture, even though there might be redundancies in such definition. For example, in a
@@ -112,6 +118,7 @@ class InteractionBase:
 
     def _compiled_impl(self, **kwargs) -> object:
         r"""Implementation of creating a compiled interaction instance (Interface).
+
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled interaction instance.
         """
@@ -119,6 +126,7 @@ class InteractionBase:
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating interaction energy :math:`f_\mathrm{interaction}` (Interface).
+
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
         
@@ -135,6 +143,7 @@ class InteractionBase:
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{interaction}/\partial \phi_i` (Interface).
+
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
         
@@ -151,6 +160,7 @@ class InteractionBase:
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{interaction}/\partial \phi_i^2` (Interface).
+
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
         
@@ -167,6 +177,7 @@ class InteractionBase:
 
     def compiled(self, **kwargs_full) -> object:
         r"""Make a compiled interaction instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
+
         This function requires the implementation of :meth:`_compiled_impl`. The
         interaction instance is a compiled class, which must implement a list of methods
         or properties. See :class:`InteractionBaseCompiled` for the list and the detailed

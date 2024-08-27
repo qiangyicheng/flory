@@ -50,6 +50,7 @@ class ConstraintBaseCompiled(object):
 
     def initialize(self, num_part: int) -> None:
         r"""Initialize the internal data of the constraint.
+
         Typically this function initialize the Lagrange multiplier according to the
         number of compartments.
 
@@ -61,6 +62,7 @@ class ConstraintBaseCompiled(object):
 
     def prepare(self, phis_feat: np.ndarray, masks: np.ndarray) -> None:
         r"""Prepare the constraint.
+
         This function prepares the constraint according to the volume fractions of
         features and the masks of the compartments. Usually this includes the calculation
         of :attr:`potential` and :attr:`volume_derivative`.
@@ -95,6 +97,7 @@ class ConstraintBaseCompiled(object):
 
 class ConstraintBase:
     """Base class for a general constraint.
+
     A constraint can be either local or global. Local constraint means that it needs be
     satisfied in all compartments. For example, the charge balance is a local constraint.
     Global constraint means that it only needs to be satisfied by the mean value. For
@@ -112,6 +115,7 @@ class ConstraintBase:
 
     def _compiled_impl(self, **kwargs) -> object:
         """Implementation of creating a compiled constraint instance (Interface).
+
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled ensemble instance.
         """
@@ -119,6 +123,7 @@ class ConstraintBase:
 
     def compiled(self, **kwargs_full) -> object:
         r"""Make a compiled constraint instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
+
         This function requires the implementation of :meth:`_compiled_impl`. The
         constraint instance is a compiled class, which must implement a list of methods or
         properties. See :class:`ConstraintBaseCompiled` for the list and the detailed

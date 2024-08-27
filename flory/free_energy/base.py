@@ -13,6 +13,7 @@ from ..entropy import EntropyBase
 
 class FreeEnergyBase:
     """Base class for a general free energy of mixture.
+
     A free energy is constructed by an interactions energy and a entropic energy. Once the
     energy, Jacobian and Hessian of both interactions energy and entropic energy are
     implemented, class :class:`FreeEnergyBase` provides methods such as the chemical
@@ -66,6 +67,7 @@ class FreeEnergyBase:
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating free energy :math:`f`.
+
         This method is general, thus does not need to be overwritten. The method makes use
         of :meth:`~flory.interaction.base.InteractionBase._energy_impl` in
         :class:`~flory.interaction.base.InteractionBase` and
@@ -86,6 +88,7 @@ class FreeEnergyBase:
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f/\partial \phi_i`.
+
         This method is general, thus does not need to be overwritten. The method makes use
         of :meth:`~flory.interaction.base.InteractionBase._jacobian_impl` in
         :class:`~flory.interaction.base.InteractionBase` and
@@ -106,6 +109,7 @@ class FreeEnergyBase:
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Hessian :math:`\partial^2 f/\partial \phi_i^2`.
+
         This method is general, thus does not need to be overwritten. The method makes use
         of :meth:`~flory.interaction.base.InteractionBase._hessian_impl` in
         :class:`~flory.interaction.base.InteractionBase` and
@@ -126,6 +130,7 @@ class FreeEnergyBase:
 
     def check_volume_fractions(self, phis: np.ndarray, axis: int = -1) -> np.ndarray:
         r"""Check whether volume fractions are valid.
+
         If the shape of :paramref:`phis` or it has non-positive values, an exception will be raised.
         Note that this method does not forbid volume fractions to be larger than 1.
 
@@ -171,6 +176,7 @@ class FreeEnergyBase:
 
     def jacobian(self, phis: np.ndarray, index: Optional[int] = None) -> np.ndarray:
         r"""Calculate the Jacobian with/without volume conservation.
+
         If parameter :paramref:`index` is specified, the system will be considered as
         conserved and the volume fraction of component :paramref:`index` is treated to be
         not independent. Note that different from :meth:`exchange_chemical_potentials`,
@@ -201,6 +207,7 @@ class FreeEnergyBase:
 
     def hessian(self, phis: np.ndarray, index: Optional[int] = None) -> np.ndarray:
         r"""Calculate the Hessian with/without volume conservation.
+
         If parameter :paramref:`index` is specified, the system will be considered as
         conserved and the volume fraction of component :paramref:`index` is treated to be
         not independent. Note that different from :meth:`exchange_chemical_potentials`,
@@ -253,6 +260,7 @@ class FreeEnergyBase:
 
     def exchange_chemical_potentials(self, phis: np.ndarray, index: int) -> np.ndarray:
         r"""Calculate exchange chemical potentials.
+
         Component :paramref:`index` is treated as the solvent. The exchange chemical
         potentials is obtained by removing chemical potential of the solvent. The exchange
         chemical potential of the solvent is always zero and kept in the result. The
@@ -275,6 +283,7 @@ class FreeEnergyBase:
 
     def pressure(self, phis: np.ndarray, index: int) -> np.ndarray:
         r"""Calculate osmotic pressure of the solvent.
+
         Component :paramref:`index` is treated as the solvent. The osmotic pressure of the
         solvent is proportional to the original chemical potential of the solvent.
 

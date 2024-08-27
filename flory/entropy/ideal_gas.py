@@ -20,6 +20,7 @@ from .base import EntropyBase, EntropyBaseCompiled
 )
 class IdealGasEntropyCompiled(EntropyBaseCompiled):
     r"""Compiled class for the entropic energy of mixture of ideal gas.
+
     For ideal gas, the Boltzmann factor :math:`p_i^{(m)}` is determined by the
     relative volumes of the molecules :math:`l_i = \nu_i/\nu` and the mean fields it
     feel, :math:`w_r^{(m)}`,
@@ -79,6 +80,7 @@ class IdealGasEntropyCompiled(EntropyBaseCompiled):
 
 class IdealGasEntropy(EntropyBase):
     r"""Class for entropic energy of mixture of ideal gas.
+
     The particular form of dimensionless entropic energy reads
 
     .. math::
@@ -116,7 +118,8 @@ class IdealGasEntropy(EntropyBase):
 
     def _compiled_impl(self) -> object:
         """Implementation of creating a compiled entropy instance.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.EntropyBase._compiled_impl` in
         :class:`~flory.entropy.base.EntropyBase`.
 
@@ -128,7 +131,8 @@ class IdealGasEntropy(EntropyBase):
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating entropic energy :math:`f_\mathrm{entropy}`.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.EntropyBase._energy_impl` in
         :class:`~flory.entropy.base.EntropyBase`.
 
@@ -145,7 +149,8 @@ class IdealGasEntropy(EntropyBase):
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{entropy}/\partial \phi_i`.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.EntropyBase._jacobian_impl` in
         :class:`~flory.entropy.base.EntropyBase`.
 
@@ -162,7 +167,8 @@ class IdealGasEntropy(EntropyBase):
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{entropy}/\partial \phi_i^2`.
-        This function overwrites the interface
+
+        This method overwrites the interface
         :meth:`~flory.entropy.base.EntropyBase._hessian_impl` in
         :class:`~flory.entropy.base.EntropyBase`.
 
