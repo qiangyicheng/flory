@@ -13,7 +13,7 @@ The associated average free energy density of the system reads
 
 $$\bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,$$
 
-where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_p$ is the fraction of the system volume occupied by phase $\alpha$, and $\phi_{p,i}$ is the volume fraction of component $i$ in phase $\alpha$.
+where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_p$ is the fraction of the system volume occupied by phase $p$, and $\phi_{p,i}$ is the volume fraction of component $i$ in phase $p$.
 
 `flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
 For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
