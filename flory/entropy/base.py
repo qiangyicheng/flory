@@ -65,9 +65,9 @@ class EntropyBaseCompiled(object):
             omegas:
                 Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
                 containing the mean field felt by the features :math:`\phi_r^{(m)}`.
-            masks:
+            Js:
                 Constant. The 1D array with the size of :math:`M`, containing the relative
-                volumes of compartments.
+                volumes of compartments :math:`J_m`.
 
         Returns:
             : The single molecule partition functions of components :math:`Q_i`.

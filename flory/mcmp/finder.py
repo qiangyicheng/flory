@@ -1,4 +1,4 @@
-"""Module for a general finder of coexisting phases.
+"""Module for a general finder for coexisting phases.
 
 :mod:`flory.mcmp` provides the general tool for finding equilibrium multiple coexisting
 phases in multicomponent mixtures with defined :mod:`~flory.interaction`,
