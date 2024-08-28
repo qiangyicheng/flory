@@ -26,4 +26,4 @@ from .ensemble import EnsembleBase, CanonicalEnsemble
 from .free_energy import FreeEnergyBase, FloryHuggins
 from .constraint import ConstraintBase, LinearLocalConstraint
 from .mcmp import CoexistingPhasesFinder
-from .utils import find_coexisting_phases
+from .shortcut import find_coexisting_phases
