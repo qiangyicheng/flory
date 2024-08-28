@@ -6,16 +6,19 @@
 The :mod:`flory` Python package provides tools for investigating phase separation in
 multicomponent mixtures. In particular, it allows to determine equilibrium states of
 :math:`N_\mathrm{p}` coexisting phases, each described by the volume fractions
-:math:`\phi_i^{(m)}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
+:math:`\phi_{p,i}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
 
-We currently focus on incompressible systems with constant volume (cannonical ensemble),
-whose average free energy density is given by 
+:mod:`flory` finds coexisting phases by minimizing the average free energy density in the
+following form,
 
 .. math::
-    \bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(m)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(m)}\}) \; ,
+    \bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,
 
-where :math:`J_\alpha` is the fraction of volume occupied by phase :math:`\alpha`.
-Each phase is described by a Flory-Huggins free energy
+where :math:`J_p` is the fraction of volume occupied by phase :math:`p`.
+
+
+`flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
+For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
 
 .. math::
    f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,
@@ -31,7 +34,7 @@ which is used by :mod:`flory`:
    :linenos:
    :lines: 1,3,4,6
 
-The details are described in :func:`~flory.mcmp.find_coexisting_phases`, and
+The details are described in :func:`~flory.shortcut.find_coexisting_phases`, and
 :ref:`examples` lists more use cases.
 
 Contents
