@@ -28,7 +28,8 @@ See :ref:`Examples` for examples.
 import logging
 import time
 from datetime import datetime
-from typing import Any, Optional, Union, Iterable, Dict
+from typing import Any, Optional, Union, Dict
+from collections.abc import Iterable
 
 import numpy as np
 from tqdm.auto import tqdm
