@@ -8,13 +8,15 @@
 `flory` is a Python package for analyzing theories of multicomponent mixtures.
 In particular, the package provides routines to determine coexisting states numerically.
 This is a challenging problem, since the thermodynamic coexistence conditions are many coupled non-linear equations.
-Currently, `flory` supports finding coexisting phases in the canonical ensemble of system with an arbitrary number of components that interact according to Flory-Huggins theory.
+`flory` supports finding coexisting phases with an arbitrary number of components.
 The associated average free energy density of the system reads
 
-$$\bar{f}({N_\mathrm{p}}, \{J_\alpha\}, \{\phi_i^{(m)}\}) = \sum_{\alpha=1}^{{N_\mathrm{p}}} J_\alpha f(\{\phi_i^{(m)}\}) \; ,$$
+$$\bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,$$
 
-where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_\alpha$ is the fraction of the system volume occupied by phase $\alpha$, and $\phi_i^{(m)}$ is the volume fraction of component $i$ in phase $\alpha$.
-The free energy density of each homogeneous phase reads
+where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_p$ is the fraction of the system volume occupied by phase $\alpha$, and $\phi_{p,i}$ is the volume fraction of component $i$ in phase $\alpha$.
+
+`flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
+For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
 
 $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
 
@@ -31,16 +33,42 @@ pip install flory
 
 Usage
 -----
-A simple example determines the coexisting phases of a binary mixture:
+A simple example determines the coexisting phases of a binary mixture with Flory-Huggins free energy:
 
 ```python
 import flory
 
+num_comp = 2                    # Set number of components
 chis = [[0, 4.0], [4.0, 0]]     # Set the \chi matrix
 phi_means = [0.5, 0.5]          # Set the average volume fractions
 
 # obtain relative volumes and compositions of the two coexisting phases
-volumes, phis = flory.find_coexisting_phases(chis, phi_means, 16)
+volumes, phis = flory.find_coexisting_phases(n_comp, chis, phi_means)
+```
+
+It is equivalent to a more advanced example:
+
+```python
+import flory
+
+num_comp = 2                    # Set number of components
+chis = [[0, 4.0], [4.0, 0]]     # Set the \chi matrix
+phi_means = [0.5, 0.5]          # Set the average volume fractions
+
+# create a free energy
+fh = flory.FloryHuggins(num_comp, chis)
+# create a ensemble
+ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
+# construct a finder from interaction, entropy and ensemble
+finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
+# obtain relative volumes and compositions of the two coexisting phases
+volumes, phis = finder.run()
+```
+
+The free energy instance provides more tools for analysis, such as:
+```python
+# calculate the chemical potentials of the coexisting phases
+mus = fh.chemical_potentials(phis)
 ```
 
 More information
