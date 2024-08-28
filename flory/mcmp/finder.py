@@ -42,7 +42,7 @@ from ..constraint import ConstraintBase, NoConstraintCompiled
 
 
 class CoexistingPhasesFinder:
-    """Class for a general finder of coexisting phases.
+    r"""Class for a general finder of coexisting phases.
 
     This class is recommended when multiple instances of :paramref:`interaction`,
     :paramref:`entropy`, :paramref:`ensemble` or :paramref:`constraints` need to be

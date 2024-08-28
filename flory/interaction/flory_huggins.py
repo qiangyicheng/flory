@@ -247,7 +247,7 @@ class FloryHugginsInteraction(InteractionBase):
         )
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
-        """Implementation of calculating interaction energy.
+        r"""Implementation of calculating interaction energy.
 
         This method overwrites the interface
         :meth:`~flory.entropy.base.InteractionBase._energy_impl` in

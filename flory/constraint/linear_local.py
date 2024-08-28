@@ -165,7 +165,7 @@ class LinearLocalConstraint(ConstraintBase):
     def _compiled_impl(
         self, constraint_acceptance_ratio: float = 1.0, constraint_elasticity: float = 1.0
     ) -> object:
-        """Implementation of creating a compiled constraint instance.
+        r"""Implementation of creating a compiled constraint instance.
 
         This method overwrites the interface
         :meth:`~flory.constraint.base.ConstraintBase._compiled_impl` in
