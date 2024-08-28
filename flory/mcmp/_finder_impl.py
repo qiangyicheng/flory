@@ -1,6 +1,6 @@
 """The implementation details of the core algorithm for finder. 
 
-:mod:`flory.mcmp._finder_impl` contains the implementation details of the module
+:mod:`~flory.mcmp._finder_impl` contains the implementation details of the module
 :mod:`~flory.mcmp.finder`. The main components of the module is the function
 :func:`multicomponent_self_consistent_metastep`, which implements the self consistent
 iterations for minimizing the extended free energy functional, and the function
