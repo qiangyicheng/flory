@@ -2,3 +2,5 @@ Sphinx>=4
 sphinx-autodoc-typehints>=2.2
 sphinx-paramlinks>=0.6
 sphinx-rtd-theme>=2.0
+docutils
+more_itertools
