@@ -1,4 +1,4 @@
-"""Module for linear local constraint.
+"""Module for linear global constraint.
 
 """
 
@@ -17,35 +17,36 @@ from .base import ConstraintBase, ConstraintBaseCompiled
         ("_num_feat", int32),  # a scalar
         ("_Cs", float64[:, ::1]),  # a C-continuous array
         ("_Ts", float64[::1]),  # a C-continuous array
-        ("_multiplier", float64[:, ::1]),  # a C-continuous array
-        ("_residue", float64[:, ::1]),  # a C-continuous array
+        ("_multiplier", float64[::1]),  # a C-continuous array
+        ("_residue", float64[::1]),  # a C-continuous array
         ("_potential", float64[:, ::1]),  # a C-continuous array
         ("_volume_derivative", float64[::1]),  # a C-continuous array
         ("_acceptance_ratio", float64),  # a C-continuous array
         ("_elasticity", float64),  # a C-continuous array
     ]
 )
-class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
-    r"""Compiled class for linear local constraint.
+class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
+    r"""Compiled class for linear global constraint.
 
-    Linear local constraint requires that the certain linear combination of feature volume
-    fractions :math:`\phi_r^{(m)}` are constant,
+    Linear global constraint requires that the certain linear combination of feature
+    average volume fractions :math:`\bar{\phi}_r` are constant,
 
         .. math::
-            \sum_r C_{\alpha,r} \phi_r^{(m)} = T_\alpha,
+            \sum_r C_{\alpha,r} \sum_m J_m \phi_r^{(m)} = T_\alpha \sum_m J_m,
 
     where :math:`\alpha` is the index of constraint. This effectively means an additional
     term in the free energy,
 
         .. math::
-            f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
+            f_\mathrm{constraint} = \sum_\alpha^A \xi_\alpha \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
 
     However, such form usually suffers from numerical instability since the Lagrange
     multiplier only delivers good guidance when the constraint is almost satisfied.
     We thus extend the term further into,
 
         .. math::
-            f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \left[ \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) + \kappa \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right)^2 \right],
+            f_\mathrm{constraint} = \sum_\alpha^A \xi_\alpha \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) +
+            \sum_\alpha^A \kappa \left[ \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) \right]^2
 
     where we term :math:`\kappa` as the elasticity of constraints. Note that when the
     constraints are satisfied, these additional terms vanish.
@@ -76,9 +77,9 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         self._Ts = Ts
         self._acceptance_ratio = acceptance_ratio
         self._elasticity = elasticity
-        self._multiplier = np.zeros((self._num_cons, 1))
+        self._multiplier = np.zeros((self._num_cons))
         self._potential = np.zeros((self._num_feat, 1))
-        self._residue = np.zeros((self._num_cons, 1))
+        self._residue = np.zeros((self._num_cons))
         self._volume_derivative = np.zeros((1,))
 
     @property
@@ -94,24 +95,31 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         return self._volume_derivative
 
     def initialize(self, num_part: int) -> None:
-        self._multiplier = np.zeros((self._num_cons, num_part))
+        self._multiplier = np.zeros((self._num_cons))
 
     def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
-        self._residue = self._Cs @ phis_feat
+        compart_residue = self._Cs @ phis_feat
         for itr_cons in range(self._num_cons):
-            self._residue[itr_cons] -= self._Ts[itr_cons]
+            compart_residue[itr_cons] -= self._Ts[itr_cons]
 
-        self._potential = self._Cs.T @ (
-            self._multiplier + 2 * self._elasticity * self._residue
+        self._residue = (compart_residue * Js).sum(axis=-1)
+
+        self._potential = np.outer(
+            self._Cs.T @ (self._multiplier + 2.0 * self._elasticity * self._residue),
+            np.ones_like(phis_feat[0]),
         )
-        self._volume_derivative = np.zeros_like(self._residue[0])
+
+        self._volume_derivative = np.zeros_like(phis_feat[0])
         for itr_cons in range(self._num_cons):
             self._volume_derivative += self._residue[itr_cons] * (
-                self._multiplier[itr_cons] + self._residue[itr_cons] * self._elasticity
+                self._multiplier[itr_cons]
+                + 2.0 * compart_residue[itr_cons] * self._elasticity
             )
         self._potential *= masks
         self._residue *= masks
         self._volume_derivative *= masks
+
+        self._residue /= Js.sum() # scale residue according to total volume
 
     def evolve(self, step: float, masks: np.ndarray) -> float:
         self._multiplier += step * self._acceptance_ratio * self._residue
@@ -119,13 +127,13 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         return np.abs(self._residue).max()
 
 
-class LinearLocalConstraint(ConstraintBase):
-    r"""Class for for linear local constraints.
+class LinearGlobalConstraint(ConstraintBase):
+    r"""Class for for linear global constraints.
 
-    The linear local constraints require that
+    The linear global constraints require that
 
-    .. math::
-            \sum_r C_{\alpha,r} \phi_r^{(m)} = T_\alpha,
+        .. math::
+            \sum_r C_{\alpha,r} \sum_m J_m \phi_r^{(m)} = T_\alpha \sum_m J_m,
 
     where :math:`\alpha` is the index of constraint.
     """
@@ -180,8 +188,8 @@ class LinearLocalConstraint(ConstraintBase):
                 Elasticity :math:`\kappa` of the constraints.
 
         Returns:
-            : Instance of :class:`LinearLocalConstraintCompiled`.
+            : Instance of :class:`LinearGlobalConstraintCompiled`.
         """
-        return LinearLocalConstraintCompiled(
+        return LinearGlobalConstraintCompiled(
             self.Cs, self.Ts, constraint_acceptance_ratio, constraint_elasticity
         )

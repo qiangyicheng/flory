@@ -352,7 +352,7 @@ def multicomponent_self_consistent_metastep(
         # prepare constraints: constraints are stateful
         if constraints:
             for cons in literal_unroll(constraints):
-                cons.prepare(phis_feat, masks)
+                cons.prepare(phis_feat, Js, masks)
 
         # temp for omega, namely chi.phi
         omega_temp = interaction.potential(phis_feat)

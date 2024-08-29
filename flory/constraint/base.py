@@ -60,7 +60,7 @@ class ConstraintBaseCompiled(object):
         """
         raise NotImplementedError
 
-    def prepare(self, phis_feat: np.ndarray, masks: np.ndarray) -> None:
+    def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
         r"""Prepare the constraint.
 
         This function prepares the constraint according to the volume fractions of
@@ -72,6 +72,9 @@ class ConstraintBaseCompiled(object):
             phis_feat:
                 Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
+            Js:
+                Constant. The 1D array with the size of :math:`M`, containing the relative
+                volumes of compartments :math:`J_m`.
             masks:
                 Constant. The 1D array with the size of :math:`M`, containing the masks to
                 mark whether the compartment is living or not.

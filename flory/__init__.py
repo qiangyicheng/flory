@@ -24,6 +24,6 @@ from .interaction import InteractionBase, FloryHugginsInteraction
 from .entropy import EntropyBase, IdealGasEntropy
 from .ensemble import EnsembleBase, CanonicalEnsemble, GrandCanonicalEnsemble
 from .free_energy import FreeEnergyBase, FloryHuggins
-from .constraint import ConstraintBase, LinearLocalConstraint
+from .constraint import ConstraintBase, LinearLocalConstraint, LinearGlobalConstraint
 from .mcmp import CoexistingPhasesFinder
 from .shortcut import find_coexisting_phases
