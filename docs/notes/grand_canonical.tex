@@ -122,7 +122,7 @@ where
         Q_i       & = \frac{1}{V}\int \dd \bbr \exp\left[-\left(\nu_i/\nu_0\right) w_i\right]  \quad & \text{single molecule partition function,}                    \\
         Q^{(g)}   & = \prod_{i \in I_g} (Q_i)^{\varphi_i} \quad                                      & \text{single group partition function,}                       \\
         h_g       & = - \sum_{i \in I(g)} \varphi_i \log \varphi_i              \quad                & \text{group chemical potential due to combination,}           \\
-        \varphi_i & = \frac{\psi_i / \nu_i}{\sum_{j \in I(g)} \psi_j / \nu_j}\quad                   & \text{relative molecule number/volume fraction within group.}
+        \varphi_i & = \frac{\psi_i / \nu_i}{\sum_{j \in I(g)} \psi_j / \nu_j} = \psi_i l_g\quad                   & \text{relative molecule number/volume fraction within group.}
     \end{align}
 \end{subequations}
 Note that here we call $h^{(g)}$ the \emph{group chemical potential due to combination}, whose reason we will see later.
@@ -142,9 +142,9 @@ Note that the relative mean volume fraction within the group is automatically gu
 \begin{align}
     \bphi^{(g)} =  e^{h_g + \mu^{(g)}} Q^{(g)} l_g \;,
 \end{align}
-with $l_g$ being the \emph{harmonic mean group relative molecule size},
+with $l_g$ being the \emph{mean group relative molecule size},
 \begin{align}
-    l_g = 1/\sum_{i \in I(g)} \left(\psi_i \nu_0 / \nu_i\right)
+    l_g = 1/\sum_{i \in I(g)} \left(\psi_i \nu_0 / \nu_i\right) = \sum l_i \varphi_i
 \end{align}
 controlled by the arithmetic mean group chemical potential $\mu^{(g)}$.
 Now it is clear that once we have the single group partition function, the average volume fractions of the entire group is controlled by parameter $l_g e^{h_g + \mu^{(g)}}$, where we call \emph{group scaled activity}.
@@ -160,5 +160,9 @@ In the special case that there's only one component in each group, the self-cons
     \end{align}
 \end{subequations}
 where we call $e^{\mu_i} l_i$ \emph{scaled activity} of component $i$.
+
+\section{Notes on the forms used in the package}
+
+Since in the package we use the chemical potential of unit volume, the scaled activity thus becomes $e^{\mu_i l_i} l_i$, where $\mu_i$ is the original chemical potential in our package.
 
 \end{document}

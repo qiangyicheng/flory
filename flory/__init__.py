@@ -22,7 +22,7 @@ except ImportError:
 
 from .interaction import InteractionBase, FloryHugginsInteraction
 from .entropy import EntropyBase, IdealGasEntropy
-from .ensemble import EnsembleBase, CanonicalEnsemble
+from .ensemble import EnsembleBase, CanonicalEnsemble, GrandCanonicalEnsemble
 from .free_energy import FreeEnergyBase, FloryHuggins
 from .constraint import ConstraintBase, LinearLocalConstraint
 from .mcmp import CoexistingPhasesFinder

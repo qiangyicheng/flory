@@ -76,6 +76,10 @@ Here we collect the common symbols used in the user interface.
       - 1
       - Volume fraction of component :math:`i`.
       - :math:`N_\mathrm{c}`
+    * - :math:`\mu_i`
+      - :math:`k_\mathrm{B}T/\nu`
+      - Chemical potential of component :math:`i` by unit volume.
+      - :math:`N_\mathrm{c}`
     * - :math:`\phi_{p,i}`
       - 1
       - Volume fraction of component :math:`i` in compartment :math:`p`.
