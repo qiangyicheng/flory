@@ -629,6 +629,12 @@ class CoexistingPhasesFinder:
             rng=self._rng,
         )
 
+        n_valid = count_valid_compartments(self._Js, self._kill_threshold)
+        if n_valid < self._num_part // 2:
+            self._logger.warning(
+                f"Only {n_valid} out of {self._num_part} compartments are living, the result might not be reliable."
+            )
+
         # store diagnostic output
         self._diagnostics = {
             "steps": steps,
@@ -638,8 +644,8 @@ class CoexistingPhasesFinder:
             "max_abs_js_diff": max_abs_Js_diff,
             "max_constraint_residue": max_constraint_residue,
             "revive_count_left": self._revive_count_left,
-            "phis": final_phis_comp,
-            "Js": final_Js,
+            "phis": self._phis_comp.copy(),
+            "Js": self._Js.copy(),
         }
 
         phases_volumes, phases_compositions = get_clusters(final_Js, final_phis_comp)
