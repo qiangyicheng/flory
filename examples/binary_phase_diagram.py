@@ -18,7 +18,6 @@ finder = flory.CoexistingPhasesFinder(
     interaction,
     entropy,
     ensemble,
-    num_part=16,
     progress=False,
 )
 
