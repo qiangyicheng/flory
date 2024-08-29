@@ -1,0 +1,168 @@
+\documentclass[aps,prl,reprint,onecolumn,groupedaddress,amsmath,amssymb]{revtex4-2}
+
+\usepackage[]{hyperref}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{xr}
+
+\newcommand{\dd}{{\mathrm{d}}}
+\newcommand{\dx}{{\dd x}}
+\newcommand{\dy}{{\dd y}}
+\newcommand{\kBT}{{k_{\mathrm{B}}T}}
+
+\newcommand{\bphi}{{\bar{\phi}}}
+
+\newcommand{\Eqref}[1]{Eq.~\ref{#1}}
+\newcommand{\Eqsref}[1]{Eqs.~\ref{#1}}
+
+\input{definealphabet.tex.inc}
+
+\definealphabet{NN}{}{N_\mathrm}
+\definealphabet*{NN}{}{N_\mathrm}
+\definealphabet*{bb}{}{\boldsymbol}
+
+\hypersetup{
+  colorlinks   = true,
+  urlcolor     = blue,
+  linkcolor    = blue,
+  citecolor   = red
+}
+
+\begin{document}
+
+\title{Efficient field-like method of finding coexistence states of multicomponent mixture in semi-grand canonical ensemble}
+
+\author{Yicheng Qiang}
+\affiliation{Max Planck Institute for Dynamics and Self-Organization, Am Fa{\ss}berg 17, 37077 G{\"o}ttingen, Germany}
+
+\maketitle
+\tableofcontents
+
+\section{Inspiration}
+In the multicomponent systems in biology, different components are subject to different constraints.
+For example, the small molecules, such as the solvent, can move freely in and out of the cell or organelles with membranes, while the big ones, e.g. many proteins, are mainly constrained.
+Therefore, we extend our method for finding coexisting phases to semi-grand canonical ensemble, where the components can be exchanged with the environment in a specific constrained way.
+
+\section{System Setup}
+Consider a mixture of $\NNc$ components, categorized into $\NNg$ groups, with each group contains $\NNc^{(g)}$ components.
+Apparently,
+\begin{align}
+    \NNc = \sum_{g}^{\NNg} \NNc^{(g)}.
+\end{align}
+In each group, we assume that the average volume fractions of the components can only change proportionally,
+\begin{align}
+    \bphi_i = \bphi^{(g)} \psi_i:  \quad \sum_{i \in I_g} \psi_i = 1 \quad \forall g \in \mathbb{Z} \cap [1,\NNg] \;.
+\end{align}
+Physically, this means that the \emph{components} within each group are \emph{canonical}, while for all the \emph{groups} in the whole mixture are \emph{grand canonical}.
+For example, a three-component system (including solvent) enclosed by semipermeable membrane, which allows the exchange of the solvent, is composed of two groups: the first group contains two solutes, while the second group contains the solvent.
+In this example, the ratio of the volume fractions in the first group is fixed, while the ratio between the first group and the second one can vary.
+
+To derive the free energy functional of the system, we focus on only one group of components, containing $\NNc^{(g)}$ components, and assume that their density operators are subject to the some external potential field $w_i^{(g)}$.
+For simplicity, we drop all the $(g)$ oversubscription for simplicity.
+The number density operators (number of a reference volume unit)
+\begin{align}
+    \hat{\rho}_i = \frac{\nu_i}{\nu_0} \sum_{m_i}^{M_i} \delta \left( \bbr - \bbr_{m_i} \right).
+\end{align}
+Then the grand canonical partition function
+\begin{align}
+    Z
+     & = \sum_{M} \prod_i^{\NNc} \frac{e^{\mu_i M_i}}{M_i !} \int \left( \prod_{m_i}^{M_i} \dd \bbr_{m_i} \right) \exp \left\{ - \sum_{m_i}^{M_i} \nu_i w_i(\bbr_{m_i}) /\nu_0 \right\} \notag \\
+     & = \sum_{M} \prod_i^{\NNc} \frac{e^{\mu_i M_i}}{M_i !} Q_i^{M_i} \;,
+\end{align}
+with $ M = \sum_i M_i$ is the total particle number.
+The single molecule partition function of component $i$
+\begin{align}
+    Q_i = \int \dd \bbr \exp\left[-\left(\nu_i/\nu_0\right) w_i\right] \;,
+\end{align}
+note that it has not been normalized by the system volume $V$.
+The arbitrary reference molecule volume $\nu_0$ is introduced to keep the field dimensionless.
+Since the relative amounts of the components are kept constant, the particle numbers satisfy similar relations,
+\begin{align}
+    M_i = \varphi_i M,  \quad \mathrm{where} \quad \frac{\varphi_i \nu_i}{\sum_j^{\NNc} \varphi_j \nu_j} = \psi_i \quad \mathrm{or \; equivalently} \quad \varphi_i = \frac{\psi_i / \nu_i}{\sum_j^{\NNc} \psi_j / \nu_j} \;.
+\end{align}
+Then
+\begin{align}
+    Z
+     & = \sum_{M} \prod_i^{\NNc} \frac{e^{\mu_i M \varphi_i}}{\left(M \varphi_i \right) !} Q_i^{M \varphi_i} \notag                                         \\
+     & = \sum_{M} \frac{M!}{\prod_i^{\NNc}\left(M \varphi_i \right) !} \frac{1}{M!} \left( \prod_i^{\NNc} e^{\mu_i \varphi_i} Q_i^{\varphi_i} \right)^M \;.
+\end{align}
+Note that the combinatorial factor can be approximated by (in the sense of exponents)
+\begin{align}
+    \log \frac{M!}{\prod_i^{\NNc}\left(M \varphi_i \right) !}
+     & \approx M \log M - \sum_i^{\NNc} M\varphi_i \log M\varphi_i \notag \\
+     & = - M \sum_i^{\NNc} \varphi_i \log \varphi_i \notag                \\
+     & = M h \;.
+\end{align}
+Therefore
+\begin{align}
+    Z & \approx \sum_{M} \frac{1}{M!} \left( e^{h} \prod_i^{\NNc} e^{\mu_i \varphi_i} Q_i^{\varphi_i} \right)^M \propto \exp \left( e^{h + \mu} Q \right)\;, \quad \mathrm{with} \quad Q = \prod_i^{\NNc} Q_i^{\varphi_i} \;.
+\end{align}
+with the group chemical potential
+\begin{align}
+    \mu = \sum_i^{\NNc} \mu_i \varphi_i
+\end{align}
+The corresponding part of grand potential
+\begin{align}
+    - \log Z = - e^{h + \mu}  Q \;.
+\end{align}
+
+\section{The free energy functional}
+From the previous section, we know that in the final grand potential, each group has its own effective ``single group partition function'' $Q$.
+Within a mixture of multiple groups, the effective Flory-Huggins free energy functional reads,
+\begin{align}
+    \frac{F \nu_0}{\kBT} = \int \dd \bbr \left[\frac{1}{2} \sum_{i,j}^{\NNc} \chi_{ij} \phi_i \phi_j + \sum_i^{\NNc}m_i \phi_i - \sum_i^{\NNc}w_i \phi_i + \xi \left(\sum_i \phi_i -1 \right) \right] - \sum_g^{\NNg} e^{h_g + \mu_g} Q^{(g)} \;.
+\end{align}
+Before going forward, we obtain the averaged single molecule free energy, by scaling all the integration by the volume $V$,
+\begin{align}
+    f = \frac{1}{V}\int \dd \bbr \left[\frac{1}{2} \sum_{i,j}^{\NNc} \chi_{ij} \phi_i \phi_j + \sum_i^{\NNc}m_i \phi_i - \sum_i^{\NNc}w_i \phi_i + \xi \left(\sum_i \phi_i -1 \right) \right] - \sum_g^{\NNg} e^{h_g + \mu_g} Q^{(g)} \;,
+\end{align}
+where
+\begin{subequations}
+    \begin{align}
+        Q_i       & = \frac{1}{V}\int \dd \bbr \exp\left[-\left(\nu_i/\nu_0\right) w_i\right]  \quad & \text{single molecule partition function,}                    \\
+        Q^{(g)}   & = \prod_{i \in I_g} (Q_i)^{\varphi_i} \quad                                      & \text{single group partition function,}                       \\
+        h_g       & = - \sum_{i \in I(g)} \varphi_i \log \varphi_i              \quad                & \text{group chemical potential due to combination,}           \\
+        \varphi_i & = \frac{\psi_i / \nu_i}{\sum_{j \in I(g)} \psi_j / \nu_j} = \psi_i l_g\quad                   & \text{relative molecule number/volume fraction within group.}
+    \end{align}
+\end{subequations}
+Note that here we call $h^{(g)}$ the \emph{group chemical potential due to combination}, whose reason we will see later.
+Take the saddle point, we obtain the self-consistent equations,
+\begin{subequations}
+    \begin{align}
+        \frac{\delta f}{\delta w_i}    & = -\phi_i + e^{h_g + \mu_g} Q^{(g)} l_i \frac{ \varphi_i}{Q_i}\exp\left[-\left(\nu_i/\nu_0\right) w_i\right]  \quad \text{for} \quad i\in I_g \quad & \text{volume fraction fields,} \\
+        \frac{\delta f}{\delta \phi_i} & = \sum_j \chi_{ij} \phi_j + m_i -w_i + \xi     \quad                                                                                                & \text{conjugate fields,}       \\
+        \frac{\delta f}{\delta \xi}    & = \sum_i \phi_i -1     \quad                                                                                                                        & \text{incompressibility.}
+    \end{align}
+\end{subequations}
+Note that the spatial average of the first equation gives
+\begin{align}
+    \bphi_i = \frac{1}{V} \int \dd \bbr \phi_i = e^{h_g + \mu_g} Q^{(g)} l_i \varphi_i \;.
+\end{align}
+Note that the relative mean volume fraction within the group is automatically guaranteed, with
+\begin{align}
+    \bphi^{(g)} =  e^{h_g + \mu^{(g)}} Q^{(g)} l_g \;,
+\end{align}
+with $l_g$ being the \emph{mean group relative molecule size},
+\begin{align}
+    l_g = 1/\sum_{i \in I(g)} \left(\psi_i \nu_0 / \nu_i\right) = \sum l_i \varphi_i
+\end{align}
+controlled by the arithmetic mean group chemical potential $\mu^{(g)}$.
+Now it is clear that once we have the single group partition function, the average volume fractions of the entire group is controlled by parameter $l_g e^{h_g + \mu^{(g)}}$, where we call \emph{group scaled activity}.
+
+
+\section{degenerate to grand canonical ensemble}
+In the special case that there's only one component in each group, the self-consistent equations become
+\begin{subequations}
+    \begin{align}
+        \frac{\delta f}{\delta w_i}    & = -\phi_i + e^{\mu_i} l_i \exp\left[-\left(\nu_i/\nu_0\right) w_i\right]  \quad \text{for} \quad i\in I_g \quad & \text{volume fraction fields,} \\
+        \frac{\delta f}{\delta \phi_i} & = \sum_j \chi_{ij} \phi_j + m_i -w_i + \xi     \quad                                                            & \text{conjugate fields,}       \\
+        \frac{\delta f}{\delta \xi}    & = \sum_i \phi_i -1     \quad                                                                                    & \text{incompressibility.}
+    \end{align}
+\end{subequations}
+where we call $e^{\mu_i} l_i$ \emph{scaled activity} of component $i$.
+
+\section{Notes on the forms used in the package}
+
+Since in the package we use the chemical potential of unit volume, the scaled activity thus becomes $e^{\mu_i l_i} l_i$, where $\mu_i$ is the original chemical potential in our package.
+
+\end{document}

@@ -47,7 +47,7 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
         self._volume_derivative = np.zeros((num_part,))
         pass
 
-    def prepare(self, phis_feat: np.ndarray, masks: np.ndarray) -> None:
+    def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
         pass
 
     def evolve(self, step: float, masks: np.ndarray) -> float:

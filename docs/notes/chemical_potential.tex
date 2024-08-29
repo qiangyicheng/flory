@@ -40,7 +40,7 @@ Since the dimensionless free energy density is defined by $f = \tilde{f} k_\math
     \tilde{\mu}_i = l_i \left(\tilde{f} - \sum_j \phi_j \frac{\partial \tilde{f}}{\partial \phi_j} + \frac{\partial \tilde{f}}{\partial \phi_i} \right) \;,
 \end{align} 
 where $l_i = \nu_i / \nu$ is the relative molecule volumes.
-Then the exchange chemical potentials with respect to component $s$ is simply $\tilde{\mu}_i - \tilde{\mu}_s$.
+Then the exchange chemical potentials with respect to component $s$ is simply $\tilde{\mu}_i/l_i - \tilde{\mu}_s/l_s$.
 The osmotic pressure $P_i$, defined by the balance $P_i \nu_i + \partial F/\partial N_i = 0$, reads
 \begin{align}
     P_i = - \mu_i / \nu_i, 
@@ -49,6 +49,8 @@ while the dimensionless version $\tilde{P}_i$, defined by $P_i = \tilde{P}_i k_\
 \begin{align}
     \tilde{P}_i = - \tilde{\mu}_i / l_i \;.
 \end{align}
+
+\section{Notes on the forms used in the package}
 
 To avoid include explicit relative volumes, and keep the definition of original chemical potential and the exchange chemical potential identical, we let $\tilde{\mu}_i$ absorb a prefactor of $1/l_i$, 
 \begin{subequations}

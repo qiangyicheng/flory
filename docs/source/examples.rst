@@ -5,7 +5,7 @@ Here we provide a few examples for using package.
 
 Find coexisting phases once
 ---------------------------
-Since we only need to find the coexisting phases once, we assign values to the :math:`\chi_{ij}` matrix and the average volume fractions :math:`\bar{\phi}_i` , and call the wrapper function :meth:`~flory.mcmp.find_coexisting_phases` directly.
+Since we only need to find the coexisting phases once, we assign values to the :math:`\chi_{ij}` matrix and the average volume fractions :math:`\bar{\phi}_i` , and call the wrapper function :meth:`~flory.shortcut.find_coexisting_phases` directly.
 Here we consider a symmetric two-component system, with :math:`\chi=4`:
 
 .. literalinclude:: /../../examples/find_coexiting_phases.py
@@ -18,7 +18,7 @@ We obtain two symmetric phases:
    :linenos:
 
 
-By adding a :paramref:`~flory.mcmp.CoexistingPhasesFinder.sizes` parameter, we can also investigate the coexisting phases where the components have different molecule sizes:
+By adding a :paramref:`~flory.mcmp.finder.CoexistingPhasesFinder.sizes` parameter, we can also investigate the coexisting phases where the components have different molecule sizes:
 
 .. literalinclude:: /../../examples/find_coexiting_phases_unequal_sizes.py
    :emphasize-lines: 5, 7
@@ -43,13 +43,13 @@ which gives two phases:
 Construct a 2D phase diagram
 ----------------------------
 When constructing a phase diagram, we usually need to find coexisting phases for multiple instances.
-To avoid the creation and the destruction of the internal data each time, we provide the class API :class:`~flory.mcmp.CoexistingPhasesFinder`.
+To avoid the creation and the destruction of the internal data each time, we provide the class API :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 Using the class API usually involves three steps: creation of the finder instance, setting the system parameters and finding the coexisting states.
 When the system sizes such as number of components :math:`N_\mathrm{c}` and the number of compartments :math:`M` do not change, the finder can be reused.
 Here we provide a simple example for generating a :math:`(\phi, \chi)` phase diagram for a simple binary mixture: 
 
 .. literalinclude:: /../../examples/binary_phase_diagram.py
-   :emphasize-lines: 11-13, 19,20
+   :emphasize-lines: 13-22, 29,31
    :linenos:
 
 We obtain the phase diagram
@@ -69,7 +69,7 @@ By launching more compartments, it makes the algorithm much more likely to find 
 Here we refer to this as the finite size effect, see an example of :math:`N_\mathrm{c}=8` below:
 
 .. literalinclude:: /../../examples/finite_size_effect.py
-   :emphasize-lines: 19-22
+   :emphasize-lines: 20-23
    :linenos:
 
 We obtain
@@ -85,7 +85,7 @@ Construct a ternary phase diagram
 Here we provide a simple example for generating a :math:`(\phi_B, \phi_A)` phase diagram for a simple ternary mixture with fixed interaction matrix: 
 
 .. literalinclude:: /../../examples/ternary_phase_diagram.py
-   :emphasize-lines: 6, 40-60
+   :emphasize-lines: 11-20, 37-43, 59-62
    :linenos:
 
 We obtain the phase diagram

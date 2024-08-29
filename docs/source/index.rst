@@ -17,7 +17,7 @@ following form,
 where :math:`J_p` is the fraction of volume occupied by phase :math:`p`.
 
 
-`flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
+:mod:`flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
 For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
 
 .. math::

@@ -37,7 +37,7 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
         Args:
             phi_means:
                 1D array with the size of :math:`N_\mathrm{c}`, containing the mean volume
-                fractions of the components :math:`i`, :math:`\bar{\phi}_i`. The number of
+                fractions of the components, :math:`\bar{\phi}_i`. The number of
                 components :math:`N_\mathrm{c}` is inferred from this array.
         """
         self._num_comp = phi_means.shape[0]
