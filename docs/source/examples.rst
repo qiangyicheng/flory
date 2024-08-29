@@ -49,7 +49,7 @@ When the system sizes such as number of components :math:`N_\mathrm{c}` and the 
 Here we provide a simple example for generating a :math:`(\phi, \chi)` phase diagram for a simple binary mixture: 
 
 .. literalinclude:: /../../examples/binary_phase_diagram.py
-   :emphasize-lines: 13-22, 29,31
+   :emphasize-lines: 13-22, 29-31
    :linenos:
 
 We obtain the phase diagram
