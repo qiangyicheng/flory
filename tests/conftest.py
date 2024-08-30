@@ -7,9 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
-from pde.tools.misc import module_available
-from pde.tools.numba import random_seed
-
 
 @pytest.fixture(autouse=True)
 def _setup_and_teardown():
@@ -26,17 +23,6 @@ def _setup_and_teardown():
     plt.close("all")
 
 
-@pytest.fixture(autouse=False, name="rng")
-def init_random_number_generators():
-    """Get a random number generator and set the seed of the random number generator.
-
-    The function returns an instance of :func:`~numpy.random.default_rng()` and
-    initializes the default generators of both :mod:`numpy` and :mod:`numba`.
-    """
-    random_seed()
-    return np.random.default_rng(0)
-
-
 def pytest_configure(config):
     """Add markers to the configuration."""
     config.addinivalue_line("markers", "slow: test runs slowly")
@@ -48,7 +34,7 @@ def pytest_addoption(parser):
         "--runslow",
         action="store_true",
         default=False,
-        help="also run tests marked by `slow`",
+        help="also run tests marked as `slow`",
     )
 
 
