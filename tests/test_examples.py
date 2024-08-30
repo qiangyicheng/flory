@@ -3,9 +3,9 @@
 """
 
 import os
+import shutil
 import subprocess as sp
 import sys
-import shutil
 from pathlib import Path
 
 import pytest

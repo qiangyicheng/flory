@@ -5,6 +5,5 @@ class ConfigError(AutoClassTocError):
     """
     Indicate an configuration error affecting :rst:dir:`autoclasstoc`.
     """
-    pass
 
 
