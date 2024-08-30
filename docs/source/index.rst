@@ -17,8 +17,9 @@ following form,
 where :math:`J_p` is the fraction of volume occupied by phase :math:`p`.
 
 
-:mod:`flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
-For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
+:mod:`flory` supports different forms of interaction, entropy, ensemble and constraints to
+assemble the free energy of the phases. For example, with the commonly used Flory-Huggins
+free energy, the free energy density of each homogeneous phase reads
 
 .. math::
    f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,
@@ -34,8 +35,13 @@ which is used by :mod:`flory`:
    :linenos:
    :lines: 1,3,4,6
 
-The details are described in :func:`~flory.shortcut.find_coexisting_phases`, and
-:ref:`examples` lists more use cases.
+The example above is equivalent to a detailed one, 
+
+.. literalinclude:: /../../examples/find_coexiting_phases_class.py
+   :linenos:
+   :lines: 6-8, 10
+
+See :ref:`examples` for more use cases.
 
 Contents
 ==================
