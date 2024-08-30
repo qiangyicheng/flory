@@ -118,8 +118,8 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`\phi_r`
       - 1
       - Volume fraction of feature :math:`r`.
-      - :math:`\bar{\phi}_r`
-    * - :math:`\phi_r`
+      - :math:`N_\mathrm{s}`
+    * - :math:`\bar{\phi}_r`
       - 1
       - Mean volume fraction of feature :math:`r`.
       - :math:`N_\mathrm{s}`
