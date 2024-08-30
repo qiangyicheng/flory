@@ -13,7 +13,7 @@ or reused.
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
-
+from __future__ import annotations
 import numba as nb
 import numpy as np
 from numba import literal_unroll
@@ -224,7 +224,7 @@ def multicomponent_self_consistent_metastep(
     revive_tries: int,
     revive_scaler: float,
     rng: np.random.Generator,
-) -> tuple[float, float, float, int, bool]:
+) -> tuple[float, float, float, float, int, bool]:
     r"""
     The core algorithm of finding coexisting states of multicomponent systems with
     self-consistent iterations.
@@ -460,7 +460,7 @@ def sort_phases(
 
 def get_clusters(
     Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray] | tuple[np.ndarray, int]:
     r"""Find clusters of compositions.
 
     Find unique phases from compartments by clustering. The returning results are sorted

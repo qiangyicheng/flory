@@ -66,7 +66,7 @@ class EnsembleBase:
         """
         self.num_comp = num_comp
 
-    def _compiled_impl(self, **kwargs) -> object:
+    def _compiled_impl(self, **kwargs) -> EnsembleBaseCompiled:
         """Implementation of creating a compiled ensemble instance (Interface).
 
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
@@ -74,7 +74,7 @@ class EnsembleBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> object:
+    def compiled(self, **kwargs_full) -> EnsembleBaseCompiled:
         r"""Make a compiled ensemble instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The ensemble

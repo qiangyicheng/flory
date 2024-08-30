@@ -154,7 +154,7 @@ class LinearLocalConstraint(ConstraintBase):
         elif Cs.ndim == 2:
             self.num_cons = Cs.shape[0]
         else:
-            self._logger("Constraint matrix is not 1D or 2D.")
+            self._logger.error("Constraint matrix is not 1D or 2D.")
             raise ValueError("Constraint matrix must be 1D or 2D.")
 
         shape = (self.num_cons, self.num_feat)
