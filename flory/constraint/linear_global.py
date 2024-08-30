@@ -1,13 +1,14 @@
 """Module for linear global constraint.
 
 """
+from __future__ import annotations
 
-from typing import Optional, Tuple
 import logging
 
-from numba.experimental import jitclass
-from numba import float64, int32
 import numpy as np
+from numba import float64, int32
+from numba.experimental import jitclass
+
 from .base import ConstraintBase, ConstraintBaseCompiled
 
 
@@ -77,9 +78,9 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
         self._Ts = Ts
         self._acceptance_ratio = acceptance_ratio
         self._elasticity = elasticity
-        self._multiplier = np.zeros((self._num_cons))
+        self._multiplier = np.zeros(self._num_cons)
         self._potential = np.zeros((self._num_feat, 1))
-        self._residue = np.zeros((self._num_cons))
+        self._residue = np.zeros(self._num_cons)
         self._volume_derivative = np.zeros((1,))
 
     @property
@@ -95,7 +96,7 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
         return self._volume_derivative
 
     def initialize(self, num_part: int) -> None:
-        self._multiplier = np.zeros((self._num_cons))
+        self._multiplier = np.zeros(self._num_cons)
 
     def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
         compart_residue = self._Cs @ phis_feat

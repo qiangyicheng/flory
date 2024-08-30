@@ -1,12 +1,11 @@
-"""Module for no constraint.
-
-"""
+"""Module for no constraint."""
 
 import logging
 
-from numba.experimental import jitclass
-from numba import float64, int32
 import numpy as np
+from numba import float64, int32
+from numba.experimental import jitclass
+
 from .base import ConstraintBase, ConstraintBaseCompiled
 
 
@@ -45,7 +44,6 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
     def initialize(self, num_part: int) -> None:
         self._potential = np.zeros((self._num_feat, num_part))
         self._volume_derivative = np.zeros((num_part,))
-        pass
 
     def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
         pass

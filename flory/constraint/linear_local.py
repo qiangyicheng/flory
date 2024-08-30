@@ -1,13 +1,14 @@
 """Module for linear local constraint.
 
 """
+from __future__ import annotations
 
-from typing import Optional, Tuple
 import logging
 
-from numba.experimental import jitclass
-from numba import float64, int32
 import numpy as np
+from numba import float64, int32
+from numba.experimental import jitclass
+
 from .base import ConstraintBase, ConstraintBaseCompiled
 
 

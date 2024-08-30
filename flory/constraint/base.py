@@ -4,10 +4,10 @@
 
 import numpy as np
 
-from ..commom import *
+from ..common import filter_kwargs
 
 
-class ConstraintBaseCompiled(object):
+class ConstraintBaseCompiled:
     r"""Abstract base class for a general compiled constraint.
     
     This abstract class defines the necessary members of a compiled constraint instance.

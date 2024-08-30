@@ -1,14 +1,14 @@
 """Module for a general free energy of mixture.
 """
+from __future__ import annotations
 
 import logging
-from typing import Optional, Union
 
 import numpy as np
 
-from ..commom import *
-from ..interaction import InteractionBase
+from ..common import *
 from ..entropy import EntropyBase
+from ..interaction import InteractionBase
 
 
 class FreeEnergyBase:
@@ -31,7 +31,9 @@ class FreeEnergyBase:
         self._logger = logging.getLogger(self.__class__.__name__)
         if interaction.num_comp != entropy.num_comp:
             self._logger.error(
-                f"Interactions requires {interaction.num_comp} components while entropy requires {entropy.num_comp}."
+                "Interactions requires %d components while entropy requires %d.",
+                interaction.num_comp,
+                entropy.num_comp,
             )
             raise ComponentNumberError(
                 "Number of component mismatch between interaction and entropy."
@@ -150,12 +152,14 @@ class FreeEnergyBase:
 
         if phis.shape[axis] != self.num_comp:
             self._logger.error(
-                f"The shape of f{phis.shape} of volume fractions is incompatible with the number of components {self.num_comp}."
+                "The shape %s of volume fractions is incompatible with the number of components %d.",
+                phis.shape,
+                self.num_comp,
             )
             raise VolumeFractionError("Invalid size for volume fractions")
 
         if np.any(phis < 0):
-            self._logger.error(f"Volume fractions {phis} contain negative values.")
+            self._logger.error("Volume fractions %s contain negative values.", phis)
             raise VolumeFractionError("Volume fractions must be all positive")
         return phis
 
@@ -174,7 +178,7 @@ class FreeEnergyBase:
         phis = self.check_volume_fractions(phis)
         return self._energy_impl(phis)
 
-    def jacobian(self, phis: np.ndarray, index: Optional[int] = None) -> np.ndarray:
+    def jacobian(self, phis: np.ndarray, index: int | None = None) -> np.ndarray:
         r"""Calculate the Jacobian with/without volume conservation.
 
         If parameter :paramref:`index` is specified, the system will be considered as
@@ -205,7 +209,7 @@ class FreeEnergyBase:
                 np.delete(j_full, index, axis=-1) - j_full[..., index, None]
             )  # chain rule
 
-    def hessian(self, phis: np.ndarray, index: Optional[int] = None) -> np.ndarray:
+    def hessian(self, phis: np.ndarray, index: int | None = None) -> np.ndarray:
         r"""Calculate the Hessian with/without volume conservation.
 
         If parameter :paramref:`index` is specified, the system will be considered as
@@ -303,7 +307,7 @@ class FreeEnergyBase:
 
     def num_unstable_modes(
         self, phis: np.ndarray, conserved: bool = True
-    ) -> Union[int, np.ndarray]:
+    ) -> int | np.ndarray:
         r"""Count the number of unstable modes with/without volume conservation.
 
         Args:
@@ -322,9 +326,7 @@ class FreeEnergyBase:
         eigenvalues = np.linalg.eigvalsh(self.hessian(phis, 0 if conserved else None))
         return np.sum(eigenvalues < 0, axis=-1).astype(int)
 
-    def is_stable(
-        self, phis: np.ndarray, conserved: bool = True
-    ) -> Union[int, np.ndarray]:
+    def is_stable(self, phis: np.ndarray, conserved: bool = True) -> int | np.ndarray:
         r"""Determine whether the mixture is locally stable.
 
         Args:

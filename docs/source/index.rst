@@ -8,16 +8,15 @@ multicomponent mixtures. In particular, it allows to determine equilibrium state
 :math:`N_\mathrm{p}` coexisting phases, each described by the volume fractions
 :math:`\phi_{p,i}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
 
-:mod:`flory` finds coexisting phases by minimizing the average free energy density in the
-following form,
+:mod:`flory` finds coexisting phases by minimizing the average free energy density
 
 .. math::
     \bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,
 
-where :math:`J_p` is the fraction of volume occupied by phase :math:`p`.
+where :math:`J_p` is the fraction of the system volume occupied by phase :math:`p`.
 
 
-:mod:`flory` supports different forms of interaction, entropy, ensemble and constraints to
+:mod:`flory` supports different forms of interaction, entropy, ensemble, and constraints to
 assemble the free energy of the phases. For example, with the commonly used Flory-Huggins
 free energy, the free energy density of each homogeneous phase reads
 

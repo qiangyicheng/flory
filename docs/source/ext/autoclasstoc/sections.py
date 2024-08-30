@@ -1,8 +1,10 @@
 import inspect
+import re
+
 from more_itertools import always_iterable
+
 from . import utils
 from .errors import ConfigError
-import re
 
 SECTIONS = {}
 
@@ -251,7 +253,7 @@ class PublicMethods(Section):
     constructor and various operators).  If you want to exclude dunder methods, 
     use `PublicMethodsWithoutDunders`.
     """
-    key = 'public-methods'
+    key = "public-methods"
     title = "Public Methods:"
 
     def predicate(self, name, attr, meta):
@@ -266,15 +268,15 @@ class PublicMethodsWithoutDunders(PublicMethods):
     """
     Include a "Public Methods" section in the class TOC.
     """
-    key = 'public-methods-without-dunders'
-    exclude_pattern = '__'
+    key = "public-methods-without-dunders"
+    exclude_pattern = "__"
 
 
 class PrivateMethods(Section):
     """
     Include a "Private Methods" section in the class TOC.
     """
-    key = 'private-methods'
+    key = "private-methods"
     title = "Private Methods:"
 
     def predicate(self, name, attr, meta):
@@ -293,7 +295,7 @@ class PublicDataAttrs(Section):
     in the TOC.  Data attributes defined in :meth:`__init__` (for example) will 
     not be found.
     """
-    key = 'public-attrs'
+    key = "public-attrs"
     title = "Public Data Attributes:"
 
     def predicate(self, name, attr, meta):
@@ -312,7 +314,7 @@ class PrivateDataAttrs(Section):
     in the TOC.  Data attributes defined in :meth:`__init__` (for example) will 
     not be found.
     """
-    key = 'private-attrs'
+    key = "private-attrs"
     title = "Private Data Attributes:"
 
     def predicate(self, name, attr, meta):
@@ -327,7 +329,7 @@ class InnerClasses(Section):
     """
     Include an "Inner Classes" section in the class TOC.
     """
-    key = 'inner-classes'
+    key = "inner-classes"
     title = "Inner Classes:"
 
     def predicate(self, name, attr, meta):
@@ -366,7 +368,7 @@ def is_public(name):
     Specifically, a name is public if it either doesn't start with an 
     underscore.
     """
-    return not name.startswith('_')
+    return not name.startswith("_")
 
 
 def is_private(name):
@@ -385,7 +387,7 @@ def is_special(name):
 
     Such names typically have special meaning to Python, e.g. :meth:`__init__`.
     """
-    return name.startswith('__') and name.endswith('__')
+    return name.startswith("__") and name.endswith("__")
 
 
 def does_match(name, pattern, **kwargs):

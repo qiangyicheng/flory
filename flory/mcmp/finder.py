@@ -24,22 +24,23 @@ See :ref:`Examples` for examples.
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
+from __future__ import annotations
 
 import logging
 import time
-from datetime import datetime
-from typing import Any, Optional, Union, Dict
 from collections.abc import Iterable
+from datetime import datetime
+from typing import Any
 
 import numpy as np
 from tqdm.auto import tqdm
 
-from ._finder_impl import *
-from ..commom import *
-from ..interaction import InteractionBase
-from ..entropy import EntropyBase
-from ..ensemble import EnsembleBase
+from ..common import *
 from ..constraint import ConstraintBase, NoConstraintCompiled
+from ..ensemble import EnsembleBase
+from ..entropy import EntropyBase
+from ..interaction import InteractionBase
+from ._finder_impl import *
 
 
 class CoexistingPhasesFinder:
@@ -58,10 +59,10 @@ class CoexistingPhasesFinder:
         interaction: InteractionBase,
         entropy: EntropyBase,
         ensemble: EnsembleBase,
-        constraints: Union[ConstraintBase, Tuple[ConstraintBase], None] = None,
+        constraints: ConstraintBase | tuple[ConstraintBase] | None = None,
         *,
-        num_part: Optional[int] = None,
-        rng: Optional[np.random.Generator] = None,
+        num_part: int | None = None,
+        rng: np.random.Generator | None = None,
         max_steps: int = 1000000,
         convergence_criterion: str = "standard",
         tolerance: float = 1e-5,
@@ -200,7 +201,7 @@ class CoexistingPhasesFinder:
             self._rng = np.random.default_rng(self._rng_seed)
         else:
             self._rng_is_external = True
-            self._rng_seed = int(0)
+            self._rng_seed = 0
             self._rng = rng
 
         # other parameters
@@ -244,20 +245,26 @@ class CoexistingPhasesFinder:
             compiled_instance:
                 The instance to check.
         """
-        if hasattr(compiled_instance, "num_comp"):
-            if not (compiled_instance.num_comp == self._num_comp):
+        if (
+            hasattr(compiled_instance, "num_comp")
+            and compiled_instance.num_comp != self._num_comp
+        ):
                 self._logger.error(
-                    f""""number of components {compiled_instance.num_comp} obtained from compiled objects is incompatible,
-                    {self._num_comp} is already set for the finder.
-                    """
+                    "number of components %d obtained from compiled objects is "
+                    "incompatible, %d is already set for the finder.",
+                    compiled_instance.num_comp,
+                    self._num_comp,
                 )
                 raise ComponentNumberError
-        if hasattr(compiled_instance, "num_feat"):
-            if not (compiled_instance.num_feat == self._num_feat):
+        if (
+            hasattr(compiled_instance, "num_feat")
+            and compiled_instance.num_feat != self._num_feat
+        ):
                 self._logger.error(
-                    f""""number of features {compiled_instance.num_feat} obtained from compiled objects is incompatible,
-                    {self._num_feat} is already set for the finder.
-                    """
+                    "number of features %d obtained from compiled objects is "
+                    "incompatible, %d is already set for the finder.",
+                    compiled_instance.num_feat,
+                    self._num_feat,
                 )
                 raise FeatureNumberError
 
@@ -279,7 +286,9 @@ class CoexistingPhasesFinder:
         field = np.array(field)
         if field.shape != self._omegas.shape:
             self._logger.error(
-                f"field with size of {field.shape} is invalid. It must have the size of {(self._num_feat, self._num_part)}."
+                "field with size of %s is invalid. It must have the size of %s.",
+                field.shape,
+                (self._num_feat, self._num_part),
             )
             raise ValueError("New field must match the size of the old one.")
         return field
@@ -353,10 +362,10 @@ class CoexistingPhasesFinder:
 
     def set_constraints(
         self,
-        constraints: Union[ConstraintBase, Tuple[ConstraintBase], None] = None,
+        constraints: ConstraintBase | tuple[ConstraintBase] | None = None,
         *,
         if_reset_revive: bool = True,
-        kwargs_individual: Union[Dict, Tuple[Dict], None] = None,
+        kwargs_individual: dict | tuple[dict] | None = None,
         **kwargs,
     ) -> None:
         """Set a new set of constraint instances.
@@ -479,10 +488,10 @@ class CoexistingPhasesFinder:
     def run(
         self,
         *,
-        max_steps: Optional[float] = None,
-        tolerance: Optional[float] = None,
-        interval: Optional[int] = None,
-        progress: Optional[bool] = None,
+        max_steps: float | None = None,
+        tolerance: float | None = None,
+        interval: int | None = None,
+        progress: bool | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         r"""Run instance to find coexisting phases.
 
@@ -605,7 +614,8 @@ class CoexistingPhasesFinder:
                     and tolerance > max_constraint_residue
                 ):
                     self._logger.info(
-                        f"Composition and volumes reached stationary state after {steps} steps"
+                        "Composition and volumes reached stationary state after %d steps",
+                        steps,
                     )
                     break
             else:
@@ -632,7 +642,9 @@ class CoexistingPhasesFinder:
         n_valid = count_valid_compartments(self._Js, self._kill_threshold)
         if n_valid < self._num_part // 2:
             self._logger.warning(
-                f"Only {n_valid} out of {self._num_part} compartments are living, the result might not be reliable."
+                "Only %d out of %d compartments are living, the result might not be reliable.",
+                n_valid,
+                self._num_part,
             )
 
         # store diagnostic output

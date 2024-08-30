@@ -5,9 +5,8 @@
 [![Documentation Status](https://readthedocs.org/projects/flory/badge/?version=latest)](https://flory.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/flory.svg)](https://badge.fury.io/py/flory)
 
-`flory` is a Python package for analyzing theories of multicomponent mixtures.
-In particular, the package provides routines to determine coexisting states numerically.
-This is a challenging problem, since the thermodynamic coexistence conditions are many coupled non-linear equations.
+`flory` is a Python package for analyzing field theories of multicomponent mixtures.
+In particular, the package provides routines to determine coexisting states numerically, which is a challenging problem since the thermodynamic coexistence conditions are many coupled non-linear equations.
 `flory` supports finding coexisting phases with an arbitrary number of components.
 The associated average free energy density of the system reads
 
@@ -15,7 +14,7 @@ $$\bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}}
 
 where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_p$ is the fraction of the system volume occupied by phase $p$, and $\phi_{p,i}$ is the volume fraction of component $i$ in phase $p$.
 
-`flory` supports different forms of interaction, entropy, ensemble and constraints to assemble the free energy of the phases.
+`flory` supports different forms of interaction, entropy, ensemble, and constraints to describe the free energy of phases.
 For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
 
 $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
@@ -33,7 +32,7 @@ pip install flory
 
 Usage
 -----
-A simple example determines the coexisting phases of a binary mixture with Flory-Huggins free energy:
+The following example determines the coexisting phases of a binary mixture with Flory-Huggins free energy:
 
 ```python
 import flory

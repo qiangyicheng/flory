@@ -1,7 +1,9 @@
-from docutils import nodes as _nodes
-from docutils.statemachine import StringList, string2lines
 from importlib import import_module
 from inspect import isclass
+
+from docutils import nodes as _nodes
+from docutils.statemachine import StringList, string2lines
+
 from .errors import ConfigError
 
 
@@ -54,7 +56,7 @@ def pick_sections(sections, exclude=None):
     """
 
     def _section_from_anything(x):
-        from .sections import Section, SECTIONS
+        from .sections import SECTIONS, Section
 
         if isinstance(x, str):
             try:
@@ -140,7 +142,7 @@ def get_cls_xref(cls, cant_import=None):
     if "<locals>" in cls.__qualname__:
         return cls.__name__ if cant_import is None else cant_import
     else:
-        return f'~{cls.__module__}.{cls.__qualname__}'
+        return f"~{cls.__module__}.{cls.__qualname__}"
 
 
 def find_attrs(cls):
