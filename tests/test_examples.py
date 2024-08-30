@@ -30,14 +30,6 @@ def test_example_scripts(path):
         proc.kill()
         outs, errs = proc.communicate()
 
-    # # delete files that might be created by the test
-    # try:
-    #     (PACKAGE_PATH / "diffusion.mov").unlink()
-    #     (PACKAGE_PATH / "allen_cahn.avi").unlink()
-    #     (PACKAGE_PATH / "allen_cahn.hdf").unlink()
-    # except OSError:
-    #     pass
-
     # prepare output
     msg = f"Script `{path}` failed with following output:"
     if outs:

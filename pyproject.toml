@@ -92,6 +92,7 @@ section-order = ["future", "standard-library", "third-party", "first-party", "se
 self = ["flory"]
 
 [tool.pytest.ini_options]
-minversion = "6.0"
+minversion = "7.0"
 addopts = "--strict-markers"
 testpaths = ["tests"]
+pythonpath = ["."]
