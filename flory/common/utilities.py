@@ -2,7 +2,7 @@
 """
 
 import inspect
-from typing import Callable, Any
+from typing import Any, Callable
 
 
 def filter_kwargs(kwargs_full: dict[str, Any], func: Callable) -> dict[str, Any]:

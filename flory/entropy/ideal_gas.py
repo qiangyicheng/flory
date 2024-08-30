@@ -1,13 +1,14 @@
 """Module for ideal gas entropic energy of mixture.
 
 """
+from __future__ import annotations
 
-from typing import Optional, Tuple
 import logging
 
-from numba.experimental import jitclass
-from numba import float64, int32
 import numpy as np
+from numba import float64, int32
+from numba.experimental import jitclass
+
 from .base import EntropyBase, EntropyBaseCompiled
 
 
@@ -96,7 +97,7 @@ class IdealGasEntropy(EntropyBase):
     def __init__(
         self,
         num_comp: int,
-        sizes: Optional[np.ndarray] = None,
+        sizes: np.ndarray | None = None,
     ):
         r"""
         Args:

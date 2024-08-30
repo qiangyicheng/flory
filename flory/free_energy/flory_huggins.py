@@ -2,13 +2,12 @@
 Flory-Huggins free energy is a combination of Flory-Huggins interaction energy and ideal
 gas entropy.
 """
-
-from typing import Union, Optional
+from __future__ import annotations
 
 import numpy as np
 
-from ..interaction import FloryHugginsInteraction
 from ..entropy import IdealGasEntropy
+from ..interaction import FloryHugginsInteraction
 from .base import FreeEnergyBase
 
 
@@ -32,8 +31,8 @@ class FloryHuggins(FreeEnergyBase):
     def __init__(
         self,
         num_comp: int,
-        chis: Union[np.ndarray, float],
-        sizes: Optional[np.ndarray] = None,
+        chis: np.ndarray | float,
+        sizes: np.ndarray | None = None,
     ):
         r"""
         Args:
@@ -56,7 +55,7 @@ class FloryHuggins(FreeEnergyBase):
         num_comp: int,
         chi: float,
         *,
-        sizes: Optional[np.ndarray] = None,
+        sizes: np.ndarray | None = None,
         vanishing_diagonal: bool = True,
     ):
         r"""Create Flory-Huggins free energy with uniform :math:`\chi_{ij}` matrix.
@@ -75,9 +74,9 @@ class FloryHuggins(FreeEnergyBase):
         chi_mean: float = 0,
         chi_std: float = 1,
         *,
-        sizes: Optional[np.ndarray] = None,
+        sizes: np.ndarray | None = None,
         vanishing_diagonal: bool = True,
-        rng: Optional[np.random.Generator] = None,
+        rng: np.random.Generator | None = None,
     ):
         r"""Create Flory-Huggins free energy with random :math:`\chi_{ij}` matrix.
 

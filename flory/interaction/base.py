@@ -1,13 +1,14 @@
 """Module for a general interaction energy of mixture.
 
 """
+from __future__ import annotations
 
-from typing import Union
 import numpy as np
-from ..commom import *
+
+from ..common import *
 
 
-class InteractionBaseCompiled(object):
+class InteractionBaseCompiled:
     r"""Abstract base class for a general compiled interaction.
 
     This abstract class defines the necessary members of a compiled constraint instance.
@@ -69,7 +70,7 @@ class InteractionBaseCompiled(object):
         """
         raise NotImplementedError
 
-    def incomp_coef(self, phis_feat: np.ndarray) -> Union[float, np.ndarray]:
+    def incomp_coef(self, phis_feat: np.ndarray) -> float | np.ndarray:
         r"""Calculate the coefficient for incompressibility.
 
         This method calculates the coefficient for incompressibility during iteration.

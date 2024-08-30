@@ -1,13 +1,14 @@
 """Module for grand canonical ensemble of mixture.
 
 """
+from __future__ import annotations
 
-from typing import Optional, Tuple
 import logging
 
-from numba.experimental import jitclass
-from numba import float64, int32
 import numpy as np
+from numba import float64, int32
+from numba.experimental import jitclass
+
 from .base import EnsembleBase, EnsembleBaseCompiled
 
 
@@ -86,7 +87,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
 
     @classmethod
     def from_chemical_potential(
-        cls, num_comp: int, mus: np.ndarray, sizes: Optional[np.ndarray] = None
+        cls, num_comp: int, mus: np.ndarray, sizes: np.ndarray | None = None
     ):
         r"""Create grand canonical ensemble from chemical potentials by volume.
 

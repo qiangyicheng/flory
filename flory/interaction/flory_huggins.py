@@ -1,12 +1,14 @@
 """Module for Flory-Huggins interaction energy of mixture.
 """
 
-import logging
-from typing import Any, Union, Optional
+from __future__ import annotations
 
-from numba.experimental import jitclass
-from numba import float64, int32
+import logging
+
 import numpy as np
+from numba import float64, int32
+from numba.experimental import jitclass
+
 from .base import InteractionBase, InteractionBaseCompiled
 
 
@@ -80,7 +82,7 @@ class FloryHugginsInteraction(InteractionBase):
     def __init__(
         self,
         num_comp: int,
-        chis: Union[np.ndarray, float],
+        chis: np.ndarray | float,
     ):
         r"""
         Args:
@@ -140,7 +142,7 @@ class FloryHugginsInteraction(InteractionBase):
         chi_std: float = 1,
         *,
         vanishing_diagonal: bool = True,
-        rng: Optional[np.random.Generator] = None,
+        rng: np.random.Generator | None = None,
     ):
         r"""Create Flory-Huggins interaction with random :math:`\chi_{ij}` matrix.
 

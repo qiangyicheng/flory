@@ -4,10 +4,10 @@
 
 import numpy as np
 
-from ..commom import *
+from ..common import filter_kwargs
 
 
-class EnsembleBaseCompiled(object):
+class EnsembleBaseCompiled:
     r"""Abstract base class for a general compiled ensemble.
 
     This abstract class defines the necessary members of a compiled constraint instance.

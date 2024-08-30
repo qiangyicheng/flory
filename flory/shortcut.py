@@ -1,10 +1,11 @@
 """Shortcuts for simple tasks of finding coexisting phases."""
+from __future__ import annotations
+
 
 import numpy as np
-from typing import Optional
 
-from .free_energy import FloryHuggins
 from .ensemble import CanonicalEnsemble
+from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
 
 
@@ -12,7 +13,7 @@ def find_coexisting_phases(
     num_comp: int,
     chis: np.ndarray,
     phi_means: np.ndarray,
-    sizes: Optional[np.ndarray] = None,
+    sizes: np.ndarray | None = None,
     **kwargs,
 ) -> tuple[np.ndarray, np.ndarray]:
     r"""Find coexisting phases of Flory-Huggins mixtures in canonical ensemble.

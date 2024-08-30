@@ -14,17 +14,15 @@ or reused.
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
-from typing import Tuple
-
 import numba as nb
 import numpy as np
-from scipy import cluster, spatial
 from numba import literal_unroll
+from scipy import cluster, spatial
 
-from ..interaction.base import InteractionBaseCompiled
-from ..entropy.base import EntropyBaseCompiled
-from ..ensemble.base import EnsembleBaseCompiled
 from ..constraint.base import ConstraintBaseCompiled
+from ..ensemble.base import EnsembleBaseCompiled
+from ..entropy.base import EntropyBaseCompiled
+from ..interaction.base import InteractionBaseCompiled
 
 
 @nb.njit()
@@ -199,12 +197,11 @@ def revive_compartments_by_copy(
                 living_nicely_count += 1
                 revive_count += 1
                 break
-            else:
-                living_nicely_count -= 1
-                living_nicely_indexes[pos_in_living] = living_nicely_indexes[
-                    living_nicely_count
-                ]
-                living_nicely_indexes[living_nicely_count] = -1
+            living_nicely_count -= 1
+            living_nicely_indexes[pos_in_living] = living_nicely_indexes[
+                living_nicely_count
+            ]
+            living_nicely_indexes[living_nicely_count] = -1
     return revive_count
 
 
@@ -213,7 +210,7 @@ def multicomponent_self_consistent_metastep(
     interaction: InteractionBaseCompiled,
     entropy: EntropyBaseCompiled,
     ensemble: EnsembleBaseCompiled,
-    constraints: Tuple[ConstraintBaseCompiled],
+    constraints: tuple[ConstraintBaseCompiled],
     *,
     omegas: np.ndarray,
     Js: np.ndarray,
