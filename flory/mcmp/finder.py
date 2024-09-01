@@ -36,6 +36,7 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from ..common import *
+from ..common.phases import Phases
 from ..constraint import ConstraintBase, NoConstraintCompiled
 from ..ensemble import EnsembleBase
 from ..entropy import EntropyBase
@@ -492,7 +493,7 @@ class CoexistingPhasesFinder:
         tolerance: float | None = None,
         interval: int | None = None,
         progress: bool | None = None,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> Phases:
         r"""Run instance to find coexisting phases.
 
         The keywords arguments can be used to temporarily overwrite the provided values
@@ -515,12 +516,11 @@ class CoexistingPhasesFinder:
                 Whether to show progress bar when checking convergence.
 
         Returns:
-            [0]:
-                Volume fractions of each phase :math:`J_p`. 1D array with the size of
-                :math:`N_\mathrm{p}`.
-            [1]:
-                Volume fractions of components in each phase :math:`\phi_{p,i}`. 2D array
-                with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
+            phases:
+                Composition and relative size of the phases. The first item (accessible by
+                :code:`phases[0]` or :code:`phases.Js`) contains the fraction of volume of
+                each phase. The second item (accessible by :code:`phases[1]` or
+                :code:`phases.phis`) contains volume fractions of all components.
         """
         if max_steps is None:
             max_steps = self._max_steps
@@ -660,6 +660,6 @@ class CoexistingPhasesFinder:
             "Js": self._Js.copy(),
         }
 
-        phases_volumes, phases_compositions = get_clusters(final_Js, final_phis_comp)
-
-        return phases_volumes, phases_compositions
+        # transpose phi since `Phases` uses a different convention
+        phases = Phases(final_Js, final_phis_comp.T)
+        return phases.get_clusters()  #  TODO: Expose the distance threshold?

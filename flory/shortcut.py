@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from .common.phases import Phases
 from .ensemble import CanonicalEnsemble
 from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
@@ -14,7 +15,7 @@ def find_coexisting_phases(
     phi_means: np.ndarray,
     sizes: np.ndarray | None = None,
     **kwargs,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Phases:
     r"""Find coexisting phases of Flory-Huggins mixtures in canonical ensemble.
 
     This function is a convenience wrapper for the class
@@ -40,12 +41,11 @@ def find_coexisting_phases(
             :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
     Returns:
-        [0]:
-            Volume fractions of each phase :math:`J_p`. 1D array with the size of
-            :math:`N_\mathrm{p}`.
-        [1]:
-            Volume fractions of components in each phase :math:`\phi_{p,i}`. 2D
-            array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`.
+        phases:
+            Composition and relative size of the phases. The first item (accessible by
+            :code:`phases[0]` or :code:`phases.Js`) contains the fraction of volume of
+            each phase. The second item (accessible by :code:`phases[1]` or
+            :code:`phases.phis`) contains volume fractions of all components.
     """
     free_energy = FloryHuggins(num_comp, chis, sizes)
     ensemble = CanonicalEnsemble(num_comp, phi_means)

@@ -17,7 +17,6 @@ or reused.
 import numba as nb
 import numpy as np
 from numba import literal_unroll
-from scipy import cluster, spatial
 
 from ..constraint.base import ConstraintBaseCompiled
 from ..ensemble.base import EnsembleBaseCompiled
@@ -426,80 +425,3 @@ def multicomponent_self_consistent_metastep(
         n_valid_phase == n_valid_phase_last,
     )
 
-
-def sort_phases(
-    Js_phases: np.ndarray, phis_phases: np.ndarray
-) -> tuple[np.ndarray, np.ndarray]:
-    r"""Sort the phases.
-
-    Sort the phases according to the index of most concentrated components. Note that this
-    function uses different data structure from other functions in the module. See
-    :paramref:`phis_phases`.
-
-    Args:
-        Js_phases:
-            Constant. 1D array with the size of :math:`N_\mathrm{p}`, containing the volumes
-            of each phase :math:`J_p`.
-        phis_phases:
-            Constant. 2D array with the size of :math:`N_\mathrm{p} \times N_\mathrm{c}`,
-            containing the volume fractions of the components in each phase
-            :math:`\phi_{p,i}`. The first dimension must be the same as
-            :paramref:`Js_phases`. Note that this usually corresponds to the transpose of
-            the arrays of :math:`\phi_i^{(m)}`, for example
-            :attr:`~flory.mcmp.CoexistingPhasesFinder.phis` in class
-            :class:`~flory.mcmp.CoexistingPhasesFinder`.
-
-    Returns:
-        [0]: Sorted :paramref:`Js_phases`.
-        [1]: Sorted :paramref:`phis_phases`.
-    """
-    enrich_indexes = np.argsort(phis_phases)
-    sorting_index = np.lexsort(np.transpose(enrich_indexes))
-    return Js_phases[sorting_index], phis_phases[sorting_index]
-
-
-def get_clusters(
-    Js: np.ndarray, phis: np.ndarray, dist: float = 1e-2
-) -> tuple[np.ndarray, np.ndarray]:
-    r"""Find clusters of compositions.
-
-    Find unique phases from compartments by clustering. The returning results are sorted
-    according to the index of most concentrated components.
-
-    Args:
-        Js:
-            Constant. The 1D array with the size of :math:`M`, containing the relative
-            volumes of compartments :math:`J_m`.
-        phis:
-            Constant. 2D array with the size of :math:`N_\mathrm{c} \times M`, containing
-            the volume fractions of the components in each phase :math:`\phi_i^{(m)}`.
-            The second dimension must be the same as :paramref:`Js`.
-        dist:
-            Constant. Cut-off distance for cluster analysis
-
-    Returns:
-        [0]:
-            1D array with the size of :math:`N_\mathrm{p}`, containing the volumes of the
-            unique phases :math:`J_p`.
-        [1]:
-            1D array with the size of :math:`N_\mathrm{p} \times  N_\mathrm{c}`,
-            containing the compositions of all unique phases :math:`\phi_{p,i}`. Note that
-            the data structure is different from normal, see :meth:`sort_phases` for more
-            information.
-    """
-    # transpose to make the compartment index the first index
-    phis = np.transpose(phis)
-    # calculate distances between compositions
-    if phis.shape[0] == 1:
-        return phis, 1
-    dists = spatial.distance.pdist(phis)
-    # obtain hierarchy structure
-    links = cluster.hierarchy.linkage(dists, method="centroid")
-    # flatten the hierarchy by clustering
-    clusters = cluster.hierarchy.fcluster(links, dist, criterion="distance")
-    cluster_phis = np.array(
-        [phis[clusters == n, :].mean(axis=0) for n in np.unique(clusters)]
-    )
-    cluster_Js = np.array([Js[clusters == n].sum(axis=0) for n in np.unique(clusters)])
-    cluster_Js /= cluster_Js.sum()
-    return sort_phases(cluster_Js, cluster_phis)
