@@ -13,8 +13,8 @@ import pytest
 PACKAGE_PATH = Path(__file__).resolve().parents[1]
 EXAMPLES = (PACKAGE_PATH / "examples").glob("*.py")
 
-@pytest.mark.slow
-@pytest.mark.no_cover
+@pytest.mark.slow()
+@pytest.mark.no_cover()
 @pytest.mark.parametrize("path", EXAMPLES)
 def test_example_scripts(path, tmp_path):
     """Runs an example script given by path."""

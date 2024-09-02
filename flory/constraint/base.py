@@ -116,7 +116,7 @@ class ConstraintBase:
         """
         self.num_feat = num_feat
 
-    def _compiled_impl(self, **kwargs) -> object:
+    def _compiled_impl(self, **kwargs) -> ConstraintBaseCompiled:
         """Implementation of creating a compiled constraint instance (Interface).
 
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
@@ -124,7 +124,7 @@ class ConstraintBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> object:
+    def compiled(self, **kwargs_full) -> ConstraintBaseCompiled:
         r"""Make a compiled constraint instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The

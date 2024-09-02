@@ -123,7 +123,7 @@ class EntropyBase:
         """
         self.num_comp = num_comp
 
-    def _compiled_impl(self, **kwargs) -> object:
+    def _compiled_impl(self, **kwargs) -> EntropyBaseCompiled:
         """Implementation of creating a compiled entropy instance (Interface).
 
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
@@ -182,7 +182,7 @@ class EntropyBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> object:
+    def compiled(self, **kwargs_full) -> EntropyBaseCompiled:
         r"""Make a compiled entropy instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The entropy
