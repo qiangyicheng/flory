@@ -166,10 +166,33 @@ class LinearGlobalConstraint(ConstraintBase):
             raise ValueError("Constraint matrix must be 1D or 2D.")
 
         shape = (self.num_cons, self.num_feat)
-        self.Cs = np.broadcast_to(Cs, shape).astype(float)
+        self._Cs = np.broadcast_to(Cs, shape).astype(float)
         shape = (self.num_cons,)
         Ts = np.atleast_1d(Ts)
-        self.Ts = np.broadcast_to(Ts, shape).astype(float)
+        self._Ts = np.broadcast_to(Ts, shape).astype(float)
+        
+    @property
+    def Cs(self) -> np.ndarray:
+        r"""Coefficients of features for linear constraints :math:`C_{\alpha,r}`."""
+
+        return self._Cs
+
+    @Cs.setter
+    def Cs(self, Cs_new: np.ndarray):
+        Cs_new = np.atleast_1d(Cs_new)
+        shape = (self.num_cons, self.num_feat)
+        self._Cs = np.broadcast_to(Cs_new, shape).astype(float)
+
+    @property
+    def Ts(self) -> np.ndarray:
+        r"""Targets of features for linear constraints :math:`T_\alpha`."""
+        return self._Ts
+
+    @Ts.setter
+    def Ts(self, Ts_new: np.ndarray):
+        shape = (self.num_cons,)
+        Ts_new = np.atleast_1d(Ts_new)
+        self._Ts = np.broadcast_to(Ts_new, shape).astype(float)
 
     def _compiled_impl(
         self, constraint_acceptance_ratio: float = 1.0, constraint_elasticity: float = 1.0
@@ -192,5 +215,5 @@ class LinearGlobalConstraint(ConstraintBase):
             : Instance of :class:`LinearGlobalConstraintCompiled`.
         """
         return LinearGlobalConstraintCompiled(
-            self.Cs, self.Ts, constraint_acceptance_ratio, constraint_elasticity
+            self._Cs, self._Ts, constraint_acceptance_ratio, constraint_elasticity
         )

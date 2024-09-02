@@ -1,6 +1,7 @@
 """Module for grand canonical ensemble of mixture.
 
 """
+
 from __future__ import annotations
 
 import logging
@@ -83,7 +84,18 @@ class GrandCanonicalEnsemble(EnsembleBase):
         scaled_activity = np.atleast_1d(scaled_activity)
 
         shape = (num_comp,)
-        self.scaled_activity = np.array(np.broadcast_to(scaled_activity, shape))
+        self._scaled_activity = np.array(np.broadcast_to(scaled_activity, shape))
+
+    @property
+    def scaled_activity(self) -> np.ndarray:
+        r"""The scaled activities of the components :math:`l_i e^{l_i \mu_i}`."""
+        return self._scaled_activity
+
+    @scaled_activity.setter
+    def scaled_activity(self, scaled_activity_new: np.ndarray):
+        scaled_activity_new = np.atleast_1d(scaled_activity_new)
+        shape = (self.num_comp,)
+        self._scaled_activity = np.array(np.broadcast_to(scaled_activity_new, shape))
 
     @classmethod
     def from_chemical_potential(
@@ -126,4 +138,4 @@ class GrandCanonicalEnsemble(EnsembleBase):
             : Instance of :class:`GrandCanonicalEnsembleCompiled`.
         """
 
-        return GrandCanonicalEnsembleCompiled(self.scaled_activity)
+        return GrandCanonicalEnsembleCompiled(self._scaled_activity)

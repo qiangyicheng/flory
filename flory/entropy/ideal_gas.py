@@ -1,6 +1,7 @@
 """Module for ideal gas entropic energy of mixture.
 
 """
+
 from __future__ import annotations
 
 import logging
@@ -111,11 +112,22 @@ class IdealGasEntropy(EntropyBase):
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
         if sizes is None:
-            self.sizes = np.ones(num_comp)
+            self._sizes = np.ones(num_comp)
         else:
             sizes = np.atleast_1d(sizes)
             shape = (num_comp,)
-            self.sizes = np.array(np.broadcast_to(sizes, shape))
+            self._sizes = np.array(np.broadcast_to(sizes, shape))
+
+    @property
+    def sizes(self) -> np.ndarray:
+        r"""The relative molecule volumes :math:`l_i = \nu_i/\nu`."""
+        return self._sizes
+
+    @sizes.setter
+    def sizes(self, sizes_new: np.ndarray):
+        sizes_new = np.atleast_1d(sizes_new)
+        shape = (self.num_comp,)
+        self._sizes = np.array(np.broadcast_to(sizes_new, shape))
 
     def _compiled_impl(self) -> object:
         """Implementation of creating a compiled entropy instance.
@@ -128,7 +140,7 @@ class IdealGasEntropy(EntropyBase):
             : Instance of :class:`IdealGasEntropyCompiled`.
         """
 
-        return IdealGasEntropyCompiled(self.sizes)
+        return IdealGasEntropyCompiled(self._sizes)
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating entropic energy :math:`f_\mathrm{entropy}`.
@@ -146,7 +158,7 @@ class IdealGasEntropy(EntropyBase):
         Returns:
             : The entropic energy density.
         """
-        return np.einsum("...i,...i->...", phis / self.sizes, np.log(phis))
+        return np.einsum("...i,...i->...", phis / self._sizes, np.log(phis))
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{entropy}/\partial \phi_i`.
@@ -164,7 +176,7 @@ class IdealGasEntropy(EntropyBase):
         Returns:
             : The full Jacobian.
         """
-        return np.log(phis) / self.sizes + 1.0 / self.sizes
+        return np.log(phis) / self._sizes + 1.0 / self._sizes
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{entropy}/\partial \phi_i^2`.
@@ -182,4 +194,4 @@ class IdealGasEntropy(EntropyBase):
         Returns:
             : The full Hessian.
         """
-        return np.eye(self.num_comp) / (phis * self.sizes)[..., None]
+        return np.eye(self.num_comp) / (phis * self._sizes)[..., None]

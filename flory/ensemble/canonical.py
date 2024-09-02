@@ -1,6 +1,7 @@
 """Module for canonical ensemble of mixture.
 
 """
+
 from __future__ import annotations
 
 import logging
@@ -33,6 +34,7 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
     Since (translational) entropy is always defined for each component, this class is only
     aware of the component-based description of the system.
     """
+
     def __init__(self, phi_means: np.ndarray):
         r"""
         Args:
@@ -58,14 +60,13 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
             incomp += phis_comp[itr_comp]
         incomp *= masks
         return incomp
-   
 
 
 class CanonicalEnsemble(EnsembleBase):
     r"""Class for an canonical ensemble that the average volume fractions are conserved.
 
     The particular form of the conservation law reads
-    
+
     .. math::
         \bar{\phi}_i = \frac{\sum_m \phi_i^{(m)} J_m }{\sum_m J_m}.
 
@@ -89,10 +90,27 @@ class CanonicalEnsemble(EnsembleBase):
         phi_means = np.atleast_1d(phi_means)
 
         shape = (num_comp,)
-        self.phi_means = np.array(np.broadcast_to(phi_means, shape))
+        self._phi_means = np.array(np.broadcast_to(phi_means, shape))
 
-        if not np.allclose(self.phi_means.sum(), 1.0):
-             self._logger.warning(
+        if not np.allclose(self._phi_means.sum(), 1.0):
+            self._logger.warning(
+                "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
+            )
+
+    @property
+    def phi_means(self) -> np.ndarray:
+        r"""The average volume fractions of the components :math:`\bar{\phi}_i`."""
+
+        return self._phi_means
+
+    @phi_means.setter
+    def phi_means(self, phi_means_new: np.ndarray):
+        phi_means_new = np.atleast_1d(phi_means_new)
+        shape = (self.num_comp,)
+        self._phi_means = np.array(np.broadcast_to(phi_means_new, shape))
+
+        if not np.allclose(self._phi_means.sum(), 1.0):
+            self._logger.warning(
                 "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
             )
 
@@ -101,10 +119,10 @@ class CanonicalEnsemble(EnsembleBase):
 
         This method overwrites the interface
         :meth:`~flory.ensemble.base.EnsembleBase._compiled_impl` in
-        :class:`~flory.ensemble.base.EnsembleBase`. 
-        
+        :class:`~flory.ensemble.base.EnsembleBase`.
+
         Returns:
             : Instance of :class:`CanonicalEnsembleCompiled`.
         """
 
-        return CanonicalEnsembleCompiled(self.phi_means)
+        return CanonicalEnsembleCompiled(self._phi_means)

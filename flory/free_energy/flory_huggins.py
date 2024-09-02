@@ -2,6 +2,7 @@
 Flory-Huggins free energy is a combination of Flory-Huggins interaction energy and ideal
 gas entropy.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -17,7 +18,7 @@ class FloryHuggins(FreeEnergyBase):
     The particular implementation of the free energy density reads
 
     .. math::
-        f(\{\phi_i\}) = 
+        f(\{\phi_i\}) =
             \sum_{i=1}^{N_\mathrm{c}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
             + \sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
@@ -48,6 +49,24 @@ class FloryHuggins(FreeEnergyBase):
         interaction = FloryHugginsInteraction(num_comp, chis=chis)
         entropy = IdealGasEntropy(num_comp, sizes=sizes)
         super().__init__(interaction, entropy)
+
+    @property
+    def chis(self) -> np.ndarray:
+        r"""The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`."""
+        return self.interaction.chis
+
+    @chis.setter
+    def chis(self, chis_new: np.ndarray):
+        self.interaction.chis = chis_new
+
+    @property
+    def sizes(self) -> np.ndarray:
+        r"""The relative molecule volumes :math:`l_i = \nu_i/\nu`."""
+        return self.entropy.sizes
+
+    @sizes.setter
+    def sizes(self, sizes_new: np.ndarray):
+        self.entropy.sizes = sizes_new
 
     @classmethod
     def from_uniform(

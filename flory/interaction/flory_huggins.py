@@ -47,7 +47,7 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
         self._incomp_coef = chis.sum() + chis_shift * self._num_feat * self._num_feat
 
     @property
-    def num_feat(self) ->int:
+    def num_feat(self) -> int:
         return self._num_feat
 
     def volume_derivative(
@@ -102,13 +102,27 @@ class FloryHugginsInteraction(InteractionBase):
         # ensure that the chi matrix is symmetric
         if not np.allclose(chis, chis.T):
             self._logger.warning("Using symmetrized χ interaction-matrix")
-        self.chis = 0.5 * (chis + chis.T)
+        self._chis = 0.5 * (chis + chis.T)
+
+    @property
+    def chis(self) -> np.ndarray:
+        r"""The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`."""
+        return self._chis
+
+    @chis.setter
+    def chis(self, chis_new: np.ndarray):
+        chis_new = np.atleast_1d(chis_new)
+        shape = (self.num_comp, self.num_comp)
+        chis_new = np.array(np.broadcast_to(chis_new, shape))
+        if not np.allclose(chis_new, chis_new.T):
+            self._logger.warning("Using symmetrized χ interaction-matrix")
+        self._chis = 0.5 * (chis_new + chis_new.T)
 
     @property
     def independent_entries(self) -> np.ndarray:
         r"""Entries of the upper triangle of the :math:`\chi_{ij}`"""
 
-        return self.chis[np.triu_indices_from(self.chis, k=0)]
+        return self._chis[np.triu_indices_from(self._chis, k=0)]
 
     @classmethod
     def from_uniform(
@@ -182,9 +196,9 @@ class FloryHugginsInteraction(InteractionBase):
                 Whether the diagonal elements of the :math:`\chi_{ij}` matrix are set to
                 be zero.
         """
-        self.chis = np.full((self.num_comp, self.num_comp), chi)
+        self._chis = np.full((self.num_comp, self.num_comp), chi)
         if vanishing_diagonal:
-            self.chis[np.diag_indices_from(self.chis)] = 0
+            self._chis[np.diag_indices_from(self._chis)] = 0
 
     def set_random_chis(
         self,
@@ -210,7 +224,7 @@ class FloryHugginsInteraction(InteractionBase):
         if rng is None:
             rng = np.random.default_rng()
 
-        self.chis[:] = 0  # reset old values
+        self._chis[:] = 0  # reset old values
 
         # determine random entries
         if vanishing_diagonal:
@@ -221,8 +235,8 @@ class FloryHugginsInteraction(InteractionBase):
 
         # build symmetric  matrix from this
         i, j = np.triu_indices(self.num_comp, 1 if vanishing_diagonal else 0)
-        self.chis[i, j] = chi_vals
-        self.chis[j, i] = chi_vals
+        self._chis[i, j] = chi_vals
+        self._chis[j, i] = chi_vals
 
     def _compiled_impl(self, *, additional_chis_shift: float = 1.0) -> object:
         """Implementation of creating a compiled interaction instance.
@@ -245,7 +259,7 @@ class FloryHugginsInteraction(InteractionBase):
         """
 
         return FloryHugginsInteractionCompiled(
-            self.chis, -self.chis.min() + additional_chis_shift
+            self._chis, -self._chis.min() + additional_chis_shift
         )
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
@@ -264,7 +278,7 @@ class FloryHugginsInteraction(InteractionBase):
         Returns:
             : The interaction energy density
         """
-        ans = 0.5 * np.einsum("...i,...j,ij->...", phis, phis, self.chis)
+        ans = 0.5 * np.einsum("...i,...j,ij->...", phis, phis, self._chis)
         return ans
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
@@ -279,11 +293,11 @@ class FloryHugginsInteraction(InteractionBase):
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
                 phases are included, the index of the components must be the last
                 dimension.
-                
+
         Returns:
             : The full Jacobian
         """
-        ans = phis @ self.chis
+        ans = phis @ self._chis
         return ans
 
     def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
@@ -302,4 +316,4 @@ class FloryHugginsInteraction(InteractionBase):
         Returns:
             : The full Hessian
         """
-        return np.zeros_like(phis)[..., None] + self.chis  # type: ignore
+        return np.zeros_like(phis)[..., None] + self._chis  # type: ignore
