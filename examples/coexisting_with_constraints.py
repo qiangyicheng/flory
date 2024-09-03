@@ -27,6 +27,8 @@ finder = flory.CoexistingPhasesFinder(
 )
 phases = finder.run().get_clusters()
 
+print((fh.free_energy_density(phases.fractions) * phases.volumes).sum())
+
 with open(__file__ + ".out", "w") as f:
     print("Volumes:", phases.volumes, file=f)
     print("Compositions:", phases.fractions, file=f)

@@ -16,11 +16,16 @@ def test_CoexistingPhasesFinder_set_instances():
 
     free_energy = flory.FloryHuggins(num_comp, chis, sizes)
     ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
-    constraint = flory.LinearLocalConstraint(num_comp, [-1.0, 0.0, 1.0], 0.0)
+    constraint_1 = flory.LinearLocalConstraint(num_comp, [-1.0, 0.0, 1.0], 0.0)
+    constraint_2 = flory.LinearGlobalConstraint(num_comp, [-1.0, 0.0, 1.0], 0.0)
 
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble, [constraint]
+        free_energy.interaction, free_energy.entropy, ensemble, [constraint_1]
     )
+
+    finder.set_constraints([constraint_1, constraint_2])
+
+    finder.run(max_steps=10000)
 
     new_chis = free_energy.chis.copy()
     new_chis[0, 1] += 0.5
@@ -37,7 +42,6 @@ def test_CoexistingPhasesFinder_set_instances():
     finder.set_interaction(free_energy.interaction)
     finder.set_entropy(free_energy.entropy)
     finder.set_ensemble(new_ensemble)
-    finder.set_constraints(constraint)
     finder.set_constraints([flory.NoConstraint(num_comp)])
 
-    finder.run()
+    finder.run(max_steps=10000)

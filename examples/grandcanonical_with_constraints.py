@@ -5,7 +5,7 @@ import flory
 num_comp = 3
 chis = (1 - np.identity(num_comp)) * 5
 
-mus = [-1, 0.0, 0.0]
+mus = [-1, 0.0, 0.1]
 
 Cs = [[1, 1, 0]]
 Ts = [0.4]
@@ -21,6 +21,7 @@ finder = flory.CoexistingPhasesFinder(
     constraint,
     random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     progress=True,
+    tolerance=1e-12
 )
 phases = finder.run().get_clusters()
 

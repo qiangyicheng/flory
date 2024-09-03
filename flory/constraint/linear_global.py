@@ -113,19 +113,17 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
 
         self._volume_derivative = np.zeros_like(phis_feat[0])
         for itr_cons in range(self._num_cons):
-            self._volume_derivative += self._residue[itr_cons] * (
+            self._volume_derivative += compart_residue[itr_cons] * (
                 self._multiplier[itr_cons]
-                + 2.0 * compart_residue[itr_cons] * self._elasticity
+                + 2.0 * self._residue[itr_cons] * self._elasticity
             )
         self._potential *= masks
-        self._residue *= masks
         self._volume_derivative *= masks
 
         self._residue /= Js.sum() # scale residue according to total volume
 
     def evolve(self, step: float, masks: np.ndarray) -> float:
         self._multiplier += step * self._acceptance_ratio * self._residue
-        self._multiplier *= masks
         return np.abs(self._residue).max()
 
 

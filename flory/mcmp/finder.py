@@ -416,6 +416,9 @@ class CoexistingPhasesFinder:
 
         for cons in self._constraints:
             self.check_instance(cons)
+        
+        self.reinitialize_constraint()
+            
         if if_reset_revive:
             self.reset_revive()
 
