@@ -37,6 +37,9 @@ class Phases:
         self.volumes = volumes
         self.fractions = fractions
 
+    def __str__(self) -> str:
+        return "Phases(volumes={}, fractions={})".format(self.volumes, self.fractions)
+
     @property
     def num_phases(self) -> int:
         r"""Number of phases :math:`N_\mathrm{p}`."""
