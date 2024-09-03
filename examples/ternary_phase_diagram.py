@@ -20,9 +20,9 @@ options = {
 finder = flory.CoexistingPhasesFinder(interaction, entropy, ensemble, **options)
 
 # determine the three phase coexistence
-volumes, phis = finder.run()
-assert volumes.shape[0] == 3
-p3_phis = phis
+phases = finder.run().get_clusters()
+assert phases.volumes.shape[0] == 3
+p3_phis = phases.fractions
 p3_center = np.mean(p3_phis, axis=0)
 p3_edges = [p3_phis[[1, 2]], p3_phis[[0, 2]], p3_phis[[0, 1]]]
 
@@ -59,12 +59,12 @@ def find_p2_boundaries(
         ensemble.phi_means = np.array(next_phis)
         internal_finder.set_ensemble(ensemble)
         backup_omegas = internal_finder.omegas.copy()
-        volumes, phis = internal_finder.run()
+        phases = internal_finder.run().get_clusters()
         
-        if volumes.shape[0] == 2 and np.all(phis > 0):
-            ties.append(phis)
+        if phases.volumes.shape[0] == 2 and np.all(phases.fractions > 0):
+            ties.append(phases.fractions)
             previous = tie_center
-            current_tie = phis
+            current_tie = phases.fractions
         else:
             internal_finder.reinitialize_from_omegas(backup_omegas)
             if step > scan_step_min:

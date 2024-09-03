@@ -23,11 +23,11 @@ def test_find_coexisting_phases_symmetric(num_comp: int, chi: float, size: float
     volumes_ref = np.ones(num_comp) / num_comp
     phis_ref = phi_l + np.identity(num_comp) * (phi_h - phi_l)
 
-    volumes_calc, phis_calc = flory.find_coexisting_phases(
+    phases = flory.find_coexisting_phases(
         num_comp, chis, phi_means, sizes=sizes, tolerance=1e-7, progress=True
     )
-    np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-2, atol=1e-5)
-    np.testing.assert_allclose(phis_calc, phis_ref, rtol=1e-2, atol=1e-5)
+    np.testing.assert_allclose(phases.volumes, volumes_ref, rtol=1e-2, atol=1e-5)
+    np.testing.assert_allclose(phases.fractions, phis_ref, rtol=1e-2, atol=1e-5)
 
 
 @pytest.mark.parametrize("num_part", [8, 16])
@@ -43,7 +43,7 @@ def test_find_coexisting_phases_asymmetric_ternary(num_part: int):
         [[0.07578904, 0.81377563, 0.11043533], [0.30555285, 0.09408195, 0.60036519]]
     )
 
-    volumes_calc, phis_calc = flory.find_coexisting_phases(
+    phases = flory.find_coexisting_phases(
         num_comp,
         chis,
         phi_means,
@@ -52,8 +52,8 @@ def test_find_coexisting_phases_asymmetric_ternary(num_part: int):
         tolerance=1e-7,
         progress=False,
     )
-    np.testing.assert_allclose(volumes_calc, volumes_ref, rtol=1e-5)
-    np.testing.assert_allclose(phis_calc, phis_ref, rtol=1e-5)
+    np.testing.assert_allclose(phases.volumes, volumes_ref, rtol=1e-5)
+    np.testing.assert_allclose(phases.fractions, phis_ref, rtol=1e-5)
 
 
 def test_CoexistingPhasesFinder_ODT():
@@ -89,12 +89,12 @@ def test_CoexistingPhasesFinder_ODT():
         chis = chi - np.identity(num_comp) * chi
         interaction.chis = np.array(chis)
         finder.set_interaction(interaction)
-        ans = finder.run()
+        phases = finder.run().get_clusters()
         assert finder.diagnostics["max_abs_incomp"] < 1e-5
         assert finder.diagnostics["max_abs_omega_diff"] < 1e-5
         assert finder.diagnostics["max_abs_js_diff"] < 1e-5
-        phi_h = ans[1][0, 0]
-        phi_l = ans[1][0, 1]
+        phi_h = phases.fractions[0, 0]
+        phi_l = phases.fractions[0, 1]
         line_chi.append(chi)
         line_l.append(phi_l)
         line_h.append(phi_h)
