@@ -41,8 +41,8 @@ num_comp = 2                    # Set number of components
 chis = [[0, 4.0], [4.0, 0]]     # Set the \chi matrix
 phi_means = [0.5, 0.5]          # Set the average volume fractions
 
-# obtain relative volumes and compositions of the two coexisting phases
-volumes, phis = flory.find_coexisting_phases(n_comp, chis, phi_means)
+# obtain coexisting phases
+phases = flory.find_coexisting_phases(num_comp, chis, phi_means)
 ```
 
 It is equivalent to a more advanced example:
@@ -60,14 +60,14 @@ fh = flory.FloryHuggins(num_comp, chis)
 ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
 # construct a finder from interaction, entropy and ensemble
 finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
-# obtain relative volumes and compositions of the two coexisting phases
-volumes, phis = finder.run()
+# obtain phases by clustering compartments 
+phases = finder.run().get_clusters()
 ```
 
 The free energy instance provides more tools for analysis, such as:
 ```python
 # calculate the chemical potentials of the coexisting phases
-mus = fh.chemical_potentials(phis)
+mus = fh.chemical_potentials(phases.fractions)
 ```
 
 More information

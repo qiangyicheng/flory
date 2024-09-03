@@ -60,14 +60,14 @@ For instance, the following code finds the two coexisting phases of a symmetric 
 fh = flory.FloryHuggins(2, chis = [[0, 4.0], [4.0, 0]])
 ensemble = flory.CanonicalEnsemble(2, phi_means = [0.5, 0.5])
 finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
-volumes, phis = finder.run() # we need to revise this once we have Phases class.
+phases = finder.run().get_clusters()
 ```
 Here `FloryHuggins` represents the widely-used Flory-Huggins free energy that creates the interaction `FloryHugginsInteraction` and the entropy `IdealGasEntropy` simultaneously, and provides tools for analyzing coexisting phases. 
 Then the coexisting phases of another symmetric binary mixture with $\chi=3.5$ matrix can be obtained by updating the interaction:
 ```python
-new_interaction = flory.FloryHugginsInteraction(2, chis = [[0, 3.5], [3.5, 0]]) # we need to revise this once we have new setter.
-finder.set_interaction(new_interaction)
-volumes, phis = finder.run() # we need to revise this once we have Phases class.
+fh.chis = [[0, 3.5], [3.5, 0]]
+finder.set_interaction(fh.interaction)
+phases = finder.run().get_clusters()
 ```
 Such procedures can be repeated to complete certain tasks such as generating or sampling the phase diagrams.
 A different interaction type can be used to update the finder as well.

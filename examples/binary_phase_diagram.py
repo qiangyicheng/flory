@@ -28,11 +28,11 @@ line_h = []
 for chi in np.arange(chi_start, chi_end, -0.1):  # scan chi from high value to low value
     interaction.chis = np.array([[0, chi], [chi, 0]])  # set chi matrix of the finder
     finder.set_interaction(interaction)
-    volumes, phis = finder.run()  # get coexisting phases
-    if phis.shape[0] == 1:  # stop scanning if no phase separation
+    phases = finder.run().get_clusters()  # get coexisting phases
+    if phases.fractions.shape[0] == 1:  # stop scanning if no phase separation
         break
-    phi_h = phis[0, 0]  # extract the volume fraction of component 0 in phase 0
-    phi_l = phis[1, 0]  # extract the volume fraction of component 0 in phase 1
+    phi_h = phases.fractions[0, 0]  # extract the volume fraction of component 0 in phase 0
+    phi_l = phases.fractions[1, 0]  # extract the volume fraction of component 0 in phase 1
     line_chi.append(chi)
     line_l.append(phi_l)
     line_h.append(phi_h)

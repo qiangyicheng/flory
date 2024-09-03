@@ -7,8 +7,8 @@ fh = flory.FloryHuggins(2, chis)
 ensemble = flory.CanonicalEnsemble(2, phi_means)
 finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
 
-volumes, phis = finder.run()
+phases = finder.run().get_clusters()
 
 with open(__file__ + ".out", "w") as f:
-    print("Volumes:", volumes, file=f)
-    print("Compositions:", phis, file=f)
+    print("Volumes:", phases.volumes, file=f)
+    print("Compositions:", phases.fractions, file=f)
