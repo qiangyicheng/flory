@@ -24,6 +24,7 @@ except ImportError:
         __version__ = "unknown"
     del PackageNotFoundError, version
 
+from .common import Phases
 from .constraint import ConstraintBase, LinearGlobalConstraint, LinearLocalConstraint
 from .ensemble import CanonicalEnsemble, EnsembleBase, GrandCanonicalEnsemble
 from .entropy import EntropyBase, IdealGasEntropy

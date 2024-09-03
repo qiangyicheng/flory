@@ -61,7 +61,7 @@ express the free energy of the entire mixtures in an extended form by introducin
 conjugate variables :math:`w_r^{(m)}`,
 
 .. math::
-    &\bar{f}(\{J_m\}, \{\phi_r^{(m)}\}, \{w_r^{(m)}\}) \\
+    &\bar{f}(\{J_m\}, \{\phi_r^{(m)}\}, \{w_r^{(m)}\}, \xi) \\
     =& 
     \sum_{m=1}^M J_m \biggl[ 
         f_\mathrm{interaction}(\{\phi_r^{(m)}\}) 

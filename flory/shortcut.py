@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .common.phases import Phases
+from .common import Phases
 from .ensemble import CanonicalEnsemble
 from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
@@ -30,7 +30,8 @@ def find_coexisting_phases(
     on the supported arguments.
 
     Args:
-        TODO: Fix documentation with signature
+        num_comp:
+            Number of components :math:`N_\mathrm{c}` in the system.
         chis:
             The interaction matrix. Symmetric 2D array with size of :math:`N_\mathrm{c}
             \times N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}` matrix
@@ -39,18 +40,21 @@ def find_coexisting_phases(
             The average volume fractions :math:`\bar{\phi}_i` of all the components of the
             system. 1D array of length :math:`N_\mathrm{c}`. Note that the volume fraction
             of the solvent is included as well, so the sum of this array must be one.
-        num_part:
-            Number of compartments :math:`M` in the system.
+        sizes:
+            The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
+            volume of a reference molecule :math:`\nu`. It is treated as all-one vector by
+            default.
         \**kwargs:
             All additional arguments are used directly to initialize
             :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
     Returns:
-        phases:
-            Composition and relative size of the phases. The first item (accessible by
-            :code:`phases[0]` or :code:`phases.Js`) contains the fraction of volume of
-            each phase. The second item (accessible by :code:`phases[1]` or
-            :code:`phases.phis`) contains volume fractions of all components.
+        :
+            Composition and relative size of the phases. The member
+            :paramref:`~flory.common.phases.Phases.volumes` (accessible by
+            :code:`.volumes`) contains the fraction of volume of each phase. The member
+            :paramref:`~flory.common.phases.Phases.fractions` (accessible by
+            :code:`.fractions`) contains volume fractions of all components.
     """
     free_energy = FloryHuggins(num_comp, chis, sizes)
     ensemble = CanonicalEnsemble(num_comp, phi_means)

@@ -4,15 +4,21 @@
 phases in multicomponent mixtures with defined :mod:`~flory.interaction`,
 :mod:`~flory.entropy`, :mod:`~flory.ensemble` and :mod:`~flory.constraint`. The finder is
 provided through the class :class:`CoexistingPhasesFinder`, which is designed to be
-flexible, reusable, independent and efficient: - flexible: :class:`CoexistingPhasesFinder`
-can be applied to different interaction, entropy, ensemble and constraint, as soon as the
-they implement the a minimal set of methods. - reusable: :class:`CoexistingPhasesFinder`
-tries every possibility to avoid recreation of objects as soon as the system size is
-unchanged, making it ideal to be reused for different parameters. - independent:
-:class:`CoexistingPhasesFinder` owns all the data it needs once created. Therefore
-multiple instances can be created and stored freely. - efficient:
-:class:`CoexistingPhasesFinder` use :func:`numba.jit` to compile all of its core
-algorithms.
+flexible, reusable, independent and efficient: 
+
+- flexible: :class:`CoexistingPhasesFinder` can be applied to different interaction,
+  entropy, ensemble and constraint, as soon as the they implement the a minimal set of
+  methods. 
+
+- reusable: :class:`CoexistingPhasesFinder` tries every possibility to avoid recreation of
+  objects as soon as the system size is unchanged, making it ideal to be reused for
+  different parameters. 
+
+- independent: :class:`CoexistingPhasesFinder` owns all the data it needs once created.
+  Therefore multiple instances can be created and stored freely. 
+
+- efficient: :class:`CoexistingPhasesFinder` use :func:`numba.jit` to compile all of its
+  core algorithms.
 
 The usage of :class:`CoexistingPhasesFinder` usually follows the creation-and-run manner
 for new instance, or reinitialization-and-run for existing instance. The reinitialization
@@ -36,7 +42,6 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from ..common import *
-from ..common.phases import Phases
 from ..constraint import ConstraintBase, NoConstraintCompiled
 from ..ensemble import EnsembleBase
 from ..entropy import EntropyBase
@@ -282,7 +287,7 @@ class CoexistingPhasesFinder:
                 The field to check.
 
         Returns:
-            : The field converted to :class:`np.ndarray`.
+            : The field converted to numpy array.
         """
         field = np.array(field)
         if field.shape != self._omegas.shape:
@@ -516,11 +521,12 @@ class CoexistingPhasesFinder:
                 Whether to show progress bar when checking convergence.
 
         Returns:
-            phases:
-                Composition and relative size of the phases. The first item (accessible by
-                :code:`phases[0]` or :code:`phases.Js`) contains the fraction of volume of
-                each phase. The second item (accessible by :code:`phases[1]` or
-                :code:`phases.phis`) contains volume fractions of all components.
+            :   Composition and relative size of the compartments. The member
+                :paramref:`~flory.common.phases.Phases.volumes` (accessible by
+                :code:`.volumes`) contains the fraction of volume of each compartment. The
+                member :paramref:`~flory.common.phases.Phases.fractions` (accessible by
+                :code:`.fractions`) contains volume fractions of all components. Use method
+                :meth:`~.flory.common.phases.Phases.get_clusters` to obtain unique phases.
         """
         if max_steps is None:
             max_steps = self._max_steps

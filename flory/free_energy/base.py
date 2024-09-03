@@ -3,6 +3,7 @@
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
+
 from __future__ import annotations
 
 import logging
@@ -262,7 +263,11 @@ class FreeEnergyBase:
         """
         f = self.free_energy_density(phis)
         j = self.jacobian(phis)
-        ans = np.atleast_1d(f)[..., None] - np.einsum("...i,...i->...", phis, j)[...,None] + j
+        ans = (
+            np.atleast_1d(f)[..., None]
+            - np.einsum("...i,...i->...", phis, j)[..., None]
+            + j
+        )
         return ans
 
     def exchange_chemical_potentials(self, phis: np.ndarray, index: int) -> np.ndarray:
