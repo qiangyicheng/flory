@@ -1,4 +1,7 @@
-"""Module for no constraint."""
+"""Module for no constraint.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
+"""
 
 import logging
 

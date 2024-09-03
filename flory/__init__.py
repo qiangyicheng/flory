@@ -6,6 +6,9 @@ model, but not limited to it. Instead, it describes general free energy using fo
 parts: :mod:`~flory.interaction`, :mod:`~flory.entropy`, :mod:`~flory.ensemble`, and
 :mod:`~flory.constraint`. Coexisting phases are obtained using an improved Gibbs
 ensemble method.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
+.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
 try:

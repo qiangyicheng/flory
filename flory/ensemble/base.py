@@ -1,5 +1,6 @@
 """Module for a general ensemble of mixture.
 
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 import numpy as np

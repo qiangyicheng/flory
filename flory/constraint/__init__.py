@@ -1,4 +1,6 @@
 """Module containing several constrains.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 from .base import ConstraintBase, ConstraintBaseCompiled

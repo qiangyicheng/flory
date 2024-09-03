@@ -1,5 +1,6 @@
 """Module for a general entropic energy of mixture.
 
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 import numpy as np

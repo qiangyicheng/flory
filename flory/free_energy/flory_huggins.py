@@ -1,6 +1,9 @@
 """Module for Flory-Huggins free energy.
 Flory-Huggins free energy is a combination of Flory-Huggins interaction energy and ideal
 gas entropy.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
+.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
 from __future__ import annotations

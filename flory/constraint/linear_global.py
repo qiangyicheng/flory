@@ -1,5 +1,6 @@
 """Module for linear global constraint.
 
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 from __future__ import annotations
 

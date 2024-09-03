@@ -1,5 +1,6 @@
 """Module for a general constraint.
 
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 import numpy as np

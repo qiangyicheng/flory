@@ -1,4 +1,6 @@
 """Exceptions that package :mod:`flory` might raise.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 class VolumeFractionError(ValueError):

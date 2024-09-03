@@ -1,4 +1,7 @@
 """Module for Flory-Huggins interaction energy of mixture.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
+.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
 from __future__ import annotations

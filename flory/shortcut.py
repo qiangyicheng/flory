@@ -1,4 +1,8 @@
-"""Shortcuts for simple tasks of finding coexisting phases."""
+"""Shortcuts for simple tasks of finding coexisting phases.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
+.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
+"""
 from __future__ import annotations
 
 import numpy as np

@@ -1,4 +1,6 @@
 """Utilities shared by package :mod:`flory`.
+
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 import inspect

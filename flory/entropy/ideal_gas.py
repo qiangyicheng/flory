@@ -1,5 +1,6 @@
 """Module for ideal gas entropic energy of mixture.
 
+.. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
 from __future__ import annotations
