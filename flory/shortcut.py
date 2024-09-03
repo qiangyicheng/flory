@@ -26,6 +26,7 @@ def find_coexisting_phases(
     on the supported arguments.
 
     Args:
+        TODO: Fix documentation with signature
         chis:
             The interaction matrix. Symmetric 2D array with size of :math:`N_\mathrm{c}
             \times N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}` matrix
@@ -55,4 +56,5 @@ def find_coexisting_phases(
         ensemble,
         **kwargs,
     )
-    return finder.run()
+    phases = finder.run()
+    return phases.get_clusters()  # use default distance threshold

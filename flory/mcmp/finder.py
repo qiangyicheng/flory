@@ -661,5 +661,4 @@ class CoexistingPhasesFinder:
         }
 
         # transpose phi since `Phases` uses a different convention
-        phases = Phases(final_Js, final_phis_comp.T)
-        return phases.get_clusters()  #  TODO: Expose the distance threshold?
+        return Phases(final_Js, final_phis_comp.T)
