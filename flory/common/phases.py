@@ -12,15 +12,15 @@ from scipy import cluster, spatial
 
 
 class Phases:
-    r"""Contains information about compositions and relative sizes of many phases."""
+    """Contains information about compositions and relative sizes of many phases."""
 
     def __init__(self, volumes: np.ndarray, fractions: np.ndarray):
-        """
-        Attributes:
-            volumes (:class:`~numpy.ndarray`):
+        r"""
+        Args:
+            volumes:
                 1D array with shape :math:`N_\mathrm{p}`, containing the volume
                 :math:`J_p` of each phase.
-            fractions (:class:`~numpy.ndarray`):
+            fractions:
                 2D array with shape :math:`N_\mathrm{p} \times N_\mathrm{c}`,
                 containing the volume fractions of the components in each phase
                 :math:`\phi_{p,i}`. The first dimension must be the same as
@@ -33,32 +33,30 @@ class Phases:
         if fractions.ndim != 2:
             raise ValueError("fractions must be a 2d array")
         if volumes.shape[0] != fractions.shape[0]:
-            raise ValueError(
-                "volumes and fractions must have consistent first dimension"
-            )
+            raise ValueError("volumes and fractions must have consistent first dimension")
         self.volumes = volumes
         self.fractions = fractions
 
     @property
     def num_phases(self) -> int:
-        """int: number of phases."""
+        r"""Number of phases :math:`N_\mathrm{p}`."""
         return len(self.volumes)
 
     @property
     def num_components(self) -> int:
-        """int: number of components"""
+        r"""Number of components :math:`N_\mathrm{c}`."""
         return self.fractions.shape[1]
 
     @property
     def mean_fractions(self) -> np.ndarray:
-        """:class:`numpy.ndarray`: Mean fraction averaged over phases"""
+        r"""Mean fraction averaged over phases :math:`\bar{\phi}_i`"""
         return self.volumes @ self.fractions / self.volumes.sum()
 
     def sort(self) -> Phases:
-        r"""Sort the phases according to the index of most concentrated components.
+        """Sort the phases according to the index of most concentrated components.
 
         Returns:
-            :class:`Phases`: The sorted phases
+            : The sorted phases.
         """
         enrich_indexes = np.argsort(self.fractions)
         sorting_index = np.lexsort(np.transpose(enrich_indexes))
@@ -72,10 +70,10 @@ class Phases:
 
         Args:
             dist (float):
-                Cut-off distance for cluster analysis
+                Cut-off distance for cluster analysis.
 
         Returns:
-            :class:`Phases`: The clustered and sorted phases
+            : The clustered and sorted phases.
         """
         if self.num_phases < 2:
             return self  # nothing to do here
