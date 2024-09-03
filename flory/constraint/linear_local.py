@@ -123,7 +123,7 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
 
 
 class LinearLocalConstraint(ConstraintBase):
-    r"""Class for for linear local constraints.
+    r"""Class for linear local constraints.
 
     The linear local constraints require that
 

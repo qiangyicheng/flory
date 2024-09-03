@@ -54,4 +54,24 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
     def evolve(self, step: float, masks: np.ndarray) -> float:
         return 0
 
-# No need for a factory class
+
+class NoConstraint(ConstraintBase):
+    r"""Class for no constraints."""
+
+    def __init__(self, num_feat: int):
+        """
+        Args:
+            num_feat:
+                Number of features :math:`N_\mathrm{s}`.
+        """
+        self.num_feat = num_feat
+
+    def _compiled_impl(
+        self
+    ) -> object:
+        r"""Implementation of creating a no constraint instance.
+
+        Returns:
+            : Instance of :class:`NoConstraintCompiled`.
+        """
+        return NoConstraintCompiled(self.num_feat)

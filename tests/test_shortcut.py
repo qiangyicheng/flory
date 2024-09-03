@@ -8,7 +8,7 @@ import pytest
 import flory
 
 
-@pytest.mark.parametrize("num_comp", [4, 5, 6])
+@pytest.mark.parametrize("num_comp", [3, 4, 5])
 @pytest.mark.parametrize("chi", [8, 9, 10])
 @pytest.mark.parametrize("size", [1.0, 1.2])
 def test_find_coexisting_phases_symmetric(num_comp: int, chi: float, size: float):
@@ -28,6 +28,16 @@ def test_find_coexisting_phases_symmetric(num_comp: int, chi: float, size: float
     )
     np.testing.assert_allclose(phases.volumes, volumes_ref, rtol=1e-2, atol=1e-5)
     np.testing.assert_allclose(phases.fractions, phis_ref, rtol=1e-2, atol=1e-5)
+
+    fh = flory.FloryHuggins(num_comp, chis, sizes)
+    exchange_mus = fh.exchange_chemical_potentials(phases.fractions, 0)
+    for mus in exchange_mus:
+        np.testing.assert_allclose(mus, exchange_mus[0], rtol=1e-2, atol=1e-5)
+    pressures = fh.pressure(phases.fractions, 0)
+    for p in pressures:
+        np.testing.assert_allclose(p, pressures[0], rtol=1e-2, atol=1e-5)
+    modes = fh.num_unstable_modes(phases.fractions)
+    np.testing.assert_equal(modes.sum(), 0)
 
 
 @pytest.mark.parametrize("num_part", [8, 16])

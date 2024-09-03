@@ -130,7 +130,7 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
 
 
 class LinearGlobalConstraint(ConstraintBase):
-    r"""Class for for linear global constraints.
+    r"""Class for linear global constraints.
 
     The linear global constraints require that
 

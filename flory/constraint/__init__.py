@@ -6,4 +6,4 @@
 from .base import ConstraintBase, ConstraintBaseCompiled
 from .linear_global import LinearGlobalConstraint, LinearGlobalConstraintCompiled
 from .linear_local import LinearLocalConstraint, LinearLocalConstraintCompiled
-from .no import NoConstraintCompiled
+from .no import NoConstraint, NoConstraintCompiled

@@ -30,6 +30,7 @@ See :ref:`Examples` for examples.
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
+
 from __future__ import annotations
 
 import logging
@@ -255,24 +256,24 @@ class CoexistingPhasesFinder:
             hasattr(compiled_instance, "num_comp")
             and compiled_instance.num_comp != self._num_comp
         ):
-                self._logger.error(
-                    "number of components %d obtained from compiled objects is "
-                    "incompatible, %d is already set for the finder.",
-                    compiled_instance.num_comp,
-                    self._num_comp,
-                )
-                raise ComponentNumberError
+            self._logger.error(
+                "number of components %d obtained from compiled objects is "
+                "incompatible, %d is already set for the finder.",
+                compiled_instance.num_comp,
+                self._num_comp,
+            )
+            raise ComponentNumberError
         if (
             hasattr(compiled_instance, "num_feat")
             and compiled_instance.num_feat != self._num_feat
         ):
-                self._logger.error(
-                    "number of features %d obtained from compiled objects is "
-                    "incompatible, %d is already set for the finder.",
-                    compiled_instance.num_feat,
-                    self._num_feat,
-                )
-                raise FeatureNumberError
+            self._logger.error(
+                "number of features %d obtained from compiled objects is "
+                "incompatible, %d is already set for the finder.",
+                compiled_instance.num_feat,
+                self._num_feat,
+            )
+            raise FeatureNumberError
 
     def check_field(self, field: np.ndarray) -> np.ndarray:
         r"""Check the size of a field.
@@ -394,12 +395,16 @@ class CoexistingPhasesFinder:
         self._constraints = []
         if constraints:
             if isinstance(constraints, ConstraintBase):
+                if kwargs_individual is None:
+                    kwargs_individual = {}
                 self._constraints.append(
                     constraints.compiled(
                         **{**self._kwargs_for_instances, **kwargs, **kwargs_individual}
                     )
                 )
             elif isinstance(constraints, Iterable):
+                if kwargs_individual is None:
+                    kwargs_individual = [{}] * len(constraints)
                 for cons, current_args in zip(constraints, kwargs_individual):
                     self._constraints.append(
                         cons.compiled(
