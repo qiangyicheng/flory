@@ -58,7 +58,7 @@ class CoexistingPhasesFinder:
     calculated. The class will reuse all the options and the internal resources. Note that
     reuse the instance of this class is only possible when all the system sizes are not
     changed, including the number of components :math:`N_\mathrm{c}`, the number of
-    features :math:`N_\mathrm{s}` and the number of compartments :math:`M`.
+    features :math:`N_\mathrm{s}` and the number of compartments :math:`N_\mathrm{M}`.
     """
 
     def __init__(
@@ -100,7 +100,7 @@ class CoexistingPhasesFinder:
                 can provide a compiled constraint instance. See
                 :class:`~flory.constraint.base.ConstraintBase` for more information.
             num_part:
-                Number of compartments :math:`M` in the system. By default this is set to
+                Number of compartments :math:`N_\mathrm{M}` in the system. By default this is set to
                 be :math:`8 N_\mathrm{c}`.
             rng:
                 Random number generator for initialization and reviving. None indicates
@@ -280,7 +280,7 @@ class CoexistingPhasesFinder:
 
         This method checks whether the :paramref:`field` has the same size as the
         :attr:`omegas`, which contains the conjugate field of the volume fractions of the
-        features, :math:`w_r^{(m)}`, which has the size of :math:`N_\mathrm{s} \times M`.
+        features, :math:`w_r^{(m)}`, which has the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`.
         An exception will be raise on failure.
 
         Args:
@@ -483,7 +483,7 @@ class CoexistingPhasesFinder:
     def omegas(self) -> np.ndarray:
         r"""Internal conjugate fields :math:`w_r^{(m)}`.
 
-        Read-only array of length :math:`N_\mathrm{s} \times M`. Use
+        Read-only array of length :math:`N_\mathrm{s} \times N_\mathrm{M}`. Use
         :meth:`reinitialize_from_omegas` to initialize the system from given
         :math:`w_r^{(m)}`.
         """

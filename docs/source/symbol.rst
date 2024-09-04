@@ -31,11 +31,11 @@ Counts
       - 1
       - Number of unstable modes
       - Integer
-    * - :math:`A`
+    * - :math:`N_\mathrm{A}`
       - 1
       - Number of constraints
       - Integer
-    * - :math:`M`
+    * - :math:`N_\mathrm{M}`
       - 1
       - Number of compartments
       - Integer
@@ -54,11 +54,11 @@ Counts
     * - :math:`\alpha`
       - 1
       - Index for constraints. 1-Based in documentation
-      - Integer :math:`\in [1, A]`
+      - Integer :math:`\in [1, N_\mathrm{A}]`
     * - :math:`m`
       - 1
       - Index for compartments. 1-Based in documentation
-      - Integer :math:`\in [1, M]`
+      - Integer :math:`\in [1, N_\mathrm{M}]`
 
 Common Variables
 ---------------------------
@@ -126,19 +126,19 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`\phi_i^{(m)}`
       - 1
       - Volume fractions of component :math:`i` in compartment :math:`m`.
-      - :math:`N_\mathrm{c} \times M`
+      - :math:`N_\mathrm{c} \times N_\mathrm{M}`
     * - :math:`\phi_r^{(m)}`
       - 1
       - Volume fractions of feature :math:`r` in compartment :math:`m`.
-      - :math:`N_\mathrm{s} \times M`
+      - :math:`N_\mathrm{s} \times N_\mathrm{M}`
     * - :math:`w_r^{(m)}`
       - 1
       - Conjugate variable of (mean field felt by) :math:`\phi_r^{(m)}`.
-      - :math:`N_\mathrm{s} \times M`
+      - :math:`N_\mathrm{s} \times N_\mathrm{M}`
     * - :math:`p_i^{(m)}`
       - 1
       - Boltzmann factor of component :math:`i` in compartment :math:`m`.
-      - :math:`N_\mathrm{c} \times M`
+      - :math:`N_\mathrm{c} \times N_\mathrm{M}`
     * - :math:`Q_i`
       - 1
       - Single molecule partition function of component :math:`i`.
@@ -146,15 +146,15 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`J_m`
       - Arbitrary volume
       - Relative volume of compartment :math:`m`.
-      - :math:`M`
+      - :math:`N_\mathrm{M}`
     * - :math:`C_{\alpha,r}`
       - 1
       - Coefficients of features for linear constraint :math:`\alpha`.
-      - :math:`A \times N_\mathrm{s}`
+      - :math:`N_\mathrm{A} \times N_\mathrm{s}`
     * - :math:`T_\alpha`
       - 1
       - Target (right-hand-side) of constraint :math:`\alpha`.
-      - :math:`A`
+      - :math:`N_\mathrm{A}`
     * - :math:`\kappa`
       - 1
       - Elasticity of constraints.

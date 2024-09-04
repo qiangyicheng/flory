@@ -59,7 +59,7 @@ class NoConstraint(ConstraintBase):
     r"""Class for no constraints."""
 
     def __init__(self, num_feat: int):
-        """
+        r"""
         Args:
             num_feat:
                 Number of features :math:`N_\mathrm{s}`.

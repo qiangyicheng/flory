@@ -40,13 +40,13 @@ class InteractionBaseCompiled:
 
         Args:
             potential:
-                Constant. 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Constant. 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the part of the field :math:`w_r^{(m)}` contributed by the
                 interaction. Usually this is the returned value of :meth:`potential`. This
                 parameter is passed in since usually the calculation of interaction energy
                 density can be accelerated by directly using the potential.
             phis_feat:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
 
         Returns:
@@ -64,7 +64,7 @@ class InteractionBaseCompiled:
 
         Args:
             phis_feat:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
 
         Returns:
@@ -84,7 +84,7 @@ class InteractionBaseCompiled:
 
         Args:
             phis_feat:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
 
         Returns:

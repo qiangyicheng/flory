@@ -48,9 +48,9 @@ concepts:
 - Free energy :math:`f` consists of four parts: **interaction**, **entropy**,
   **ensemble** and **constraint**.
 - Instead of optimizing the number of phases :math:`N_\mathrm{p}`, package fixes the number
-  of **compartments** :math:`M`. Compartments can be viewed to be equivalence of phases
+  of **compartments** :math:`N_\mathrm{M}`. Compartments can be viewed to be equivalence of phases
   but do not have to be unique. To obtain the correct coexisting phases, the package
-  usually uses number of compartments :math:`M` much larger than the maximum number of
+  usually uses number of compartments :math:`N_\mathrm{M}` much larger than the maximum number of
   phases :math:`N_\mathrm{p}` allowed by the Gibbs phase law.
 - :math:`N_\mathrm{c}` **components** interact and feel the constraints though the volume
   fractions of :math:`N_\mathrm{s}` **features**. This may reduce computational cost
@@ -87,7 +87,7 @@ Here,
   functions to part of the entropic energies, whose form is defined by the **ensemble**.
 - :math:`f_\mathrm{constraint}(\{\phi_r^{(m)}\})` describes additional **constraints** that
   the system will be subject to.
-- :math:`\eta(\sum_{m=1}^M J_m -1)` conserves the total volume.
+- :math:`\eta(\sum_{m=1}^{N_\mathrm{M}} J_m -1)` conserves the total volume.
 
 Although the form above may look different from the normal free energy function, we next
 use an example of Flory-Huggins free energy to show their equivalence and the iteration scheme
@@ -191,5 +191,5 @@ compartments are considered "dead" at the beginning of the simulation.
 
 As we mentioned, this method does not guarantee that the true equilibrium state (the
 global minimum) is always found. Therefore, :mod:`flory` handles the problem by launching
-many more compartments than the number of components, :math:`M\gg{N_\mathrm{c}}`, see
+many more compartments than the number of components, :math:`N_\mathrm{M}\gg{N_\mathrm{c}}`, see
 :paramref:`~flory.mcmp.finder.CoexistingPhasesFinder.num_part`.

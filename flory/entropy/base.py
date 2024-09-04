@@ -60,14 +60,14 @@ class EntropyBaseCompiled:
 
         Args:
             phis_comp:
-                Output. The 2D array with the size of :math:`N_\mathrm{c} \times M`,
+                Output. The 2D array with the size of :math:`N_\mathrm{c} \times N_\mathrm{M}`,
                 containing Boltzmann factors :math:`p_i^{(m)}`, namely the volume
                 fractions of components before normalization.
             omegas:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the mean field felt by the features :math:`\phi_r^{(m)}`.
             Js:
-                Constant. The 1D array with the size of :math:`M`, containing the relative
+                Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
                 volumes of compartments :math:`J_m`.
 
         Returns:
@@ -85,10 +85,10 @@ class EntropyBaseCompiled:
 
         Args:
             phis_feat:
-                Output. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Output. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
             phis_comp:
-                Constant. The 2D array with the size of :math:`N_\mathrm{c} \times M`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{c} \times N_\mathrm{M}`,
                 containing the volume fractions of components :math:`\phi_i^{(m)}`.
 
         """

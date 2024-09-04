@@ -33,7 +33,7 @@ class ConstraintBaseCompiled:
         
         This property typically contains the Jacobian of the constraint part of the free
         energy with respect to the volume fractions of the features, which is an array
-        with the size of :math:`N_\mathrm{s} \times M`. Note that this property should be
+        with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`. Note that this property should be
         used after :meth:`prepare` is called.
         """
         raise NotImplementedError
@@ -44,7 +44,7 @@ class ConstraintBaseCompiled:
         
         This property typically contains the Jacobian of the constraint part of the free
         energy with respect to the volumes of the compartments, which is an array with the
-        size of :math:`M`. Note that this property should be used after :meth:`prepare` is
+        size of :math:`N_\mathrm{M}`. Note that this property should be used after :meth:`prepare` is
         called.
         """
         raise NotImplementedError
@@ -57,7 +57,7 @@ class ConstraintBaseCompiled:
 
         Args:
             num_part:
-                Constant. Number of compartments :math:`M`.
+                Constant. Number of compartments :math:`N_\mathrm{M}`.
         """
         raise NotImplementedError
 
@@ -71,13 +71,13 @@ class ConstraintBaseCompiled:
 
         Args:
             phis_feat:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times M`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
             Js:
-                Constant. The 1D array with the size of :math:`M`, containing the relative
+                Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
                 volumes of compartments :math:`J_m`.
             masks:
-                Constant. The 1D array with the size of :math:`M`, containing the masks to
+                Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the masks to
                 mark whether the compartment is living or not.
         """
         raise NotImplementedError
@@ -89,7 +89,7 @@ class ConstraintBaseCompiled:
             step:
                 Constant. The step size of the evolution.
             masks:
-                Constant. The 1D array with the size of :math:`M`, containing the masks to
+                Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the masks to
                 mark whether the compartment is living or not.
                 
         Returns:

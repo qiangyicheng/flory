@@ -40,14 +40,14 @@ class EnsembleBaseCompiled:
 
         Args:
             phis_comp:
-                Mutable. The 2D array with the size of :math:`N_\mathrm{c} \times M`, containing
+                Mutable. The 2D array with the size of :math:`N_\mathrm{c} \times N_\mathrm{M}`, containing
                 Boltzmann factors of the components, which are proportional
                 to resulting volume fractions.
             Qs:
                 Constant. The 1D array with the size of :math:`N_\mathrm{c}`, containing
                 single molecule partition functions of the components.
             masks:
-                Constant. The 1D array with the size of :math:`M`, containing the masks to
+                Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the masks to
                 mark whether the compartment is living or not.
 
         Returns:

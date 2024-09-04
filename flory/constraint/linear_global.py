@@ -60,12 +60,12 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
         r"""
         Args:
             Cs:
-                2D array with the size of :math:`A \times N_\mathrm{s}`,
+                2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{s}`,
                 containing coefficients of features for linear constraints. Note that both
                 number of features :math:`N_\mathrm{s}` and number of constraints
-                :math:`A` are inferred from this parameter.
+                :math:`N_\mathrm{A}` are inferred from this parameter.
             Ts:
-                1D vector with the size of :math:`A`, containing the
+                1D vector with the size of :math:`N_\mathrm{A}`, containing the
                 targets of the constraints.
             acceptance_ratio:
                 The relative acceptance during :meth:`evolve`.
@@ -144,12 +144,12 @@ class LinearGlobalConstraint(ConstraintBase):
             num_feat:
                 Number of features :math:`N_\mathrm{s}`.
             Cs:
-                2D array with the size of :math:`A \times N_\mathrm{s}`,
+                2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{s}`,
                 containing coefficients of features for linear constraints. Note that both
                 number of features :math:`N_\mathrm{s}` and number of constraints
-                :math:`A` are inferred from this parameter.
+                :math:`N_\mathrm{A}` are inferred from this parameter.
             Ts:
-                1D vector with the size of :math:`A`, containing the
+                1D vector with the size of :math:`N_\mathrm{A}`, containing the
                 targets of the constraints.
         """
         super().__init__(num_feat)

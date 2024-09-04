@@ -45,7 +45,7 @@ Construct a 2D phase diagram
 When constructing a phase diagram, we usually need to find coexisting phases for multiple instances.
 To avoid the creation and the destruction of the internal data each time, we provide the class API :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 Using the class API usually involves three steps: creation of the finder instance, setting the system parameters and finding the coexisting states.
-When the system sizes such as number of components :math:`N_\mathrm{c}` and the number of compartments :math:`M` do not change, the finder can be reused.
+When the system sizes such as number of components :math:`N_\mathrm{c}` and the number of compartments :math:`N_\mathrm{M}` do not change, the finder can be reused.
 Here we provide a simple example for generating a :math:`(\phi, \chi)` phase diagram for a simple binary mixture: 
 
 .. literalinclude:: /../../examples/binary_phase_diagram.py
@@ -78,11 +78,11 @@ We obtain
    :scale: 80 %
    :alt: phase diagram example
 
-showing that :math:`M=4` underestimates the number of phases in the final coexisting state, while larger :math:`M` values give the correct result. 
+showing that :math:`N_\mathrm{M}=4` underestimates the number of phases in the final coexisting state, while larger :math:`N_\mathrm{M}` values give the correct result. 
 
 Construct a ternary phase diagram
 ---------------------------------
-Here we provide a simple example for generating a :math:`(\phi_B, \phi_A)` phase diagram for a simple ternary mixture with fixed interaction matrix.
+Here we provide a simple example for generating a :math:`(\phi_B, \phi_N_\mathrm{A})` phase diagram for a simple ternary mixture with fixed interaction matrix.
 The example first finds a point in the phase diagram that leads to three-phase coexistence, which is a triangle in the phase diagram.
 Then starting from each edge of the triangle, we follow the direction to the unknown region in the phase diagram to complete all two-phase coexistence regions.
 

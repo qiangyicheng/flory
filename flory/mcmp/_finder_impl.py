@@ -26,13 +26,13 @@ from ..interaction.base import InteractionBaseCompiled
 
 @nb.njit()
 def count_valid_compartments(Js: np.ndarray, threshold: float) -> int:
-    """Count valid compartments.
+    r"""Count valid compartments.
 
     Count how many entries in :paramref:`Js` are larger than :paramref:`threshold`.
 
     Args:
         Js:
-            Constant. The 1D array with the size of :math:`M`, containing the relative
+            Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
             volumes of compartments :math:`J_m`.
         threshold:
             Constant. The threshold below which the corresponding compartment is
@@ -46,14 +46,14 @@ def count_valid_compartments(Js: np.ndarray, threshold: float) -> int:
 
 @nb.njit()
 def make_valid_compartment_masks(Js: np.ndarray, threshold: float) -> np.ndarray:
-    """Create masks for valid compartments.
+    r"""Create masks for valid compartments.
 
     Create masks for entries in :paramref:`Js` are larger than :paramref:`threshold`.
     Value of 1.0 or 0.0 indicates a valid or invalid mask, respectively.
 
     Args:
         Js:
-            Constant. The 1D array with the size of :math:`M`, containing the relative
+            Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
             volumes of compartments :math:`J_m`.
         threshold:
             Constant. The threshold below which the corresponding compartment is
@@ -61,7 +61,7 @@ def make_valid_compartment_masks(Js: np.ndarray, threshold: float) -> np.ndarray
 
     Returns:
         :
-            1D array with the size of :math:`M`, containing masks of entries in
+            1D array with the size of :math:`N_\mathrm{M}`, containing masks of entries in
             :paramref:`Js` larger than :paramref:`threshold`.
     """
     return np.sign(Js - threshold).clip(0.0)
@@ -86,10 +86,10 @@ def revive_compartments_by_random(
 
     Args:
         Js:
-            Constant. The 1D array with the size of :math:`M`, containing the relative
+            Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
             volumes of compartments :math:`J_m`.
         targets:
-            Mutable. 2D array with the size of :math:` N_* \times M`, containing the
+            Mutable. 2D array with the size of :math:`N_* \times N_\mathrm{M}`, containing the
             values to be revived. The second dimension has to be the same as that of
             :paramref:`Js`. Note that this is not checked.
         threshold:
@@ -147,10 +147,10 @@ def revive_compartments_by_copy(
 
     Args:
         Js:
-            Constant. The 1D array with the size of :math:`M`, containing the relative
+            Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
             volumes of compartments :math:`J_m`.
         targets:
-            Mutable. 2D array with the size of :math:` N_* \times M`, containing the
+            Mutable. 2D array with the size of :math:`N_* \times N_\mathrm{M}`, containing the
             values to be revived. The second dimension has to be the same as that of
             :paramref:`Js`. Note that this is not checked.
 
@@ -244,22 +244,22 @@ def multicomponent_self_consistent_metastep(
             :paramref:`constraints` are actually mutable. See
             :class:`~flory.constraint.base.constraintBaseCompiled` for more information.
         omegas:
-            Mutable. 2D array with size of :math:`N_\mathrm{s} \times M`, containing the
+            Mutable. 2D array with size of :math:`N_\mathrm{s} \times N_\mathrm{M}`, containing the
             conjugate field :math:`w_r^{(m)}` of features. Note that this field is both
             used as input and output. Note again that this function DO NOT initialize
             :paramref:`omegas`, it should be initialized externally, and usually a random
             initialization will be a reasonable choice.
         Js:
-            Mutable. 1D array with size of :math:`M`, containing the relative volumes of
+            Mutable. 1D array with size of :math:`N_\mathrm{M}`, containing the relative volumes of
             the compartments :math:`J_m`. The average value of `Js` will and should be
-            unity, in order to keep the values invariant for different :math:`M`. Note
+            unity, in order to keep the values invariant for different :math:`N_\mathrm{M}`. Note
             that this field is both used as input and output. An all-one array is usually
             a nice initialization, unless resume of a previous run is intended.
         phis_comp:
-            Output. 2D array with size of :math:`N_\mathrm{c} \times M`, containing the
+            Output. 2D array with size of :math:`N_\mathrm{c} \times N_\mathrm{M}`, containing the
             volume fractions of components :math:`\phi_i^{(m)}`.
         phis_feat:
-            Output. 2D array with size of :math:`N_\mathrm{s} \times M`, containing the
+            Output. 2D array with size of :math:`N_\mathrm{s} \times N_\mathrm{M}`, containing the
             volume fractions of features :math:`\phi_r^{(m)}`.
         steps_inner:
             Constant. Number of steps in current routine. Within these steps, convergence
