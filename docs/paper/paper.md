@@ -81,11 +81,12 @@ To support different forms of free energy, the core method in the finder is desi
 The finder fetches compiled instances of interaction, entropy, ensemble and constraints, where system specific codes are inserted as methods.
 These methods are also compiled for performance, using the JIT class feature from numba [@lam2015Numba].
 
-The `flory` package adopts the latest numerical methods to determine the coexisting phases, based on the idea of compartments.
-Compartments play the similar role of phases in calculation.
-However, the phases need to have unique compositions while the compositions of the compartments do not have to [@zwicker2022Evolved].
-By replacing unique phases by many more compartments (more than the number of phases allowed than the Gibbs phase rule), the package relieves the typical problem of multiple local minimum, and obtains the unique coexisting phases by clustering the coexisting compartments.
+The `flory` package adopts the state-of-art numerical methods to determine the coexisting phases, based on the idea of compartments.
+In each instance, package starts with many initial compartments that exchange particles and volumes, whose number is fixed [@zwicker2022Evolved].
+The `flory` package then minimizes the full free energy instead of solving the coexistence conditions.
+At the free energy minimum, many compartments will have similar compositions, which the package then cluster to obtain unique phases.
+This strategy relieves the typical problem of multiple local minimum and avoids iterate over different phase number in calculation.
 To reduce the influence of using many compartments on performance, the `flory` package implements the improved Gibbs ensemble method developed recently [@qiang2024Scaling].
-This method redistributes components across all compartments according to physical quantities, such that the total computation cost only scales linearly with the number of compartments.
+This method redistributes components across all compartments guided by a set of conjugate variables, such that the total computation cost only scales linearly with the number of compartments.
 Therefore, the `flory` package can promisingly obtain the equilibrium coexisting states even though this is not guaranteed theoretically. 
 # References
