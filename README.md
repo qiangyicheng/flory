@@ -10,14 +10,14 @@ In particular, the package provides routines to determine coexisting states nume
 `flory` supports finding coexisting phases with an arbitrary number of components.
 The associated average free energy density of the system reads
 
-$$\bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,$$
+$$\bar{f}({N_\mathrm{P}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{P}}} J_p f(\{\phi_{p,i}\}) \; ,$$
 
-where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_p$ is the fraction of the system volume occupied by phase $p$, and $\phi_{p,i}$ is the volume fraction of component $i$ in phase $p$.
+where $N_\mathrm{C}$ is the number of components, $N_\mathrm{P}$ is the number of phases, $J_p$ is the fraction of the system volume occupied by phase $p$, and $\phi_{p,i}$ is the volume fraction of component $i$ in phase $p$.
 
 `flory` supports different forms of interaction, entropy, ensemble, and constraints to describe the free energy of phases.
 For example, with the commonly used Flory-Huggins free energy, the free energy density of each homogeneous phase reads
 
-$$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
+$$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{C}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
 
 where $\chi_{ij}$ is the Flory-Huggins interaction parameter between component $i$ and $j$, and $l_i$ is the relative molecular size of component $i$.
 Given an interaction matrix $\chi_{ij}$, average volume fractions of all components across the system $\bar{\phi}_i$, and the relative molecule sizes $l_i$, `flory` provides tools to find the coexisting phases in equilibrium.

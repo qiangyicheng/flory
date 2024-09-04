@@ -26,7 +26,7 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{s}`.
+                Number of features :math:`N_\mathrm{S}`.
         """
         self._num_feat = num_feat
         self._potential = np.zeros((self._num_feat, 1))
@@ -62,7 +62,7 @@ class NoConstraint(ConstraintBase):
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{s}`.
+                Number of features :math:`N_\mathrm{S}`.
         """
         self.num_feat = num_feat
 

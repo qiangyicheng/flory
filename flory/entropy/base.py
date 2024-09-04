@@ -31,12 +31,12 @@ class EntropyBaseCompiled:
 
     @property
     def num_comp(self) -> int:
-        r"""Number of components :math:`N_\mathrm{c}`."""
+        r"""Number of components :math:`N_\mathrm{C}`."""
         raise NotImplementedError
 
     @property
     def num_feat(self) -> int:
-        r"""Number of features :math:`N_\mathrm{s}`."""
+        r"""Number of features :math:`N_\mathrm{S}`."""
         raise NotImplementedError
 
     def partition(
@@ -53,18 +53,18 @@ class EntropyBaseCompiled:
         fields for the features :math:`w_r^{(m)}` instead of components. For example when
         we have polydispersity of the molecule sizes, all the polydispersed components of
         the same kind share the same external fields, but with different volume fractions.
-        In such cases the number of features :math:`N_\mathrm{s}` can be much smaller than
-        number of components :math:`N_\mathrm{c}`. This method acts as the mapping from
+        In such cases the number of features :math:`N_\mathrm{S}` can be much smaller than
+        number of components :math:`N_\mathrm{C}`. This method acts as the mapping from
         feature-based description of the system to the component-based description of the
         system. Note that this method should modify :paramref:`phis_comp` directly.
 
         Args:
             phis_comp:
-                Output. The 2D array with the size of :math:`N_\mathrm{c} \times N_\mathrm{M}`,
+                Output. The 2D array with the size of :math:`N_\mathrm{C} \times N_\mathrm{M}`,
                 containing Boltzmann factors :math:`p_i^{(m)}`, namely the volume
                 fractions of components before normalization.
             omegas:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{S} \times N_\mathrm{M}`,
                 containing the mean field felt by the features :math:`\phi_r^{(m)}`.
             Js:
                 Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
@@ -85,10 +85,10 @@ class EntropyBaseCompiled:
 
         Args:
             phis_feat:
-                Output. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
+                Output. The 2D array with the size of :math:`N_\mathrm{S} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
             phis_comp:
-                Constant. The 2D array with the size of :math:`N_\mathrm{c} \times N_\mathrm{M}`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{C} \times N_\mathrm{M}`,
                 containing the volume fractions of components :math:`\phi_i^{(m)}`.
 
         """
@@ -120,7 +120,7 @@ class EntropyBase:
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
         """
         self.num_comp = num_comp
 

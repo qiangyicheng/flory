@@ -22,7 +22,7 @@ class EnsembleBaseCompiled:
 
     @property
     def num_comp(self) -> int:
-        r"""Number of components :math:`N_\mathrm{c}`."""
+        r"""Number of components :math:`N_\mathrm{C}`."""
         raise NotImplementedError
 
     def normalize(
@@ -35,16 +35,16 @@ class EnsembleBaseCompiled:
         :paramref:`phis_comp`, making use of the single molecule partition function in
         :paramref:`Qs`. The exact form of such normalization depends on the emsemble. This
         method must report the incompressibility :math:`\sum_i \phi_i^{(m)} -1`. Note that
-        this function is only aware of the number of components :math:`N_\mathrm{c}`.
+        this function is only aware of the number of components :math:`N_\mathrm{C}`.
         Mapping from/to features are handled by :mod:`~flory.entropy`.
 
         Args:
             phis_comp:
-                Mutable. The 2D array with the size of :math:`N_\mathrm{c} \times N_\mathrm{M}`, containing
+                Mutable. The 2D array with the size of :math:`N_\mathrm{C} \times N_\mathrm{M}`, containing
                 Boltzmann factors of the components, which are proportional
                 to resulting volume fractions.
             Qs:
-                Constant. The 1D array with the size of :math:`N_\mathrm{c}`, containing
+                Constant. The 1D array with the size of :math:`N_\mathrm{C}`, containing
                 single molecule partition functions of the components.
             masks:
                 Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the masks to
@@ -63,7 +63,7 @@ class EnsembleBase:
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
         """
         self.num_comp = num_comp
 

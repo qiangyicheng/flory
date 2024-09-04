@@ -24,7 +24,7 @@ class ConstraintBaseCompiled:
 
     @property
     def num_feat(self) -> int:
-        r"""Number of features :math:`N_\mathrm{s}`."""
+        r"""Number of features :math:`N_\mathrm{S}`."""
         raise NotImplementedError
 
     @property
@@ -33,7 +33,7 @@ class ConstraintBaseCompiled:
         
         This property typically contains the Jacobian of the constraint part of the free
         energy with respect to the volume fractions of the features, which is an array
-        with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`. Note that this property should be
+        with the size of :math:`N_\mathrm{S} \times N_\mathrm{M}`. Note that this property should be
         used after :meth:`prepare` is called.
         """
         raise NotImplementedError
@@ -71,7 +71,7 @@ class ConstraintBaseCompiled:
 
         Args:
             phis_feat:
-                Constant. The 2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`,
+                Constant. The 2D array with the size of :math:`N_\mathrm{S} \times N_\mathrm{M}`,
                 containing the volume fractions of features :math:`\phi_r^{(m)}`.
             Js:
                 Constant. The 1D array with the size of :math:`N_\mathrm{M}`, containing the relative
@@ -113,7 +113,7 @@ class ConstraintBase:
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{s}`.
+                Number of features :math:`N_\mathrm{S}`.
         """
         self.num_feat = num_feat
 

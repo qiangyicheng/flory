@@ -45,7 +45,7 @@ Construct a 2D phase diagram
 When constructing a phase diagram, we usually need to find coexisting phases for multiple instances.
 To avoid the creation and the destruction of the internal data each time, we provide the class API :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 Using the class API usually involves three steps: creation of the finder instance, setting the system parameters and finding the coexisting states.
-When the system sizes such as number of components :math:`N_\mathrm{c}` and the number of compartments :math:`N_\mathrm{M}` do not change, the finder can be reused.
+When the system sizes such as number of components :math:`N_\mathrm{C}` and the number of compartments :math:`N_\mathrm{M}` do not change, the finder can be reused.
 Here we provide a simple example for generating a :math:`(\phi, \chi)` phase diagram for a simple binary mixture: 
 
 .. literalinclude:: /../../examples/binary_phase_diagram.py
@@ -66,7 +66,7 @@ For example, the true equilibrium state can be a 4-phase coexisting state, while
 This issue can be resolved by launching more compartments than phases.
 Obviously, the maximum number of phases can be found is always not larger than the number of the compartments.
 By launching more compartments, it makes the algorithm much more likely to find the correct coexisting states.
-Here we refer to this as the finite size effect, see an example of :math:`N_\mathrm{c}=8` below:
+Here we refer to this as the finite size effect, see an example of :math:`N_\mathrm{C}=8` below:
 
 .. literalinclude:: /../../examples/finite_size_effect.py
    :emphasize-lines: 20-23

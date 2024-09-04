@@ -6,7 +6,7 @@ phase diagrams <https://doi.org/10.1017/CBO9780511804137>`_ for alloys. Theoreti
 coexisting phases can be found by minimizing the mean free energy density of the whole
 mixture. In a perfect world, an ideal method for finding coexisting phase would
 
-- allow arbitrary number of components :math:`N_\mathrm{c}`;
+- allow arbitrary number of components :math:`N_\mathrm{C}`;
 - allow each phase to have an arbitrary free energy;
 - always locate the global minimum.
 
@@ -38,22 +38,22 @@ For a general mixture, the equilibrium coexisting states can be obtained by iter
 optimizing the average free energy 
 
 .. math::
-   \bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,
+   \bar{f}({N_\mathrm{P}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{P}}} J_p f(\{\phi_{p,i}\}) \; ,
 
-where :math:`N_\mathrm{p}` is the number of phases, :math:`J_p` is the volume of phase
+where :math:`N_\mathrm{P}` is the number of phases, :math:`J_p` is the volume of phase
 :math:`p` and :math:`\phi_{p,i}` is the volume fraction of the component :math:`i` in
 phase :math:`p`. To have an efficient method, package :mod:`flory` using following
 concepts:
 
 - Free energy :math:`f` consists of four parts: **interaction**, **entropy**,
   **ensemble** and **constraint**.
-- Instead of optimizing the number of phases :math:`N_\mathrm{p}`, package fixes the number
+- Instead of optimizing the number of phases :math:`N_\mathrm{P}`, package fixes the number
   of **compartments** :math:`N_\mathrm{M}`. Compartments can be viewed to be equivalence of phases
   but do not have to be unique. To obtain the correct coexisting phases, the package
   usually uses number of compartments :math:`N_\mathrm{M}` much larger than the maximum number of
-  phases :math:`N_\mathrm{p}` allowed by the Gibbs phase law.
-- :math:`N_\mathrm{c}` **components** interact and feel the constraints though the volume
-  fractions of :math:`N_\mathrm{s}` **features**. This may reduce computational cost
+  phases :math:`N_\mathrm{P}` allowed by the Gibbs phase law.
+- :math:`N_\mathrm{C}` **components** interact and feel the constraints though the volume
+  fractions of :math:`N_\mathrm{S}` **features**. This may reduce computational cost
   significantly for many systems. 
 
 Inspired by `polymeric field theories <https://doi.org/10.1088/0953-8984/10/37/002>`_, we
@@ -65,8 +65,8 @@ conjugate variables :math:`w_r^{(m)}`,
     =& 
     \sum_{m=1}^{N_\mathrm{M}} J_m \biggl[ 
         f_\mathrm{interaction}(\{\phi_r^{(m)}\}) 
-        - \sum_r^{N_\mathrm{s}} \phi_r^{(m)} w_r^{(m)} 
-        + \xi\biggl(\sum_r^{N_\mathrm{s}} \phi_r^{(m)} -1\biggr) 
+        - \sum_r^{N_\mathrm{S}} \phi_r^{(m)} w_r^{(m)} 
+        + \xi\biggl(\sum_r^{N_\mathrm{S}} \phi_r^{(m)} -1\biggr) 
         \biggr] \\
         &+ g\left(\{Q_i(\{w_r^{(m)}\})\}\right) 
         + f_\mathrm{constraint}(\{\phi_r^{(m)}\})
@@ -76,9 +76,9 @@ Here,
 
 - :math:`f_\mathrm{interaction}(\{\phi_r^{(m)}\})` describes the **interaction** energy
   density in each compartment.
-- :math:`- \sum_r^{N_\mathrm{s}} \phi_r^{(m)} w_r^{(m)}` couples the volume fractions of
+- :math:`- \sum_r^{N_\mathrm{S}} \phi_r^{(m)} w_r^{(m)}` couples the volume fractions of
   features :math:`\phi_r^{(m)}` to their conjugate variable :math:`w_r^{(m)}`.
-- :math:`\xi(\sum_r^{N_\mathrm{s}} \phi_r^{(m)} -1)` enforces the incompressibility
+- :math:`\xi(\sum_r^{N_\mathrm{S}} \phi_r^{(m)} -1)` enforces the incompressibility
   through the Lagrange multiplier :math:`\xi`
 - :math:`Q_i(\{w_r^{(m)}\})` is the single molecule partition function of the component
   :math:`i` under the mean field :math:`w_r^{(m)}`, describing the translational
@@ -99,7 +99,7 @@ Example: Flory-Huggins Free Energy
 The Flory-Huggins free energy of a single compartment reads
 
 .. math::
-   f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; .
+   f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{C}} \frac{\phi_i}{l_i} \ln \phi_i \; .
 
 Here we assume that the components all interact through their own features. In other
 words, the number of components is the same as the number of features. In the canonical
@@ -107,7 +107,7 @@ ensemble, the average volume fractions of components across all compartments are
 constant. Therefore, we express the mean free energy into,
 
 .. math::
-    \bar{f} = & \sum_{m=1}^{N_\mathrm{M}} J_m \biggl[\frac{1}{2} \sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)} - \sum_{i=1}^{N_\mathrm{c}} w_i^{(m)}\phi_i^{(m)} + \xi_m \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}-1\biggr) \biggr] \\
+    \bar{f} = & \sum_{m=1}^{N_\mathrm{M}} J_m \biggl[\frac{1}{2} \sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)} - \sum_{i=1}^{N_\mathrm{C}} w_i^{(m)}\phi_i^{(m)} + \xi_m \biggl(\sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)}-1\biggr) \biggr] \\
     &- \sum_{i=1}^{N}\bar{\phi_i}\ln Q_i +\eta\biggl(\sum_{m=1}^{N_\mathrm{M}} J_m -1\biggr) \;,
 
 with the single molecule partition function
@@ -122,7 +122,7 @@ and compartment volume conservation, respectively. Consequently, the extremum of
 extended free energy with respect to :math:`\xi(x)` corresponds to incompressibility,
 
 .. math::
-    \frac{\partial \bar{f}}{\partial \xi_m} \propto \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)} - 1\biggr)J_m = 0 \quad \quad \Rightarrow  \quad \quad \sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)} = 1 \;,
+    \frac{\partial \bar{f}}{\partial \xi_m} \propto \biggl(\sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)} - 1\biggr)J_m = 0 \quad \quad \Rightarrow  \quad \quad \sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)} = 1 \;,
 
 the extremum with respect to :math:`\eta` corresponds to conservation of the total volume
 of all compartments,
@@ -144,13 +144,13 @@ consider them explicitly. To optimize the extended free energy density, we obtai
 self-consistent equations
 
 .. math::
-    1            & = \sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}                                       \\
+    1            & = \sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)}                                       \\
     1            & = \sum_{m=1}^{N_\mathrm{M}} J_m                                                   \\
     \phi_i^{(m)} & = \frac{\bar{\phi_i}}{Q_i}\exp\left(-w_i^{(m)}\right)              \\
-    w_i^{(m)}    & = \sum_{j=1}^{N_\mathrm{c}} \chi_{ij} \phi_j^{(m)} + \xi_m                     \\
-    -\eta        & = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
-    - \sum_{i=1}^{N_\mathrm{c}} w_i^{(m)}\phi_i^{(m)}
-    + \xi_m \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}-1\biggr)
+    w_i^{(m)}    & = \sum_{j=1}^{N_\mathrm{C}} \chi_{ij} \phi_j^{(m)} + \xi_m                     \\
+    -\eta        & = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
+    - \sum_{i=1}^{N_\mathrm{C}} w_i^{(m)}\phi_i^{(m)}
+    + \xi_m \biggl(\sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)}-1\biggr)
     - \sum_{i=1} \phi_i^{(m)}\; .
 
 To solve these equations, we design the following iterative scheme
@@ -158,12 +158,12 @@ To solve these equations, we design the following iterative scheme
 .. math::
     Q_i^{(m)}    & = \sum_{m=1}^{N_\mathrm{M}} \exp\left(-w_i^{(m)}\right) J_m                                                            \\
     \phi_i^{(m)} & = \frac{\bar{\phi_i}}{Q_i^{(m)}}\exp\left(-w_i^{(m)}\right)                                             \\
-    \xi_m        & = \frac{1}{{N_\mathrm{c}}} \biggl(\sum_{i=1}^{{N_\mathrm{c}}} w_i^{(m)} - \sum_{i,j=1}^{{N_\mathrm{c}}} \chi_{ij} \phi_j^{(m)} \biggr) \\
-    \eta_m       & = -\frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
-    + \sum_{i=1}^{N_\mathrm{c}} w_i^{(m)}\phi_i^{(m)} - \xi_m \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}-1\biggr)
+    \xi_m        & = \frac{1}{{N_\mathrm{C}}} \biggl(\sum_{i=1}^{{N_\mathrm{C}}} w_i^{(m)} - \sum_{i,j=1}^{{N_\mathrm{C}}} \chi_{ij} \phi_j^{(m)} \biggr) \\
+    \eta_m       & = -\frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
+    + \sum_{i=1}^{N_\mathrm{C}} w_i^{(m)}\phi_i^{(m)} - \xi_m \biggl(\sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)}-1\biggr)
     + \sum_{i=1} \phi_i^{(m)}                                                                                                  \\
     \bar{\eta}   & = \sum_{m=1}^{N_\mathrm{M}}  \eta_m J_m                                                                                \\
-    w_i^{(m)*}   & = \sum_{j=1}^{N_\mathrm{c}} \chi_{ij} \phi_j^{(m)} + \xi^{(m)}                                                      \\
+    w_i^{(m)*}   & = \sum_{j=1}^{N_\mathrm{C}} \chi_{ij} \phi_j^{(m)} + \xi^{(m)}                                                      \\
     J_m^*        & = J^{(m)} + \eta^{(m)} - \bar{\eta}\;,
 
 where the asterisks denote the output of the iteration. In order to improve numerical
@@ -191,5 +191,5 @@ compartments are considered "dead" at the beginning of the simulation.
 
 As we mentioned, this method does not guarantee that the true equilibrium state (the
 global minimum) is always found. Therefore, :mod:`flory` handles the problem by launching
-many more compartments than the number of components, :math:`N_\mathrm{M}\gg{N_\mathrm{c}}`, see
+many more compartments than the number of components, :math:`N_\mathrm{M}\gg{N_\mathrm{C}}`, see
 :paramref:`~flory.mcmp.finder.CoexistingPhasesFinder.num_part`.

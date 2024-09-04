@@ -18,10 +18,10 @@ class Phases:
         r"""
         Args:
             volumes:
-                1D array with shape :math:`N_\mathrm{p}`, containing the volume
+                1D array with shape :math:`N_\mathrm{P}`, containing the volume
                 :math:`J_p` of each phase.
             fractions:
-                2D array with shape :math:`N_\mathrm{p} \times N_\mathrm{c}`,
+                2D array with shape :math:`N_\mathrm{P} \times N_\mathrm{C}`,
                 containing the volume fractions of the components in each phase
                 :math:`\phi_{p,i}`. The first dimension must be the same as
                 :paramref:`volumes`.
@@ -42,12 +42,12 @@ class Phases:
 
     @property
     def num_phases(self) -> int:
-        r"""Number of phases :math:`N_\mathrm{p}`."""
+        r"""Number of phases :math:`N_\mathrm{P}`."""
         return len(self.volumes)
 
     @property
     def num_components(self) -> int:
-        r"""Number of components :math:`N_\mathrm{c}`."""
+        r"""Number of components :math:`N_\mathrm{C}`."""
         return self.fractions.shape[1]
 
     @property

@@ -60,9 +60,9 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         r"""
         Args:
             Cs:
-                2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{s}`,
+                2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{S}`,
                 containing coefficients of features for linear constraints. Note that both
-                number of features :math:`N_\mathrm{s}` and number of constraints
+                number of features :math:`N_\mathrm{S}` and number of constraints
                 :math:`N_\mathrm{A}` are inferred from this parameter.
             Ts:
                 1D vector with the size of :math:`N_\mathrm{A}`, containing the
@@ -137,11 +137,11 @@ class LinearLocalConstraint(ConstraintBase):
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{s}`.
+                Number of features :math:`N_\mathrm{S}`.
             Cs:
-                2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{s}`,
+                2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{S}`,
                 containing coefficients of features for linear constraints. Note that both
-                number of features :math:`N_\mathrm{s}` and number of constraints
+                number of features :math:`N_\mathrm{S}` and number of constraints
                 :math:`N_\mathrm{A}` are inferred from this parameter.
             Ts:
                 1D vector with the size of :math:`N_\mathrm{A}`, containing the

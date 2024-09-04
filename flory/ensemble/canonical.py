@@ -40,9 +40,9 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
         r"""
         Args:
             phi_means:
-                1D array with the size of :math:`N_\mathrm{c}`, containing the mean volume
+                1D array with the size of :math:`N_\mathrm{C}`, containing the mean volume
                 fractions of the components, :math:`\bar{\phi}_i`. The number of
-                components :math:`N_\mathrm{c}` is inferred from this array.
+                components :math:`N_\mathrm{C}` is inferred from this array.
         """
         self._num_comp = phi_means.shape[0]
         self._phi_means = phi_means  # do not affect chis
@@ -81,7 +81,7 @@ class CanonicalEnsemble(EnsembleBase):
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             phi_means:
                 The average volume fractions of the components :math:`\bar{\phi}_i`.
         """

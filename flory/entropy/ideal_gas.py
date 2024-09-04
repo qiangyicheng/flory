@@ -34,17 +34,17 @@ class IdealGasEntropyCompiled(EntropyBaseCompiled):
     Note that this class assumes that there's no degeneracy of the components' features,
     in other words all components have their own mean fields, such that the component
     index is the same as the feature id, :math:`i=r`. Therefore the number of features
-    :math:`N_\mathrm{s}` are the same as the number of components :math:`N_\mathrm{c}`.
+    :math:`N_\mathrm{S}` are the same as the number of components :math:`N_\mathrm{C}`.
     """
 
     def __init__(self, sizes: np.ndarray):
         r"""
         Args:
             sizes:
-                1D array with the size of :math:`N_\mathrm{c}`, containing the relative
+                1D array with the size of :math:`N_\mathrm{C}`, containing the relative
                 molecule volumes :math:`l_i = \nu_i/\nu`. The number of components
-                :math:`N_\mathrm{c}` is inferred from this array. The number of features
-                :math:`N_\mathrm{s}` is set to be same as :math:`N_\mathrm{c}`.
+                :math:`N_\mathrm{C}` is inferred from this array. The number of features
+                :math:`N_\mathrm{S}` is set to be same as :math:`N_\mathrm{C}`.
         """
         self._num_comp = sizes.shape[0]
         self._num_feat = sizes.shape[0]
@@ -88,7 +88,7 @@ class IdealGasEntropy(EntropyBase):
 
     .. math::
         f_\mathrm{entropy}(\{\phi_i\}) =
-            \sum_{i=1}^{N_\mathrm{c}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i),
+            \sum_{i=1}^{N_\mathrm{C}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i),
 
     where :math:`\phi_i` is the fraction of component :math:`i`. All components are
     assumed to have the same molecular volume :math:`\nu` by default. The relative
@@ -104,7 +104,7 @@ class IdealGasEntropy(EntropyBase):
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             sizes:
                 The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
                 volume of a reference molecule :math:`\nu`. It is treated as all-one

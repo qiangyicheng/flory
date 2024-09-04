@@ -30,9 +30,9 @@ The `flory` python package presented in this paper provides convenient tools for
 The package focuses on the coexisting phases in thermodynamically large systems, where the interfaces between phases can be safely ignored.
 The package finds the coexisting phases by minimization the following average free energy density,
 
-$$\bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,$$
+$$\bar{f}({N_\mathrm{P}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{P}}} J_p f(\{\phi_{p,i}\}) \; ,$$
 
-where $N_\mathrm{c}$ is the number of components, $N_\mathrm{p}$ is the number of phases, $J_p$ is the volume fraction of the phase $p$ and $\phi_{p,i}$ is the volume fraction of the component $i$ within the phase $p$.
+where $N_\mathrm{C}$ is the number of components, $N_\mathrm{P}$ is the number of phases, $J_p$ is the volume fraction of the phase $p$ and $\phi_{p,i}$ is the volume fraction of the component $i$ within the phase $p$.
 
 To achieve flexibility, `flory` expresses any mixture by four orthogonal aspects: interaction, entropy, ensemble and constraints.
 The package only imposes limits on the entropy part that is crucial for the core algorithm, while keeping other three aspects arbitrary.
@@ -40,7 +40,7 @@ By combining these four aspects, `flory` supports a broad range of the forms of 
 A few widely-used specializations are provided for all four aspects, while customized ones can be easily added.
 
 <!-- Each phase is considered to be homogeneous with a energy density -->
-<!-- $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
+<!-- $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{C}} \frac{\phi_i}{l_i} \ln \phi_i \; ,$$
 
 where $\chi_{ij}$ is the Flory-Huggins interaction between component $i$ and $j$, and $l_i$ is the relative molecule size of the component $i$.
 The package has the direct control over the average volume fractions of all components $\bar{\phi}_i = \sum_p J_p \phi_i^{(m)}$, allows the researchers to find coexisting phases at a fixed system composition. -->

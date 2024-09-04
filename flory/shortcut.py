@@ -31,14 +31,14 @@ def find_coexisting_phases(
 
     Args:
         num_comp:
-            Number of components :math:`N_\mathrm{c}` in the system.
+            Number of components :math:`N_\mathrm{C}` in the system.
         chis:
-            The interaction matrix. Symmetric 2D array with size of :math:`N_\mathrm{c}
-            \times N_\mathrm{c}`. This matrix should be the full :math:`\chi_{ij}` matrix
+            The interaction matrix. Symmetric 2D array with size of :math:`N_\mathrm{C}
+            \times N_\mathrm{C}`. This matrix should be the full :math:`\chi_{ij}` matrix
             of the system, including the solvent component.
         phi_means:
             The average volume fractions :math:`\bar{\phi}_i` of all the components of the
-            system. 1D array of length :math:`N_\mathrm{c}`. Note that the volume fraction
+            system. 1D array of length :math:`N_\mathrm{C}`. Note that the volume fraction
             of the solvent is included as well, so the sum of this array must be one.
         sizes:
             The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the

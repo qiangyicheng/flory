@@ -22,8 +22,8 @@ class FloryHuggins(FreeEnergyBase):
 
     .. math::
         f(\{\phi_i\}) =
-            \sum_{i=1}^{N_\mathrm{c}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
-            + \sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+            \sum_{i=1}^{N_\mathrm{C}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i)
+            + \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
     where :math:`\phi_i` is the fraction of component :math:`i`. All components are
     assumed to have the same molecular volume :math:`\nu` by default and the interactions
@@ -41,7 +41,7 @@ class FloryHuggins(FreeEnergyBase):
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             chis:
                 The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`.
             sizes:

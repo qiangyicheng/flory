@@ -5,13 +5,13 @@
 
 The :mod:`flory` Python package provides tools for investigating phase separation in
 multicomponent mixtures. In particular, it allows to determine equilibrium states of
-:math:`N_\mathrm{p}` coexisting phases, each described by the volume fractions
-:math:`\phi_{p,i}` of the :math:`i=1, \ldots, N_\mathrm{c}` components.
+:math:`N_\mathrm{P}` coexisting phases, each described by the volume fractions
+:math:`\phi_{p,i}` of the :math:`i=1, \ldots, N_\mathrm{C}` components.
 
 :mod:`flory` finds coexisting phases by minimizing the average free energy density
 
 .. math::
-    \bar{f}({N_\mathrm{p}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{p}}} J_p f(\{\phi_{p,i}\}) \; ,
+    \bar{f}({N_\mathrm{P}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{P}}} J_p f(\{\phi_{p,i}\}) \; ,
 
 where :math:`J_p` is the fraction of the system volume occupied by phase :math:`p`.
 
@@ -21,7 +21,7 @@ assemble the free energy of the phases. For example, with the commonly used Flor
 free energy, the free energy density of each homogeneous phase reads
 
 .. math::
-   f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{c}} \frac{\phi_i}{l_i} \ln \phi_i \; ,
+   f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i \phi_j + \sum_{i=1}^{N_\mathrm{C}} \frac{\phi_i}{l_i} \ln \phi_i \; ,
 
 where :math:`\chi_{ij}` is the Flory interaction parameter between component :math:`i`
 and :math:`j`, and :math:`l_i` is the relative molecule size of the component :math:`i`.

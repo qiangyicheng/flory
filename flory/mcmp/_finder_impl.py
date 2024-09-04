@@ -244,7 +244,7 @@ def multicomponent_self_consistent_metastep(
             :paramref:`constraints` are actually mutable. See
             :class:`~flory.constraint.base.constraintBaseCompiled` for more information.
         omegas:
-            Mutable. 2D array with size of :math:`N_\mathrm{s} \times N_\mathrm{M}`, containing the
+            Mutable. 2D array with size of :math:`N_\mathrm{S} \times N_\mathrm{M}`, containing the
             conjugate field :math:`w_r^{(m)}` of features. Note that this field is both
             used as input and output. Note again that this function DO NOT initialize
             :paramref:`omegas`, it should be initialized externally, and usually a random
@@ -256,10 +256,10 @@ def multicomponent_self_consistent_metastep(
             that this field is both used as input and output. An all-one array is usually
             a nice initialization, unless resume of a previous run is intended.
         phis_comp:
-            Output. 2D array with size of :math:`N_\mathrm{c} \times N_\mathrm{M}`, containing the
+            Output. 2D array with size of :math:`N_\mathrm{C} \times N_\mathrm{M}`, containing the
             volume fractions of components :math:`\phi_i^{(m)}`.
         phis_feat:
-            Output. 2D array with size of :math:`N_\mathrm{s} \times N_\mathrm{M}`, containing the
+            Output. 2D array with size of :math:`N_\mathrm{S} \times N_\mathrm{M}`, containing the
             volume fractions of features :math:`\phi_r^{(m)}`.
         steps_inner:
             Constant. Number of steps in current routine. Within these steps, convergence

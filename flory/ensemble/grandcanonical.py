@@ -40,9 +40,9 @@ class GrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
         r"""
         Args:
             scaled_activity:
-                1D array with the size of :math:`N_\mathrm{c}`, containing the scaled
+                1D array with the size of :math:`N_\mathrm{C}`, containing the scaled
                 activities of the components, :math:`l_i e^{l_i \mu_i}`. The number
-                of components :math:`N_\mathrm{c}` is inferred from this array.
+                of components :math:`N_\mathrm{C}` is inferred from this array.
         """
         self._num_comp = scaled_activity.shape[0]
         self._scaled_activity = scaled_activity  # do not affect chis
@@ -75,7 +75,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             scaled_activity:
                 The scaled activities of the components :math:`l_i e^{l_i \mu_i}`.
         """
@@ -106,7 +106,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
 
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             mus:
                 The chemical potentials by volume :math:`\mu_i`.
             sizes:

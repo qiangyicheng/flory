@@ -57,8 +57,8 @@ class CoexistingPhasesFinder:
     :paramref:`entropy`, :paramref:`ensemble` or :paramref:`constraints` need to be
     calculated. The class will reuse all the options and the internal resources. Note that
     reuse the instance of this class is only possible when all the system sizes are not
-    changed, including the number of components :math:`N_\mathrm{c}`, the number of
-    features :math:`N_\mathrm{s}` and the number of compartments :math:`N_\mathrm{M}`.
+    changed, including the number of components :math:`N_\mathrm{C}`, the number of
+    features :math:`N_\mathrm{S}` and the number of compartments :math:`N_\mathrm{M}`.
     """
 
     def __init__(
@@ -101,7 +101,7 @@ class CoexistingPhasesFinder:
                 :class:`~flory.constraint.base.ConstraintBase` for more information.
             num_part:
                 Number of compartments :math:`N_\mathrm{M}` in the system. By default this is set to
-                be :math:`8 N_\mathrm{c}`.
+                be :math:`8 N_\mathrm{C}`.
             rng:
                 Random number generator for initialization and reviving. None indicates
                 that a new random number generator should be created by the class, seeded
@@ -280,7 +280,7 @@ class CoexistingPhasesFinder:
 
         This method checks whether the :paramref:`field` has the same size as the
         :attr:`omegas`, which contains the conjugate field of the volume fractions of the
-        features, :math:`w_r^{(m)}`, which has the size of :math:`N_\mathrm{s} \times N_\mathrm{M}`.
+        features, :math:`w_r^{(m)}`, which has the size of :math:`N_\mathrm{S} \times N_\mathrm{M}`.
         An exception will be raise on failure.
 
         Args:
@@ -452,7 +452,7 @@ class CoexistingPhasesFinder:
 
         Args:
             omegas:
-                New :math:`w_r^{(m)}` field, must have the size of :math:`N_\mathrm{s}
+                New :math:`w_r^{(m)}` field, must have the size of :math:`N_\mathrm{S}
                 \times M`.
         """
         self._omegas = self.check_field(omegas)
@@ -470,7 +470,7 @@ class CoexistingPhasesFinder:
 
         Args:
             phis:
-                New :math:`\phi_r^{(m)}`, must have the size of :math:`N_\mathrm{s} \times
+                New :math:`\phi_r^{(m)}`, must have the size of :math:`N_\mathrm{S} \times
                 M`.
         """
         phis = self.check_field(phis)
@@ -483,7 +483,7 @@ class CoexistingPhasesFinder:
     def omegas(self) -> np.ndarray:
         r"""Internal conjugate fields :math:`w_r^{(m)}`.
 
-        Read-only array of length :math:`N_\mathrm{s} \times N_\mathrm{M}`. Use
+        Read-only array of length :math:`N_\mathrm{S} \times N_\mathrm{M}`. Use
         :meth:`reinitialize_from_omegas` to initialize the system from given
         :math:`w_r^{(m)}`.
         """

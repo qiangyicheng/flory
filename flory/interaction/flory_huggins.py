@@ -28,7 +28,7 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
     Flory-Huggins interaction is the second-ordered interaction, whose energy reads,
 
     .. math::
-        f(\{\phi_r\}) = \sum_{r,s=1}^{N_\mathrm{s}} \frac{\chi_{rs}}{2} \phi_r\phi_s .
+        f(\{\phi_r\}) = \sum_{r,s=1}^{N_\mathrm{S}} \frac{\chi_{rs}}{2} \phi_r\phi_s .
 
     Note that here we use describe the system by features.
 
@@ -38,9 +38,9 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
         r"""
         Args:
             chis:
-                2D array with the size of :math:`N_\mathrm{s} \times N_\mathrm{s}`,
+                2D array with the size of :math:`N_\mathrm{S} \times N_\mathrm{S}`,
                 containing the Flory-Huggins interaction matrix :math:`\chi_{rs}` for
-                features. The number of features :math:`N_\mathrm{s}` is inferred from
+                features. The number of features :math:`N_\mathrm{S}` is inferred from
                 this matrix.
             chis_shift:
                 The shift of entire Flory-Huggins matrix for the :meth:`incomp_coef`.
@@ -77,7 +77,7 @@ class FloryHugginsInteraction(InteractionBase):
     The particular form of interaction energy density reads
 
         .. math::
-            f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{c}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+            f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
         where :math:`\phi_i` is the fraction of component :math:`i`.
     """
@@ -90,7 +90,7 @@ class FloryHugginsInteraction(InteractionBase):
         r"""
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             chis:
                 The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`.
         """
@@ -139,7 +139,7 @@ class FloryHugginsInteraction(InteractionBase):
 
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             chi:
                 The value of all non-zero values in the interaction matrix :math:`\chi{i
                 \ne j}`
@@ -165,7 +165,7 @@ class FloryHugginsInteraction(InteractionBase):
 
         Args:
             num_comp:
-                Number of components :math:`N_\mathrm{c}`.
+                Number of components :math:`N_\mathrm{C}`.
             chi_mean:
                 Mean interaction :math:`\bar{\chi}`.
             chi_std:
