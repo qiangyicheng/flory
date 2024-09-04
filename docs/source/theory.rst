@@ -51,7 +51,7 @@ concepts:
   of **compartments** :math:`M`. Compartments can be viewed to be equivalence of phases
   but do not have to be unique. To obtain the correct coexisting phases, the package
   usually uses number of compartments :math:`M` much larger than the maximum number of
-  phases :math:`N_p` allowed by the Gibbs phase law.
+  phases :math:`N_\mathrm{p}` allowed by the Gibbs phase law.
 - :math:`N_\mathrm{c}` **components** interact and feel the constraints though the volume
   fractions of :math:`N_\mathrm{s}` **features**. This may reduce computational cost
   significantly for many systems. 
@@ -65,8 +65,8 @@ conjugate variables :math:`w_r^{(m)}`,
     =& 
     \sum_{m=1}^M J_m \biggl[ 
         f_\mathrm{interaction}(\{\phi_r^{(m)}\}) 
-        - \sum_r^{M_\mathrm{s}} \phi_r^{(m)} w_r^{(m)} 
-        + \xi\biggl(\sum_r^{M_\mathrm{s}} \phi_r^{(m)} -1\biggr) 
+        - \sum_r^{N_\mathrm{s}} \phi_r^{(m)} w_r^{(m)} 
+        + \xi\biggl(\sum_r^{N_\mathrm{s}} \phi_r^{(m)} -1\biggr) 
         \biggr] \\
         &+ g\left(\{Q_i(\{w_r^{(m)}\})\}\right) 
         + f_\mathrm{constraint}(\{\phi_r^{(m)}\})
@@ -76,9 +76,9 @@ Here,
 
 - :math:`f_\mathrm{interaction}(\{\phi_r^{(m)}\})` describes the **interaction** energy
   density in each compartment.
-- :math:`- \sum_r^{M_\mathrm{s}} \phi_r^{(m)} w_r^{(m)}` couples the volume fractions of
+- :math:`- \sum_r^{N_\mathrm{s}} \phi_r^{(m)} w_r^{(m)}` couples the volume fractions of
   features :math:`\phi_r^{(m)}` to their conjugate variable :math:`w_r^{(m)}`.
-- :math:`\xi(\sum_r^{M_\mathrm{s}} \phi_r^{(m)} -1)` enforces the incompressibility
+- :math:`\xi(\sum_r^{N_\mathrm{s}} \phi_r^{(m)} -1)` enforces the incompressibility
   through the Lagrange multiplier :math:`\xi`
 - :math:`Q_i(\{w_r^{(m)}\})` is the single molecule partition function of the component
   :math:`i` under the mean field :math:`w_r^{(m)}`, describing the translational
