@@ -63,14 +63,14 @@ conjugate variables :math:`w_r^{(m)}`,
 .. math::
     &\bar{f}(\{J_m\}, \{\phi_r^{(m)}\}, \{w_r^{(m)}\}, \xi) \\
     =& 
-    \sum_{m=1}^M J_m \biggl[ 
+    \sum_{m=1}^{N_\mathrm{M}} J_m \biggl[ 
         f_\mathrm{interaction}(\{\phi_r^{(m)}\}) 
         - \sum_r^{N_\mathrm{s}} \phi_r^{(m)} w_r^{(m)} 
         + \xi\biggl(\sum_r^{N_\mathrm{s}} \phi_r^{(m)} -1\biggr) 
         \biggr] \\
         &+ g\left(\{Q_i(\{w_r^{(m)}\})\}\right) 
         + f_\mathrm{constraint}(\{\phi_r^{(m)}\})
-        + \eta\biggl(\sum_{m=1}^M J_m -1\biggr) \; .
+        + \eta\biggl(\sum_{m=1}^{N_\mathrm{M}} J_m -1\biggr) \; .
 
 Here,
 
@@ -107,13 +107,13 @@ ensemble, the average volume fractions of components across all compartments are
 constant. Therefore, we express the mean free energy into,
 
 .. math::
-    \bar{f} = & \sum_{m=1}^M J_m \biggl[\frac{1}{2} \sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)} - \sum_{i=1}^{N_\mathrm{c}} w_i^{(m)}\phi_i^{(m)} + \xi_m \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}-1\biggr) \biggr] \\
-    &- \sum_{i=1}^{N}\bar{\phi_i}\ln Q_i +\eta\biggl(\sum_{m=1}^M J_m -1\biggr) \;,
+    \bar{f} = & \sum_{m=1}^{N_\mathrm{M}} J_m \biggl[\frac{1}{2} \sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)} - \sum_{i=1}^{N_\mathrm{c}} w_i^{(m)}\phi_i^{(m)} + \xi_m \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}-1\biggr) \biggr] \\
+    &- \sum_{i=1}^{N}\bar{\phi_i}\ln Q_i +\eta\biggl(\sum_{m=1}^{N_\mathrm{M}} J_m -1\biggr) \;,
 
 with the single molecule partition function
 
 .. math::
-    Q_i = \sum_{m=1}^M J_m \exp\left(-w_i^{(m)}\right).
+    Q_i = \sum_{m=1}^{N_\mathrm{M}} J_m \exp\left(-w_i^{(m)}\right).
 
 Here we recall that :math:`J_m` are the relative volumes of the compartments,
 :math:`w_i^{(m)}` are the conjugate variables of :math:`\phi_i^{(m)}`, and :math:`\xi_m`
@@ -128,7 +128,7 @@ the extremum with respect to :math:`\eta` corresponds to conservation of the tot
 of all compartments,
 
 .. math::
-    \frac{\partial \bar{f}}{\partial \eta} \propto \sum_{m=1}^M J_m -1 = 0 \quad \quad \Rightarrow  \quad \quad \sum_{m=1}^M J_m = 1 \;,
+    \frac{\partial \bar{f}}{\partial \eta} \propto \sum_{m=1}^{N_\mathrm{M}} J_m -1 = 0 \quad \quad \Rightarrow  \quad \quad \sum_{m=1}^{N_\mathrm{M}} J_m = 1 \;,
 
 and the extremum with respect to :math:`w_i^{(m)}` defines the relationship between
 :math:`\phi_i^{(m)}` and :math:`w_i^{(m)}`,
@@ -145,7 +145,7 @@ self-consistent equations
 
 .. math::
     1            & = \sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}                                       \\
-    1            & = \sum_{m=1}^M J_m                                                   \\
+    1            & = \sum_{m=1}^{N_\mathrm{M}} J_m                                                   \\
     \phi_i^{(m)} & = \frac{\bar{\phi_i}}{Q_i}\exp\left(-w_i^{(m)}\right)              \\
     w_i^{(m)}    & = \sum_{j=1}^{N_\mathrm{c}} \chi_{ij} \phi_j^{(m)} + \xi_m                     \\
     -\eta        & = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
@@ -156,13 +156,13 @@ self-consistent equations
 To solve these equations, we design the following iterative scheme
 
 .. math::
-    Q_i^{(m)}    & = \sum_{m=1}^M \exp\left(-w_i^{(m)}\right) J_m                                                            \\
+    Q_i^{(m)}    & = \sum_{m=1}^{N_\mathrm{M}} \exp\left(-w_i^{(m)}\right) J_m                                                            \\
     \phi_i^{(m)} & = \frac{\bar{\phi_i}}{Q_i^{(m)}}\exp\left(-w_i^{(m)}\right)                                             \\
     \xi_m        & = \frac{1}{{N_\mathrm{c}}} \biggl(\sum_{i=1}^{{N_\mathrm{c}}} w_i^{(m)} - \sum_{i,j=1}^{{N_\mathrm{c}}} \chi_{ij} \phi_j^{(m)} \biggr) \\
     \eta_m       & = -\frac{1}{2}\sum_{i,j=1}^{N_\mathrm{c}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
     + \sum_{i=1}^{N_\mathrm{c}} w_i^{(m)}\phi_i^{(m)} - \xi_m \biggl(\sum_{i=1}^{N_\mathrm{c}} \phi_i^{(m)}-1\biggr)
     + \sum_{i=1} \phi_i^{(m)}                                                                                                  \\
-    \bar{\eta}   & = \sum_{m=1}^M  \eta_m J_m                                                                                \\
+    \bar{\eta}   & = \sum_{m=1}^{N_\mathrm{M}}  \eta_m J_m                                                                                \\
     w_i^{(m)*}   & = \sum_{j=1}^{N_\mathrm{c}} \chi_{ij} \phi_j^{(m)} + \xi^{(m)}                                                      \\
     J_m^*        & = J^{(m)} + \eta^{(m)} - \bar{\eta}\;,
 

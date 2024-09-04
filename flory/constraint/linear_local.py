@@ -41,14 +41,14 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
     term in the free energy,
 
         .. math::
-            f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
+            f_\mathrm{constraint} = \sum_\alpha^{N_\mathrm{A}} \sum_m^{M} J_m \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
 
     However, such form usually suffers from numerical instability since the Lagrange
     multiplier only delivers good guidance when the constraint is almost satisfied.
     We thus extend the term further into,
 
         .. math::
-            f_\mathrm{constraint} = \sum_\alpha^A \sum_m^{M} J_m \left[ \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) + \kappa \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right)^2 \right],
+            f_\mathrm{constraint} = \sum_\alpha^{N_\mathrm{A}} \sum_m^{M} J_m \left[ \xi_\alpha^{(m)} \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) + \kappa \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right)^2 \right],
 
     where we term :math:`\kappa` as the elasticity of constraints. Note that when the
     constraints are satisfied, these additional terms vanish.

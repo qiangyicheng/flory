@@ -40,15 +40,15 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
     term in the free energy,
 
         .. math::
-            f_\mathrm{constraint} = \sum_\alpha^A \xi_\alpha \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
+            f_\mathrm{constraint} = \sum_\alpha^{N_\mathrm{A}} \xi_\alpha \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right).
 
     However, such form usually suffers from numerical instability since the Lagrange
     multiplier only delivers good guidance when the constraint is almost satisfied.
     We thus extend the term further into,
 
         .. math::
-            f_\mathrm{constraint} = \sum_\alpha^A \xi_\alpha \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) +
-            \sum_\alpha^A \kappa \left[ \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) \right]^2
+            f_\mathrm{constraint} = \sum_\alpha^{N_\mathrm{A}} \xi_\alpha \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) +
+            \sum_\alpha^{N_\mathrm{A}} \kappa \left[ \sum_m^{M} J_m \left(\sum_r C_{\alpha,r} \phi_r^{(m)} - T_\alpha\right) \right]^2
 
     where we term :math:`\kappa` as the elasticity of constraints. Note that when the
     constraints are satisfied, these additional terms vanish.
