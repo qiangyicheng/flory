@@ -43,10 +43,10 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from ..common import *
-from ..constraint import ConstraintBase, NoConstraintCompiled
-from ..ensemble import EnsembleBase
-from ..entropy import EntropyBase
-from ..interaction import InteractionBase
+from ..constraint import ConstraintBase, ConstraintBaseCompiled, NoConstraintCompiled
+from ..ensemble import EnsembleBase, EnsembleBaseCompiled
+from ..entropy import EntropyBase, EntropyBaseCompiled
+from ..interaction import InteractionBase, FloryHugginsInteractionCompiled
 from ._finder_impl import *
 
 
@@ -238,7 +238,15 @@ class CoexistingPhasesFinder:
         self._kwargs_for_instances = kwargs
         self.reinitialize_random()
 
-    def check_instance(self, compiled_instance: object) -> None:
+    def check_instance(
+        self,
+        compiled_instance: (
+            InteractionBaseCompiled
+            | EntropyBaseCompiled
+            | EnsembleBaseCompiled
+            | ConstraintBaseCompiled
+        ),
+    ) -> None:
         """Check the size of the compiled instance.
 
         This method checks whether the compiled instance from
@@ -416,9 +424,9 @@ class CoexistingPhasesFinder:
 
         for cons in self._constraints:
             self.check_instance(cons)
-        
+
         self.reinitialize_constraint()
-            
+
         if if_reset_revive:
             self.reset_revive()
 

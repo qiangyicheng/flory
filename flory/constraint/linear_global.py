@@ -2,6 +2,7 @@
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
+
 from __future__ import annotations
 
 import logging
@@ -120,7 +121,7 @@ class LinearGlobalConstraintCompiled(ConstraintBaseCompiled):
         self._potential *= masks
         self._volume_derivative *= masks
 
-        self._residue /= Js.sum() # scale residue according to total volume
+        self._residue /= Js.sum()  # scale residue according to total volume
 
     def evolve(self, step: float, masks: np.ndarray) -> float:
         self._multiplier += step * self._acceptance_ratio * self._residue
@@ -169,7 +170,7 @@ class LinearGlobalConstraint(ConstraintBase):
         shape = (self.num_cons,)
         Ts = np.atleast_1d(Ts)
         self._Ts = np.broadcast_to(Ts, shape).astype(float)
-        
+
     @property
     def Cs(self) -> np.ndarray:
         r"""Coefficients of features for linear constraints :math:`C_{\alpha,r}`."""
@@ -195,7 +196,7 @@ class LinearGlobalConstraint(ConstraintBase):
 
     def _compiled_impl(
         self, constraint_acceptance_ratio: float = 1.0, constraint_elasticity: float = 1.0
-    ) -> object:
+    ) -> LinearGlobalConstraintCompiled:
         r"""Implementation of creating a compiled constraint instance.
 
         This method overwrites the interface

@@ -46,7 +46,7 @@ class FreeEnergyBase:
         self.entropy = entropy
         self.num_comp = interaction.num_comp
 
-    def interaction_compiled(self, **kwargs_full) -> object:
+    def interaction_compiled(self, **kwargs_full) -> InteractionBase:
         """Get the compiled instance of the interaction.
 
         Args:
@@ -58,7 +58,7 @@ class FreeEnergyBase:
         """
         return self.interaction.compiled(**kwargs_full)
 
-    def entropy_compiled(self, **kwargs_full) -> object:
+    def entropy_compiled(self, **kwargs_full) -> EntropyBase:
         """Get the compiled instance of the entropy.
 
         Args:

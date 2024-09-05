@@ -115,7 +115,7 @@ class CanonicalEnsemble(EnsembleBase):
                 "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
             )
 
-    def _compiled_impl(self) -> object:
+    def _compiled_impl(self) -> CanonicalEnsembleCompiled:
         """Implementation of creating a compiled ensemble instance.
 
         This method overwrites the interface

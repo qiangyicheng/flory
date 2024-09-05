@@ -130,7 +130,7 @@ class IdealGasEntropy(EntropyBase):
         shape = (self.num_comp,)
         self._sizes = np.array(np.broadcast_to(sizes_new, shape))
 
-    def _compiled_impl(self) -> object:
+    def _compiled_impl(self) -> IdealGasEntropyCompiled:
         """Implementation of creating a compiled entropy instance.
 
         This method overwrites the interface

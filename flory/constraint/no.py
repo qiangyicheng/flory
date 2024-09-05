@@ -66,9 +66,7 @@ class NoConstraint(ConstraintBase):
         """
         self.num_feat = num_feat
 
-    def _compiled_impl(
-        self
-    ) -> object:
+    def _compiled_impl(self) -> NoConstraintCompiled:
         r"""Implementation of creating a no constraint instance.
 
         Returns:

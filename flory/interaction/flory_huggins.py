@@ -241,7 +241,9 @@ class FloryHugginsInteraction(InteractionBase):
         self._chis[i, j] = chi_vals
         self._chis[j, i] = chi_vals
 
-    def _compiled_impl(self, *, additional_chis_shift: float = 1.0) -> object:
+    def _compiled_impl(
+        self, *, additional_chis_shift: float = 1.0
+    ) -> FloryHugginsInteractionCompiled:
         """Implementation of creating a compiled interaction instance.
 
         This method overwrites the interface

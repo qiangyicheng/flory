@@ -128,7 +128,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
         scaled_activity = sizes * np.exp(sizes * mus)
         return cls(num_comp, scaled_activity)
 
-    def _compiled_impl(self) -> object:
+    def _compiled_impl(self) -> GrandCanonicalEnsembleCompiled:
         """Implementation of creating a compiled ensemble instance.
 
         This method overwrites the interface
