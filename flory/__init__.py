@@ -25,7 +25,12 @@ except ImportError:
     del PackageNotFoundError, version
 
 from .common import Phases
-from .constraint import ConstraintBase, NoConstraint, LinearGlobalConstraint, LinearLocalConstraint
+from .constraint import (
+    ConstraintBase,
+    LinearGlobalConstraint,
+    LinearLocalConstraint,
+    NoConstraint,
+)
 from .ensemble import CanonicalEnsemble, EnsembleBase, GrandCanonicalEnsemble
 from .entropy import EntropyBase, IdealGasEntropy
 from .free_energy import FloryHuggins, FreeEnergyBase

@@ -5,5 +5,5 @@
 """
 
 from .exceptions import ComponentNumberError, FeatureNumberError, VolumeFractionError
-from .utilities import filter_kwargs
 from .phases import Phases
+from .utilities import filter_kwargs

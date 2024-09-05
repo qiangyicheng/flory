@@ -14,6 +14,7 @@ or reused.
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 from __future__ import annotations
+
 import numba as nb
 import numpy as np
 from numba import literal_unroll
