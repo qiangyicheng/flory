@@ -1,3 +1,5 @@
+# This file is adapted and modified from the package autoclasstoc (https://github.com/kalekundert/autoclasstoc)
+
 import inspect
 import re
 
@@ -13,18 +15,18 @@ class Section:
     """
     Format a specific section in a class TOC, e.g. "Public Methods".
 
-    The purpose of this class is to make it easy to customize the sections that 
-    make up the class TOC.  For example, you might want an "Event Handler" 
-    section that includes any method that starts with "on\\_".  Or you might 
-    want to format the links in a table with multiple columns, to save more 
-    space.  
+    The purpose of this class is to make it easy to customize the sections that
+    make up the class TOC.  For example, you might want an "Event Handler"
+    section that includes any method that starts with "on\\_".  Or you might
+    want to format the links in a table with multiple columns, to save more
+    space.
 
-    These kinds of things can be accomplished by subclassing `Section` and 
-    overwriting the relevant methods.  Almost every method is meant to be 
-    overridden by subclasses, but most subclasses will only need to override 
-    `key`, `title`, and `predicate`.  `key` and `title` have no default value, 
-    and must be overridden in each subclass.  `predicate` determines which 
-    attributes are included in the section, which is the primary purpose of 
+    These kinds of things can be accomplished by subclassing `Section` and
+    overwriting the relevant methods.  Almost every method is meant to be
+    overridden by subclasses, but most subclasses will only need to override
+    `key`, `title`, and `predicate`.  `key` and `title` have no default value,
+    and must be overridden in each subclass.  `predicate` determines which
+    attributes are included in the section, which is the primary purpose of
     most custom sections.
     """
 
@@ -65,10 +67,10 @@ class Section:
         Create a section for a specific class.
 
         Arguments:
-            state (docutils.parsers.rst.states.RSTState): The state object 
-                associated with the :rst:dir:`autoclasstoc` directive.  This 
-                can be used to evaluate restructured text markup using 
-                `nodes_from_rst()`.  
+            state (docutils.parsers.rst.states.RSTState): The state object
+                associated with the :rst:dir:`autoclasstoc` directive.  This
+                can be used to evaluate restructured text markup using
+                `nodes_from_rst()`.
             cls (type): The class to make the TOC section for.
         """
         self.state = state
@@ -82,22 +84,20 @@ class Section:
 
     def check(self):
         """
-        Raise `ConfigError` if the section has not been configured correctly, 
+        Raise `ConfigError` if the section has not been configured correctly,
         e.g. if it doesn't have a title specified.
         """
         if not self.key:
-            raise ConfigError(
-                f"no key specified for {self.__class__.__name__!r}")
+            raise ConfigError(f"no key specified for {self.__class__.__name__!r}")
         if not self.title:
-            raise ConfigError(
-                f"no title specified for {self.__class__.__name__!r}")
+            raise ConfigError(f"no title specified for {self.__class__.__name__!r}")
 
     def format(self):
         """
         Return a list of *docutils* nodes that will compose the section.
 
-        The default implementation of this method creates and populates 
-        :rst:dir:`autosummary` directives for the class in question and all of 
+        The default implementation of this method creates and populates
+        :rst:dir:`autosummary` directives for the class in question and all of
         its superclasses.
         """
         assert self.state
@@ -136,12 +136,12 @@ class Section:
         Return true if the given attribute should be included in this section.
 
         Arguments:
-            name (str): The name of the attribute.  In most cases, this is 
+            name (str): The name of the attribute.  In most cases, this is
                 identical to :attr:`attr.__name__`.
             attr (object): The attribute object itself.
-            meta (dict): Any `:meta:`__ fields present in the attribute's 
-                docstring, as parsed by 
-                :func:`sphinx.util.docstrings.separate_metadata()`. 
+            meta (dict): Any `:meta:`__ fields present in the attribute's
+                docstring, as parsed by
+                :func:`sphinx.util.docstrings.separate_metadata()`.
 
         __ https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#info-field-lists
 
@@ -166,9 +166,9 @@ class Section:
         """
         Create the container node that will contain the entire section.
 
-        This method is meant to be overridden in subclasses.  The primary 
-        purpose of the container node is to belong to a CSS class that can then 
-        be used to identify HTML elements associated with 
+        This method is meant to be overridden in subclasses.  The primary
+        purpose of the container node is to belong to a CSS class that can then
+        be used to identify HTML elements associated with
         :rst:dir:`autoclasstoc`.
         """
         return utils.make_container()
@@ -181,16 +181,16 @@ class Section:
         """
         return utils.make_rubric(self.title)
 
-    def _make_links(self, attrs, cls, current_class = False):
+    def _make_links(self, attrs, cls, current_class=False):
         """
         Make a link to the full documentation for each attribute.
 
-        This method is meant to be overridden in subclasses.  The default 
-        implementation creates the links using an :rst:dir:`autosummary` 
+        This method is meant to be overridden in subclasses.  The default
+        implementation creates the links using an :rst:dir:`autosummary`
         directive.
 
         Arguments:
-            attrs (dict): A dictionary of attributes, in the same format as 
+            attrs (dict): A dictionary of attributes, in the same format as
                 ``__dict__``.
             cls (type): The class that the attributes belong to.
         """
@@ -200,8 +200,8 @@ class Section:
         """
         Make a collapsible node to contain links to inherited attributes.
 
-        This method is meant to be overridden in subclasses.  The default 
-        implementation returns a `details` node, which is rendered in HTML as a 
+        This method is meant to be overridden in subclasses.  The default
+        implementation returns a `details` node, which is rendered in HTML as a
         ``<details>`` element.
         """
         return utils.make_inherited_details(self.state, parent)
@@ -211,9 +211,9 @@ class Section:
         Return only those attributes that match the predicate.
 
         Arguments:
-            attrs (dict): A dictionary of attributes, in the same format as 
-                ``__dict__``.  Attributes have only an annotation, but no 
-                value, will be present in this dictionary, but will have the 
+            attrs (dict): A dictionary of attributes, in the same format as
+                ``__dict__``.  Attributes have only an annotation, but no
+                value, will be present in this dictionary, but will have the
                 special value `utils.ANNOTATED_ATTR`.
 
         Return:
@@ -225,9 +225,9 @@ class Section:
         """
         Return all attributes associated with this class.
 
-        These attributes will subsequently be filtered to remove any that 
-        aren't relevant to this section, so there is no need to do any 
-        filtering here.  The return value should be a name-to-attribute 
+        These attributes will subsequently be filtered to remove any that
+        aren't relevant to this section, so there is no need to do any
+        filtering here.  The return value should be a name-to-attribute
         dictionary in the same format as :attr:`__dict__`.
         """
         return utils.find_attrs(self.cls)
@@ -236,9 +236,9 @@ class Section:
         """
         Find attributes that this class has inherited from other classes.
 
-        These attributes will subsequently be filtered to remove any that 
-        aren't relevant to this section, so there is no need to do any 
-        filtering here.  The return value should be a dictionary mapping parent 
+        These attributes will subsequently be filtered to remove any that
+        aren't relevant to this section, so there is no need to do any
+        filtering here.  The return value should be a dictionary mapping parent
         class types to :attr:`__dict__` style dictionaries.
         """
         return utils.find_inherited_attrs(self.cls)
@@ -248,19 +248,20 @@ class PublicMethods(Section):
     """
     Include a "Public Methods" section in the class TOC.
 
-    Note that dunder methods are included in this section, because they usually 
-    correspond to syntax that is part of the class's public interface (e.g. the 
-    constructor and various operators).  If you want to exclude dunder methods, 
+    Note that dunder methods are included in this section, because they usually
+    correspond to syntax that is part of the class's public interface (e.g. the
+    constructor and various operators).  If you want to exclude dunder methods,
     use `PublicMethodsWithoutDunders`.
     """
+
     key = "public-methods"
     title = "Public Methods:"
 
     def predicate(self, name, attr, meta):
         return (
-            super().predicate(name, attr, meta) and
-            is_method(name, attr) and
-            (is_public(name) or is_special(name))
+            super().predicate(name, attr, meta)
+            and is_method(name, attr)
+            and (is_public(name) or is_special(name))
         )
 
 
@@ -268,6 +269,7 @@ class PublicMethodsWithoutDunders(PublicMethods):
     """
     Include a "Public Methods" section in the class TOC.
     """
+
     key = "public-methods-without-dunders"
     exclude_pattern = "__"
 
@@ -276,14 +278,15 @@ class PrivateMethods(Section):
     """
     Include a "Private Methods" section in the class TOC.
     """
+
     key = "private-methods"
     title = "Private Methods:"
 
     def predicate(self, name, attr, meta):
         return (
-            super().predicate(name, attr, meta) and
-            is_method(name, attr) and
-            is_private(name)
+            super().predicate(name, attr, meta)
+            and is_method(name, attr)
+            and is_private(name)
         )
 
 
@@ -291,18 +294,19 @@ class PublicDataAttrs(Section):
     """
     Include a "Public Data Attributes" section in the class TOC.
 
-    Note that only data attributes defined at the class level will be included 
-    in the TOC.  Data attributes defined in :meth:`__init__` (for example) will 
+    Note that only data attributes defined at the class level will be included
+    in the TOC.  Data attributes defined in :meth:`__init__` (for example) will
     not be found.
     """
+
     key = "public-attrs"
     title = "Public Data Attributes:"
 
     def predicate(self, name, attr, meta):
         return (
-            super().predicate(name, attr, meta) and
-            is_data_attr(name, attr) and
-            is_public(name)
+            super().predicate(name, attr, meta)
+            and is_data_attr(name, attr)
+            and is_public(name)
         )
 
 
@@ -310,18 +314,19 @@ class PrivateDataAttrs(Section):
     """
     Include a "Private Data Attributes" section in the class TOC.
 
-    Note that only data attributes defined at the class level will be included 
-    in the TOC.  Data attributes defined in :meth:`__init__` (for example) will 
+    Note that only data attributes defined at the class level will be included
+    in the TOC.  Data attributes defined in :meth:`__init__` (for example) will
     not be found.
     """
+
     key = "private-attrs"
     title = "Private Data Attributes:"
 
     def predicate(self, name, attr, meta):
         return (
-            super().predicate(name, attr, meta) and
-            is_data_attr(name, attr) and
-            is_private(name)
+            super().predicate(name, attr, meta)
+            and is_data_attr(name, attr)
+            and is_private(name)
         )
 
 
@@ -329,43 +334,45 @@ class InnerClasses(Section):
     """
     Include an "Inner Classes" section in the class TOC.
     """
+
     key = "inner-classes"
     title = "Inner Classes:"
 
     def predicate(self, name, attr, meta):
-        return (
-            super().predicate(name, attr, meta) and
-            inspect.isclass(attr)
-        )
+        return super().predicate(name, attr, meta) and inspect.isclass(attr)
 
 
 def is_method(name, attr):
     """
     Return true if the given attribute is a method or property.
     """
-    return any([
-        inspect.isfunction(attr),
-        inspect.ismethoddescriptor(attr),
-    ])
+    return any(
+        [
+            inspect.isfunction(attr),
+            inspect.ismethoddescriptor(attr),
+        ]
+    )
 
 
 def is_data_attr(name, attr):
     """
-    Return true if the given attribute is a data attribute, e.g. not a method 
+    Return true if the given attribute is a data attribute, e.g. not a method
     or an inner class.  Many data attributes are properties.
     """
-    return all([
-        not inspect.isclass(attr),
-        not inspect.isfunction(attr),
-        not inspect.ismethoddescriptor(attr),
-    ])
+    return all(
+        [
+            not inspect.isclass(attr),
+            not inspect.isfunction(attr),
+            not inspect.ismethoddescriptor(attr),
+        ]
+    )
 
 
 def is_public(name):
     """
     Return true if the given name is public.
 
-    Specifically, a name is public if it either doesn't start with an 
+    Specifically, a name is public if it either doesn't start with an
     underscore.
     """
     return not name.startswith("_")
@@ -375,7 +382,7 @@ def is_private(name):
     """
     Return true if the given name is private.
 
-    A name is private if it starts with an underscore, but does not start and 
+    A name is private if it starts with an underscore, but does not start and
     end with two underscores (i.e. not a special method).
     """
     return not is_public(name) and not is_special(name)
@@ -394,12 +401,8 @@ def does_match(name, pattern, **kwargs):
     """
     Return true if the name matches the given pattern.
 
-    Under the hood, `re.match` is used to find the pattern.  This means that 
-    the match must start at the beginning of the name.  If you want to match an 
+    Under the hood, `re.match` is used to find the pattern.  This means that
+    the match must start at the beginning of the name.  If you want to match an
     internal pattern, the pattern must start with ``.*``.
     """
-    return pattern and any(
-            re.match(p, name, **kwargs)
-            for p in always_iterable(pattern)
-    )
-
+    return pattern and any(re.match(p, name, **kwargs) for p in always_iterable(pattern))

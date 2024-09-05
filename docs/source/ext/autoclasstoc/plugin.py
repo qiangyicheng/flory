@@ -1,3 +1,5 @@
+# This file is adapted and modified from the package autoclasstoc (https://github.com/kalekundert/autoclasstoc)
+
 from docutils.parsers.rst import directives
 from sphinx.ext.autodoc import ClassDocumenter
 from sphinx.util.docutils import SphinxDirective

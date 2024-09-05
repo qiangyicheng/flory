@@ -1,3 +1,5 @@
+# This file is adapted and modified from the package autoclasstoc (https://github.com/kalekundert/autoclasstoc)
+
 from importlib import import_module
 from inspect import isclass
 
@@ -109,6 +111,7 @@ def make_inherited_details(state, parent, open_by_default=False):
     """
     return nodes_from_rst(state, f"Inherited from :py:class:`{get_cls_xref(parent)}`:")
 
+
 def make_links(state, attrs, cls, current_class=False):
     """
     Make links to the given class attributes.
@@ -127,6 +130,7 @@ def make_links(state, attrs, cls, current_class=False):
             *[f'    {x if current_class else join(cls_xref, x, sep=".")}' for x in attrs],
         ],
     )
+
 
 def get_cls_xref(cls, cant_import=None):
     """
