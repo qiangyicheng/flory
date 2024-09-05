@@ -1,3 +1,8 @@
+# This contains code from package `autoclasstoc` (https://github.com/kalekundert/autoclasstoc)
+# The original package follows the MIT license, see LICENSE.txt in the same folder
+# It has been modified for the package `flory` by Yicheng Qiang.
+# The `flory` package also follows the MIT license, see LICENSE in the root directory of the package.
+
 """\
 Add a succinct TOC to auto-documented classes.
 """
