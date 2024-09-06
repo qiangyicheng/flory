@@ -79,7 +79,7 @@ class FloryHugginsInteraction(InteractionBase):
         .. math::
             f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
-        where :math:`\phi_i` is the fraction of component :math:`i`.
+    where :math:`\phi_i` is the fraction of component :math:`i`.
     """
 
     def __init__(
