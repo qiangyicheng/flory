@@ -6,4 +6,4 @@
 
 from .exceptions import ComponentNumberError, FeatureNumberError, VolumeFractionError
 from .phases import Phases
-from .utilities import filter_kwargs
+from .utilities import *

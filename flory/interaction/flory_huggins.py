@@ -71,15 +71,17 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
         return self._incomp_coef
 
 
-class FloryHugginsInteraction(InteractionBase):
-    r"""Class for Flory-Huggins interaction energy of mixture.
+class FloryHugginsInteractionBase(InteractionBase):
+    r"""Base Class for Flory-Huggins interaction energy of mixture.
 
     The particular form of interaction energy density reads
 
     .. math::
         f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
-    where :math:`\phi_i` is the fraction of component :math:`i`.
+    where :math:`\phi_i` is the fraction of component :math:`i`. This class only
+    implements the common methods of all Flory-Huggins interaction. Note that
+    :meth:`~flory.interaction.base.InteractionBase._compiled_impl` is not implemented.
     """
 
     def __init__(
@@ -106,6 +108,114 @@ class FloryHugginsInteraction(InteractionBase):
         if not np.allclose(chis, chis.T):
             self._logger.warning("Using symmetrized χ interaction-matrix")
         self._chis = 0.5 * (chis + chis.T)
+
+    def _compiled_impl(
+        self, *, additional_chis_shift: float = 1.0
+    ) -> FloryHugginsInteractionCompiled:
+        """Implementation of creating a compiled interaction instance.
+
+        This method overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._compiled_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
+
+        Args:
+            additional_chis_shift:
+                Shift of the entire chis matrix to improve the convergence by evolving
+                towards incompressible system faster. This value should be larger than 0.
+                This value only affects the numerics, not the actual physical system. Note
+                that with very large value, the convergence will be slowed down, since the
+                algorithm no longer have enough ability to temporarily relax the
+                incompressibility.
+
+        Returns:
+            : Instance of :class:`FloryHugginsInteractionCompiled`.
+        """
+
+        return FloryHugginsInteractionCompiled(
+            self._chis, -self._chis.min() + additional_chis_shift
+        )
+
+    def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
+        r"""Implementation of calculating interaction energy.
+
+        This method overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._energy_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+
+        Returns:
+            : The interaction energy density
+        """
+        ans = 0.5 * np.einsum("...i,...j,ij->...", phis, phis, self._chis)
+        return ans
+
+    def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
+        r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{interaction}/\partial \phi_i`.
+
+        This method overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._jacobian_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+
+        Returns:
+            : The full Jacobian
+        """
+        ans = phis @ self._chis
+        return ans
+
+    def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
+        r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{interaction}/\partial \phi_i^2`.
+
+        This method overwrites the interface
+        :meth:`~flory.entropy.base.InteractionBase._hessian_impl` in
+        :class:`~flory.entropy.base.InteractionBase`.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+
+        Returns:
+            : The full Hessian
+        """
+        return np.zeros_like(phis)[..., None] + self._chis  # type: ignore
+
+class FloryHugginsInteraction(FloryHugginsInteractionBase):
+    r"""Class for Flory-Huggins interaction energy of mixture.
+
+    The particular form of interaction energy density reads
+
+    .. math::
+        f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+
+    where :math:`\phi_i` is the fraction of component :math:`i`.
+    """
+
+    def __init__(
+        self,
+        num_comp: int,
+        chis: np.ndarray | float,
+    ):
+        r"""
+        Args:
+            num_comp:
+                Number of components :math:`N_\mathrm{C}`.
+            chis:
+                The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`.
+        """
+        super().__init__(num_comp, chis)
+        self._logger = logging.getLogger(self.__class__.__name__)
 
     @property
     def chis(self) -> np.ndarray:
@@ -266,59 +376,3 @@ class FloryHugginsInteraction(InteractionBase):
         return FloryHugginsInteractionCompiled(
             self._chis, -self._chis.min() + additional_chis_shift
         )
-
-    def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""Implementation of calculating interaction energy.
-
-        This method overwrites the interface
-        :meth:`~flory.entropy.base.InteractionBase._energy_impl` in
-        :class:`~flory.entropy.base.InteractionBase`.
-
-        Args:
-            phis:
-                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
-                phases are included, the index of the components must be the last
-                dimension.
-
-        Returns:
-            : The interaction energy density
-        """
-        ans = 0.5 * np.einsum("...i,...j,ij->...", phis, phis, self._chis)
-        return ans
-
-    def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{interaction}/\partial \phi_i`.
-
-        This method overwrites the interface
-        :meth:`~flory.entropy.base.InteractionBase._jacobian_impl` in
-        :class:`~flory.entropy.base.InteractionBase`.
-
-        Args:
-            phis:
-                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
-                phases are included, the index of the components must be the last
-                dimension.
-
-        Returns:
-            : The full Jacobian
-        """
-        ans = phis @ self._chis
-        return ans
-
-    def _hessian_impl(self, phis: np.ndarray) -> np.ndarray:
-        r"""Implementation of calculating Hessian :math:`\partial^2 f_\mathrm{interaction}/\partial \phi_i^2`.
-
-        This method overwrites the interface
-        :meth:`~flory.entropy.base.InteractionBase._hessian_impl` in
-        :class:`~flory.entropy.base.InteractionBase`.
-
-        Args:
-            phis:
-                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
-                phases are included, the index of the components must be the last
-                dimension.
-
-        Returns:
-            : The full Hessian
-        """
-        return np.zeros_like(phis)[..., None] + self._chis  # type: ignore
