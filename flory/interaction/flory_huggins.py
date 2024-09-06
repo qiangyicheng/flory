@@ -76,8 +76,8 @@ class FloryHugginsInteraction(InteractionBase):
 
     The particular form of interaction energy density reads
 
-        .. math::
-            f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
+    .. math::
+        f_\mathrm{interaction}(\{\phi_i\}) = \sum_{i,j=1}^{N_\mathrm{C}} \frac{\chi_{ij}}{2} \phi_i\phi_j
 
     where :math:`\phi_i` is the fraction of component :math:`i`.
     """
