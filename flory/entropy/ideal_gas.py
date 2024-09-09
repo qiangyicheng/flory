@@ -80,8 +80,7 @@ class IdealGasEntropyCompiled(EntropyBaseCompiled):
             ans -= phis_comp[itr_comp] / self._sizes[itr_comp]
         return ans
 
-
-class IdealGasEntropy(EntropyBase):
+class IdealGasEntropyBase(EntropyBase):
     r"""Class for entropic energy of mixture of ideal gas.
 
     The particular form of dimensionless entropic energy reads
@@ -93,7 +92,9 @@ class IdealGasEntropy(EntropyBase):
     where :math:`\phi_i` is the fraction of component :math:`i`. All components are
     assumed to have the same molecular volume :math:`\nu` by default. The relative
     molecular sizes :math:`l_i=\nu_i/\nu` can be changed by setting the optional parameter
-    :paramref:`sizes`. Note that no implicit solvent is assumed.
+    :paramref:`sizes`. Note that no implicit solvent is assumed. This class only
+    implements the common methods of all ideal gas entropy. Note that
+    :meth:`~flory.entropy.base.EntropyBase._compiled_impl` is not implemented.
     """
 
     def __init__(
@@ -118,30 +119,6 @@ class IdealGasEntropy(EntropyBase):
             sizes = np.atleast_1d(sizes)
             shape = (num_comp,)
             self._sizes = np.array(np.broadcast_to(sizes, shape))
-
-    @property
-    def sizes(self) -> np.ndarray:
-        r"""The relative molecule volumes :math:`l_i = \nu_i/\nu`."""
-        return self._sizes
-
-    @sizes.setter
-    def sizes(self, sizes_new: np.ndarray):
-        sizes_new = np.atleast_1d(sizes_new)
-        shape = (self.num_comp,)
-        self._sizes = np.array(np.broadcast_to(sizes_new, shape))
-
-    def _compiled_impl(self) -> IdealGasEntropyCompiled:
-        """Implementation of creating a compiled entropy instance.
-
-        This method overwrites the interface
-        :meth:`~flory.entropy.base.EntropyBase._compiled_impl` in
-        :class:`~flory.entropy.base.EntropyBase`.
-
-        Returns:
-            : Instance of :class:`IdealGasEntropyCompiled`.
-        """
-
-        return IdealGasEntropyCompiled(self._sizes)
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating entropic energy :math:`f_\mathrm{entropy}`.
@@ -196,3 +173,59 @@ class IdealGasEntropy(EntropyBase):
             : The full Hessian.
         """
         return np.eye(self.num_comp) / (phis * self._sizes)[..., None]
+
+class IdealGasEntropy(IdealGasEntropyBase):
+    r"""Class for entropic energy of mixture of ideal gas.
+
+    The particular form of dimensionless entropic energy reads
+
+    .. math::
+        f_\mathrm{entropy}(\{\phi_i\}) =
+            \sum_{i=1}^{N_\mathrm{C}} \frac{\nu}{\nu_i}\phi_i \ln(\phi_i),
+
+    where :math:`\phi_i` is the fraction of component :math:`i`. All components are
+    assumed to have the same molecular volume :math:`\nu` by default. The relative
+    molecular sizes :math:`l_i=\nu_i/\nu` can be changed by setting the optional parameter
+    :paramref:`sizes`. Note that no implicit solvent is assumed.
+    """
+
+    def __init__(
+        self,
+        num_comp: int,
+        sizes: np.ndarray | None = None,
+    ):
+        r"""
+        Args:
+            num_comp:
+                Number of components :math:`N_\mathrm{C}`.
+            sizes:
+                The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
+                volume of a reference molecule :math:`\nu`. It is treated as all-one
+                vector by default.
+        """
+        super().__init__(num_comp, sizes)
+        self._logger = logging.getLogger(self.__class__.__name__)
+
+    @property
+    def sizes(self) -> np.ndarray:
+        r"""The relative molecule volumes :math:`l_i = \nu_i/\nu`."""
+        return self._sizes
+
+    @sizes.setter
+    def sizes(self, sizes_new: np.ndarray):
+        sizes_new = np.atleast_1d(sizes_new)
+        shape = (self.num_comp,)
+        self._sizes = np.array(np.broadcast_to(sizes_new, shape))
+
+    def _compiled_impl(self) -> IdealGasEntropyCompiled:
+        """Implementation of creating a compiled entropy instance.
+
+        This method overwrites the interface
+        :meth:`~flory.entropy.base.EntropyBase._compiled_impl` in
+        :class:`~flory.entropy.base.EntropyBase`.
+
+        Returns:
+            : Instance of :class:`IdealGasEntropyCompiled`.
+        """
+
+        return IdealGasEntropyCompiled(self._sizes.astype(np.float64))
