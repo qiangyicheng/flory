@@ -30,6 +30,12 @@ Installation
 pip install flory
 ```
 
+As an alternative, you can install `flory` through [conda](https://docs.conda.io/en/latest/) using the [conda-forge](https://conda-forge.org/) channel:
+
+```bash
+conda install -c conda-forge flory
+```
+
 Usage
 -----
 The following example determines the coexisting phases of a binary mixture with Flory-Huggins free energy:
