@@ -7,7 +7,8 @@ import pytest
 
 import flory
 
-
+@pytest.mark.slow
+@pytest.mark.no_cover
 def test_consistency_ensemble():
     num_comp = 3
     chis = [[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
@@ -43,7 +44,8 @@ def test_consistency_ensemble():
         phases_canonical.fractions, phases_grandcanonical.fractions, rtol=1e-3
     )
 
-
+@pytest.mark.slow
+@pytest.mark.no_cover
 def test_consistency_polydispersity():
     num_feat = 2
     chis_feat = [[0, 4.0], [4.0, 0]]
