@@ -15,7 +15,7 @@ authors:
 affiliations:
  - name: Max Planck Institute for Dynamics and Self-Organization, Göttingen, Germany
    index: 1
-date: 11 August 2024
+date: 9 September 2024
 bibliography: paper.bib
 ---
 
@@ -64,7 +64,7 @@ finder.set_interaction(fh.interaction)
 phases = finder.run().get_clusters()
 ```
 This procedure can be repeated to sample an entire phase diagrams.
-Moreover, we could vary the type of interaction by initializing a different class, and we could similarly change the entropy, ensemble, and constraints.
+Moreover, we could vary the type of interaction by initializing a different class or modifying the existing one, and we could similarly change the entropy, ensemble, and constraints.
 Customized specialization of all four aspects can be easily implemented by deriving from the provided base classes.
 
 The `flory` package is designed to deliver high performance, which is achieved by just-in-time compilation using numba [@lam2015Numba].
