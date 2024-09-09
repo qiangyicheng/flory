@@ -113,5 +113,14 @@ Instead, the system will keep fixed chemical potentials.
 :mod:`flory` can handle this by switching from :class:`~flory.ensemble.canonical.CanonicalEnsemble` to :class:`~flory.ensemble.grandcanonical.GrandCanonicalEnsemble`:
 
 .. literalinclude:: /../../examples/grandcanonical_with_constraints.py
-   :emphasize-lines: 7, 13
+   :emphasize-lines: 8, 14
+   :linenos:
+
+Using different interaction&entropy
+---------------------------------
+In a mixture with polydispersity, several components may share the same interaction property but only differs in size.
+:mod:`flory` allows to handle this case sufficiently by using different :mod:`~flory.interaction` and :mod:`~flory.entropy`:
+
+.. literalinclude:: /../../examples/polydispersed.py
+   :emphasize-lines: 4-5, 11-12
    :linenos:
