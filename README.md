@@ -4,6 +4,7 @@
 [![Codecov](https://codecov.io/github/qiangyicheng/flory/graph/badge.svg?token=YF3K9ST8XQ)](https://codecov.io/github/qiangyicheng/flory)
 [![Documentation Status](https://readthedocs.org/projects/flory/badge/?version=latest)](https://flory.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/flory.svg)](https://badge.fury.io/py/flory)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/flory.svg)](https://anaconda.org/conda-forge/flory)
 
 `flory` is a Python package for analyzing field theories of multicomponent mixtures.
 In particular, the package provides routines to determine coexisting states numerically, which is a challenging problem since the thermodynamic coexistence conditions are many coupled non-linear equations.
