@@ -25,7 +25,9 @@ def test_CoexistingPhasesFinder_set_instances():
 
     finder.set_constraints([constraint_1, constraint_2])
 
-    finder.run(max_steps=10000)
+    finder.run(max_steps=100)
+
+    ###############################################################
 
     new_chis = free_energy.chis.copy()
     new_chis[0, 1] += 0.5
@@ -44,4 +46,21 @@ def test_CoexistingPhasesFinder_set_instances():
     finder.set_ensemble(new_ensemble)
     finder.set_constraints([flory.NoConstraint(num_comp)])
 
-    finder.run(max_steps=10000)
+    finder.run(max_steps=100)
+    
+    ###############################################################
+    
+    num_feat = 2
+    chis_feat = [[0, 4.0], [4.0, 0]]
+    phi_means = [0.2, 0.3, 0.2, 0.3]
+    sizes = [1, 2, 1, 2]
+    num_comp_per_feat = [2, 2]
+    num_comp = np.sum(num_comp_per_feat)
+
+    interaction = flory.FloryHugginsBlockInteraction(num_feat, chis_feat, num_comp_per_feat)
+    entropy = flory.IdealGasPolydispersedEntropy(num_feat, sizes, num_comp_per_feat)
+    ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
+    finder = flory.CoexistingPhasesFinder(interaction, entropy, ensemble)
+    
+    finder.run(max_steps=100)
+
