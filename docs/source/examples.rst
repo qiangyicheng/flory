@@ -82,7 +82,7 @@ showing that :math:`N_\mathrm{M}=4` underestimates the number of phases in the f
 
 Construct a ternary phase diagram
 ---------------------------------
-Here we provide a simple example for generating a :math:`(\phi_B, \phi_N_\mathrm{A})` phase diagram for a simple ternary mixture with fixed interaction matrix.
+Here we provide a simple example for generating a :math:`(\phi_B, \phi_A)` phase diagram for a simple ternary mixture with fixed interaction matrix.
 The example first finds a point in the phase diagram that leads to three-phase coexistence, which is a triangle in the phase diagram.
 Then starting from each edge of the triangle, we follow the direction to the unknown region in the phase diagram to complete all two-phase coexistence regions.
 
