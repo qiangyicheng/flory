@@ -36,6 +36,7 @@ version_file = "flory/_version.py"
 
 [project.urls]
 homepage = "https://github.com/qiangyicheng/flory"
+documentation = "https://flory.readthedocs.io"
 repository = "https://github.com/qiangyicheng/flory"
 
 [tool.setuptools]
