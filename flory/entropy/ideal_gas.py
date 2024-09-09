@@ -228,4 +228,4 @@ class IdealGasEntropy(IdealGasEntropyBase):
             : Instance of :class:`IdealGasEntropyCompiled`.
         """
 
-        return IdealGasEntropyCompiled(self._sizes)
+        return IdealGasEntropyCompiled(self._sizes.astype(np.float64))

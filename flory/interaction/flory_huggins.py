@@ -191,6 +191,7 @@ class FloryHugginsInteractionBase(InteractionBase):
         """
         return np.zeros_like(phis)[..., None] + self._chis  # type: ignore
 
+
 class FloryHugginsInteraction(FloryHugginsInteractionBase):
     r"""Class for Flory-Huggins interaction energy of mixture.
 
@@ -374,5 +375,6 @@ class FloryHugginsInteraction(FloryHugginsInteractionBase):
         """
 
         return FloryHugginsInteractionCompiled(
-            self._chis, -self._chis.min() + additional_chis_shift
+            self._chis.astype(np.float64),
+            -self._chis.astype(np.float64).min() + additional_chis_shift,
         )
