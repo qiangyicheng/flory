@@ -22,19 +22,23 @@ bibliography: paper.bib
 # Summary
 
 Phase separation, an intrinsic property of mixtures, is widely observed in many scenarios, ranging from the simple demixing of oil and water to the condensation of biomolecules in cells.
-In multicomponent mixtures, phase separation leads to the coexistence of multiple phases, which is crucial in many fields.
-The `flory` package provides an easily accessible, performant, and extensible code that finds the coexisting phases in multicomponent mixtures.
-The package expresses the free energy of the mixtures by several orthogonal aspects to cover a broad range of mixtures.
-Compared with existing methods, the `flory` package implements the state-of-art method that is optimized for mixtures of many components.
+In multicomponent mixtures, phase separation can lead to many coexisting phases, which is crucial in many fields.
+The `flory` package provides an easily accessible, performant, and extensible code that finds coexisting phases in multicomponent mixtures.
+The package expresses the free energy of the mixtures by several orthogonal aspects to cover a broad range of physical situations.
+Compared with existing methods, the `flory` package implements a state-of-art method that is optimized for mixtures of many components.
 
 # Statement of need
 
-Finding coexisting phases is a general question in many fields such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
-There are several strategies to theoretically predict the coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
-The computational cost of many existing methods of finding the coexisting phases, however, scales strongly with component count, so systems with many different components cannot be analyzed.
+Finding coexisting phases is a general task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
+There are several strategies to theoretically predict coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
+<!-- We also need to mention somewhere that for many of the methods above there is no openly available code, so the `flory` package fills a gap. In fact, the only openly available method that I'm aware of is `pycalphad`, which we need to cite: Otis, R. & Liu, Z.-K., (2017). pycalphad: CALPHAD-based Computational Thermodynamics in Python. Journal of Open Research Software. 5(1), p.1. DOI: http://doi.org/10.5334/jors.140 
+
+Do you know any additional packages that solve comparable problems?
+-->
+The computational cost of many existing methods of finding the coexisting phases, however, scales strongly with component count, so systems with many different components cannot be analyzed efficiently.
 
 The `flory` Python package is designed to solve this problem.
-It aims to find the coexisting phases in a broad range of multicomponent mixtures conveniently, while also being efficient enough for sampling entire phase diagrams in high dimensions.
+It aims to find coexisting phases in a broad range of multicomponent mixtures conveniently while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
 
 # Methods 
 
