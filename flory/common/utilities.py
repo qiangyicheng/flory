@@ -62,7 +62,7 @@ def make_square_blocks(arr: np.ndarray, block_sizes: np.ndarray) -> np.ndarray:
         )
 
     ans = arr
-    for id in range(len(arr_shape)):
-        ans = np.repeat(ans, block_sizes, axis=id)
+    for i in range(len(arr_shape)):
+        ans = np.repeat(ans, block_sizes, axis=i)
 
     return ans

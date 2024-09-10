@@ -1,5 +1,5 @@
 Examples
-======================
+========
 
 Here we provide a few examples for using package.
 
@@ -97,7 +97,7 @@ We obtain the phase diagram
    :alt: phase diagram example
 
 Using constraints
----------------------------------
+-----------------
 In many systems such as mixtures containing ions or chemical reactions, there are additional constraints.
 :mod:`flory` provides convenient ways to consider these constrains.
 For example, in a system with 5 components, with first four components are charged, :mod:`flory` can find the coexisting phases that each phase is charge neutral, by applying a :class:`~flory.constraint.linear_local.LinearLocalConstraint`:
@@ -107,7 +107,7 @@ For example, in a system with 5 components, with first four components are charg
    :linenos:
 
 Using different ensemble
----------------------------------
+------------------------
 When considering an open system, the volume fractions are no longer conserved.
 Instead, the system will keep fixed chemical potentials.
 :mod:`flory` can handle this by switching from :class:`~flory.ensemble.canonical.CanonicalEnsemble` to :class:`~flory.ensemble.grandcanonical.GrandCanonicalEnsemble`:
