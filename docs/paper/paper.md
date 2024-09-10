@@ -31,14 +31,19 @@ Compared with existing methods, the `flory` package implements a state-of-art me
 
 Finding coexisting phases is a general task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
 There are several strategies to theoretically predict coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
+These strategies are utilized in few open-sourced packages, such as `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation], which usually combine a database to compute phase diagrams (Calphad) of mixtures with few components.
+However, the computational cost of finding the coexisting phases scales strongly with component count, so systems with many different components cannot be analyzed efficiently.
+
+The `flory` Python package is designed to fill this gap.
+It aims to find coexisting phases in a broad range of multicomponent mixtures conveniently while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
+Compared to the Calphad tools, `flory` package imposes 
+
 <!-- We also need to mention somewhere that for many of the methods above there is no openly available code, so the `flory` package fills a gap. In fact, the only openly available method that I'm aware of is `pycalphad`, which we need to cite: Otis, R. & Liu, Z.-K., (2017). pycalphad: CALPHAD-based Computational Thermodynamics in Python. Journal of Open Research Software. 5(1), p.1. DOI: http://doi.org/10.5334/jors.140 
 
 Do you know any additional packages that solve comparable problems?
--->
-The computational cost of many existing methods of finding the coexisting phases, however, scales strongly with component count, so systems with many different components cannot be analyzed efficiently.
 
-The `flory` Python package is designed to solve this problem.
-It aims to find coexisting phases in a broad range of multicomponent mixtures conveniently while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
+I found another one `OpenCalphad`, which I added above. There is also a commercial one [@andersson2002ThermoCalc]. I guess we do not need to cite them. 
+-->
 
 # Methods 
 
