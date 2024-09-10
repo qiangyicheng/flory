@@ -1,4 +1,4 @@
-"""Module for Flory-Huggins block interaction energy of mixture.
+r"""Module for Flory-Huggins block interaction energy of mixture.
 
 The Flory-Huggins block interaction means that several components may have exactly
 same interactions. Equivalently, the matrix :math:`\chi_{ij}` has blocked structure.

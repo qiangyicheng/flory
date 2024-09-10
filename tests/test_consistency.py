@@ -7,6 +7,7 @@ import pytest
 
 import flory
 
+
 @pytest.mark.slow
 @pytest.mark.no_cover
 def test_consistency_ensemble():

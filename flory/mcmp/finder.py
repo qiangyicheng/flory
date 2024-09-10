@@ -46,7 +46,7 @@ from ..common import *
 from ..constraint import ConstraintBase, ConstraintBaseCompiled, NoConstraintCompiled
 from ..ensemble import EnsembleBase, EnsembleBaseCompiled
 from ..entropy import EntropyBase, EntropyBaseCompiled
-from ..interaction import InteractionBase, FloryHugginsInteractionCompiled
+from ..interaction import FloryHugginsInteractionCompiled, InteractionBase
 from ._finder_impl import *
 
 
