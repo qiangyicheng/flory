@@ -65,6 +65,8 @@ class EnsembleBase:
             num_comp:
                 Number of components :math:`N_\mathrm{C}`.
         """
+        if num_comp < 1:
+            raise ValueError("Component count must be at least 1")
         self.num_comp = num_comp
 
     def _compiled_impl(self, **kwargs) -> EnsembleBaseCompiled:
