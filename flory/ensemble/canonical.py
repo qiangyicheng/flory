@@ -27,11 +27,11 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
     Therefore, the volume fractions distribution of the components in compartments can be
     obtained by normalizing the Boltzmann factors according to the average volume
     fractions,
-    
+
         .. math::
             \phi_i^{(m)} &= \frac{\bar{\phi}_i}{Q_i} p_i^{(m)} \\
             Q_i &= \sum_m p_i^{(m)} J_m .
-    
+
     Since (translational) entropy is always defined for each component, this class is only
     aware of the component-based description of the system.
     """
@@ -70,47 +70,36 @@ class CanonicalEnsemble(EnsembleBase):
 
     .. math::
         \bar{\phi}_i = \frac{\sum_m \phi_i^{(m)} J_m }{\sum_m J_m}.
-
     """
 
-    def __init__(
-        self,
-        num_comp: int,
-        phi_means: np.ndarray,
-    ):
+    def __init__(self, num_comp: int, phi_means: np.ndarray | None = None):
         r"""
         Args:
             num_comp:
                 Number of components :math:`N_\mathrm{C}`.
             phi_means:
-                The average volume fractions of the components :math:`\bar{\phi}_i`.
+                The average volume fractions of the components :math:`\bar{\phi}_i`. If
+                omitted, an equimolar system is initialized.
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
 
-        phi_means = np.atleast_1d(phi_means)
-
-        shape = (num_comp,)
-        self._phi_means = np.array(np.broadcast_to(phi_means, shape))
-
-        if not np.allclose(self._phi_means.sum(), 1.0):
-            self._logger.warning(
-                "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
-            )
+        if phi_means is None:
+            self.phi_means = np.full(num_comp, 1 / num_comp)
+        else:
+            self.phi_means = np.atleast_1d(phi_means)
 
     @property
     def phi_means(self) -> np.ndarray:
         r"""The average volume fractions of the components :math:`\bar{\phi}_i`."""
-
         return self._phi_means
 
     @phi_means.setter
     def phi_means(self, phi_means_new: np.ndarray):
-        phi_means_new = np.atleast_1d(phi_means_new)
-        shape = (self.num_comp,)
-        self._phi_means = np.array(np.broadcast_to(phi_means_new, shape))
+        phi_means_new = np.array(phi_means_new)  # copy data
+        self._phi_means = np.broadcast_to(phi_means_new, (self.num_comp,))
 
-        if not np.allclose(self._phi_means.sum(), 1.0):
+        if not np.isclose(self._phi_means.sum(), 1.0):
             self._logger.warning(
                 "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
             )
@@ -125,5 +114,4 @@ class CanonicalEnsemble(EnsembleBase):
         Returns:
             : Instance of :class:`CanonicalEnsembleCompiled`.
         """
-
         return CanonicalEnsembleCompiled(self._phi_means)
