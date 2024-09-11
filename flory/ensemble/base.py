@@ -67,7 +67,12 @@ class EnsembleBase:
         """
         if num_comp < 1:
             raise ValueError("Component count must be at least 1")
-        self.num_comp = num_comp
+        self._num_comp = num_comp
+
+    @property
+    def num_comp(self) -> int:
+        """Component count"""
+        return self._num_comp
 
     def _compiled_impl(self, **kwargs) -> EnsembleBaseCompiled:
         """Implementation of creating a compiled ensemble instance (Interface).

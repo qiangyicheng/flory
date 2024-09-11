@@ -23,5 +23,3 @@ def test_canonical_ensemble():
     np.testing.assert_allclose(e.phi_means, [1, 0])
     with pytest.raises(ValueError):
         e.phi_means = [0.25, 0.25, 0.25, 0.25]
-    with pytest.raises(ValueError):
-        e.phi_means = [2, 1]

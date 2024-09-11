@@ -72,11 +72,7 @@ class CanonicalEnsemble(EnsembleBase):
         \bar{\phi}_i = \frac{\sum_m \phi_i^{(m)} J_m }{\sum_m J_m}.
     """
 
-    def __init__(
-        self,
-        num_comp: int,
-        phi_means: np.ndarray | None = None,
-    ):
+    def __init__(self, num_comp: int, phi_means: np.ndarray | None = None):
         r"""
         Args:
             num_comp:
