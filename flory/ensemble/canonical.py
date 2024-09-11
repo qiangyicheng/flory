@@ -70,7 +70,6 @@ class CanonicalEnsemble(EnsembleBase):
 
     .. math::
         \bar{\phi}_i = \frac{\sum_m \phi_i^{(m)} J_m }{\sum_m J_m}.
-
     """
 
     def __init__(
@@ -101,11 +100,9 @@ class CanonicalEnsemble(EnsembleBase):
 
     @phi_means.setter
     def phi_means(self, phi_means_new: np.ndarray):
-        phi_means_new = np.asarray(phi_means_new)
+        phi_means_new = np.array(phi_means_new)  # copy data
         self._phi_means = np.broadcast_to(phi_means_new, (self.num_comp,))
 
-        if np.any(self._phi_means < 0) or np.any(self._phi_means > 1):
-            raise ValueError("Volume fractions must be within [0, 1]")
         if not np.isclose(self._phi_means.sum(), 1.0):
             self._logger.warning(
                 "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
