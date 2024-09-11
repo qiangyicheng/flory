@@ -116,6 +116,6 @@ class CanonicalEnsemble(EnsembleBase):
         :class:`~flory.ensemble.base.EnsembleBase`.
 
         Returns:
-            Instance of :class:`CanonicalEnsembleCompiled`.
+            : Instance of :class:`CanonicalEnsembleCompiled`.
         """
         return CanonicalEnsembleCompiled(self._phi_means)
