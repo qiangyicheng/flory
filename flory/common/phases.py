@@ -97,3 +97,67 @@ class Phases:
 
         # return sorted results
         return Phases(cluster_volumes, cluster_fractions).sort()
+
+
+class PhasesResult(Phases):
+    """Contains compositions and relative sizes of many phases along with convergence information."""
+
+    def __init__(self, volumes: np.ndarray, fractions: np.ndarray, conv_info: dict = {}):
+        r"""
+        Args:
+            volumes:
+                1D array with shape :math:`N_\mathrm{P}`, containing the volume
+                :math:`J_p` of each phase.
+            fractions:
+                2D array with shape :math:`N_\mathrm{P} \times N_\mathrm{C}`,
+                containing the volume fractions of the components in each phase
+                :math:`\phi_{p,i}`. The first dimension must be the same as
+                :paramref:`volumes`.
+            conv_info:
+                Additional information about the convergence.
+        """
+        super().__init__(volumes, fractions)
+        self._conv_info = conv_info
+
+    @classmethod
+    def from_phases(cls, phases: Phases, conv_info: dict = {}):
+        r"""
+        Args:
+            phases:
+                The :class:`Phases` containing volumes and fractions.
+            conv_info:
+                Additional information about the convergence.
+        """
+        return cls(phases.volumes, phases.fractions, conv_info)
+
+    @property
+    def conv_info(self) -> dict:
+        r"""Convergence information for current collection of phases."""
+        return self._conv_info
+
+    def sort(self) -> PhasesResult:
+        """Sort the phases according to the index of most concentrated components.
+
+        Returns:
+            : The sorted phases.
+        """
+        sorted_phases = super().sort()
+        return PhasesResult.my_class_method(sorted_phases, self.conv_info)
+
+    def get_clusters(self, dist: float = 1e-2) -> PhasesResult:
+        r"""Find clusters of compositions.
+
+        Find unique phases from compartments by clustering. The returning results are
+        sorted according to the index of most concentrated components.
+
+        Args:
+            dist (float):
+                Cut-off distance for cluster analysis.
+
+        Returns:
+            : The clustered and sorted phases.
+        """
+        clusterred_phases = super().get_clusters(dist)
+
+        # return sorted results
+        return PhasesResult.from_phases(clusterred_phases, self.conv_info)

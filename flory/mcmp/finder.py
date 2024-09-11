@@ -514,7 +514,7 @@ class CoexistingPhasesFinder:
         tolerance: float | None = None,
         interval: int | None = None,
         progress: bool | None = None,
-    ) -> Phases:
+    ) -> PhasesResult:
         r"""Run instance to find coexisting phases.
 
         The keywords arguments can be used to temporarily overwrite the provided values
@@ -678,9 +678,7 @@ class CoexistingPhasesFinder:
             "max_abs_js_diff": max_abs_Js_diff,
             "max_constraint_residue": max_constraint_residue,
             "revive_count_left": self._revive_count_left,
-            "phis": self._phis_comp.copy(),
-            "Js": self._Js.copy(),
         }
 
         # transpose phi since `Phases` uses a different convention
-        return Phases(final_Js, final_phis_comp.T)
+        return PhasesResult(final_Js, final_phis_comp.T, self._diagnostics.copy())
