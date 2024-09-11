@@ -87,12 +87,19 @@ class Phases:
         links = cluster.hierarchy.linkage(dists, method="centroid")
         # flatten the hierarchy by clustering
         clusters = cluster.hierarchy.fcluster(links, dist, criterion="distance")
-        cluster_fractions = np.array(
-            [self.fractions[clusters == n, :].mean(axis=0) for n in np.unique(clusters)]
-        )
-        cluster_volumes = np.array(
-            [self.volumes[clusters == n].sum(axis=0) for n in np.unique(clusters)]
-        )
+        cluster_fractions = []
+        cluster_volumes = []
+
+        for n in np.unique(clusters):
+            current_fractions = self.fractions[clusters == n, :]
+            current_volumes = self.volumes[clusters == n]
+            sumed_fractions = current_volumes @ current_fractions / current_volumes.sum()
+            cluster_fractions.append(sumed_fractions)
+            cluster_volumes.append(current_volumes.sum())
+
+        current_fractions = np.array(current_fractions)
+        cluster_volumes = np.array(cluster_volumes)
+
         cluster_volumes /= cluster_volumes.sum()
 
         # return sorted results
