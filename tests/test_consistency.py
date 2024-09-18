@@ -7,6 +7,7 @@ import pytest
 
 import flory
 
+
 @pytest.mark.slow
 @pytest.mark.no_cover
 def test_consistency_ensemble():
@@ -22,7 +23,7 @@ def test_consistency_ensemble():
         free_energy.interaction, free_energy.entropy, ensemble
     )
 
-    phases_canonical = finder.run().get_clusters()
+    phases_canonical = finder.run().get_clusters().sort()
 
     ###############################################################
 
@@ -35,7 +36,7 @@ def test_consistency_ensemble():
         free_energy.interaction, free_energy.entropy, ensemble, constraint, random_std=1.0
     )
 
-    phases_grandcanonical = finder.run().get_clusters()
+    phases_grandcanonical = finder.run().get_clusters().sort()
 
     np.testing.assert_allclose(
         phases_canonical.volumes, phases_grandcanonical.volumes, rtol=1e-3
@@ -61,7 +62,7 @@ def test_consistency_polydispersity():
     ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
     finder = flory.CoexistingPhasesFinder(interaction, entropy, ensemble)
 
-    phases_optimized = finder.run().get_clusters()
+    phases_optimized = finder.run().get_clusters().sort()
     ###############################################################
 
     chis = interaction.chis
@@ -69,7 +70,7 @@ def test_consistency_polydispersity():
     fh = flory.FloryHuggins(num_comp, chis, sizes)
     finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
 
-    phases_standard = finder.run().get_clusters()
+    phases_standard = finder.run().get_clusters().sort()
 
     np.testing.assert_allclose(
         phases_optimized.volumes, phases_standard.volumes, rtol=1e-4

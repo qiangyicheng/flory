@@ -37,8 +37,16 @@ class Phases:
         self.volumes = volumes
         self.fractions = fractions
 
+    def _copy(self, volumes: np.ndarray, fractions: np.ndarray) -> Phases:
+        """create copy with changed volume and fraction
+
+        This method helps with subclassing methods that should keep other information
+        intact.
+        """
+        return self.__class__(volumes, fractions)
+
     def __str__(self) -> str:
-        return f"Phases(volumes={self.volumes}, fractions={self.fractions})"
+        return f"{self.__class__.__name__}(volumes={self.volumes}, fractions={self.fractions})"
 
     @property
     def num_phases(self) -> int:
@@ -51,9 +59,18 @@ class Phases:
         return self.fractions.shape[1]
 
     @property
+    def total_volume(self) -> float:
+        """Total volume of entire system"""
+        return self.volumes.sum()
+
+    @property
     def mean_fractions(self) -> np.ndarray:
         r"""Mean fraction averaged over phases :math:`\bar{\phi}_i`"""
-        return self.volumes @ self.fractions / self.volumes.sum()
+        return self.volumes @ self.fractions / self.total_volume
+
+    def normalize(self) -> Phases:
+        """normalize the phases so that their volumes adds to one"""
+        return self._copy(self.volumes / self.total_volume, self.fractions)
 
     def sort(self) -> Phases:
         """Sort the phases according to the index of most concentrated components.
@@ -63,7 +80,7 @@ class Phases:
         """
         enrich_indexes = np.argsort(self.fractions)
         sorting_index = np.lexsort(np.transpose(enrich_indexes))
-        return Phases(self.volumes[sorting_index], self.fractions[sorting_index])
+        return self._copy(self.volumes[sorting_index], self.fractions[sorting_index])
 
     def get_clusters(self, dist: float = 1e-2) -> Phases:
         r"""Find clusters of compositions.
@@ -87,13 +104,65 @@ class Phases:
         links = cluster.hierarchy.linkage(dists, method="centroid")
         # flatten the hierarchy by clustering
         clusters = cluster.hierarchy.fcluster(links, dist, criterion="distance")
-        cluster_fractions = np.array(
-            [self.fractions[clusters == n, :].mean(axis=0) for n in np.unique(clusters)]
-        )
-        cluster_volumes = np.array(
-            [self.volumes[clusters == n].sum(axis=0) for n in np.unique(clusters)]
-        )
-        cluster_volumes /= cluster_volumes.sum()
 
-        # return sorted results
-        return Phases(cluster_volumes, cluster_fractions).sort()
+        # collect data for each cluster
+        cluster_fractions = []
+        cluster_volumes = []
+        for n in np.unique(clusters):
+            current_fractions = self.fractions[clusters == n, :]
+            current_volumes = self.volumes[clusters == n]
+            mean_fractions = np.average(
+                current_fractions, weights=current_volumes, axis=0
+            )
+            cluster_fractions.append(mean_fractions)
+            cluster_volumes.append(current_volumes.sum())
+
+        return self._copy(cluster_volumes, cluster_fractions)
+
+
+class PhasesResult(Phases):
+    """Contains compositions and relative sizes of many phases along with extra information."""
+
+    def __init__(
+        self, volumes: np.ndarray, fractions: np.ndarray, *, info: dict | None = None
+    ):
+        r"""
+        Args:
+            volumes:
+                1D array with shape :math:`N_\mathrm{P}`, containing the volume
+                :math:`J_p` of each phase.
+            fractions:
+                2D array with shape :math:`N_\mathrm{P} \times N_\mathrm{C}`,
+                containing the volume fractions of the components in each phase
+                :math:`\phi_{p,i}`. The first dimension must be the same as
+                :paramref:`volumes`.
+            info:
+                Additional information about how the phases were obtained.
+        """
+        super().__init__(volumes, fractions)
+        self._info = {} if info is None else info
+
+    @classmethod
+    def from_phases(cls, phases: Phases, *, info: dict | None = None) -> PhasesResult:
+        r"""create phase result from :class:`Phases`
+
+        Args:
+            phases:
+                The :class:`Phases` containing volumes and fractions.
+            info:
+                Additional information about how the phases were obtained
+        """
+        return cls(phases.volumes, phases.fractions, info=info)
+
+    @property
+    def info(self) -> dict:
+        r"""Information for the current collection of phases."""
+        return self._info
+
+    def _copy(self, volumes: np.ndarray, fractions: np.ndarray) -> PhasesResult:
+        """create copy with changed volume and fraction
+
+        This method helps with subclassing methods that should keep other information
+        intact.
+        """
+        return self.__class__(volumes, fractions, info=self.info.copy())

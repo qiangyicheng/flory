@@ -117,7 +117,7 @@ Instead, the system will keep fixed chemical potentials.
    :linenos:
 
 Using different interaction&entropy
----------------------------------
+-----------------------------------
 In a mixture with polydispersity, several components may share the same interaction property but only differs in size.
 :mod:`flory` allows to handle this case sufficiently by using different :mod:`~flory.interaction` and :mod:`~flory.entropy`:
 

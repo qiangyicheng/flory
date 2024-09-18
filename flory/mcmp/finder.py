@@ -46,7 +46,7 @@ from ..common import *
 from ..constraint import ConstraintBase, ConstraintBaseCompiled, NoConstraintCompiled
 from ..ensemble import EnsembleBase, EnsembleBaseCompiled
 from ..entropy import EntropyBase, EntropyBaseCompiled
-from ..interaction import InteractionBase, FloryHugginsInteractionCompiled
+from ..interaction import FloryHugginsInteractionCompiled, InteractionBase
 from ._finder_impl import *
 
 
@@ -678,8 +678,6 @@ class CoexistingPhasesFinder:
             "max_abs_js_diff": max_abs_Js_diff,
             "max_constraint_residue": max_constraint_residue,
             "revive_count_left": self._revive_count_left,
-            "phis": self._phis_comp.copy(),
-            "Js": self._Js.copy(),
         }
 
         # transpose phi since `Phases` uses a different convention

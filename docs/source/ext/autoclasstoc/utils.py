@@ -115,7 +115,13 @@ def make_inherited_details(state, parent, open_by_default=False):
     return nodes_from_rst(state, f"Inherited from :py:class:`{get_cls_xref(parent)}`:")
 
 
-def make_links(state, attrs, cls, current_class=False):
+def remove_prefix(str, prefix):
+    if str.startswith(prefix):
+        return str[len(prefix) :]
+    return str
+
+
+def make_links(state, attrs, cls, current_class=False, mod_prefix=""):
     """
     Make links to the given class attributes.
 
@@ -130,7 +136,10 @@ def make_links(state, attrs, cls, current_class=False):
         [
             ".. autosummary::",
             "",
-            *[f'    {x if current_class else join(cls_xref, x, sep=".")}' for x in attrs],
+            *[
+                f'    {remove_prefix(x if current_class else join(cls_xref, x, sep="."), mod_prefix)}'
+                for x in attrs
+            ],
         ],
     )
 

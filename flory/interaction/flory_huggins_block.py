@@ -1,4 +1,4 @@
-"""Module for Flory-Huggins block interaction energy of mixture.
+r"""Module for Flory-Huggins block interaction energy of mixture.
 
 The Flory-Huggins block interaction means that several components may have exactly
 same interactions. Equivalently, the matrix :math:`\chi_{ij}` has blocked structure.
@@ -34,7 +34,6 @@ class FloryHugginsBlockInteraction(FloryHugginsInteractionBase):
 
     where :math:`B_r` and :math:`B_s` are the set of index of components that belong to
     feature :math:`r` and :math:`s`, respectively.
-
     """
 
     def __init__(

@@ -5,5 +5,5 @@
 """
 
 from .exceptions import ComponentNumberError, FeatureNumberError, VolumeFractionError
-from .phases import Phases
+from .phases import Phases, PhasesResult
 from .utilities import *

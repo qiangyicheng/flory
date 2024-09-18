@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .common import Phases
+from .common import PhasesResult
 from .ensemble import CanonicalEnsemble
 from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
@@ -19,7 +19,7 @@ def find_coexisting_phases(
     phi_means: np.ndarray,
     sizes: np.ndarray | None = None,
     **kwargs,
-) -> Phases:
+) -> PhasesResult:
     r"""Find coexisting phases of Flory-Huggins mixtures in canonical ensemble.
 
     This function is a convenience wrapper for the class
@@ -65,4 +65,7 @@ def find_coexisting_phases(
         **kwargs,
     )
     phases = finder.run()
-    return phases.get_clusters()  # use default distance threshold
+    # cluster (using default distance threshold), sort, and normalize the phases
+    phases = phases.get_clusters().sort().normalize()
+    # return result together with diagnostic information
+    return PhasesResult.from_phases(phases, info=finder.diagnostics.copy())

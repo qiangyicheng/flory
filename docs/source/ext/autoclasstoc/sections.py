@@ -118,8 +118,10 @@ class Section:
         wrapper = self._make_container()
         wrapper += self._make_rubric()
 
+        current_mod = f"~{self.cls.__module__}"
+
         if attrs:
-            wrapper += self._make_links(attrs, self.cls, True)
+            wrapper += self._make_links(attrs, self.cls, True, current_mod)
 
         if not self.include_inherited:
             return [wrapper]
@@ -129,7 +131,7 @@ class Section:
                 continue
 
             d = self._make_inherited_details(parent)
-            d += self._make_links(attrs, parent, False)
+            d += self._make_links(attrs, parent, False, current_mod)
             wrapper += d
 
         return [wrapper]
@@ -184,7 +186,7 @@ class Section:
         """
         return utils.make_rubric(self.title)
 
-    def _make_links(self, attrs, cls, current_class=False):
+    def _make_links(self, attrs, cls, current_class=False, mod_prefix=""):
         """
         Make a link to the full documentation for each attribute.
 
@@ -197,7 +199,7 @@ class Section:
                 ``__dict__``.
             cls (type): The class that the attributes belong to.
         """
-        return utils.make_links(self.state, attrs, cls, current_class)
+        return utils.make_links(self.state, attrs, cls, current_class, mod_prefix)
 
     def _make_inherited_details(self, parent):
         """
