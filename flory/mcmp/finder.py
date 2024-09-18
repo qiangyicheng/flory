@@ -46,7 +46,7 @@ from ..common import *
 from ..constraint import ConstraintBase, ConstraintBaseCompiled, NoConstraintCompiled
 from ..ensemble import EnsembleBase, EnsembleBaseCompiled
 from ..entropy import EntropyBase, EntropyBaseCompiled
-from ..interaction import InteractionBase, FloryHugginsInteractionCompiled
+from ..interaction import FloryHugginsInteractionCompiled, InteractionBase
 from ._finder_impl import *
 
 
@@ -514,7 +514,7 @@ class CoexistingPhasesFinder:
         tolerance: float | None = None,
         interval: int | None = None,
         progress: bool | None = None,
-    ) -> PhasesResult:
+    ) -> Phases:
         r"""Run instance to find coexisting phases.
 
         The keywords arguments can be used to temporarily overwrite the provided values
@@ -681,4 +681,4 @@ class CoexistingPhasesFinder:
         }
 
         # transpose phi since `Phases` uses a different convention
-        return PhasesResult(final_Js, final_phis_comp.T, self._diagnostics.copy())
+        return Phases(final_Js, final_phis_comp.T)

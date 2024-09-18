@@ -63,7 +63,9 @@ class Phases:
         """
         enrich_indexes = np.argsort(self.fractions)
         sorting_index = np.lexsort(np.transpose(enrich_indexes))
-        return Phases(self.volumes[sorting_index], self.fractions[sorting_index])
+        return self.__class__(
+            self.volumes[sorting_index], self.fractions[sorting_index]
+        )
 
     def get_clusters(self, dist: float = 1e-2) -> Phases:
         r"""Find clusters of compositions.
@@ -103,13 +105,15 @@ class Phases:
         cluster_volumes /= cluster_volumes.sum()
 
         # return sorted results
-        return Phases(cluster_volumes, cluster_fractions).sort()
+        return self.__class__(cluster_volumes, cluster_fractions).sort()
 
 
 class PhasesResult(Phases):
-    """Contains compositions and relative sizes of many phases along with convergence information."""
+    """Contains compositions and relative sizes of many phases along with extra information."""
 
-    def __init__(self, volumes: np.ndarray, fractions: np.ndarray, conv_info: dict = {}):
+    def __init__(
+        self, volumes: np.ndarray, fractions: np.ndarray, *, info: dict | None = None
+    ):
         r"""
         Args:
             volumes:
@@ -120,27 +124,28 @@ class PhasesResult(Phases):
                 containing the volume fractions of the components in each phase
                 :math:`\phi_{p,i}`. The first dimension must be the same as
                 :paramref:`volumes`.
-            conv_info:
-                Additional information about the convergence.
+            info:
+                Additional information about how the phases were obtained.
         """
         super().__init__(volumes, fractions)
-        self._conv_info = conv_info
+        self._info = {} if info is None else info
 
     @classmethod
-    def from_phases(cls, phases: Phases, conv_info: dict = {}):
-        r"""
+    def from_phases(cls, phases: Phases, *, info: dict | None = None) -> PhasesResult:
+        r"""create phase result from :class:`Phases`
+
         Args:
             phases:
                 The :class:`Phases` containing volumes and fractions.
-            conv_info:
-                Additional information about the convergence.
+            info:
+                Additional information about how the phases were obtained
         """
-        return cls(phases.volumes, phases.fractions, conv_info)
+        return cls(phases.volumes, phases.fractions, info=info)
 
     @property
-    def conv_info(self) -> dict:
-        r"""Convergence information for current collection of phases."""
-        return self._conv_info
+    def info(self) -> dict:
+        r"""Information for the current collection of phases."""
+        return self._info
 
     def sort(self) -> PhasesResult:
         """Sort the phases according to the index of most concentrated components.
@@ -149,7 +154,9 @@ class PhasesResult(Phases):
             : The sorted phases.
         """
         sorted_phases = super().sort()
-        return PhasesResult.my_class_method(sorted_phases, self.conv_info)
+        assert isinstance(sorted_phases, self.__class__)
+        sorted_phases._info = self.info.copy()
+        return sorted_phases
 
     def get_clusters(self, dist: float = 1e-2) -> PhasesResult:
         r"""Find clusters of compositions.
@@ -164,7 +171,7 @@ class PhasesResult(Phases):
         Returns:
             : The clustered and sorted phases.
         """
-        clusterred_phases = super().get_clusters(dist)
-
-        # return sorted results
-        return PhasesResult.from_phases(clusterred_phases, self.conv_info)
+        clustered_phases = super().get_clusters(dist)
+        assert isinstance(clustered_phases, self.__class__)
+        clustered_phases._info = self.info.copy()
+        return clustered_phases
