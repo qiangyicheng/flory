@@ -32,12 +32,14 @@ In contrast to existing methods, the `flory` package implements a state-of-art m
 Finding coexisting phases is a general task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
 There are several strategies to theoretically predict coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
 However, there are only a few open-source packages that implement these strategies.
-Most notably, `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation] combine a database to compute phase diagrams (Calphad) of mixtures with few components. <!-- What do they combine? I expect two aspects that are combined -->
+Most notably, `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation] combine a database of phases several strategies above to compute phase diagrams (Calphad) of mixtures with few components.
 However, the computational cost of finding the coexisting phases scales strongly with component count, so systems with many different components cannot be analyzed efficiently with these packages.
 
 The `flory` Python package is designed to fill this gap.
 It determines coexisting phases in a broad range of multicomponent mixtures while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
-Compared to the Calphad tools, `flory` package imposes <!-- There is something missing here? -->
+<!-- There is something missing here? -->
+<!-- It seems I forgot to remove this sentence. Do you think we need further comparison here? I put a possible sentence below. -->
+Compared to the Calphad tools, `flory` package focuses on mixtures with more components but simpler free energies.
 
 # Methods 
 
@@ -53,7 +55,7 @@ The package only imposes limits on the entropy part, which is crucial for the co
 By combining these four aspects, `flory` supports a broad range of free energy densities $f$ with different ensembles and constraints.
 A few widely-used specializations are provided for all four aspects, while customized ones can be added easily.
 
-The `flory` package is designed to deliver high performance. <!--, which is mainly achieved by just-in-time compilation using numba [@lam2015Numba]. -->
+The `flory` package is designed to deliver high performance. 
 The core part of the `flory` package is the finder for coexisting phases, which can be reused when the number $N_\mathrm{C}$ of components is kept fixed.
 This design moves a significant overhead to the creation of the solver, which can be amortized in many tasks, e.g., when a phase diagram is sampled.
 The core methods in the finder are just-in-time (JIT) compiled using numba [@lam2015Numba] to achieve high performance.
@@ -93,7 +95,7 @@ Customized specialization of all four aspects can be easily implemented by deriv
 
 # Acknowledgements
 
-We thank Chengjie Luo for stimulating discussions. 
+We thank Chengjie Luo for stimulating discussions.
 We gratefully acknowledge funding from the Max Planck Society and the European Union (ERC, EmulSim, 101044662).
 
 # References
