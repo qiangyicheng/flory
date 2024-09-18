@@ -65,6 +65,7 @@ def find_coexisting_phases(
         **kwargs,
     )
     phases = finder.run()
-    phases = phases.get_clusters()  # use default distance threshold
+    # cluster (using default distance threshold), sort, and normalize the phases
+    phases = phases.get_clusters().sort().normalize()
     # return result together with diagnostic information
     return PhasesResult.from_phases(phases, info=finder.diagnostics.copy())

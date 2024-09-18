@@ -68,6 +68,10 @@ class Phases:
         r"""Mean fraction averaged over phases :math:`\bar{\phi}_i`"""
         return self.volumes @ self.fractions / self.total_volume
 
+    def normalize(self) -> Phases:
+        """normalize the phases so that their volumes adds to one"""
+        return self._copy(self.volumes / self.total_volume, self.fractions)
+
     def sort(self) -> Phases:
         """Sort the phases according to the index of most concentrated components.
 
@@ -100,21 +104,20 @@ class Phases:
         links = cluster.hierarchy.linkage(dists, method="centroid")
         # flatten the hierarchy by clustering
         clusters = cluster.hierarchy.fcluster(links, dist, criterion="distance")
+
+        # collect data for each cluster
         cluster_fractions = []
         cluster_volumes = []
-
         for n in np.unique(clusters):
             current_fractions = self.fractions[clusters == n, :]
             current_volumes = self.volumes[clusters == n]
-            sumed_fractions = current_volumes @ current_fractions / current_volumes.sum()
-            cluster_fractions.append(sumed_fractions)
+            mean_fractions = np.average(
+                current_fractions, weights=current_volumes, axis=0
+            )
+            cluster_fractions.append(mean_fractions)
             cluster_volumes.append(current_volumes.sum())
 
-        current_fractions = np.array(current_fractions)
-        cluster_volumes = np.array(cluster_volumes)
-
-        # return sorted results
-        return self._copy(cluster_volumes, cluster_fractions).sort()
+        return self._copy(cluster_volumes, cluster_fractions)
 
 
 class PhasesResult(Phases):

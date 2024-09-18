@@ -54,6 +54,19 @@ def test_phases(cls):
     if cls == PhasesResult:
         assert p2.info["test"] == "value"
 
+    p2 = phases.normalize()
+    assert isinstance(p2, cls)
+    assert p2 is not phases
+    assert p2.total_volume == pytest.approx(1.0)
+    if p2.volumes[1] > p2.volumes[0]:
+        np.testing.assert_allclose(p2.volumes, phases.volumes / 1.2)
+        np.testing.assert_allclose(p2.fractions, phases.fractions)
+    else:
+        np.testing.assert_allclose(p2.volumes[::-1], phases.volumes / 1.2)
+        np.testing.assert_allclose(p2.fractions[::-1], phases.fractions)
+    if cls == PhasesResult:
+        assert p2.info["test"] == "value"
+
 
 @pytest.mark.parametrize("cls", [Phases, PhasesResult])
 def test_phases_wrong_input(cls):
