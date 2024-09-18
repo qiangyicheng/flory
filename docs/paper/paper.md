@@ -37,9 +37,6 @@ However, the computational cost of finding the coexisting phases scales strongly
 
 The `flory` Python package is designed to fill this gap.
 It determines coexisting phases in a broad range of multicomponent mixtures while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
-<!-- There is something missing here? -->
-<!-- It seems I forgot to remove this sentence. Do you think we need further comparison here? I put a possible sentence below. -->
-Compared to the Calphad tools, `flory` package focuses on mixtures with more components but simpler free energies.
 
 # Methods 
 
