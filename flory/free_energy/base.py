@@ -351,3 +351,32 @@ class FreeEnergyBase:
             : The number of negative eigenvalues of the Hessian.
         """
         return self.num_unstable_modes(phis, conserved) == 0
+
+    def equilibration_error(
+        self, phis: np.ndarray, ord: int | None = None, axis: int | None = 1
+    ) -> float | np.ndarray:
+        r"""Determine how well the phases are in balance with each other.
+
+        Note that this function do not check whether the coexistence of the providing
+        phases are the equilibrium state. It only checks its necessary condition that all
+        phases must reach chemical potential balance with each other.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. Multiple phases
+                are expected, the index of the components must be the last dimension. If
+                only one phase is provided, the result will always be zero.
+            ord:
+                The order for calculating norm. See  :func:`numpy.linalg.norm` for more
+                details.
+            axis:
+                Whether to calculate error by component, by phase or by all. `0`: by
+                component; `1`: by phase; `None`: by both.
+
+        Returns:
+            : The equilibration error by component, by phase or by all.
+        """
+        mus = self.chemical_potentials(phis)
+        mus_mean = mus.mean(axis=0)
+        mus = mus - mus_mean
+        return np.linalg.norm(mus, ord=ord, axis=axis)
