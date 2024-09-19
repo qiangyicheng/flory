@@ -353,7 +353,7 @@ class FreeEnergyBase:
         return self.num_unstable_modes(phis, conserved) == 0
 
     def equilibration_error(
-        self, phis: np.ndarray, ord: int | None = None, axis: int | None = 1
+        self, phis: np.ndarray, order: int | None = None, axis: int | None = 1
     ) -> float | np.ndarray:
         r"""Determine how well the phases are in balance with each other.
 
@@ -366,7 +366,7 @@ class FreeEnergyBase:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. Multiple phases
                 are expected, the index of the components must be the last dimension. If
                 only one phase is provided, the result will always be zero.
-            ord:
+            order:
                 The order for calculating norm. See  :func:`numpy.linalg.norm` for more
                 details.
             axis:
@@ -379,4 +379,4 @@ class FreeEnergyBase:
         mus = self.chemical_potentials(phis)
         mus_mean = mus.mean(axis=0)
         mus = mus - mus_mean
-        return np.linalg.norm(mus, ord=ord, axis=axis)
+        return np.linalg.norm(mus, ord=order, axis=axis)

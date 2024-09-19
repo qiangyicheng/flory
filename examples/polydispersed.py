@@ -1,5 +1,6 @@
-import flory
 import numpy as np
+
+import flory
 
 num_feat = 2
 chis_feat = [[0, 4.0], [4.0, 0]]
