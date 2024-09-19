@@ -370,13 +370,12 @@ class FreeEnergyBase:
                 The order for calculating norm. See  :func:`numpy.linalg.norm` for more
                 details.
             axis:
-                Whether to calculate error by component, by phase or by all. `0`: by
-                component; `1`: by phase; `None`: by both.
+                Whether to calculate error by component (`axis=0`), by phase (`axis=1`),
+                or by both (`axis=None`, returns a scalar).
 
         Returns:
             : The equilibration error by component, by phase or by all.
         """
         mus = self.chemical_potentials(phis)
-        mus_mean = mus.mean(axis=0)
-        mus = mus - mus_mean
+        mus -= mus.mean(axis=0)  # get deviations from mean
         return np.linalg.norm(mus, ord=order, axis=axis)

@@ -9,7 +9,7 @@ import flory
 from flory.common.phases import get_uniform_random_composition
 
 
-def test_equilibration_error():
+def test_equilibration_error(rng):
     """Test function `equilibration_error`"""
     num_comp = 3
     chis = np.array([[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]])
@@ -25,6 +25,6 @@ def test_equilibration_error():
     phase_error = fh.equilibration_error(phases.fractions)
     assert phase_error.max() < 1e-4
 
-    random_comps = [get_uniform_random_composition(3) for _ in range(3)]
-    phase_error = fh.equilibration_error(random_comps)
-    assert phase_error.max() > 1e-4
+    random_comps = [get_uniform_random_composition(3, rng=rng) for _ in range(3)]
+    phase_error = fh.equilibration_error(random_comps, axis=None)
+    assert phase_error > 1e-2
