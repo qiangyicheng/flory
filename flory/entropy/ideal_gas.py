@@ -11,6 +11,7 @@ import numpy as np
 from numba import float64, int32
 from numba.experimental import jitclass
 
+from ..common.math import xlogx
 from .base import EntropyBase, EntropyBaseCompiled
 
 
@@ -136,7 +137,7 @@ class IdealGasEntropyBase(EntropyBase):
         Returns:
             : The entropic energy density.
         """
-        return np.einsum("...i,...i->...", phis / self._sizes, np.log(phis))
+        return np.sum(xlogx(phis) / self._sizes, axis=-1)
 
     def _jacobian_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating Jacobian :math:`\partial f_\mathrm{entropy}/\partial \phi_i`.
