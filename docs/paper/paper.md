@@ -31,8 +31,9 @@ In contrast to existing methods, the `flory` package implements a state-of-art m
 
 Finding coexisting phases is a general task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
 There are several strategies to theoretically predict coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
-There are a few open-source packages that implement these strategies.
+There are a few open-source packages that implement these strategies [@kwon2024Equilipy],.
 Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
+In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization strategy to surface phases.
 However, the computational cost of finding the coexisting phases scales strongly with component count, so systems with many different components cannot be analyzed efficiently with these packages.
 
 The `flory` Python package is designed to fill this gap.
