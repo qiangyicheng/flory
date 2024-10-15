@@ -31,14 +31,14 @@ In contrast to existing methods, the `flory` package implements a state-of-art m
 
 Finding coexisting phases is a general task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
 There are several strategies to theoretically predict coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
-However, there are only a few open-source packages that implement these strategies.
-Most notably, `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation] combine a database of candidate phases and several strategies above to compute phase diagrams (Calphad) of mixtures with few components.
+There are a few open-source packages that implement these strategies.
+Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
 However, the computational cost of finding the coexisting phases scales strongly with component count, so systems with many different components cannot be analyzed efficiently with these packages.
 
 The `flory` Python package is designed to fill this gap.
 It determines coexisting phases in a broad range of multicomponent mixtures while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
 
-# Methods 
+# Methods
 
 The `flory` package is based on the free energy minimization strategy.
 To reduce computation cost, the package focuses on coexisting phases in thermodynamically large systems, where the interfaces between phases become negligible.
@@ -52,7 +52,7 @@ The package only imposes limits on the entropy part, which is crucial for the co
 By combining these four aspects, `flory` supports a broad range of free energy densities $f$ with different ensembles and constraints.
 A few widely-used specializations are provided for all four aspects, while customized ones can be added easily.
 
-The `flory` package is designed to deliver high performance. 
+The `flory` package is designed to deliver high performance.
 The core part of the `flory` package is the finder for coexisting phases, which can be reused when the number $N_\mathrm{C}$ of components is kept fixed.
 This design moves a significant overhead to the creation of the solver, which can be amortized in many tasks, e.g., when a phase diagram is sampled.
 The core methods in the finder are just-in-time (JIT) compiled using numba [@lam2015Numba] to achieve high performance.
@@ -63,7 +63,7 @@ These methods are also compiled for performance, using the experimental `jitclas
 The `flory` package adopts state-of-the-art numerical methods to determine coexisting phases.
 The main idea is to represent the system by many independent compartments, which can exchange particles and volumes, obeying total constraints [@zwicker2022Evolved].
 The `flory` package then minimizes the full free energy $\bar f$ instead of directly solving the corresponding coexistence conditions.
-At the free energy minimum, compartments may share similar compositions, which the package then cluster to obtain unique phases using the `scipy` cluster methods [@SciPy2020].
+At the free energy minimum, compartments may share similar compositions, which the package then cluster to obtain unique phases using the `scipy` cluster methods [@virtanen2020SciPy].
 This strategy circumvents the typical challenge of multiple local minima and it avoids iterating over all possible phase counts $N_\mathrm{P}$.
 To improve performance, the `flory` package implements the improved Gibbs ensemble method we developed recently [@qiang2024Scaling].
 This method redistributes components across all compartments simultaneously, guided by a set of conjugate variables, such that the total computation cost per step only scales linearly with the number of compartments.
@@ -73,19 +73,23 @@ In summary, the `flory` package can typically obtain the equilibrium coexisting 
 # Examples
 
 The following code illustrates the main functionality of the package by finding the two coexisting phases of a symmetric Flory-Huggins binary mixture with $\chi=4$:
+
 ```python
 fh = flory.FloryHuggins(2, chis=[[0, 4.0], [4.0, 0]])
 ensemble = flory.CanonicalEnsemble(2, phi_means=[0.5, 0.5])
 finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
 phases = finder.run().get_clusters()
 ```
+
 Here, `FloryHuggins` represents the seminal Flory-Huggins free energy that creates the interaction `FloryHugginsInteraction` and the entropy `IdealGasEntropy` simultaneously, and provides tools for analyzing coexisting phases.
 By updating the interaction, we can then obtain the coexisting phases of another symmetric binary mixture with $\chi=3.5$:
+
 ```python
 fh.chis = [[0, 3.5], [3.5, 0]]
 finder.set_interaction(fh.interaction)
 phases = finder.run().get_clusters()
 ```
+
 This procedure can be repeated to sample an entire phase diagrams.
 Moreover, we could vary the type of interaction by initializing a different class or modifying the existing one, and we could similarly change the entropy, ensemble, and constraints.
 Customized specialization of all four aspects can be easily implemented by deriving from the provided base classes.
