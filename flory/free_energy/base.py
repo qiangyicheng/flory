@@ -134,6 +134,34 @@ class FreeEnergyBase:
         """
         return self.interaction._hessian_impl(phis) + self.entropy._hessian_impl(phis)
 
+    def _jacobian_fractions_impl(self, phis: np.ndarray) -> np.ndarray:
+        r"""Calculate the Inner Product of Jacobian and Fractions.
+
+        This function is solely designed the case when the Jacobian diverge, but its inner
+        product with the fractions have finite limits.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+
+        Returns:
+            : The inner product of Jacobian and fractions
+        """
+
+        if hasattr(self.interaction, "_jacobian_fractions_impl"):
+            ans_interaction = self.interaction._jacobian_fractions_impl(phis)
+        else:
+            ans_interaction = self.interaction._jacobian_impl(phis) * phis
+
+        if hasattr(self.entropy, "_jacobian_fractions_impl"):
+            ans_entropy = self.entropy._jacobian_fractions_impl(phis)
+        else:
+            ans_entropy = self.entropy._jacobian_impl(phis) * phis
+
+        return ans_interaction + ans_entropy
+
     def check_volume_fractions(self, phis: np.ndarray, axis: int = -1) -> np.ndarray:
         r"""Check whether volume fractions are valid.
 
@@ -261,13 +289,11 @@ class FreeEnergyBase:
         Returns:
             : The original chemical potentials.
         """
+        phis = self.check_volume_fractions(phis)
         f = self.free_energy_density(phis)
         j = self.jacobian(phis)
-        ans = (
-            np.atleast_1d(f)[..., None]
-            - np.einsum("...i,...i->...", phis, j)[..., None]
-            + j
-        )
+        phij = self._jacobian_fractions_impl(phis).sum(-1)
+        ans = np.atleast_1d(f)[..., None] - phij[..., None] + j
         return ans
 
     def exchange_chemical_potentials(self, phis: np.ndarray, index: int) -> np.ndarray:
@@ -290,7 +316,7 @@ class FreeEnergyBase:
         Returns:
             : The exchange chemical potentials of component with respect to the solvent component.
         """
-        mus = self.chemical_potentials(phis)
+        mus = self.jacobian(phis)
         return mus - mus[..., index, None]
 
     def pressure(self, phis: np.ndarray, index: int) -> np.ndarray:
@@ -377,5 +403,6 @@ class FreeEnergyBase:
             : The equilibration error by component, by phase or by all.
         """
         mus = self.chemical_potentials(phis)
+        mus = np.nan_to_num(mus, posinf=0.0, neginf=0.0)
         mus -= mus.mean(axis=0)  # get deviations from mean
         return np.linalg.norm(mus, ord=order, axis=axis)
