@@ -81,6 +81,7 @@ class IdealGasEntropyCompiled(EntropyBaseCompiled):
             ans -= phis_comp[itr_comp] / self._sizes[itr_comp]
         return ans
 
+
 class IdealGasEntropyBase(EntropyBase):
     r"""Class for entropic energy of mixture of ideal gas.
 
@@ -173,7 +174,33 @@ class IdealGasEntropyBase(EntropyBase):
         Returns:
             : The full Hessian.
         """
-        return np.eye(self.num_comp) / (phis * self._sizes)[..., None]
+        # manually generate the matrix sine we assume no prior knowledge for the dimension of `phis``
+        ans_diag = 1.0 / phis * self._sizes
+        shape = list(ans_diag.shape)
+        shape.append(self.num_comp)
+        ans = np.zeros(shape)
+        for itr in range(self.num_comp):
+            ans[..., itr, itr] = ans_diag[..., itr]
+        return ans
+
+    def _jacobian_fractions_impl(self, phis: np.ndarray) -> np.ndarray:
+        r"""Implementation of calculating :math:`\phi_i \partial f_\mathrm{entropy}/\partial \phi_i`.
+
+        This method is not included in the interface, since it is only needed when
+        :math:`\phi_i \partial f_\mathrm{entropy}/\partial \phi_i` exist but
+        :math:`\partial f_\mathrm{entropy}/\partial \phi_i` diverges.
+
+        Args:
+            phis:
+                The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
+                phases are included, the index of the components must be the last
+                dimension.
+
+        Returns:
+            : The full Jacobian.
+        """
+        return xlogx(phis) / self._sizes + phis / self._sizes
+
 
 class IdealGasEntropy(IdealGasEntropyBase):
     r"""Class for entropic energy of mixture of ideal gas.
