@@ -4,18 +4,18 @@
 phases in multicomponent mixtures with defined :mod:`~flory.interaction`,
 :mod:`~flory.entropy`, :mod:`~flory.ensemble` and :mod:`~flory.constraint`. The finder is
 provided through the class :class:`CoexistingPhasesFinder`, which is designed to be
-flexible, reusable, independent and efficient: 
+flexible, reusable, independent and efficient:
 
 - flexible: :class:`CoexistingPhasesFinder` can be applied to different interaction,
   entropy, ensemble and constraint, as soon as the they implement the a minimal set of
-  methods. 
+  methods.
 
 - reusable: :class:`CoexistingPhasesFinder` tries every possibility to avoid recreation of
   objects as soon as the system size is unchanged, making it ideal to be reused for
-  different parameters. 
+  different parameters.
 
 - independent: :class:`CoexistingPhasesFinder` owns all the data it needs once created.
-  Therefore multiple instances can be created and stored freely. 
+  Therefore multiple instances can be created and stored freely.
 
 - efficient: :class:`CoexistingPhasesFinder` use :func:`numba.jit` to compile all of its
   core algorithms.
@@ -23,7 +23,7 @@ flexible, reusable, independent and efficient:
 The usage of :class:`CoexistingPhasesFinder` usually follows the creation-and-run manner
 for new instance, or reinitialization-and-run for existing instance. The reinitialization
 might be skipped in the case that the previous result in the existing instance provides
-good initial guess for next run, which is a typical case when constructing phase diagram. 
+good initial guess for next run, which is a typical case when constructing phase diagram.
 
 See :ref:`Examples` for examples.
 
@@ -576,7 +576,9 @@ class CoexistingPhasesFinder:
         pbar4 = tqdm(**bar_args, position=3, desc="Constraint Residue")
         pbar5 = tqdm(**bar_text_args, position=4, desc="Revive Count Left")
 
-        bar_val_func = lambda a: max(0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max))
+        bar_val_func = lambda a: max(
+            0, min(round(-np.log10(max(a, 1e-100)), 1), bar_max)
+        )
 
         start_time = time.time()
 

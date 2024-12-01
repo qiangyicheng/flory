@@ -31,7 +31,9 @@ def pick_class(qual_name, env):
         mod_name, cls_name = qual_name.rsplit(".", 1)
     else:
         cls_name = env.temp_data.get("autodoc:class") or env.ref_context.get("py:class")
-        mod_name = env.temp_data.get("autodoc:module") or env.ref_context.get("py:module")
+        mod_name = env.temp_data.get("autodoc:module") or env.ref_context.get(
+            "py:module"
+        )
 
         if not cls_name:
             raise ConfigError("no class name")

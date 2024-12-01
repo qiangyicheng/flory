@@ -28,12 +28,18 @@ def test_consistency_ensemble():
     ###############################################################
 
     mus = [0.0, 0.0, 0.0]
-    ensemble = flory.GrandCanonicalEnsemble.from_chemical_potential(num_comp, mus, sizes)
+    ensemble = flory.GrandCanonicalEnsemble.from_chemical_potential(
+        num_comp, mus, sizes
+    )
     constraint = flory.LinearGlobalConstraint(
         num_comp, [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], [phi_means[0], phi_means[1]]
     )
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble, constraint, random_std=1.0
+        free_energy.interaction,
+        free_energy.entropy,
+        ensemble,
+        constraint,
+        random_std=1.0,
     )
 
     phases_grandcanonical = finder.run().get_clusters().sort()
@@ -44,6 +50,7 @@ def test_consistency_ensemble():
     np.testing.assert_allclose(
         phases_canonical.fractions, phases_grandcanonical.fractions, rtol=1e-3
     )
+
 
 @pytest.mark.slow
 @pytest.mark.no_cover

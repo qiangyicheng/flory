@@ -188,7 +188,9 @@ class LinearLocalConstraint(ConstraintBase):
         self._Ts = np.broadcast_to(Ts_new, shape).astype(float)
 
     def _compiled_impl(
-        self, constraint_acceptance_ratio: float = 1.0, constraint_elasticity: float = 1.0
+        self,
+        constraint_acceptance_ratio: float = 1.0,
+        constraint_elasticity: float = 1.0,
     ) -> LinearLocalConstraintCompiled:
         r"""Implementation of creating a compiled constraint instance.
 
