@@ -54,6 +54,7 @@ pip install 'flory[test]'
 If you are using conda, consider install the optional dependencies directly:
 
 ```bash
+conda install -c conda-forge --file https://raw.githubusercontent.com/qiangyicheng/flory/main/examples/requirements.txt
 conda install -c conda-forge --file https://raw.githubusercontent.com/qiangyicheng/flory/main/tests/requirements.txt
 conda install -c conda-forge --file https://raw.githubusercontent.com/qiangyicheng/flory/main/docs/requirements.txt
 ```
