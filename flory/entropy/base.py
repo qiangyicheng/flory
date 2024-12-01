@@ -143,7 +143,7 @@ class EntropyBase:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
                 phases are included, the index of the components must be the last
                 dimension.
-                
+
         Returns:
             : The entropic energy density.
         """
@@ -154,13 +154,13 @@ class EntropyBase:
 
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
-        
+
         Args:
             phis:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
                 phases are included, the index of the components must be the last
                 dimension.
-                
+
         Returns:
             : The full Jacobian.
         """
@@ -171,7 +171,7 @@ class EntropyBase:
 
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
-        
+
         Args:
             phis:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple

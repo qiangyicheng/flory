@@ -26,6 +26,7 @@ p3_phis = phases.fractions
 p3_center = np.mean(p3_phis, axis=0)
 p3_edges = [p3_phis[[1, 2]], p3_phis[[0, 2]], p3_phis[[0, 1]]]
 
+
 # function that scan the 2-phase coexistence until the boundary is reached
 def find_p2_boundaries(
     init_tie: np.ndarray,
@@ -55,12 +56,12 @@ def find_p2_boundaries(
         next_dir = next_dir - np.dot(next_dir, tie_dir) * tie_dir
         next_dir = next_dir / np.linalg.norm(next_dir)
         next_phis = tie_center + step * next_dir
-        
+
         ensemble.phi_means = np.array(next_phis)
         internal_finder.set_ensemble(ensemble)
         backup_omegas = internal_finder.omegas.copy()
         phases = internal_finder.run().get_clusters()
-        
+
         if phases.volumes.shape[0] == 2 and np.all(phases.fractions > 0):
             ties.append(phases.fractions)
             previous = tie_center

@@ -410,4 +410,6 @@ def does_match(name, pattern, **kwargs):
     the match must start at the beginning of the name.  If you want to match an
     internal pattern, the pattern must start with ``.*``.
     """
-    return pattern and any(re.match(p, name, **kwargs) for p in always_iterable(pattern))
+    return pattern and any(
+        re.match(p, name, **kwargs) for p in always_iterable(pattern)
+    )

@@ -1,4 +1,4 @@
-"""The implementation details of the core algorithm for finder. 
+"""The implementation details of the core algorithm for finder.
 
 :mod:`~flory.mcmp._finder_impl` contains the implementation details of the module
 :mod:`~flory.mcmp.finder`. The main components of the module is the function
@@ -13,6 +13,7 @@ or reused.
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
+
 from __future__ import annotations
 
 import numba as nb
@@ -373,9 +374,7 @@ def multicomponent_self_consistent_metastep(
             + xi * incomp
         )
         for cons in literal_unroll(constraints):
-            local_energy += (
-                cons.volume_derivative
-            )  # volume_derivative from constraints are already calculated in preparation.
+            local_energy += cons.volume_derivative  # volume_derivative from constraints are already calculated in preparation.
             omega_temp += cons.potential
         for itr_feat in range(num_feat):
             omega_temp[itr_feat] += xi

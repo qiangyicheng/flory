@@ -21,7 +21,7 @@ finder = flory.CoexistingPhasesFinder(
     constraint,
     random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     progress=True,
-    tolerance=1e-12
+    tolerance=1e-12,
 )
 phases = finder.run().get_clusters()
 

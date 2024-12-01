@@ -19,5 +19,3 @@ phases = finder.run().get_clusters()
 with open(__file__ + ".out", "w") as f:
     print("Volumes:", phases.volumes, file=f)
     print("Compositions:", phases.fractions, file=f)
-
-

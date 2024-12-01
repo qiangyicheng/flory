@@ -14,11 +14,12 @@ class AutoClassToc(SphinxDirective):
     """
     Generate a succinct TOC for automatically documented classes.
 
-    This class implements the :rst:dir:`autoclasstoc` directive.  More 
-    specifically, it implements the `run` function as expected by docutils.  
-    However, most of the actual logic is delegated to other classes and 
+    This class implements the :rst:dir:`autoclasstoc` directive.  More
+    specifically, it implements the `run` function as expected by docutils.
+    However, most of the actual logic is delegated to other classes and
     functions.
     """
+
     optional_arguments = 1
     option_spec = {
         "sections": utils.comma_separated_list,
@@ -34,8 +35,7 @@ class AutoClassToc(SphinxDirective):
             mod_name, cls_name = utils.pick_class(qual_name, self.env)
             mod, cls = utils.load_class(mod_name, cls_name)
             sections = utils.pick_sections(
-                self.options.get("sections") or
-                self.config.autoclasstoc_sections,
+                self.options.get("sections") or self.config.autoclasstoc_sections,
                 exclude=self.options.get("exclude-sections"),
             )
             return utils.make_toc(self.state, cls, sections)
@@ -49,6 +49,7 @@ def load_static_assets(app, config):
     Add some rules for the spacing around <details> elements in class TOCs.
     """
     from pathlib import Path
+
     static_dir = Path(__file__).parent / "_static"
     static_dir = str(static_dir.resolve())
 
@@ -73,7 +74,7 @@ def setup(app):
         "public-attrs",
         "public-methods",
         "private-attrs",
-        "private-methods"
+        "private-methods",
     ]
 
     app.setup_extension("sphinx.ext.autosummary")

@@ -55,7 +55,9 @@ class Phases:
         if fractions.ndim != 2:
             raise ValueError("fractions must be a 2d array")
         if volumes.shape[0] != fractions.shape[0]:
-            raise ValueError("volumes and fractions must have consistent first dimension")
+            raise ValueError(
+                "volumes and fractions must have consistent first dimension"
+            )
         self.volumes = volumes
         self.fractions = fractions
 

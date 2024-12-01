@@ -3,6 +3,7 @@
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -132,13 +133,13 @@ class InteractionBase:
 
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
-        
+
         Args:
             phis:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
                 phases are included, the index of the components must be the last
                 dimension.
-                
+
         Returns:
             : The entropic energy density.
         """
@@ -149,13 +150,13 @@ class InteractionBase:
 
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
-        
+
         Args:
             phis:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
                 phases are included, the index of the components must be the last
                 dimension.
-                
+
         Returns:
             : The full Jacobian.
         """
@@ -166,13 +167,13 @@ class InteractionBase:
 
         This interface is meant to be overridden in derived classes. Multiple compositions
         should be allowed. This method is not necessary for the core algorithm.
-        
+
         Args:
             phis:
                 The volume fractions of the phase(s) :math:`\phi_{p,i}`. if multiple
                 phases are included, the index of the components must be the last
                 dimension.
-                
+
         Returns:
             : The full Hessian.
         """
@@ -188,7 +189,7 @@ class InteractionBase:
         :class:`~flory.ensemble.entropy.FloryHugginsInteractionCompiled` for an example.
         Note that different from the class :class:`InteractionBase` itself, the returned
         compiled class use the feature-based description, and can consider the degeneracy
-        of components. 
+        of components.
 
         Args:
             kwargs_full:

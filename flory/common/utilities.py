@@ -24,13 +24,14 @@ def filter_kwargs(kwargs_full: dict[str, Any], func: Callable) -> dict[str, Any]
     params = inspect.signature(func).parameters.keys()
     return {para: kwargs_full[para] for para in params if para in kwargs_full}
 
+
 def convert_and_broadcast(arr: np.ndarray, shape: np.ndarray) -> np.ndarray:
     """Converts input and broadcasts it to an array with specified shape.
 
     Args:
-        arr: 
+        arr:
             The input array.
-        shape: 
+        shape:
             The target shape to broadcast to.
 
     Returns:
@@ -40,13 +41,14 @@ def convert_and_broadcast(arr: np.ndarray, shape: np.ndarray) -> np.ndarray:
     ans = np.array(np.broadcast_to(ans, shape))
     return ans
 
+
 def make_square_blocks(arr: np.ndarray, block_sizes: np.ndarray) -> np.ndarray:
     """Expands a square np.ndarray into blocks.
 
     Args:
-        arr: 
+        arr:
             The input array. Must be square (i.e., all dimensions are equal).
-        block_sizes: 
+        block_sizes:
             The sizes for the blocks. Must have the same length as :paramref:`arr`.
 
     Returns:
