@@ -45,16 +45,10 @@ By default, only the minimal set of dependencies of `flory` package will be inst
 pip install 'flory[dev]'
 ```
 
-You can also install only the dependencies for tests:
+You can also select the optional dependencies, such as `example`, `test` or `doc`. For example, you can install the package with the optional dependencies only for tests:
 
 ```bash
 pip install 'flory[test]'
-```
-
-or install only the dependencies for documentations:
-
-```bash
-pip install 'flory[doc]'
 ```
 
 If you are using conda, consider install the optional dependencies directly:
@@ -66,13 +60,7 @@ conda install -c conda-forge --file https://raw.githubusercontent.com/qiangyiche
 
 ### Test installation
 
-If the optional dependencies for tests are installed, you can run tests in root directory of the package:
-
-```bash
-pytest
-```
-
-By default, some slow tests are skipped. You can run them as well with the `--runslow` option:
+If the optional dependencies for tests are installed, you can run tests in root directory of the package with `pytest`. By default, some slow tests are skipped. You can run them with the `--runslow` option:
 
 ```bash
 pytest --runslow

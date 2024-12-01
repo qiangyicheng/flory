@@ -29,6 +29,8 @@ dependencies = { file = ["requirements.txt"] }
 optional-dependencies = { dev = { file = [
     "tests/requirements.txt",
     "docs/requirements.txt",
+] }, example = { file = [
+    "examples/requirements.txt",
 ] }, test = { file = [
     "tests/requirements.txt",
 ] }, doc = { file = [
