@@ -49,6 +49,7 @@ Contents
    :maxdepth: 1
 
    self
+   installation
    examples
    theory
    symbol
