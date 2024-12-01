@@ -23,8 +23,8 @@ $$f(\{\phi_i\}) = \frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i \phi_j
 where $\chi_{ij}$ is the Flory-Huggins interaction parameter between component $i$ and $j$, and $l_i$ is the relative molecular size of component $i$.
 Given an interaction matrix $\chi_{ij}$, average volume fractions of all components across the system $\bar{\phi}_i$, and the relative molecule sizes $l_i$, `flory` provides tools to find the coexisting phases in equilibrium.
 
-Installation
-------------
+## Installation
+
 `flory` is available on `pypi`, so you should be able to install it through `pip`:
 
 ```bash
@@ -37,8 +37,49 @@ As an alternative, you can install `flory` through [conda](https://docs.conda.io
 conda install -c conda-forge flory
 ```
 
-Usage
------
+### Optional dependencies
+
+By default, only the minimal set of dependencies of `flory` package will be installed. To install all dependencies, run:
+
+```bash
+pip install 'flory[dev]'
+```
+
+You can also install only the dependencies for tests:
+
+```bash
+pip install 'flory[test]'
+```
+
+or install only the dependencies for documentations:
+
+```bash
+pip install 'flory[doc]'
+```
+
+If you are using conda, consider install the optional dependencies directly:
+
+```bash
+conda install -c conda-forge --file https://raw.githubusercontent.com/qiangyicheng/flory/main/tests/requirements.txt
+conda install -c conda-forge --file https://raw.githubusercontent.com/qiangyicheng/flory/main/docs/requirements.txt
+```
+
+### Test installation
+
+If the optional dependencies for tests are installed, you can run tests in root directory of the package:
+
+```bash
+pytest
+```
+
+By default, some slow tests are skipped. You can run them as well with the `--runslow` option:
+
+```bash
+pytest --runslow
+```
+
+## Usage
+
 The following example determines the coexisting phases of a binary mixture with Flory-Huggins free energy:
 
 ```python
@@ -72,12 +113,13 @@ phases = finder.run().get_clusters()
 ```
 
 The free energy instance provides more tools for analysis, such as:
+
 ```python
 # calculate the chemical potentials of the coexisting phases
 mus = fh.chemical_potentials(phases.fractions)
 ```
 
-More information
-----------------
+## More information
+
 * See examples in [examples folder](https://github.com/qiangyicheng/flory/tree/main/examples)
 * [Full documentation on readthedocs](https://flory.readthedocs.io/)
