@@ -38,17 +38,15 @@ There are a few open-source packages that implement these strategies.
 Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
 In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization strategy to surface phases.
 
-Despite of the multiple useful strategies and packages above, finding coexisting phases is still challenging when the number of the components $N_\mathrm{C}$ in the mixture is large.
-The reason is that with larger $N_\mathrm{C}$, the degree of freedom increases (e.g. composition of the phases), leading to the problem of global minimization or sampling in high-dimensional space.
-For example, the convex hull strategy needs to sample the entire free energy landscape.
-Although it is very efficient for constructing phase diagrams with few components, the computational cost of sampling increases exponentially with $N_\mathrm{C}$.
-To our knowledge, the existing Calphad packages also do not focus on the mixtures with many components.
-Instead, they are designed to have high flexibility on the free energies of candidate phases.
-Therefore, the `flory` Python package tries to fill this gap.
-Compared with the existing Calphad packages, `flory` package focuses on the cases when all the candidate phases share the same free energy function.
-It assumes that the free energy function takes a rather simple form such as Flory-Huggins free energy, which is usually not included in previous packages.
-The value of the Flory-Huggins parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical purpose.
-The package then implements its algorithm based on this assumption, and makes use of the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
+Despite these useful strategies and packages, finding coexisting phases is still challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
+This is because the number of degrees of freedom (e.g., to describe the composition of the phases) increases with larger $N_\mathrm{C}$, which requires a global minimization and sampling in a high-dimensional space.
+Consequently, some of the strategies mentioned above become prohibitively expensive.
+For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires to sample the entire free energy landscape.
+While the existing Calphad packages implement some algorithms that are more suitable, the packages were optimized for systems with few components and instead provide a high flexibility on the free energies of candidate phases.
+Since there are currently no packages focusing on the multicomponent case to our knowledge, we developed the `flory` Python package to fill this gap.
+Compared with the existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy.
+The value of the Flory-Huggins parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
+Using these assumptions, the algorithm implemented by the package makes use of the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
 As the result, the `flory` package can determine coexisting phases in a range of multicomponent mixtures while also being efficient enough when the number of the components $N_\mathrm{C}$ is large.
 
 # Methods
@@ -104,7 +102,7 @@ phases = finder.run().get_clusters()
 ```
 
 This procedure can be repeated to sample an entire phase diagrams.
-For example, the following code will generate the phase diagram of a mixture of two components with same molecule sizes,
+For example, the following code will generate the phase diagram of a mixture of two components with identical molecular sizes,
 
 ```python
 import matplotlib.pyplot as plt
@@ -135,9 +133,9 @@ plt.ylabel("$\\chi$")
 plt.show()
 ```
 
-![Phase diagram of binary mixture](pd.jpg "Phase diagram of binary mixture")
+![Phase diagram of binary mixture. The lines show the coexisting composition $\phi$ at a given interaction strength $\chi$, together known as a the binodal line.](pd.jpg "Phase diagram of binary mixture")
 
-Moreover, we could vary the type of interaction by initializing a different class or modifying the existing one, and we could similarly change the entropy, ensemble, and constraints.
+Moreover, one can vary the type of interaction by initializing a different class or by modifying the existing one, and one could similarly change the entropy, ensemble, and constraints.
 Customized specialization of all four aspects can be easily implemented by deriving from the provided base classes.
 
 # Acknowledgements
