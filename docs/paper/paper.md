@@ -43,7 +43,7 @@ This is because the number of degrees of freedom (e.g., to describe the composit
 Consequently, some of the strategies mentioned above become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires to sample the entire free energy landscape.
 While the existing Calphad packages implement some algorithms that are more suitable, the packages were optimized for systems with few components and instead provide a high flexibility on the free energies of candidate phases.
-Since there are currently no packages focusing on the multicomponent case to our knowledge, we developed the `flory` Python package to fill this gap.
+Since there are currently no packages focusing on the many-component case to our knowledge, we developed the `flory` Python package to fill this gap.
 Compared with the existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy.
 The value of the Flory-Huggins parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
 Using these assumptions, the algorithm implemented by the package makes use of the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
