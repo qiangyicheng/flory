@@ -15,7 +15,7 @@ authors:
 affiliations:
  - name: Max Planck Institute for Dynamics and Self-Organization, Göttingen, Germany
    index: 1
-date: 9 September 2024
+date: 2 December 2024
 bibliography: paper.bib
 ---
 
@@ -23,21 +23,31 @@ bibliography: paper.bib
 
 Phase separation is an intrinsic property of mixtures that is widely observed in many scenarios, ranging from the simple demixing of oil and water to the condensation of biomolecules in cells.
 In multicomponent mixtures, phase separation can lead to many coexisting phases, which is crucial in many fields.
+One key step to understand phase separation is to measure or predict the composition of the coexisting phases.
 To support such research, the `flory` package provides an easily accessible, performant, and extensible code that finds coexisting phases in multicomponent mixtures.
 The package expresses the free energy of the mixtures by several orthogonal aspects to cover a broad range of physical situations.
 In contrast to existing methods, the `flory` package implements a state-of-art method that is optimized for mixtures of many components.
+The package mainly focus on the mixtures with uniform and relatively simple free energies such as Flory-Huggins free energy and its generalizations, while more complicated ones can also be supported through extensions.
 
 # Statement of need
 
-Finding coexisting phases is a general task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
-There are several strategies to theoretically predict coexisting phases [@jacobs2023Theory], including direct spatially-resolved simulations [@shrinivas2021Phase], the construction of the convex hull of the free energy  [@mao2019Phase], solving the balance equations [@zwicker2022Evolved], and direct minimization of the free energy [@lukas2007Computational].
-There are a few open-source packages that implement these strategies [@kwon2024Equilipy],.
+Finding coexisting phases is a common task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
+In general, the coexisting phases can be theoretically predicted by solving the balance equations between phases [@zwicker2022Evolved], or equivalently minimizing the total free energy of the whole mixture [@lukas2007Computational].
+Other strategies include direct spatially-resolved simulations [@shrinivas2021Phase] and the construction of the convex hull of the free energy landscape [@mao2019Phase].
+There are a few open-source packages that implement these strategies.
 Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
 In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization strategy to surface phases.
-However, the computational cost of finding the coexisting phases scales strongly with component count, so systems with many different components cannot be analyzed efficiently with these packages.
 
-The `flory` Python package is designed to fill this gap.
-It determines coexisting phases in a broad range of multicomponent mixtures while also being efficient enough for sampling entire phase diagrams when the composition is varied for many components.
+Despite these useful strategies and packages, finding coexisting phases is still challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
+This is because the number of degrees of freedom (e.g., to describe the composition of the phases) increases with larger $N_\mathrm{C}$, which requires a global minimization and sampling in a high-dimensional space.
+Consequently, some of the strategies mentioned above become prohibitively expensive.
+For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires to sample the entire free energy landscape.
+While the existing Calphad packages implement some algorithms that are more suitable, the packages were optimized for systems with few components and instead provide a high flexibility on the free energies of candidate phases.
+Since there are currently no packages focusing on the many-component case to our knowledge, we developed the `flory` Python package to fill this gap.
+Compared with the existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy.
+The value of the Flory-Huggins parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
+Using these assumptions, the algorithm implemented by the package makes use of the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
+As the result, the `flory` package can determine coexisting phases in a range of multicomponent mixtures while also being efficient enough when the number of the components $N_\mathrm{C}$ is large.
 
 # Methods
 
@@ -92,7 +102,40 @@ phases = finder.run().get_clusters()
 ```
 
 This procedure can be repeated to sample an entire phase diagrams.
-Moreover, we could vary the type of interaction by initializing a different class or modifying the existing one, and we could similarly change the entropy, ensemble, and constraints.
+For example, the following code will generate the phase diagram of a mixture of two components with identical molecular sizes,
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import flory
+
+fh = flory.FloryHuggins(2, chis=[[0, 5.0], [5.0, 0]])
+ensemble = flory.CanonicalEnsemble(2, phi_means=[0.5, 0.5])
+finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
+
+line_chi = []
+line_l = []
+line_h = []
+for chi in np.arange(5.0, 1.0, -0.1):  # scan chi from high value to low value
+    fh.interaction.chis = [[0, chi], [chi, 0]]  # set chi matrix of the finder
+    finder.set_interaction(fh.interaction)
+    phases = finder.run().get_clusters()  # get coexisting phases
+    if phases.fractions.shape[0] == 1:  # stop scanning if no phase separation
+        break
+    line_chi.append(chi)
+    line_l.append(phases.fractions[1, 0])
+    line_h.append(phases.fractions[0, 0])
+
+plt.plot(line_l, line_chi, c="black")
+plt.plot(line_h, line_chi, c="black")
+plt.xlabel("$\\phi$")
+plt.ylabel("$\\chi$")
+plt.show()
+```
+
+![Phase diagram of binary mixture. The lines show the coexisting composition $\phi$ at a given interaction strength $\chi$, together known as a the binodal line.](pd.jpg "Phase diagram of binary mixture")
+
+Moreover, one can vary the type of interaction by initializing a different class or by modifying the existing one, and one could similarly change the entropy, ensemble, and constraints.
 Customized specialization of all four aspects can be easily implemented by deriving from the provided base classes.
 
 # Acknowledgements
