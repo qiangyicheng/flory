@@ -39,19 +39,19 @@ Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycal
 In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization strategy to surface phases.
 
 Despite these useful strategies and packages, finding coexisting phases is still challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
-This is because the number of degrees of freedom (e.g., to describe the composition of the phases) increases with larger $N_\mathrm{C}$.
-The possible number of coexisting phases also increases according the Gibbs phase law, leading to a free energy function of approximately $N_\mathrm{C}^2$ free variables.
-Finding the multiple coexisting phases then requires a global minimization and sampling in such a high-dimensional space.
-Consequently, some of the strategies mentioned above become prohibitively expensive.
+This is because the number of degrees of freedom (e.g., to describe the composition of the phases) generally increases with $N_\mathrm{C}$.
+Moreover, the possible number of coexisting phases also increases with $N_\mathrm{C}$ according to Gibbs phase rule, implying that the free energy of the entire system comprises roughly $N_\mathrm{C}^2$ free variables.
+This high-dimensional space needs to be sampled to find the global minimum with multiple coexisting phases, which is infeasible for some of the strategies mentioned above since they become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires to sample the entire free energy landscape.
-The existing Calphad packages are dedicated to address this challenge by implementing several strategies. 
-Specifically, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies.
-Compared with the existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy.
+The existing Calphad packages address this challenge by implementing several strategies and providing high flexibility on candidate phases, allowing each phase to have different free energies.
+Compared with existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy.
 Similar concept was used in a recent submodule of the `OpenCalphad` package [@li2020Implementation].
+WE NEED TO STRESS THAT OUR ASSUMPTIONS ALLOW FOR A MORE EFFICIENT IMPLEMENTATION (if this is true)
 These simple models are more common in systems such as polymeric liquid mixtures, and considered relevant in the phase separation in biology recently. 
 The value of the Flory-Huggins parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
 Using these assumptions, the algorithm implemented by the package makes use of the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
-To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` package usually starts from many phases initially and cluster the equivalent phases afterwards.
+THE NEXT SENTENCE IS AN IMPLEMENTATION DETAIL. I THINK WE RATHER WANT TO DESCRIBE WHAT THE GOAL OF THE PACKAGE IS
+To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, the `flory` package usually starts from many phases initially and cluster the equivalent phases afterwards.
 As the result, the `flory` package can determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures while also being efficient enough when the number of the components $N_\mathrm{C}$ is large.
 
 # Methods
