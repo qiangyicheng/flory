@@ -44,17 +44,14 @@ The possible number of coexisting phases also increases according the Gibbs phas
 Finding the multiple coexisting phases then requires a global minimization and sampling in such a high-dimensional space.
 Consequently, some of the strategies mentioned above become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires sampling the entire free energy landscape.
-Existing Calphad packages are designed to address this challenge by combining multiple strategies. 
-Moreover, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies.
-Compared to the existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g. the simple Flory-Huggins free energy.
+The existing Calphad packages address this challenge by combining several strategies.
+Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems.
+In contrast, `flory` focuses on the general physics of multicomponent phase separation, and thus assumes that all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy, similar to a recent submodule of the `OpenCalphad` package [@li2020Implementation].
 These simple models are more common in liquid systems such as polymer mixtures, and have recently been considered relevant to phase separation in biological cells. 
-A similar concept has been used in a recent submodule of the `OpenCalphad` package [@li2020Implementation].
-The `flory` package does not contain a database of interaction parameters.
-The value of the interaction parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
-Focusing on these simple models, `flory` removes some explicit constraints in the numerics, thus reducing the Lagrange multipliers required [@white1958Chemical].
-The algorithm implemented by the package uses the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
+The restrictions of the physical model simplifies the user interface and allow for an efficient optimization algorithm.
+For example, `flory` implements an algorithm that automatically satisfying the constrains of ensembles, thus reducing the Lagrange multipliers required [@white1958Chemical].
 To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` package starts from many phases initially and then clusters the equivalent phases afterwards.
-As the result, the `flory` package can determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures while also being efficient when the number of the components $N_\mathrm{C}$ is large.
+As the result, the `flory` package can efficiently determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures.
 
 # Methods
 
@@ -67,6 +64,7 @@ $$\bar{f}({N_\mathrm{P}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{P}}}
 where $N_\mathrm{C}$ is the number of components, $N_\mathrm{P}$ is the number of phases, $J_p$ denotes the fraction of volume that phase $p=1,\ldots,N_\mathrm{P}$ occupies in the entire system, and $\phi_{p,i}$ is the volume fraction of component $i=1,\ldots,N_\mathrm{C}$ in phase $p$.
 The physical behavior of the mixture is encoded in the free energy density $f$, which `flory` expresses using four orthogonal aspects: interaction, entropy, ensemble, and constraints.
 The package only imposes limits on the entropy part, which is crucial for the core algorithm, while the other three aspects are rather flexible.
+For instance, the interactions can be described by quadratic terms, like in the Flory-Huggins model, and the parameters can be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
 By combining these four aspects, `flory` supports a broad range of free energy densities $f$ with different ensembles and constraints.
 A few widely-used specializations are provided for all four aspects, while customized ones can be added easily.
 
