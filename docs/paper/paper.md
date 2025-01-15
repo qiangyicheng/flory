@@ -45,11 +45,12 @@ Finding the multiple coexisting phases then requires a global minimization and s
 Consequently, some of the strategies mentioned above become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires to sample the entire free energy landscape.
 The existing Calphad packages are dedicated to address this challenge by combining several strategies. 
-Specifically, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies.
+Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies.
 Compared with the existing Calphad packages, `flory` focuses on the case where all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy.
-Similar concept was used in a recent submodule of the `OpenCalphad` package [@li2020Implementation].
-These simple models are more common in systems such as polymeric liquid mixtures, and considered relevant in the phase separation in biology recently. 
-The value of the Flory-Huggins parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
+These simple models are more common in liquid systems such as polymeric mixtures, and considered relevant in the phase separation in biological cells recently. 
+Similar concept was also used in a recent submodule of the `OpenCalphad` package [@li2020Implementation].
+The `flory` package does not contain a database for interaction parameters.
+The value of the interaction parameters can either be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
 With these simple models, `flory` removes some explicit constraints in the numerics, thus reducing the Lagrange multipliers required [@white1958Chemical].
 The algorithm implemented by the package makes use of the physical information of the free energy to explore the high-dimensional free energy landscape efficiently.
 To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` package starts from many phases initially and cluster the equivalent phases afterwards.
