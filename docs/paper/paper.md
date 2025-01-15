@@ -50,7 +50,7 @@ These simple models are more common in liquid systems such as polymer mixtures, 
 The restrictions of the physical model simplifies the user interface and allow for an efficient optimization algorithm.
 For example, `flory` implements an algorithm that automatically satisfies the constraints of ensembles, thus reducing the Lagrange multipliers required [@white1958Chemical].
 To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` starts from many phases initially and then clusters the equivalent phases afterwards.
-As the result, the `flory` package can efficiently determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures.
+As the result, the `flory` package can efficiently determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures with large number of the components $N_\mathrm{C}$.
 
 # Methods
 
