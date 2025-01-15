@@ -35,18 +35,22 @@ Finding coexisting phases is a common task in many fields, such as chemical engi
 In general, the coexisting phases can be theoretically predicted by solving the balance equations between phases [@zwicker2022Evolved], or equivalently minimizing the total free energy of the whole mixture [@lukas2007Computational].
 Other strategies include direct spatially-resolved simulations [@shrinivas2021Phase] and the construction of the convex hull of the free energy landscape [@mao2019Phase].
 There are a few open-source packages that implement these strategies.
-Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015Implementation], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
+Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015OpenCalphad], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
 In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization strategy to surface phases.
 
-Despite these useful strategies and packages, finding coexisting phases is still challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
-This is because the number of degrees of freedom (e.g., to describe the composition of the phases) generally increases with $N_\mathrm{C}$.
+In general, finding coexisting phases is challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
+This is because the number of degrees of freedom (e.g., to describe the composition of the phases) increases with larger $N_\mathrm{C}$.
 Moreover, the possible number of coexisting phases also increases with $N_\mathrm{C}$ according to Gibbs phase rule, implying that the free energy of the entire system comprises roughly $N_\mathrm{C}^2$ free variables.
 This high-dimensional space needs to be sampled to find the global minimum with multiple coexisting phases, which is infeasible for some of the strategies mentioned above since they become prohibitively expensive.
-For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires to sample the entire free energy landscape.
-The existing Calphad packages address this challenge by implementing several strategies and providing high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems.
+For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires sampling the entire free energy landscape.
+The existing Calphad packages address this challenge by combining several strategies.
+Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems.
 In contrast, `flory` focuses on the general physics of multicomponent phase separation, and thus assumes that all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy, similar to a recent submodule of the `OpenCalphad` package [@li2020Implementation].
+These simple models are more common in liquid systems such as polymer mixtures, and have recently been considered relevant to phase separation in biological cells. 
 The restrictions of the physical model simplifies the user interface and allow for an efficient optimization algorithm.
-As the result, the `flory` package can determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures while also being efficient enough when the number of the components $N_\mathrm{C}$ is large.
+For example, `flory` implements an algorithm that automatically satisfies the constraints of ensembles, thus reducing the Lagrange multipliers required [@white1958Chemical].
+To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` starts from many phases initially and then clusters the equivalent phases afterwards.
+As the result, the `flory` package can efficiently determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures with large number of the components $N_\mathrm{C}$.
 
 # Methods
 
