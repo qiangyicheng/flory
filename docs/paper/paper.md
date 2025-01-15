@@ -40,17 +40,16 @@ In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization 
 
 In general, finding coexisting phases is challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
 This is because the number of degrees of freedom (e.g., to describe the composition of the phases) increases with larger $N_\mathrm{C}$.
-The possible number of coexisting phases also increases according the Gibbs phase law, leading to a free energy function with approximately $N_\mathrm{C}^2$ free variables.
-Finding the multiple coexisting phases then requires a global minimization and sampling in such a high-dimensional space.
-Consequently, some of the strategies mentioned above become prohibitively expensive.
+Moreover, the possible number of coexisting phases also increases with $N_\mathrm{C}$ according to Gibbs phase rule, implying that the free energy of the entire system comprises roughly $N_\mathrm{C}^2$ free variables.
+This high-dimensional space needs to be sampled to find the global minimum with multiple coexisting phases, which is infeasible for some of the strategies mentioned above since they become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires sampling the entire free energy landscape.
 The existing Calphad packages address this challenge by combining several strategies.
 Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems.
 In contrast, `flory` focuses on the general physics of multicomponent phase separation, and thus assumes that all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy, similar to a recent submodule of the `OpenCalphad` package [@li2020Implementation].
 These simple models are more common in liquid systems such as polymer mixtures, and have recently been considered relevant to phase separation in biological cells. 
 The restrictions of the physical model simplifies the user interface and allow for an efficient optimization algorithm.
-For example, `flory` implements an algorithm that automatically satisfying the constrains of ensembles, thus reducing the Lagrange multipliers required [@white1958Chemical].
-To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` package starts from many phases initially and then clusters the equivalent phases afterwards.
+For example, `flory` implements an algorithm that automatically satisfies the constraints of ensembles, thus reducing the Lagrange multipliers required [@white1958Chemical].
+To obtain the coexisting phases in equilibrium without the prior knowledge of the compositions of the phases, `flory` starts from many phases initially and then clusters the equivalent phases afterwards.
 As the result, the `flory` package can efficiently determine the multiple coexisting phases in equilibrium in a range of multicomponent mixtures.
 
 # Methods
