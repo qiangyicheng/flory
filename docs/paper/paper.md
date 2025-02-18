@@ -21,7 +21,7 @@ bibliography: paper.bib
 
 # Summary
 
-Phase separation is an intrinsic property of mixtures that is widely observed in many scenarios, ranging from the simple demixing of oil and water to the condensation of biomolecules in cells.
+Phase separation is an intrinsic property of mixtures that is widely observed in many scenarios, ranging from the simple demixing of oil and water to the condensation of biomolecules in cells [@hyman2014LiquidLiquid].
 In multicomponent mixtures, phase separation can lead to many coexisting phases, which is crucial in many fields.
 One key step to understand phase separation is to measure or predict the composition of the coexisting phases.
 To support such research, the `flory` package provides an easily accessible, performant, and extensible code that finds coexisting phases in multicomponent mixtures.
@@ -32,10 +32,10 @@ The package mainly focus on the mixtures with uniform and relatively simple free
 # Statement of need
 
 Finding coexisting phases is a common task in many fields, such as chemical engineering [@lukas2007Computational] and soft matter physics [@jacobs2023Theory].
-In general, the coexisting phases can be theoretically predicted by solving the balance equations between phases [@zwicker2022Evolved], or equivalently minimizing the total free energy of the whole mixture [@lukas2007Computational].
+The coexisting phases can be theoretically predicted by solving the balance equations between phases [@zwicker2022Evolved], or equivalently minimizing the total free energy of the whole mixture [@lukas2007Computational].
 Other strategies include direct spatially-resolved simulations [@shrinivas2021Phase] and the construction of the convex hull of the free energy landscape [@mao2019Phase].
 There are a few open-source packages that implement these strategies.
-Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015OpenCalphad], combine a database of candidate phases and several strategies above to compute phase diagrams of mixtures with few components.
+Most notably, Calphad packages, including `Equilipy` [@kwon2024Equilipy], `pycalphad` [@otis2017Pycalphad] and `OpenCalphad` [@sundman2015OpenCalphad], combine a database of candidate phases and the strategies above to compute phase diagrams of mixtures with few components.
 In addition, `SurfinPy` [@tse2022SurfinPy] applies the free energy minimization strategy to surface phases.
 
 In general, finding coexisting phases is challenging for mixtures with a large number of the components, $N_\mathrm{C}$.
@@ -43,8 +43,9 @@ This is because the number of degrees of freedom (e.g., to describe the composit
 Moreover, the possible number of coexisting phases also increases with $N_\mathrm{C}$ according to Gibbs phase rule, implying that the free energy of the entire system comprises roughly $N_\mathrm{C}^2$ free variables.
 This high-dimensional space needs to be sampled to find the global minimum with multiple coexisting phases, which is infeasible for some of the strategies mentioned above since they become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires sampling the entire free energy landscape.
-The existing Calphad packages address this challenge by combining several strategies.
-Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems.
+The existing Calphad packages address this challenge by taking the advantage of several strategies [@lukas2007Computational].
+For example, the free energy minimization strategy can refine the rough result obtained from the convex hull strategy.
+Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems [@sundman2015OpenCalphad].
 In contrast, `flory` focuses on the general physics of multicomponent phase separation, and thus assumes that all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy, similar to a recent submodule of the `OpenCalphad` package [@li2020Implementation].
 These simple models are more common in liquid systems such as polymer mixtures, and have recently been considered relevant to phase separation in biological cells. 
 The restrictions of the physical model simplifies the user interface and allow for an efficient optimization algorithm.
@@ -63,7 +64,7 @@ $$\bar{f}({N_\mathrm{P}}, \{J_p\}, \{\phi_{p,i}\}) = \sum_{p=1}^{{N_\mathrm{P}}}
 where $N_\mathrm{C}$ is the number of components, $N_\mathrm{P}$ is the number of phases, $J_p$ denotes the fraction of volume that phase $p=1,\ldots,N_\mathrm{P}$ occupies in the entire system, and $\phi_{p,i}$ is the volume fraction of component $i=1,\ldots,N_\mathrm{C}$ in phase $p$.
 The physical behavior of the mixture is encoded in the free energy density $f$, which `flory` expresses using four orthogonal aspects: interaction, entropy, ensemble, and constraints.
 The package only imposes limits on the entropy part, which is crucial for the core algorithm, while the other three aspects are rather flexible.
-For instance, the interactions can be described by quadratic terms, like in the Flory-Huggins model, and the parameters can be obtained from database such as `3PDB` [@Polymera] for realistic polymer mixtures, or freely chosen for theoretical investigations.
+For instance, the interactions can be described by quadratic terms, like in the Flory-Huggins model, and the parameters can be obtained from database such as `3PDB` [@2019Polymer] for realistic polymer mixtures, or freely chosen for theoretical investigations.
 By combining these four aspects, `flory` supports a broad range of free energy densities $f$ with different ensembles and constraints.
 A few widely-used specializations are provided for all four aspects, while customized ones can be added easily.
 
@@ -140,7 +141,7 @@ plt.show()
 ![Phase diagram of binary mixture. The lines show the coexisting composition $\phi$ at a given interaction strength $\chi$, together known as a the binodal line.](pd.jpg "Phase diagram of binary mixture")
 
 Moreover, one can vary the type of interaction by initializing a different class or by modifying the existing one, and one could similarly change the entropy, ensemble, and constraints.
-Customized specialization of all four aspects can be easily implemented by deriving from the provided base classes.
+Customized specialization of all four aspects can be easily implemented by deriving from the provided base classes [@2025Flory]. 
 
 # Acknowledgements
 
