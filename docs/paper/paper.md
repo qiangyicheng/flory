@@ -44,7 +44,7 @@ Moreover, the possible number of coexisting phases also increases with $N_\mathr
 This high-dimensional space needs to be sampled to find the global minimum with multiple coexisting phases, which is infeasible for some of the strategies mentioned above since they become prohibitively expensive.
 For example, the cost of the convex hull strategy increases exponentially with $N_\mathrm{C}$ since it requires sampling the entire free energy landscape.
 The existing Calphad packages address this challenge by taking the advantage of several strategies [@lukas2007Computational].
-For example, the free energy minimization strategy can refine the rough result obtained from the convex hull strategy.
+For example, the free energy minimization strategy can refine the results obtained from the convex hull strategy.
 Besides, Calphad packages usually provide high flexibility on candidate phases, allowing each phase to have different free energies to model realistic systems [@sundman2015OpenCalphad].
 In contrast, `flory` focuses on the general physics of multicomponent phase separation, and thus assumes that all candidate phases share the same free energy function, e.g., the simple Flory-Huggins free energy, similar to a recent submodule of the `OpenCalphad` package [@li2020Implementation].
 These simple models are more common in liquid systems such as polymer mixtures, and have recently been considered relevant to phase separation in biological cells. 
