@@ -55,6 +55,7 @@ Contents
    symbol
    api
    detail
+   ref
 
 Indices and tables
 ==================
