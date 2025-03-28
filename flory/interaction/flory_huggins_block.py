@@ -76,15 +76,6 @@ class FloryHugginsBlockInteraction(FloryHugginsInteractionBase):
         return self._num_comp_per_feat
 
     @property
-    def chis(self) -> np.ndarray:
-        r"""The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`.
-
-        This property should not be modified directly. Consider property :attr:`chis_feat`
-        instead.
-        """
-        return self._chis
-
-    @property
     def chis_feat(self) -> np.ndarray:
         r"""The Flory-Huggins interaction matrix of features :math:`\chi_{rs}`."""
         return self._chis_feat

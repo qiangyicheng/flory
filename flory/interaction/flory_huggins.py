@@ -109,6 +109,11 @@ class FloryHugginsInteractionBase(InteractionBase):
             self._logger.warning("Using symmetrized χ interaction-matrix")
         self._chis = 0.5 * (chis + chis.T)
 
+    @property
+    def chis(self) -> np.ndarray:
+        r"""The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`."""
+        return self._chis
+
     def _compiled_impl(
         self, *, additional_chis_shift: float = 1.0
     ) -> FloryHugginsInteractionCompiled:
@@ -218,12 +223,7 @@ class FloryHugginsInteraction(FloryHugginsInteractionBase):
         super().__init__(num_comp, chis)
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    @property
-    def chis(self) -> np.ndarray:
-        r"""The Flory-Huggins interaction matrix of components :math:`\chi_{ij}`."""
-        return self._chis
-
-    @chis.setter
+    @FloryHugginsInteractionBase.chis.setter
     def chis(self, chis_new: np.ndarray):
         chis_new = np.atleast_1d(chis_new)
         shape = (self.num_comp, self.num_comp)

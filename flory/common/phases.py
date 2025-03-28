@@ -11,22 +11,24 @@ import numpy as np
 from scipy import cluster, spatial
 
 
-def get_uniform_random_composition(num_comps: int, rng=None) -> np.ndarray:
+def get_uniform_random_composition(
+    num_comp: int, rng: np.random.Generator | None = None
+) -> np.ndarray:
     """pick concentrations uniformly from allowed simplex (sum of fractions < 1)
 
     Args:
-        num_comps (int): the number of components to use
+        num_comp (int): the number of components to use
         rng: The random number generator
 
     Returns:
-        An array with `num_comps` random fractions
+        An array with `num_comp` random fractions
     """
     rng = np.random.default_rng(rng)
 
-    phis = np.empty(num_comps)
+    phis = np.empty(num_comp)
     phi_max = 1.0
-    for d in range(num_comps - 1):
-        x = rng.beta(1, num_comps - d - 1) * phi_max
+    for d in range(num_comp - 1):
+        x = rng.beta(1, num_comp - d - 1) * phi_max
         phi_max -= x
         phis[d] = x
     phis[-1] = 1 - phis[:-1].sum()

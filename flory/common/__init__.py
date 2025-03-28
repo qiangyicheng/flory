@@ -5,5 +5,5 @@
 """
 
 from .exceptions import ComponentNumberError, FeatureNumberError, VolumeFractionError
-from .phases import Phases, PhasesResult
+from .phases import Phases, PhasesResult, get_uniform_random_composition
 from .utilities import *

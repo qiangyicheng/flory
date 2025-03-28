@@ -12,6 +12,7 @@ docs/source/_autosummary
 *.egg*
 build
 dist
+debug
 
 flory/_version.py
 .pydevproject

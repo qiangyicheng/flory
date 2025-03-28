@@ -7,3 +7,4 @@
 from .base import InteractionBase
 from .flory_huggins import FloryHugginsInteraction, FloryHugginsInteractionCompiled
 from .flory_huggins_block import FloryHugginsBlockInteraction
+from .flory_huggins_structured import FloryHugginsStructured

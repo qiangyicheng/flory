@@ -24,7 +24,7 @@ except ImportError:
         __version__ = "unknown"
     del PackageNotFoundError, version
 
-from .common import Phases
+from .common import Phases, get_uniform_random_composition
 from .constraint import (
     ConstraintBase,
     LinearGlobalConstraint,
@@ -37,6 +37,7 @@ from .free_energy import FloryHuggins, FreeEnergyBase
 from .interaction import (
     FloryHugginsBlockInteraction,
     FloryHugginsInteraction,
+    FloryHugginsStructured,
     InteractionBase,
 )
 from .mcmp import CoexistingPhasesFinder

@@ -84,11 +84,11 @@ def test_phases_wrong_input(cls):
         cls([1], [[1], [2]])
 
 
-@pytest.mark.parametrize("num_comps", [1, 2, 3])
-def test_get_uniform_random_composition(num_comps, rng):
+@pytest.mark.parametrize("num_comp", [1, 2, 3])
+def test_get_uniform_random_composition(num_comp, rng):
     """test get_uniform_random_composition function"""
-    phis = get_uniform_random_composition(num_comps, rng=rng)
-    assert phis.shape == (num_comps,)
+    phis = get_uniform_random_composition(num_comp, rng=rng)
+    assert phis.shape == (num_comp,)
     assert phis.sum() == pytest.approx(1)
 
 
