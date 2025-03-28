@@ -28,10 +28,7 @@ def _get_chi_matrix_from_features(
     Returns:
         np.ndarray: the corresponding chi matrix
     """
-    eijs = np.einsum("in,jn,n->ij", features, features, weights)
-    eij_diag = np.diag(eijs)
-    chis = eijs - 0.5 * (eij_diag[:, np.newaxis] + eij_diag[np.newaxis, :])
-    return chis
+    return -0.5 * ((features[:, None, :] - features[None, :, :]) ** 2) @ weights
 
 
 class FloryHugginsStructured(FloryHugginsInteractionBase):
@@ -48,7 +45,7 @@ class FloryHugginsStructured(FloryHugginsInteractionBase):
     features summarized by the feature matrix :math:`s_{i, \alpha}`:
 
     .. math::
-        \chi_{ij} = \frac12 \sum_{\alpha=1}^{N_\mathrm{F}} w_\alpha
+        \chi_{ij} = -\frac12 \sum_{\alpha=1}^{N_\mathrm{F}} w_\alpha
                                 \left(s_{i,\alpha} - s_{j, \alpha}\right)^2
 
     implying the rank of :math:`\chi_{ij}` is at most :math:`N_\mathrm{C}`. The weight
