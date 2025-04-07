@@ -134,7 +134,7 @@ class FloryHugginsStructured(FloryHugginsInteractionBase):
 
     @property
     def num_feat(self) -> int:
-        r"""Number of feature for each component"""
+        r"""Number of features for each component"""
         return self._features.shape[1]
 
     @property
