@@ -174,8 +174,8 @@ class IdealGasEntropyBase(EntropyBase):
         Returns:
             : The full Hessian.
         """
-        # manually generate the matrix sine we assume no prior knowledge for the dimension of `phis``
-        ans_diag = 1.0 / phis * self._sizes
+        # manually generate the matrix since we assume no prior knowledge for the dimension of `phis``
+        ans_diag = 1.0 / (phis * self._sizes)
         shape = list(ans_diag.shape)
         shape.append(self.num_comp)
         ans = np.zeros(shape)
