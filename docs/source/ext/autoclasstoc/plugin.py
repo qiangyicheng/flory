@@ -41,7 +41,7 @@ class AutoClassToc(SphinxDirective):
             return utils.make_toc(self.state, cls, sections)
 
         except ConfigError as err:
-            raise self.error(str(err))
+            raise self.error(str(err)) from err
 
 
 def load_static_assets(app, config):

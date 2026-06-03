@@ -60,6 +60,12 @@ class FloryHuggins(FreeEnergyBase):
 
     @chis.setter
     def chis(self, chis_new: np.ndarray):
+        r"""Set Flory-Huggins interaction matrix.
+
+        Args:
+            chis_new:
+                Updated interaction matrix :math:`\chi_{ij}`.
+        """
         self.interaction.chis = chis_new
 
     @property
@@ -69,6 +75,12 @@ class FloryHuggins(FreeEnergyBase):
 
     @sizes.setter
     def sizes(self, sizes_new: np.ndarray):
+        r"""Set relative molecule volumes.
+
+        Args:
+            sizes_new:
+                Updated relative molecule volumes :math:`l_i = \nu_i/\nu`.
+        """
         self.entropy.sizes = sizes_new
 
     @classmethod
@@ -82,8 +94,18 @@ class FloryHuggins(FreeEnergyBase):
     ):
         r"""Create Flory-Huggins free energy with uniform :math:`\chi_{ij}` matrix.
 
-        See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_uniform`
-        for parameter details.
+        Args:
+            num_comp:
+                Number of components :math:`N_\mathrm{C}`.
+            chi:
+                Uniform off-diagonal interaction value.
+            sizes:
+                Relative molecule volumes :math:`l_i = \nu_i/\nu`.
+            vanishing_diagonal:
+                Whether diagonal entries of the interaction matrix are set to zero.
+
+        Returns:
+            Instance of :class:`FloryHuggins`.
         """
         obj = cls(num_comp, 0, sizes=sizes)
         obj.interaction.set_uniform_chis(chi, vanishing_diagonal=vanishing_diagonal)
@@ -102,8 +124,22 @@ class FloryHuggins(FreeEnergyBase):
     ):
         r"""Create Flory-Huggins free energy with random :math:`\chi_{ij}` matrix.
 
-        See :meth:`~flory.interaction.flory_huggins.FloryHugginsInteraction.from_random_normal`
-        for parameter details.
+        Args:
+            num_comp:
+                Number of components :math:`N_\mathrm{C}`.
+            chi_mean:
+                Mean interaction :math:`\bar{\chi}`.
+            chi_std:
+                Standard deviation of interactions :math:`\sigma_\chi`.
+            sizes:
+                Relative molecule volumes :math:`l_i = \nu_i/\nu`.
+            vanishing_diagonal:
+                Whether diagonal entries of the interaction matrix are set to zero.
+            rng:
+                Random number generator used to sample interaction entries.
+
+        Returns:
+            Instance of :class:`FloryHuggins`.
         """
         obj = cls(num_comp, 0, sizes=sizes)
         obj.interaction.set_random_chis(

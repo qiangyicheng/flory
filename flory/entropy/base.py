@@ -107,6 +107,12 @@ class EntropyBaseCompiled:
         iteration algorithm to remove from it any explicit dependence of the molecule
         parameters such as :math:`l_i`.
 
+        Args:
+            phis_comp:
+                Constant. The 2D array with the size of
+                :math:`N_\mathrm{C} \times N_\mathrm{M}`, containing the component
+                fractions :math:`\phi_i^{(m)}`.
+
         Returns:
             : The volume derivatives.
         """
@@ -129,6 +135,10 @@ class EntropyBase:
 
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled entropy instance.
+
+        Args:
+            kwargs:
+                Additional arguments required by concrete implementations.
         """
         raise NotImplementedError
 

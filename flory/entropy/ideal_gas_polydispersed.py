@@ -69,6 +69,19 @@ class IdealGasPolydispersedEntropyCompiled(EntropyBaseCompiled):
     def partition(
         self, phis_comp: np.ndarray, omegas: np.ndarray, Js: np.ndarray
     ) -> np.ndarray:
+        r"""Calculate Boltzmann factors and single molecule partition functions.
+
+        Args:
+            phis_comp:
+                Output array storing component Boltzmann factors.
+            omegas:
+                Mean fields for features.
+            Js:
+                Relative compartment volumes :math:`J_m`.
+
+        Returns:
+            The single molecule partition functions of components.
+        """
         Qs = np.zeros((self._num_comp,))
         total_Js = Js.sum()
 
@@ -82,6 +95,14 @@ class IdealGasPolydispersedEntropyCompiled(EntropyBaseCompiled):
         return Qs
 
     def comp_to_feat(self, phis_feat: np.ndarray, phis_comp: np.ndarray) -> None:
+        r"""Convert component fractions to feature fractions.
+
+        Args:
+            phis_feat:
+                Output array storing feature fractions.
+            phis_comp:
+                Input array storing component fractions.
+        """
         itr_comp = 0
         for itr_feat in range(self._num_feat):
             phis_feat[itr_feat] = phis_comp[itr_comp]
@@ -91,6 +112,15 @@ class IdealGasPolydispersedEntropyCompiled(EntropyBaseCompiled):
                 itr_comp += 1
 
     def volume_derivative(self, phis_comp: np.ndarray) -> np.ndarray:
+        r"""Calculate volume derivative of entropy contribution.
+
+        Args:
+            phis_comp:
+                Component fractions :math:`\phi_i^{(m)}`.
+
+        Returns:
+            Volume derivatives for each compartment.
+        """
         ans = np.zeros_like(phis_comp[0])
         for itr_comp in range(self.num_comp):
             ans -= phis_comp[itr_comp] / self._sizes[itr_comp]
@@ -148,6 +178,12 @@ class IdealGasPolydispersedEntropy(IdealGasEntropyBase):
 
     @sizes.setter
     def sizes(self, sizes_new: np.ndarray):
+        r"""Set relative molecule volumes.
+
+        Args:
+            sizes_new:
+                Updated relative molecule volumes :math:`l_i = \nu_i/\nu`.
+        """
         sizes_new = np.atleast_1d(sizes_new)
         shape = (self.num_comp,)
         self._sizes = np.array(np.broadcast_to(sizes_new, shape))

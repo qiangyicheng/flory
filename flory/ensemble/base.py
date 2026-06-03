@@ -79,6 +79,10 @@ class EnsembleBase:
 
         This interface is meant to be overridden in derived classes. See :meth:`compiled`
         for more information on the compiled ensemble instance.
+
+        Args:
+            kwargs:
+                Additional arguments required by concrete implementations.
         """
         raise NotImplementedError
 
