@@ -4,6 +4,7 @@
 
 .coverage*
 
+debug/
 docs/build
 docs/source/_autosummary
 
@@ -17,5 +18,18 @@ flory/_version.py
 .pydevproject
 .project
 
+*.aux
+*.out
+*.bbl
+*.blg
+*.log
+*.toc
+*.fdb_latexmk
+*.fls
+*Notes.bib
+*.synctex.gz
+
 docs/paper/paper.pdf
 docs/paper/paper.crossref
+docs/notes/chemical_potential.pdf
+docs/notes/grand_canonical.pdf
