@@ -45,13 +45,39 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
         return self._volume_derivative
 
     def initialize(self, num_part: int) -> None:
+        r"""Initialize internal arrays.
+
+        Args:
+            num_part:
+                Number of compartments :math:`N_\mathrm{M}`.
+        """
         self._potential = np.zeros((self._num_feat, num_part))
         self._volume_derivative = np.zeros((num_part,))
 
     def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
-        pass
+        r"""Prepare no-constraint contribution.
+
+        Args:
+            phis_feat:
+                The feature fractions :math:`\phi_r^{(m)}`.
+            Js:
+                Relative compartment volumes :math:`J_m`.
+            masks:
+                Masks indicating whether compartments are active.
+        """
 
     def evolve(self, step: float, masks: np.ndarray) -> float:
+        r"""Evolve no-constraint state.
+
+        Args:
+            step:
+                Evolution step size.
+            masks:
+                Masks indicating whether compartments are active.
+
+        Returns:
+            Maximal absolute residue, always zero for no constraints.
+        """
         return 0
 
 

@@ -54,6 +54,21 @@ class GrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
     def normalize(
         self, phis_comp: np.ndarray, Qs: np.ndarray, masks: np.ndarray
     ) -> np.ndarray:
+        r"""Scale Boltzmann factors to component fractions.
+
+        Args:
+            phis_comp:
+                Mutable component Boltzmann factors, updated in-place to component
+                fractions.
+            Qs:
+                Single molecule partition functions of components. This parameter is
+                unused for grand canonical normalization.
+            masks:
+                Masks indicating whether compartments are active.
+
+        Returns:
+            The incompressibility in each compartment.
+        """
         incomp = -1.0 * np.ones_like(phis_comp[0])
         for itr_comp in range(self._num_comp):
             phis_comp[itr_comp] = (
@@ -94,6 +109,12 @@ class GrandCanonicalEnsemble(EnsembleBase):
 
     @scaled_activity.setter
     def scaled_activity(self, scaled_activity_new: np.ndarray):
+        r"""Set scaled activities of components.
+
+        Args:
+            scaled_activity_new:
+                Updated scaled activities :math:`l_i e^{l_i \mu_i}`.
+        """
         scaled_activity_new = np.atleast_1d(scaled_activity_new)
         shape = (self.num_comp,)
         self._scaled_activity = np.array(np.broadcast_to(scaled_activity_new, shape))
@@ -113,6 +134,10 @@ class GrandCanonicalEnsemble(EnsembleBase):
                 The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
                 volume of a reference molecule :math:`\nu`. It is treated as all-one
                 vector by default.
+
+        Returns:
+            Instance of :class:`GrandCanonicalEnsemble` with activities corresponding to
+            :paramref:`mus`.
         """
         mus = np.atleast_1d(mus)
 

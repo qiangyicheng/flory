@@ -45,7 +45,7 @@ def find_coexisting_phases(
             The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
             volume of a reference molecule :math:`\nu`. It is treated as all-one vector by
             default.
-        \**kwargs:
+        **kwargs:
             All additional arguments are used directly to initialize
             :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 

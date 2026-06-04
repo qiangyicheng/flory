@@ -68,8 +68,8 @@ def pick_sections(sections, exclude=None):
         if isinstance(x, str):
             try:
                 return SECTIONS[x]
-            except KeyError:
-                raise ConfigError(f"no autoclasstoc section with key {x!r}")
+            except KeyError as err:
+                raise ConfigError(f"no autoclasstoc section with key {x!r}") from err
 
         if isclass(x) and issubclass(x, Section):
             return x
@@ -117,10 +117,10 @@ def make_inherited_details(state, parent, open_by_default=False):
     return nodes_from_rst(state, f"Inherited from :py:class:`{get_cls_xref(parent)}`:")
 
 
-def remove_prefix(str, prefix):
-    if str.startswith(prefix):
-        return str[len(prefix) :]
-    return str
+def remove_prefix(string, prefix):
+    if string.startswith(prefix):
+        return string[len(prefix) :]
+    return string
 
 
 def make_links(state, attrs, cls, current_class=False, mod_prefix=""):
@@ -139,7 +139,7 @@ def make_links(state, attrs, cls, current_class=False, mod_prefix=""):
             ".. autosummary::",
             "",
             *[
-                f'    {remove_prefix(x if current_class else join(cls_xref, x, sep="."), mod_prefix)}'
+                f"    {remove_prefix(x if current_class else join(cls_xref, x, sep='.'), mod_prefix)}"
                 for x in attrs
             ],
         ],

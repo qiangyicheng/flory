@@ -97,9 +97,25 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         return self._volume_derivative
 
     def initialize(self, num_part: int) -> None:
+        r"""Initialize internal multipliers.
+
+        Args:
+            num_part:
+                Number of compartments :math:`N_\mathrm{M}`.
+        """
         self._multiplier = np.zeros((self._num_cons, num_part))
 
     def prepare(self, phis_feat: np.ndarray, Js: np.ndarray, masks: np.ndarray) -> None:
+        r"""Prepare potentials and volume derivatives for current state.
+
+        Args:
+            phis_feat:
+                The feature fractions :math:`\phi_r^{(m)}`.
+            Js:
+                Relative compartment volumes :math:`J_m`.
+            masks:
+                Masks indicating whether compartments are active.
+        """
         self._residue = self._Cs @ phis_feat
         for itr_cons in range(self._num_cons):
             self._residue[itr_cons] -= self._Ts[itr_cons]
@@ -117,6 +133,17 @@ class LinearLocalConstraintCompiled(ConstraintBaseCompiled):
         self._volume_derivative *= masks
 
     def evolve(self, step: float, masks: np.ndarray) -> float:
+        r"""Evolve Lagrange multipliers.
+
+        Args:
+            step:
+                Evolution step size.
+            masks:
+                Masks indicating whether compartments are active.
+
+        Returns:
+            Maximal absolute residue of all constraints.
+        """
         self._multiplier += step * self._acceptance_ratio * self._residue
         self._multiplier *= masks
         return np.abs(self._residue).max()
@@ -172,6 +199,12 @@ class LinearLocalConstraint(ConstraintBase):
 
     @Cs.setter
     def Cs(self, Cs_new: np.ndarray):
+        r"""Set coefficients of features for linear constraints.
+
+        Args:
+            Cs_new:
+                Updated coefficients :math:`C_{\alpha,r}`.
+        """
         Cs_new = np.atleast_1d(Cs_new)
         shape = (self.num_cons, self.num_feat)
         self._Cs = np.broadcast_to(Cs_new, shape).astype(float)
@@ -183,6 +216,12 @@ class LinearLocalConstraint(ConstraintBase):
 
     @Ts.setter
     def Ts(self, Ts_new: np.ndarray):
+        r"""Set targets for linear constraints.
+
+        Args:
+            Ts_new:
+                Updated targets :math:`T_\alpha`.
+        """
         shape = (self.num_cons,)
         Ts_new = np.atleast_1d(Ts_new)
         self._Ts = np.broadcast_to(Ts_new, shape).astype(float)

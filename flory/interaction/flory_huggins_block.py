@@ -91,6 +91,12 @@ class FloryHugginsBlockInteraction(FloryHugginsInteractionBase):
 
     @chis_feat.setter
     def chis_feat(self, chis_feat_new: np.ndarray):
+        r"""Set Flory-Huggins interaction matrix between features.
+
+        Args:
+            chis_feat_new:
+                Updated feature interaction matrix :math:`\chi_{rs}`.
+        """
         chis_feat_new = convert_and_broadcast(
             chis_feat_new, (self._num_feat, self._num_feat)
         )

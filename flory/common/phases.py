@@ -66,6 +66,12 @@ class Phases:
 
         This method helps with subclassing methods that should keep other information
         intact.
+
+        Args:
+            volumes:
+                1D array containing new phase volumes.
+            fractions:
+                2D array containing new component fractions of the phases.
         """
         return self.__class__(volumes, fractions)
 
@@ -188,5 +194,11 @@ class PhasesResult(Phases):
 
         This method helps with subclassing methods that should keep other information
         intact.
+
+        Args:
+            volumes:
+                1D array containing new phase volumes.
+            fractions:
+                2D array containing new component fractions of the phases.
         """
         return self.__class__(volumes, fractions, info=self.info.copy())

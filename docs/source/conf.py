@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "flory"
-copyright = "2024, Yicheng Qiang"
+copyright = "2024, Yicheng Qiang"  # noqa: A001
 author = "Yicheng Qiang"
 
 # -- General configuration ---------------------------------------------------
@@ -19,7 +19,8 @@ import sys
 
 proj_path = pathlib.Path(__file__).parent.parent.parent.resolve()
 sys.path.append(str(proj_path))
-sys.path.insert(0, os.path.abspath("./ext/"))
+ext_path = (pathlib.Path(__file__) / "ext").resolve()
+sys.path.insert(0, str(ext_path))
 
 os.environ["NUMBA_DISABLE_JIT"] = "1"
 

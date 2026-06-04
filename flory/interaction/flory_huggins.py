@@ -56,6 +56,17 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
     def volume_derivative(
         self, potential: np.ndarray, phis_feat: np.ndarray
     ) -> np.ndarray:
+        r"""Calculate volume derivatives of the interaction contribution.
+
+        Args:
+            potential:
+                Interaction potential contribution to mean fields.
+            phis_feat:
+                Feature fractions :math:`\phi_r^{(m)}`.
+
+        Returns:
+            Volume derivatives for each compartment.
+        """
         # since Flory-Huggins free energy contains only 2nd-ordered interactions,
         # the interaction energy is directly calculated from potential and phis
         ans = np.zeros_like(potential[0])
@@ -65,9 +76,27 @@ class FloryHugginsInteractionCompiled(InteractionBaseCompiled):
         return ans
 
     def potential(self, phis_feat: np.ndarray) -> np.ndarray:
+        r"""Calculate interaction potential.
+
+        Args:
+            phis_feat:
+                Feature fractions :math:`\phi_r^{(m)}`.
+
+        Returns:
+            Interaction potential contribution to mean fields.
+        """
         return self._chis @ phis_feat
 
     def incomp_coef(self, phis_feat: np.ndarray) -> float:
+        r"""Get incompressibility coefficient.
+
+        Args:
+            phis_feat:
+                Feature fractions :math:`\phi_r^{(m)}`.
+
+        Returns:
+            Incompressibility coefficient.
+        """
         return self._incomp_coef
 
 
@@ -225,6 +254,12 @@ class FloryHugginsInteraction(FloryHugginsInteractionBase):
 
     @chis.setter
     def chis(self, chis_new: np.ndarray):
+        r"""Set Flory-Huggins interaction matrix.
+
+        Args:
+            chis_new:
+                Updated interaction matrix :math:`\chi_{ij}`.
+        """
         chis_new = np.atleast_1d(chis_new)
         shape = (self.num_comp, self.num_comp)
         chis_new = np.array(np.broadcast_to(chis_new, shape))

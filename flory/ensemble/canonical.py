@@ -54,6 +54,20 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
     def normalize(
         self, phis_comp: np.ndarray, Qs: np.ndarray, masks: np.ndarray
     ) -> np.ndarray:
+        r"""Normalize component fractions in canonical ensemble.
+
+        Args:
+            phis_comp:
+                Mutable component Boltzmann factors, updated in-place to normalized
+                fractions.
+            Qs:
+                Single molecule partition functions of components.
+            masks:
+                Masks indicating whether compartments are active.
+
+        Returns:
+            The incompressibility in each compartment.
+        """
         incomp = -1.0 * np.ones_like(phis_comp[0])
         for itr_comp in range(self._num_comp):
             factor = self._phi_means[itr_comp] / Qs[itr_comp]
@@ -96,6 +110,12 @@ class CanonicalEnsemble(EnsembleBase):
 
     @phi_means.setter
     def phi_means(self, phi_means_new: np.ndarray):
+        r"""Set the average volume fractions.
+
+        Args:
+            phi_means_new:
+                Updated average volume fractions :math:`\bar{\phi}_i`.
+        """
         phi_means_new = np.array(phi_means_new)  # copy data
         self._phi_means = np.broadcast_to(phi_means_new, (self.num_comp,))
 
