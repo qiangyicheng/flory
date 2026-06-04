@@ -4,6 +4,7 @@
 .. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
 """
 
-from .base import EnsembleBase, EnsembleBaseCompiled
-from .canonical import CanonicalEnsemble, CanonicalEnsembleCompiled
-from .grandcanonical import GrandCanonicalEnsemble, GrandCanonicalEnsembleCompiled
+from .base import EnsembleBase
+from .canonical import CanonicalEnsemble
+from .canonical_reactions import CanonicalReactionsEnsemble
+from .grandcanonical import GrandCanonicalEnsemble

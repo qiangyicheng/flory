@@ -156,8 +156,8 @@ self-consistent equations
 To solve these equations, we design the following iterative scheme
 
 .. math::
-    Q_i^{(m)}    & = \sum_{m=1}^{N_\mathrm{M}} \exp\left(-w_i^{(m)}\right) J_m                                                            \\
-    \phi_i^{(m)} & = \frac{\bar{\phi_i}}{Q_i^{(m)}}\exp\left(-w_i^{(m)}\right)                                             \\
+    Q_i          & = \sum_{m=1}^{N_\mathrm{M}} \exp\left(-w_i^{(m)}\right) J_m                                                            \\
+    \phi_i^{(m)} & = \frac{\bar{\phi_i}}{Q_i}\exp\left(-w_i^{(m)}\right)                                             \\
     \xi_m        & = \frac{1}{{N_\mathrm{C}}} \biggl(\sum_{i=1}^{{N_\mathrm{C}}} w_i^{(m)} - \sum_{i,j=1}^{{N_\mathrm{C}}} \chi_{ij} \phi_j^{(m)} \biggr) \\
     \eta_m       & = -\frac{1}{2}\sum_{i,j=1}^{N_\mathrm{C}} \chi_{ij} \phi_i^{(m)} \phi_j^{(m)}
     + \sum_{i=1}^{N_\mathrm{C}} w_i^{(m)}\phi_i^{(m)} - \xi_m \biggl(\sum_{i=1}^{N_\mathrm{C}} \phi_i^{(m)}-1\biggr)
