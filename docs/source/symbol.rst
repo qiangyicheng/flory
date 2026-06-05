@@ -41,7 +41,7 @@ Counts
       - Integer
     * - :math:`N_\mathrm{B}`
       - 1
-      - Number of reaction constrains
+      - Number of reaction constraints
       - Integer
     * - :math:`i,j,k`
       - 1

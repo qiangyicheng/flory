@@ -31,7 +31,12 @@ from .constraint import (
     LinearLocalConstraint,
     NoConstraint,
 )
-from .ensemble import CanonicalEnsemble, EnsembleBase, GrandCanonicalEnsemble
+from .ensemble import (
+    CanonicalEnsemble,
+    ReactiveCanonicalEnsemble,
+    EnsembleBase,
+    GrandCanonicalEnsemble,
+)
 from .entropy import EntropyBase, IdealGasEntropy, IdealGasPolydispersedEntropy
 from .free_energy import FloryHuggins, FreeEnergyBase
 from .interaction import (

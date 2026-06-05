@@ -1,4 +1,4 @@
-"""Module for canonical ensemble of mixture.
+"""Module for reactive canonical ensemble of mixture.
 
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
@@ -17,11 +17,12 @@ from .base import EnsembleBase, EnsembleBaseCompiled
 @jitclass(
     [
         ("_num_comp", int32),  # a scalar
-        ("_weights", float64[::1, ::1]),
-        ("_means", float64[::1]),  # a C-continuous array
+        ("_weights", float64[:, :]),
+        ("_weights_inv", float64[:, :]),
+        ("_targets", float64[::1]),  # a C-continuous array
     ]
 )
-class CanonicalReactionsEnsembleCompiled(EnsembleBaseCompiled):
+class ReactiveCanonicalEnsembleCompiled(EnsembleBaseCompiled):
     r"""Compiled class for canonical ensemble with conserved combinations of fractions.
 
     In contrast to the canonical ensemble, where the average volume fractions of the
@@ -29,34 +30,30 @@ class CanonicalReactionsEnsembleCompiled(EnsembleBaseCompiled):
     correspond to conserved quantities :math:`\bar\psi_\beta` of reactions,
 
         .. math::
-            \bar\psi_\beta = \frac{\sum_m J_m \sum_i B_{\beta,i} \phi_i^{(m)} }{\sum_m J_m}
+            \bar\psi_\beta = \sum_i B_{\beta,i} \bar\phi_i
+            = \frac{\sum_m J_m \sum_i B_{\beta,i} \phi_i^{(m)} }{\sum_m J_m}
 
-    Idea: This constraint could be implemented using a projection method if we have good
-    estimates of the current average fraction
-
-    Therefore, the volume fractions distribution of the components in compartments can be
-    obtained by normalizing the Boltzmann factors according to the average volume
-    fractions,
-
-        .. math::
-            \phi_i^{(m)} &= \frac{\bar{\phi}_i}{Q_i} p_i^{(m)} \\
-            Q_i &= \sum_m p_i^{(m)} J_m .
-
-    Since (translational) entropy is always defined for each component, this class is only
-    aware of the component-based description of the system.
+    Idea: This constraint could be implemented by guessing `phi_means` and using a
+    projection method to enforce the linear constraint.
     """
 
-    def __init__(self, weights: np.ndarray, means: np.ndarray):
+    def __init__(
+        self, weights: np.ndarray, targets: np.ndarray, *, weights_inv: np.ndarray
+    ):
         r"""
         Args:
-            phi_means:
-                1D array with the size of :math:`N_\mathrm{C}`, containing the mean volume
-                fractions of the components, :math:`\bar{\phi}_i`. The number of
-                components :math:`N_\mathrm{C}` is inferred from this array.
+            weights:
+                The weights :math:`B_{\beta,i}` with which each component contributes to
+                the constraints.
+            targets:
+                The average value of the constraint :math:`\bar\psi_\beta`.
+            weights_inv:
+                The pseudo-inverse of `weights`
         """
-        self._num_comp = means.shape[0]
+        self._num_comp = weights.shape[1]
         self._weights = weights
-        self._means = means
+        self._weights_inv = weights_inv
+        self._targets = targets
 
     @property
     def num_comp(self):
@@ -79,7 +76,12 @@ class CanonicalReactionsEnsembleCompiled(EnsembleBaseCompiled):
         Returns:
             The incompressibility in each compartment.
         """
-        # determine average fractions according to constraints
+        # guess average fractions according to partition functions
+        phi_means = Qs / Qs.sum()
+        # project average fractions, so they obey constraints
+        phi_means -= self._weights_inv @ (self._weights @ phi_means - self._targets)
+        # normalize phi_means
+        phi_means /= phi_means.sum()
 
         # enforce individual average fractions
         incomp = -1.0 * np.ones_like(phis_comp[0])
@@ -93,19 +95,22 @@ class CanonicalReactionsEnsembleCompiled(EnsembleBaseCompiled):
         return incomp
 
 
-class CanonicalReactionsEnsemble(EnsembleBase):
+class ReactiveCanonicalEnsemble(EnsembleBase):
     r"""Class for an canonical ensemble with conserved linear combinations of fractions.
 
     The particular form of the conservation law reads
 
     .. math::
-        \bar\psi_\beta = \frac{\sum_m J_m \sum_i B_{\beta,i} \phi_i^{(m)} }{\sum_m J_m}.
+            \bar\psi_\beta = \sum_i B_{\beta,i} \bar\phi_i
+            = \frac{\sum_m J_m \sum_i B_{\beta,i} \phi_i^{(m)} }{\sum_m J_m}
 
-    This reduces to the canonical ensemble for :math:`B_{\beta,i} = \delta_{r,i}` and the
-    constraints are simply the average fractions, :math:`\bar\psi_\beta = \bar\phi_i`.
+    This reduces to the canonical ensemble for :math:`B_{\beta,i} = \delta_{\beta,i}`,
+    where the average fractions are constrained, :math:`\bar\psi_\beta = \bar\phi_i`.
+    In other cases, the constraints can capture chemical reactions, where only the total
+    particles counts are conserved.
     """
 
-    def __init__(self, num_comp: int, weights: np.ndarray, means: np.ndarray):
+    def __init__(self, num_comp: int, weights: np.ndarray, targets: np.ndarray):
         r"""
         Args:
             num_comp:
@@ -113,18 +118,18 @@ class CanonicalReactionsEnsemble(EnsembleBase):
             weights:
                 The weights :math:`B_{\beta,i}` with which each component contributes to
                 the constraints.
-            means:
+            targets:
                 The average value of the constraint :math:`\bar\psi_\beta`.
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
 
-        self._weights = np.atleast_2d(weights)
+        self._weights = np.asarray(weights, dtype=float)
+        if self._weights.ndim != 2:
+            raise ValueError("Weights must be 2d array")
         if self._weights.shape[1] != self.num_comp:
-            raise ValueError(
-                "Second dimension of `weights` must equal component count."
-            )
-        self.means = means
+            raise ValueError("Second dimension of `weights` must equal component count")
+        self.targets = targets
 
     @property
     def weights(self) -> np.ndarray:
@@ -132,27 +137,21 @@ class CanonicalReactionsEnsemble(EnsembleBase):
         return self._weights
 
     @property
-    def means(self) -> np.ndarray:
+    def targets(self) -> np.ndarray:
         r"""The average value of the constraint :math:`\bar\psi_\beta`."""
-        return self._means
+        return self._targets
 
-    @means.setter
-    def means(self, means_new: np.ndarray):
+    @targets.setter
+    def targets(self, targets_new: np.ndarray):
         r"""Set the average values of the constraints.
 
         Args:
-            means_new:
+            targets_new:
                 Updated average value of the constraint :math:`\bar\psi_\beta`.
         """
-        means_new = np.array(means_new)  # copy data
-        self._means = np.broadcast_to(means_new, (self.num_comp,))
+        self._targets = np.array(targets_new, dtype=float, copy=True)  # copy data
 
-        # if not np.isclose(self._means.sum(), 1.0):
-        #     self._logger.warning(
-        #         "The sum of phi_means is not 1. In incompressible system the iteration may never converge."
-        #     )
-
-    def _compiled_impl(self) -> CanonicalReactionsEnsembleCompiled:
+    def _compiled_impl(self) -> ReactiveCanonicalEnsembleCompiled:
         """Implementation of creating a compiled ensemble instance.
 
         This method overwrites the interface
@@ -162,4 +161,6 @@ class CanonicalReactionsEnsemble(EnsembleBase):
         Returns:
             : Instance of :class:`CanonicalEnsembleCompiled`.
         """
-        return CanonicalReactionsEnsembleCompiled(self.weights, self.means)
+        return ReactiveCanonicalEnsembleCompiled(
+            self.weights, self.targets, weights_inv=np.linalg.pinv(self.weights)
+        )

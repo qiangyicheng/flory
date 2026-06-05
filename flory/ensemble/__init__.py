@@ -6,5 +6,5 @@
 
 from .base import EnsembleBase
 from .canonical import CanonicalEnsemble
-from .canonical_reactions import CanonicalReactionsEnsemble
+from .reactive_canonical import ReactiveCanonicalEnsemble
 from .grandcanonical import GrandCanonicalEnsemble
