@@ -71,6 +71,8 @@ class CanonicalEnsembleCompiled(EnsembleBaseCompiled):
         incomp = -1.0 * np.ones_like(phis_comp[0])
         for itr_comp in range(self._num_comp):
             factor = self._phi_means[itr_comp] / Qs[itr_comp]
+            # in place update all compartments; replaces the Boltzmann factors stored in
+            # phis_comp by the updated estimate of the volume fractions
             phis_comp[itr_comp] = factor * phis_comp[itr_comp] * masks
             incomp += phis_comp[itr_comp]
         incomp *= masks

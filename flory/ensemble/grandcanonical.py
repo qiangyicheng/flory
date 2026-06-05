@@ -71,6 +71,8 @@ class GrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
         """
         incomp = -1.0 * np.ones_like(phis_comp[0])
         for itr_comp in range(self._num_comp):
+            # in place update all compartments; replaces the Boltzmann factors stored in
+            # phis_comp by the updated estimate of the volume fractions
             phis_comp[itr_comp] = (
                 self._scaled_activity[itr_comp] * phis_comp[itr_comp] * masks
             )
