@@ -40,9 +40,10 @@ class EnsembleBaseCompiled:
 
         Args:
             phis_comp:
-                Mutable. The 2D array with the size of :math:`N_\mathrm{C} \times N_\mathrm{M}`, containing
-                Boltzmann factors of the components, which are proportional
-                to resulting volume fractions.
+                2D array with the size :math:`N_\mathrm{C} \times N_\mathrm{M}`,
+                containing Boltzmann factors of the components, which are proportional
+                to resulting volume fractions. The array is changed in-place by the
+                method and used to return the actual volume fractions.
             Qs:
                 Constant. The 1D array with the size of :math:`N_\mathrm{C}`, containing
                 single molecule partition functions of the components.

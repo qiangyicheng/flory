@@ -33,11 +33,15 @@ Counts
       - Integer
     * - :math:`N_\mathrm{A}`
       - 1
-      - Number of constraints
+      - Number of fraction constraints
       - Integer
     * - :math:`N_\mathrm{M}`
       - 1
       - Number of compartments
+      - Integer
+    * - :math:`N_\mathrm{B}`
+      - 1
+      - Number of reaction constraints
       - Integer
     * - :math:`i,j,k`
       - 1
@@ -53,8 +57,12 @@ Counts
       - Integer :math:`\in [1, N_\mathrm{P}]`
     * - :math:`\alpha`
       - 1
-      - Index for constraints. 1-Based in documentation
+      - Index for fraction constraints. 1-Based in documentation
       - Integer :math:`\in [1, N_\mathrm{A}]`
+    * - :math:`\beta`
+      - 1
+      - Indexes for reaction constraints. 1-Based in documentation
+      - Integer :math:`\in [1, N_\mathrm{B}]`
     * - :math:`m`
       - 1
       - Index for compartments. 1-Based in documentation
@@ -88,6 +96,10 @@ Here we collect the common symbols used in the user interface.
       - 1
       - Average volume fraction of component :math:`i`.
       - :math:`N_\mathrm{C}`
+    * - :math:`\bar{\psi}_\beta`
+      - 1
+      - Average value of the reaction constraint :math:`\beta`.
+      - :math:`N_\mathrm{B}`
     * - :math:`l_i`
       - :math:`\nu`
       - Relative molecule volume of component :math:`i`.
@@ -158,4 +170,4 @@ the last index, namely the fastest-varying index (C-convention), to improve perf
     * - :math:`\kappa`
       - 1
       - Elasticity of constraints.
-      - Scaler
+      - Scalar

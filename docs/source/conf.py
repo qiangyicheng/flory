@@ -18,7 +18,7 @@ import pathlib
 import sys
 
 proj_path = pathlib.Path(__file__).parent.parent.parent.resolve()
-sys.path.append(str(proj_path))
+sys.path.insert(0, str(proj_path))
 ext_path = (pathlib.Path(__file__) / "ext").resolve()
 sys.path.insert(0, str(ext_path))
 
@@ -67,6 +67,7 @@ napoleon_custom_sections = [("Returns", "params_style")]
 
 templates_path = ["_templates"]
 exclude_patterns = []
+suppress_warnings = ["app.add_directive", "docutils"]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

@@ -343,7 +343,10 @@ def multicomponent_self_consistent_metastep(
 
         # calculate volume fractions, single molecular partition function Q and incompressibility
         Qs = entropy.partition(phis_comp, omegas, Js)  # modifies phis_comp directly
+        # `phis_comp` now contains the Boltzmann factors :math:`p_i^{(m)}`, namely the
+        # volume fractions of components before normalization
         incomp = ensemble.normalize(phis_comp, Qs, masks)  # modifies phis_comp directly
+        # `phis_comp` now contains the normalized volume fractions
         entropy.comp_to_feat(phis_feat, phis_comp)  # modifies phis_feat directly
         max_abs_incomp = np.abs(incomp).max()
 
@@ -361,9 +364,8 @@ def multicomponent_self_consistent_metastep(
             xi += omegas[itr_feat] - omega_temp[itr_feat]
         for cons in literal_unroll(constraints):
             for itr_feat in range(num_feat):
-                xi -= cons.potential[
-                    itr_feat
-                ]  # potential from constraints are already calculated in preparation.
+                # potential from constraints are already calculated in preparation
+                xi -= cons.potential[itr_feat]
         xi *= masks
         xi /= num_feat
 

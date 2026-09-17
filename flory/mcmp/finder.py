@@ -44,7 +44,7 @@ from tqdm.auto import tqdm
 
 from ..common import *
 from ..constraint import ConstraintBase, ConstraintBaseCompiled, NoConstraintCompiled
-from ..ensemble import EnsembleBase, EnsembleBaseCompiled
+from ..ensemble.base import EnsembleBase, EnsembleBaseCompiled
 from ..entropy import EntropyBase, EntropyBaseCompiled
 from ..interaction import FloryHugginsInteractionCompiled, InteractionBase
 from ._finder_impl import *

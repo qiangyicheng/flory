@@ -77,10 +77,11 @@ def setup(app):
         "private-methods",
     ]
 
-    app.setup_extension("sphinx.ext.autosummary")
     app.add_config_value("autoclasstoc_sections", default_sections, "env")
-    app.add_directive("autoclasstoc", AutoClassToc)
-    app.add_autodocumenter(AutoClassTocClassDocumenter, override=True)
+    app.add_directive("autoclasstoc", AutoClassToc, override=True)
+    app.registry.add_documenter(
+        AutoClassTocClassDocumenter.objtype, AutoClassTocClassDocumenter
+    )
     app.connect("config-inited", load_static_assets)
 
     return {
