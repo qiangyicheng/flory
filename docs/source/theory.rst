@@ -1,5 +1,5 @@
 Theory
-======================
+======
 
 Finding coexisting phases is a long lasting topic in many fields, such as `calculating
 phase diagrams <https://doi.org/10.1017/CBO9780511804137>`_ for alloys. Theoretically, the
@@ -32,7 +32,7 @@ the entire free energy surface, the method chooses not to guarantee that the glo
 minimum is always found, but aims to find it in high possibility.
 
 Concepts
----------------------
+--------
 
 For a general mixture, the equilibrium coexisting states can be obtained by iteratively
 optimizing the average free energy 
@@ -94,7 +94,7 @@ use an example of Flory-Huggins free energy to show their equivalence and the it
 it leads to.
 
 Example: Flory-Huggins Free Energy
--------------------------------------
+----------------------------------
 
 The Flory-Huggins free energy of a single compartment reads
 
@@ -193,3 +193,49 @@ As we mentioned, this method does not guarantee that the true equilibrium state 
 global minimum) is always found. Therefore, :mod:`flory` handles the problem by launching
 many more compartments than the number of components, :math:`N_\mathrm{M}\gg{N_\mathrm{C}}`, see
 :paramref:`~flory.mcmp.finder.CoexistingPhasesFinder.num_part`.
+
+Reaction-Constrained Canonical Ensemble
+---------------------------------------
+
+This ensemble is implemented by :class:`~flory.ensemble.reactive_canonical.ReactiveCanonicalEnsemble`.
+In a reactive mixture, individual component amounts need not be conserved. Instead,
+reactions conserve a set of linear combinations of the component fractions. Writing
+:math:`B_{\beta i}` for the contribution of component :math:`i` to conserved quantity
+:math:`\beta`, the constraints on the mean fractions are
+
+.. math::
+  \bar{\psi}_\beta = \sum_{i=1}^{N_\mathrm{C}} B_{\beta i}\bar{\phi}_i
+  = \frac{\sum_m J_m \sum_i B_{\beta i}\phi_i^{(m)}}
+  {\sum_m J_m} .
+
+The canonical ensemble is recovered when :math:`B` is the identity matrix. For a
+general reaction matrix, the mean fractions are not fixed individually. They are found
+by minimizing the entropic contribution subject to the conserved quantities and
+incompressibility. Introducing one multiplier :math:`\lambda_\beta` for each conserved
+quantity gives the constrained Gibbs distribution
+
+.. math::
+  \bar{\phi}_i = \frac{Q_i\exp\left[-\sum_\beta B_{\beta i}\lambda_\beta\right]}
+  {\sum_j Q_j\exp\left[-\sum_\beta B_{\beta j}\lambda_\beta\right]} .
+
+The multipliers are determined by imposing the constraints. In vector notation, this is
+the nonlinear system
+
+.. math::
+  R(\lambda) = B\bar{\phi}(\lambda)-\bar{\psi}=0 .
+
+The ensemble solves this small dual problem with Newton iteration. With
+:math:`\Sigma=\operatorname{diag}(\bar{\phi})-\bar{\phi}\bar{\phi}^{\mathsf T}`, the
+Newton equation is
+
+.. math::
+  \left(B\Sigma B^{\mathsf T}\right)\Delta\lambda = R(\lambda),
+  \qquad \lambda \leftarrow \lambda+\Delta\lambda .
+
+The step is damped when necessary to ensure that the constraint residual decreases. Once
+the mean fractions are known, the compartment fractions are normalized as in the
+canonical ensemble, :math:`\phi_i^{(m)}=(\bar{\phi}_i/Q_i)p_i^{(m)}`, where
+:math:`p_i^{(m)}` is the local Boltzmann factor. Because only conserved combinations are
+fixed, the resulting equilibrium has equal chemical potentials for components that can
+interconvert through the allowed reactions, while chemical potentials associated with
+different conserved quantities may remain distinct.

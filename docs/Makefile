@@ -26,3 +26,5 @@ default: html
 cleanall:
 	@$(SPHINXBUILD) -M clean ${@:2} "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	rm -r $(SOURCEDIR)/_autosummary
+
+clean: cleanall
