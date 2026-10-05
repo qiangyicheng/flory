@@ -84,6 +84,22 @@ def test_phases_wrong_input(cls):
         cls([1], [[1], [2]])
 
 
+def test_phases_allclose_permutation():
+    phases = Phases([0.4, 0.6], [[0.2, 0.8], [0.7, 0.3]])
+    permuted = Phases([0.6, 0.4], [[0.7, 0.3], [0.2, 0.8]])
+    different = Phases([0.6, 0.4], [[0.6, 0.4], [0.2, 0.8]])
+
+    assert phases.allclose(permuted)
+    assert not phases.allclose(different)
+
+
+def test_phases_allclose_finds_one_to_one_tolerant_matching():
+    phases = Phases([1, 1], [[0.2], [0.38]])
+    other = Phases([1, 1], [[0.3], [0.1]])
+
+    assert phases.allclose(other, rtol=0, atol=0.11)
+
+
 @pytest.mark.parametrize("num_comps", [1, 2, 3])
 def test_get_uniform_random_composition(num_comps, rng):
     """test get_uniform_random_composition function"""

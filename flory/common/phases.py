@@ -149,6 +149,64 @@ class Phases:
 
         return self._copy(cluster_volumes, cluster_fractions)
 
+    def allclose(self, other: Phases, *, rtol=1e-7, atol=0) -> bool:
+        """Check whether two phase collections match up to a permutation.
+
+        The collections are similar when they have the same number of phases and
+        components, and there is a one-to-one correspondence between their phases
+        such that each matched pair has similar volume and component fractions.
+        Values are compared using the given relative and absolute tolerances, as in
+        :func:`numpy.isclose`.
+
+        Args:
+            other: The phase collection to compare with.
+            rtol: Relative tolerance used when comparing phase values.
+            atol: Absolute tolerance used when comparing phase values.
+
+        Returns:
+            Whether such a one-to-one correspondence exists.
+        """
+        if self.num_components != other.num_components:
+            return False
+        if self.num_phases != other.num_phases:
+            return False
+
+        # Record candidate matches between phases from each collection.
+        compatible = [
+            [
+                np.isclose(volume, other.volumes[other_index], atol=atol, rtol=rtol)
+                and np.allclose(
+                    self.fractions[phase_index],
+                    other.fractions[other_index],
+                    atol=atol,
+                    rtol=rtol,
+                )
+                for other_index in range(other.num_phases)
+            ]
+            for phase_index, volume in enumerate(self.volumes)
+        ]
+
+        matched_phases = [-1] * other.num_phases
+
+        def match_phase(phase_index: int, visited: list[bool]) -> bool:
+            """Match this phase, moving existing matches when necessary."""
+            for other_index, is_compatible in enumerate(compatible[phase_index]):
+                if not is_compatible or visited[other_index]:
+                    continue
+                visited[other_index] = True
+                # Reassign a current match to find a complete one-to-one mapping.
+                if matched_phases[other_index] == -1 or match_phase(
+                    matched_phases[other_index], visited
+                ):
+                    matched_phases[other_index] = phase_index
+                    return True
+            return False
+
+        return all(
+            match_phase(phase_index, [False] * other.num_phases)
+            for phase_index in range(self.num_phases)
+        )
+
 
 class PhasesResult(Phases):
     """Contains compositions and relative sizes of many phases along with extra information."""

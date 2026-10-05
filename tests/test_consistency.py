@@ -78,13 +78,7 @@ def test_consistency_polydispersity():
     finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
 
     phases_standard = finder.run().get_clusters().sort()
-
-    np.testing.assert_allclose(
-        phases_optimized.volumes, phases_standard.volumes, rtol=1e-4
-    )
-    np.testing.assert_allclose(
-        phases_optimized.fractions, phases_standard.fractions, rtol=1e-4
-    )
+    assert phases_optimized.allclose(phases_standard, rtol=1e-4)
 
 
 def test_semi_grandcanonical_canonical_ensemble():
@@ -109,10 +103,7 @@ def test_semi_grandcanonical_canonical_ensemble():
     )
     phases_semi = finder.run().get_clusters().sort()
 
-    np.testing.assert_allclose(phases_canonical.volumes, phases_semi.volumes, rtol=1e-3)
-    np.testing.assert_allclose(
-        phases_canonical.fractions, phases_semi.fractions, rtol=1e-3
-    )
+    assert phases_canonical.allclose(phases_semi, rtol=1e-3)
 
 
 def test_semi_grandcanonical_grandcanonical_ensemble():
@@ -123,7 +114,9 @@ def test_semi_grandcanonical_grandcanonical_ensemble():
 
     free_energy = flory.FloryHuggins(num_comp, chis, sizes)
 
-    grandcanonical = flory.GrandCanonicalEnsemble.from_chemical_potential(num_comp, mus)
+    grandcanonical = flory.GrandCanonicalEnsemble.from_chemical_potential(
+        num_comp, mus, sizes
+    )
     finder = flory.CoexistingPhasesFinder(
         free_energy.interaction, free_energy.entropy, grandcanonical
     )
@@ -136,10 +129,4 @@ def test_semi_grandcanonical_grandcanonical_ensemble():
         free_energy.interaction, free_energy.entropy, semi
     )
     phases_semi = finder.run().get_clusters().sort()
-
-    np.testing.assert_allclose(
-        phases_grandcanonical.volumes, phases_semi.volumes, rtol=1e-3
-    )
-    np.testing.assert_allclose(
-        phases_grandcanonical.fractions, phases_semi.fractions, rtol=1e-3
-    )
+    assert phases_grandcanonical.allclose(phases_semi, rtol=1e-3)
