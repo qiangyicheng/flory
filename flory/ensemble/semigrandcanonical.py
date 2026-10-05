@@ -109,7 +109,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
     def __init__(
         self,
         num_comp: int,
-        is_canonical: np.ndarray[bool],
+        is_canonical: bool | np.ndarray[bool],
         constraint: np.ndarray,
     ):
         r"""
@@ -131,7 +131,16 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
 
         shape = (num_comp,)
         self._is_canonical = np.array(np.broadcast_to(is_canonical, shape), dtype=bool)
-        self._constraint = np.array(np.broadcast_to(constraint, shape))
+        self.constraint = np.array(np.broadcast_to(constraint, shape))
+        self._check()
+
+    def _check(self):
+        """Internal consistency check"""
+        if not np.isclose(self._constraint[self._is_canonical].sum(), 1.0):
+            self._logger.warning(
+                "The sum of canonical constraints exceeds 1. The iteration may never "
+                "converge in an incompressible system."
+            )
 
     @property
     def is_canonical(self) -> np.ndarray[bool]:
@@ -148,6 +157,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
         """
         shape = (self.num_comp,)
         self._is_canonical = np.array(np.broadcast_to(is_canonical_new, shape))
+        self._check()
 
     @property
     def constraint(self) -> np.ndarray:
@@ -164,6 +174,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
         """
         shape = (self.num_comp,)
         self._constraint = np.array(np.broadcast_to(constraint_new, shape))
+        self._check()
 
     def set_chemical_potential(
         self, comp_id: int, mu: float, size: float = 1.0
