@@ -85,3 +85,61 @@ def test_consistency_polydispersity():
     np.testing.assert_allclose(
         phases_optimized.fractions, phases_standard.fractions, rtol=1e-4
     )
+
+
+def test_semi_grandcanonical_canonical_ensemble():
+    num_comp = 3
+    chis = [[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
+    phi_means = [0.16, 0.68, 0.16]
+    sizes = [2.0, 2.0, 1.0]
+
+    free_energy = flory.FloryHuggins(num_comp, chis, sizes)
+
+    canonical = flory.CanonicalEnsemble(num_comp, phi_means)
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, canonical
+    )
+    phases_canonical = finder.run().get_clusters().sort()
+
+    semi = flory.SemiGrandCanonicalEnsemble(
+        num_comp, is_canonical=True, constraint=phi_means
+    )
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, semi
+    )
+    phases_semi = finder.run().get_clusters().sort()
+
+    np.testing.assert_allclose(phases_canonical.volumes, phases_semi.volumes, rtol=1e-3)
+    np.testing.assert_allclose(
+        phases_canonical.fractions, phases_semi.fractions, rtol=1e-3
+    )
+
+
+def test_semi_grandcanonical_grandcanonical_ensemble():
+    num_comp = 3
+    chis = [[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
+    mus = [0.16, 0.68, 0.16]
+    sizes = [2.0, 2.0, 1.0]
+
+    free_energy = flory.FloryHuggins(num_comp, chis, sizes)
+
+    grandcanonical = flory.GrandCanonicalEnsemble.from_chemical_potential(num_comp, mus)
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, grandcanonical
+    )
+    phases_grandcanonical = finder.run().get_clusters().sort()
+
+    semi = flory.SemiGrandCanonicalEnsemble(
+        num_comp, is_canonical=False, constraint=grandcanonical.scaled_activity
+    )
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, semi
+    )
+    phases_semi = finder.run().get_clusters().sort()
+
+    np.testing.assert_allclose(
+        phases_grandcanonical.volumes, phases_semi.volumes, rtol=1e-3
+    )
+    np.testing.assert_allclose(
+        phases_grandcanonical.fractions, phases_semi.fractions, rtol=1e-3
+    )

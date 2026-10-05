@@ -115,7 +115,6 @@ class GrandCanonicalEnsemble(EnsembleBase):
             scaled_activity_new:
                 Updated scaled activities :math:`l_i e^{l_i \mu_i}`.
         """
-        scaled_activity_new = np.atleast_1d(scaled_activity_new)
         shape = (self.num_comp,)
         self._scaled_activity = np.array(np.broadcast_to(scaled_activity_new, shape))
 
