@@ -189,7 +189,7 @@ class Phases:
         other_data = np.c_[other.fractions, other.volumes]
         dists = spatial.distance.cdist(self_data, other_data, "cityblock")
 
-        # determine optimal perturbation
+        # determine optimal permutation
         _, cols = optimize.linear_sum_assignment(dists)
         if ret_dists:
             return cols, dists
