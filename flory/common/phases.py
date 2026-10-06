@@ -8,7 +8,8 @@ from __future__ import annotations
 import typing
 
 import numpy as np
-from scipy import cluster, spatial
+from numpy.typing import NDArray
+from scipy import cluster, optimize, spatial
 
 
 def get_uniform_random_composition(num_comps: int, rng=None) -> np.ndarray:
@@ -149,7 +150,40 @@ class Phases:
 
         return self._copy(cluster_volumes, cluster_fractions)
 
-    def allclose(self, other: Phases, *, rtol=1e-7, atol=0) -> bool:
+    def match_phases(
+        self, other: Phases, *, ret_dists: bool = False
+    ) -> NDArray[int] | tuple[NDArray[int], np.ndarray]:
+        """Matches the phase ids between two collections
+
+        Args:
+            other: The phase collection to compare with.
+            ret_dists: Return the distances between phases
+
+        Raises:
+            ValueError: When the component or phase count does not match.
+
+        Returns:
+            An array of indices such that the other phases are aligned with the current
+            phases. Optionally, the distance between phases are also returned.
+        """
+        if self.num_components != other.num_components:
+            raise ValueError("Component count does not match")
+        if self.num_phases != other.num_phases:
+            raise ValueError("Phase count does not match")
+
+        # collate all data into single structures to calculate distances
+        self_data = np.c_[self.fractions, self.volumes]
+        other_data = np.c_[other.fractions, other.volumes]
+        dists = spatial.distance.cdist(self_data, other_data, "cityblock")
+
+        # determine optimal perturbation
+        _, cols = optimize.linear_sum_assignment(dists)
+        if ret_dists:
+            return cols, dists
+        else:
+            return cols
+
+    def allclose(self, other: Phases, *, tol=1e-7) -> bool:
         """Check whether two phase collections match up to a permutation.
 
         The collections are similar when they have the same number of phases and
@@ -160,52 +194,20 @@ class Phases:
 
         Args:
             other: The phase collection to compare with.
-            rtol: Relative tolerance used when comparing phase values.
-            atol: Absolute tolerance used when comparing phase values.
+            tol: Absolute tolerance between phases
 
         Returns:
             Whether such a one-to-one correspondence exists.
         """
-        if self.num_components != other.num_components:
-            return False
-        if self.num_phases != other.num_phases:
-            return False
-
-        # Record candidate matches between phases from each collection.
-        compatible = [
-            [
-                np.isclose(volume, other.volumes[other_index], atol=atol, rtol=rtol)
-                and np.allclose(
-                    self.fractions[phase_index],
-                    other.fractions[other_index],
-                    atol=atol,
-                    rtol=rtol,
-                )
-                for other_index in range(other.num_phases)
-            ]
-            for phase_index, volume in enumerate(self.volumes)
-        ]
-
-        matched_phases = [-1] * other.num_phases
-
-        def match_phase(phase_index: int, visited: list[bool]) -> bool:
-            """Match this phase, moving existing matches when necessary."""
-            for other_index, is_compatible in enumerate(compatible[phase_index]):
-                if not is_compatible or visited[other_index]:
-                    continue
-                visited[other_index] = True
-                # Reassign a current match to find a complete one-to-one mapping.
-                if matched_phases[other_index] == -1 or match_phase(
-                    matched_phases[other_index], visited
-                ):
-                    matched_phases[other_index] = phase_index
-                    return True
+        # determine best permutation to match phases
+        try:
+            permuted, dists = self.match_phases(other, ret_dists=True)
+        except ValueError:
             return False
 
-        return all(
-            match_phase(phase_index, [False] * other.num_phases)
-            for phase_index in range(self.num_phases)
-        )
+        # get total distance between phases and compare to tolerance
+        dist_tot = np.trace(dists[:, permuted])
+        return dist_tot < tol * (self.num_components + 1)
 
 
 class PhasesResult(Phases):

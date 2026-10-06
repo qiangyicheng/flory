@@ -11,6 +11,7 @@ import logging
 import numpy as np
 from numba import bool_, float64, int32
 from numba.experimental import jitclass
+from numpy.typing import NDArray
 
 from .base import EnsembleBase, EnsembleBaseCompiled
 
@@ -50,7 +51,7 @@ class SemiGrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
     by volume.
     """
 
-    def __init__(self, is_canonical: np.ndarray[bool], constraint: np.ndarray):
+    def __init__(self, is_canonical: NDArray[bool], constraint: np.ndarray):
         r"""
         Args:
             is_canonical:
@@ -109,7 +110,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
     def __init__(
         self,
         num_comp: int,
-        is_canonical: bool | np.ndarray[bool],
+        is_canonical: bool | NDArray[bool],
         constraint: np.ndarray,
     ):
         r"""
@@ -143,12 +144,12 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
             )
 
     @property
-    def is_canonical(self) -> np.ndarray[bool]:
+    def is_canonical(self) -> NDArray[bool]:
         r"""Boolean array marking canonical components."""
         return self._is_canonical
 
     @is_canonical.setter
-    def is_canonical(self, is_canonical_new: np.ndarray[bool]):
+    def is_canonical(self, is_canonical_new: NDArray[bool]):
         r"""Set constraints of components.
 
         Args:
