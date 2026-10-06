@@ -108,7 +108,7 @@ def test_semi_grandcanonical_canonical_ensemble():
 
 def test_semi_grandcanonical_grandcanonical_ensemble():
     num_comp = 3
-    chis = [[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
+    chis = [[0, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
     mus = [0.16, 0.68, 0.16]
     sizes = [2.0, 2.0, 1.0]
 
