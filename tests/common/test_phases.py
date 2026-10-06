@@ -4,6 +4,7 @@
 
 import numpy as np
 import pytest
+from helpers import assert_phases_allclose
 from scipy import stats
 
 from flory.common.phases import Phases, PhasesResult, get_uniform_random_composition
@@ -107,15 +108,16 @@ def test_phases_allclose_permutation():
     permuted = Phases([0.6, 0.4], [[0.7, 0.3], [0.2, 0.8]])
     different = Phases([0.6, 0.4], [[0.6, 0.4], [0.2, 0.8]])
 
-    assert phases.allclose(permuted)
-    assert not phases.allclose(different)
+    assert_phases_allclose(phases, permuted)
+    with pytest.raises(AssertionError):
+        assert_phases_allclose(phases, different)
 
 
 def test_phases_allclose_finds_one_to_one_tolerant_matching():
     phases = Phases([1, 1], [[0.2], [0.38]])
     other = Phases([1, 1], [[0.3], [0.1]])
 
-    assert phases.allclose(other, tol=0.11)
+    assert_phases_allclose(phases, other, tol=0.11)
 
 
 @pytest.mark.parametrize("num_comps", [1, 2, 3])

@@ -153,18 +153,31 @@ class Phases:
     def match_phases(
         self, other: Phases, *, ret_dists: bool = False
     ) -> NDArray[int] | tuple[NDArray[int], np.ndarray]:
-        """Matches the phase ids between two collections
+        """Find a minimum-distance one-to-one matching between phase collections.
+
+        Each phase is represented by its component fractions followed by its volume.
+        Pairwise distances between these vectors use the city-block metric, and the
+        assignment minimizes their total distance across all matched phases. The
+        returned mapping aligns the phase order in ``other`` with that in ``self``.
+        This finds the best matching; it does not determine whether the phases are
+        close within any particular tolerance.
 
         Args:
-            other: The phase collection to compare with.
-            ret_dists: Return the distances between phases
+            other:
+                The phase collection to match with this one. It must have the same
+                number of phases and components.
+            ret_dists:
+                If ``True``, also return the full pairwise distance matrix.
 
         Raises:
-            ValueError: When the component or phase count does not match.
+            ValueError: If the collections have different numbers of components or
+                phases.
 
         Returns:
-            An array of indices such that the other phases are aligned with the current
-            phases. Optionally, the distance between phases are also returned.
+            An integer array ``mapping`` where ``mapping[i]`` is the index in
+            ``other`` matched to phase ``i`` in ``self``. If ``ret_dists`` is true,
+            returns ``(mapping, distances)``, where ``distances[i, j]`` is the
+            distance between phase ``i`` in ``self`` and phase ``j`` in ``other``.
         """
         if self.num_components != other.num_components:
             raise ValueError("Component count does not match")
@@ -183,31 +196,6 @@ class Phases:
         else:
             return cols
 
-    def allclose(self, other: Phases, *, tol=1e-7) -> bool:
-        """Check whether two phase collections match up to a permutation.
-
-        The collections are similar when they have the same number of phases and
-        components, and there is a one-to-one correspondence between their phases
-        such that each matched pair has similar volume and component fractions.
-        Values are compared using the given relative and absolute tolerances, as in
-        :func:`numpy.isclose`.
-
-        Args:
-            other: The phase collection to compare with.
-            tol: Absolute tolerance between phases
-
-        Returns:
-            Whether such a one-to-one correspondence exists.
-        """
-        # determine best permutation to match phases
-        try:
-            permuted, dists = self.match_phases(other, ret_dists=True)
-        except ValueError:
-            return False
-
-        # get total distance between phases and compare to tolerance
-        dist_tot = np.trace(dists[:, permuted])
-        return dist_tot < tol * (self.num_components + 1)
 
 
 class PhasesResult(Phases):

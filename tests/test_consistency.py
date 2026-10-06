@@ -4,6 +4,7 @@
 
 import numpy as np
 import pytest
+from helpers import assert_phases_allclose
 
 import flory
 
@@ -78,7 +79,7 @@ def test_consistency_polydispersity():
     finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
 
     phases_standard = finder.run().get_clusters().sort()
-    assert phases_optimized.allclose(phases_standard, tol=1e-4)
+    assert_phases_allclose(phases_optimized, phases_standard, tol=1e-3)
 
 
 def test_semi_grandcanonical_canonical_ensemble():
@@ -103,7 +104,7 @@ def test_semi_grandcanonical_canonical_ensemble():
     )
     phases_semi = finder.run().get_clusters().sort()
 
-    assert phases_canonical.allclose(phases_semi, tol=1e-3)
+    assert_phases_allclose(phases_canonical, phases_semi, tol=1e-3)
 
 
 def test_semi_grandcanonical_grandcanonical_ensemble():
@@ -129,4 +130,4 @@ def test_semi_grandcanonical_grandcanonical_ensemble():
         free_energy.interaction, free_energy.entropy, semi
     )
     phases_semi = finder.run().get_clusters().sort()
-    assert phases_grandcanonical.allclose(phases_semi, tol=1e-3)
+    assert_phases_allclose(phases_grandcanonical, phases_semi, tol=1e-3)

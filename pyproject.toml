@@ -124,3 +124,4 @@ minversion = "7.0"
 addopts = "--strict-markers"
 testpaths = ["tests"]
 pythonpath = ["."]
+norecursedirs = ["tests/helpers"]
