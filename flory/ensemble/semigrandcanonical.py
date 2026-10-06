@@ -137,7 +137,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
 
     def _check(self):
         """Internal consistency check"""
-        if not np.isclose(self._constraint[self._is_canonical].sum(), 1.0):
+        if self._constraint[self._is_canonical].sum() > 1.0:
             self._logger.warning(
                 "The sum of canonical constraints exceeds 1. The iteration may never "
                 "converge in an incompressible system."
