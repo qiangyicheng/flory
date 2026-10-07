@@ -1,11 +1,3 @@
-import sys
-
-# my local path
-package_path = "/Users/skoestler/"
-
-sys.path.insert(0, package_path + "flory")
-sys.path
-
 import numpy as np
 import matplotlib.pyplot as plt
 import flory
