@@ -10,7 +10,7 @@ def assert_phases_allclose(p1, p2, *, tol=1e-7) -> None:
 
     The best phase permutation is selected by :meth:`Phases.match_phases`, then
     the distance for every matched phase is checked against an absolute tolerance
-    of ``tol * (p1.num_components + 1)``.
+    of ``tol``.
 
     Args:
         p1: The first phase collection.
@@ -27,4 +27,4 @@ def assert_phases_allclose(p1, p2, *, tol=1e-7) -> None:
 
     # get total distance between phases and compare to tolerance
     phase_dists = dists[np.arange(p1.num_phases), permuted]
-    np.testing.assert_allclose(phase_dists, 0, atol=tol * (p1.num_components + 1))
+    np.testing.assert_allclose(phase_dists, 0, atol=tol)
