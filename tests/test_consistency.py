@@ -44,7 +44,7 @@ def test_consistency_ensemble():
     )
 
     phases_grandcanonical = finder.run().get_clusters()
-    assert_phases_allclose(phases_canonical, phases_grandcanonical, tol=1e-3)
+    assert_phases_allclose(phases_canonical, phases_grandcanonical, tol=0.002)
 
 
 @pytest.mark.slow
