@@ -26,7 +26,7 @@ from .base import EnsembleBase, EnsembleBaseCompiled
 class SemiGrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
     r"""Compiled class for semi-grand canonical ensemble.
 
-    In the semi-grand canonical ensemble, the either the average volume or the original
+    In the semi-grand canonical ensemble, either the average volume or the original
     chemical potentials of components are fixed. Since (translational) entropy is always
     defined for each component, this class is only aware of the component-based
     description of the system.
@@ -44,9 +44,9 @@ class SemiGrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
     Boltzmann factors according to the scaled activity,
 
         .. math::
-            \phi_i^{(m)} &= l_i e^{l_i \mu_i} p_i^{(m)} \\
+            \phi_i^{(m)} &= e^{l_i \mu_i - 1} p_i^{(m)} \\
 
-    where :math:`l_i e^{l_i \mu_i}` is the scaled activity, :math:`l_i` is the relative
+    where :math:`e^{l_i \mu_i - 1}` is the scaled activity, :math:`l_i` is the relative
     volumes of molecules and :math:`\mu_i` is the chemical potentials of the components
     by volume.
     """
@@ -59,8 +59,10 @@ class SemiGrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
                 components are treated canonically. The number of components
                 :math:`N_\mathrm{C}` is inferred from this array.
             constraint:
-                1D array with the size of :math:`N_\mathrm{C}`, containing the scaled
-                activities of the components, :math:`l_i e^{l_i \mu_i}`.
+                1D array with the size of :math:`N_\mathrm{C}`, containing the total
+                fractions :math:`\bar\phi_i` or the scaled activities
+                :math:`e^{l_i \mu_i - 1}`, depending on whether they are treated as
+                canonical or not.
         """
         self._num_comp = is_canonical.shape[0]
         self._is_canonical = is_canonical
@@ -125,15 +127,15 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
                 Value of the constraint for each component. For canonical components
                 this constraint is the mean concentration, whereas for grand-canonical
                 components the constraint is the scaled activity
-                :math:`l_i e^{l_i \mu_i}`.
+                :math:`e^{l_i \mu_i - 1}`.
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
 
         shape = (num_comp,)
         self._is_canonical = np.array(np.broadcast_to(is_canonical, shape), dtype=bool)
+        # using the setter here also runs the check on the total fractions
         self.constraint = np.array(np.broadcast_to(constraint, shape))
-        self._check()
 
     def _check(self):
         """Internal consistency check"""
@@ -191,7 +193,9 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
                 The relative molecule volume :math:`l_i = \nu_i/\nu` with respect to the
                 volume of a reference molecule :math:`\nu`.
         """
-        self.constraint[comp_id] = size * np.exp(size * mu)
+        if self.is_canonical[comp_id]:
+            raise ValueError(f"Component {comp_id} is set to `canonical`")
+        self.constraint[comp_id] = np.exp(size * mu - 1)
 
     def _compiled_impl(self) -> SemiGrandCanonicalEnsembleCompiled:
         """Implementation of creating a compiled ensemble instance.
