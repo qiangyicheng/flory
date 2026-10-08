@@ -28,9 +28,9 @@ class GrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
     obtained by scaling the Boltzmann factors according to the scaled activity,
     
         .. math::
-            \phi_i^{(m)} &= l_i e^{l_i \mu_i} p_i^{(m)} \\
+            \phi_i^{(m)} &= e^{l_i \mu_i - 1} p_i^{(m)} \\
                 
-    where :math:`l_i e^{l_i \mu_i}` is the scaled activity, :math:`l_i` is the relative
+    where :math:`e^{l_i \mu_i - 1}` is the scaled activity, :math:`l_i` is the relative
     volumes of molecules and :math:`\mu_i` is the chemical potentials of the components by
     volume. Since (translational) entropy is always defined for each component, this class
     is only aware of the component-based description of the system.
@@ -41,7 +41,7 @@ class GrandCanonicalEnsembleCompiled(EnsembleBaseCompiled):
         Args:
             scaled_activity:
                 1D array with the size of :math:`N_\mathrm{C}`, containing the scaled
-                activities of the components, :math:`l_i e^{l_i \mu_i}`. The number
+                activities of the components, :math:`e^{l_i \mu_i - 1}`. The number
                 of components :math:`N_\mathrm{C}` is inferred from this array.
         """
         self._num_comp = scaled_activity.shape[0]
@@ -92,7 +92,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
             num_comp:
                 Number of components :math:`N_\mathrm{C}`.
             scaled_activity:
-                The scaled activities of the components :math:`l_i e^{l_i \mu_i}`.
+                The scaled activities of the components :math:`e^{l_i \mu_i - 1}`.
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -104,7 +104,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
 
     @property
     def scaled_activity(self) -> np.ndarray:
-        r"""The scaled activities of the components :math:`l_i e^{l_i \mu_i}`."""
+        r"""The scaled activities of the components :math:`e^{l_i \mu_i - 1}`."""
         return self._scaled_activity
 
     @scaled_activity.setter
@@ -113,9 +113,8 @@ class GrandCanonicalEnsemble(EnsembleBase):
 
         Args:
             scaled_activity_new:
-                Updated scaled activities :math:`l_i e^{l_i \mu_i}`.
+                Updated scaled activities :math:`e^{l_i \mu_i - 1}`.
         """
-        scaled_activity_new = np.atleast_1d(scaled_activity_new)
         shape = (self.num_comp,)
         self._scaled_activity = np.array(np.broadcast_to(scaled_activity_new, shape))
 
@@ -150,7 +149,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
             sizes = np.atleast_1d(sizes)
             sizes = np.array(np.broadcast_to(sizes, shape))
 
-        scaled_activity = sizes * np.exp(sizes * mus)
+        scaled_activity = np.exp(sizes * mus - 1)
         return cls(num_comp, scaled_activity)
 
     def _compiled_impl(self) -> GrandCanonicalEnsembleCompiled:

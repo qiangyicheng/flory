@@ -116,6 +116,10 @@ Instead, the system will keep fixed chemical potentials.
    :emphasize-lines: 8, 14
    :linenos:
 
+
+Situations where some of the components are conserved while others are controlled by a
+reservoir are handled by  :class:`~flory.ensemble.semigrandcanonical.SemiGrandCanonicalEnsemble`.
+
 Using different interaction&entropy
 -----------------------------------
 In a mixture with polydispersity, several components may share the same interaction property but only differs in size.

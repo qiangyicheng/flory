@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 PACKAGE_PATH = Path(__file__).resolve().parents[1]
-EXAMPLES = (PACKAGE_PATH / "examples").glob("*.py")
+EXAMPLES = list((PACKAGE_PATH / "examples").glob("*.py"))
 
 
 @pytest.mark.slow

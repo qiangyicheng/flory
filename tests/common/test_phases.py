@@ -4,6 +4,7 @@
 
 import numpy as np
 import pytest
+from helpers import assert_phases_allclose
 from scipy import stats
 
 from flory.common.phases import Phases, PhasesResult, get_uniform_random_composition
@@ -82,6 +83,41 @@ def test_phases_wrong_input(cls):
         cls([1], [[[1]]])
     with pytest.raises(ValueError):
         cls([1], [[1], [2]])
+
+
+def test_match_phases():
+    phases = Phases([0.4, 0.6], [[0.2, 0.8], [0.7, 0.3]])
+    permuted = Phases([0.6, 0.4], [[0.7, 0.3], [0.2, 0.8]])
+    different = Phases([0.6, 0.4], [[0.6, 0.4], [0.2, 0.8]])
+
+    np.testing.assert_array_equal(phases.match_phases(phases), [0, 1])
+    np.testing.assert_array_equal(phases.match_phases(permuted), [1, 0])
+    np.testing.assert_array_equal(phases.match_phases(different), [1, 0])
+
+    # component count mismatch
+    with pytest.raises(ValueError):
+        phases.match_phases(Phases([1.0], [[1.0]]))
+
+    # phase count mismatch
+    with pytest.raises(ValueError):
+        phases.match_phases(Phases([1.0], [[0.7, 0.3]]))
+
+
+def test_phases_allclose_permutation():
+    phases = Phases([0.4, 0.6], [[0.2, 0.8], [0.7, 0.3]])
+    permuted = Phases([0.6, 0.4], [[0.7, 0.3], [0.2, 0.8]])
+    different = Phases([0.6, 0.4], [[0.6, 0.4], [0.2, 0.8]])
+
+    assert_phases_allclose(phases, permuted)
+    with pytest.raises(AssertionError):
+        assert_phases_allclose(phases, different)
+
+
+def test_phases_allclose_finds_one_to_one_tolerant_matching():
+    phases = Phases([1, 1], [[0.2], [0.38]])
+    other = Phases([1, 1], [[0.3], [0.1]])
+
+    assert_phases_allclose(phases, other, tol=0.11)
 
 
 @pytest.mark.parametrize("num_comps", [1, 2, 3])

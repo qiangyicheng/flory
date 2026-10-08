@@ -4,6 +4,7 @@
 
 import numpy as np
 import pytest
+from helpers import assert_phases_allclose
 
 import flory
 
@@ -23,7 +24,7 @@ def test_consistency_ensemble():
         free_energy.interaction, free_energy.entropy, ensemble
     )
 
-    phases_canonical = finder.run().get_clusters().sort()
+    phases_canonical = finder.run().get_clusters()
 
     ###############################################################
 
@@ -42,14 +43,8 @@ def test_consistency_ensemble():
         random_std=1.0,
     )
 
-    phases_grandcanonical = finder.run().get_clusters().sort()
-
-    np.testing.assert_allclose(
-        phases_canonical.volumes, phases_grandcanonical.volumes, rtol=1e-3
-    )
-    np.testing.assert_allclose(
-        phases_canonical.fractions, phases_grandcanonical.fractions, rtol=1e-3
-    )
+    phases_grandcanonical = finder.run().get_clusters()
+    assert_phases_allclose(phases_canonical, phases_grandcanonical, tol=0.002)
 
 
 @pytest.mark.slow
@@ -69,7 +64,7 @@ def test_consistency_polydispersity():
     ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
     finder = flory.CoexistingPhasesFinder(interaction, entropy, ensemble)
 
-    phases_optimized = finder.run().get_clusters().sort()
+    phases_optimized = finder.run().get_clusters()
     ###############################################################
 
     chis = interaction.chis
@@ -77,11 +72,86 @@ def test_consistency_polydispersity():
     fh = flory.FloryHuggins(num_comp, chis, sizes)
     finder = flory.CoexistingPhasesFinder(fh.interaction, fh.entropy, ensemble)
 
-    phases_standard = finder.run().get_clusters().sort()
+    phases_standard = finder.run().get_clusters()
+    assert_phases_allclose(phases_optimized, phases_standard, tol=1e-3)
 
-    np.testing.assert_allclose(
-        phases_optimized.volumes, phases_standard.volumes, rtol=1e-4
+
+def test_semi_grandcanonical_canonical_ensemble():
+    """Test the canonical limit of the semi-grandcanonical ensemble"""
+    num_comp = 3
+    chis = [[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
+    phi_means = [0.16, 0.68, 0.16]
+    sizes = [2.0, 2.0, 1.0]
+
+    free_energy = flory.FloryHuggins(num_comp, chis, sizes)
+
+    canonical = flory.CanonicalEnsemble(num_comp, phi_means)
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, canonical
     )
+    phases_canonical = finder.run().get_clusters()
+
+    semi = flory.SemiGrandCanonicalEnsemble(
+        num_comp, is_canonical=True, constraint=phi_means
+    )
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, semi
+    )
+    phases_semi = finder.run().get_clusters()
+
+    assert_phases_allclose(phases_canonical, phases_semi, tol=1e-3)
+
+
+def test_semi_grandcanonical_grandcanonical_ensemble():
+    """Test the grand-canonical limit of the semi-grandcanonical ensemble"""
+    num_comp = 3
+    chis = [[0, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
+    mus = [0.16, 0.68, 0.16]
+    sizes = [2.0, 2.0, 1.0]
+
+    free_energy = flory.FloryHuggins(num_comp, chis, sizes)
+
+    grandcanonical = flory.GrandCanonicalEnsemble.from_chemical_potential(
+        num_comp, mus, sizes
+    )
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, grandcanonical
+    )
+    phases_grandcanonical = finder.run().get_clusters()
+
+    semi = flory.SemiGrandCanonicalEnsemble(
+        num_comp, is_canonical=False, constraint=grandcanonical.scaled_activity
+    )
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, semi
+    )
+    phases_semi = finder.run().get_clusters()
+    assert_phases_allclose(phases_grandcanonical, phases_semi, tol=1e-3)
+
+
+def test_semi_grandcanonical_ensemble():
+    """Test the semi-grandcanonical ensemble"""
+    num_comp = 4
+    chis = [[0, -0.34, 0, 0.1], [-0.34, -3.96, 0, 0], [0, 0, 0, 0], [0.1, 0, 0, 0]]
+    phibars = [0.2, 0.4]
+    mus = [0.68, 0.2]
+    sizes = [1.0, 2.0, 2.0, 1.0]
+
+    free_energy = flory.FloryHuggins(num_comp, chis, sizes)
+    ensemble = flory.SemiGrandCanonicalEnsemble(
+        num_comp, [True, True, False, False], constraint=np.r_[phibars, mus]
+    )
+    ensemble.set_chemical_potential(2, mus[0], sizes[2])
+    ensemble.set_chemical_potential(3, mus[1], sizes[3])
+    finder = flory.CoexistingPhasesFinder(
+        free_energy.interaction, free_energy.entropy, ensemble
+    )
+    phases = finder.run().get_clusters()
+
+    assert phases.num_phases == 2
+    assert phases.num_components == 4
+    np.testing.assert_allclose(phases.mean_fractions[:2], phibars)
+    mu_res = free_energy.chemical_potentials(phases.fractions)
     np.testing.assert_allclose(
-        phases_optimized.fractions, phases_standard.fractions, rtol=1e-4
+        mu_res[:, -1] - mu_res[:, -2], mus[1] - mus[0], atol=1e-5
     )

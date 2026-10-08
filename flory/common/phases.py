@@ -8,7 +8,8 @@ from __future__ import annotations
 import typing
 
 import numpy as np
-from scipy import cluster, spatial
+from numpy.typing import NDArray
+from scipy import cluster, optimize, spatial
 
 
 def get_uniform_random_composition(num_comps: int, rng=None) -> np.ndarray:
@@ -148,6 +149,53 @@ class Phases:
             cluster_volumes.append(current_volumes.sum())
 
         return self._copy(cluster_volumes, cluster_fractions)
+
+    def match_phases(
+        self, other: Phases, *, ret_dists: bool = False
+    ) -> NDArray[int] | tuple[NDArray[int], np.ndarray]:
+        """Find a minimum-distance one-to-one matching between phase collections.
+
+        Each phase is represented by its component fractions followed by its volume.
+        Pairwise distances between these vectors use the city-block metric, and the
+        assignment minimizes their total distance across all matched phases. The
+        returned mapping aligns the phase order in ``other`` with that in ``self``.
+        This finds the best matching; it does not determine whether the phases are
+        close within any particular tolerance.
+
+        Args:
+            other:
+                The phase collection to match with this one. It must have the same
+                number of phases and components.
+            ret_dists:
+                If ``True``, also return the full pairwise distance matrix.
+
+        Raises:
+            ValueError: If the collections have different numbers of components or
+                phases.
+
+        Returns:
+            An integer array ``mapping`` where ``mapping[i]`` is the index in
+            ``other`` matched to phase ``i`` in ``self``. If ``ret_dists`` is true,
+            returns ``(mapping, distances)``, where ``distances[i, j]`` is the
+            distance between phase ``i`` in ``self`` and phase ``j`` in ``other``.
+        """
+        if self.num_components != other.num_components:
+            raise ValueError("Component count does not match")
+        if self.num_phases != other.num_phases:
+            raise ValueError("Phase count does not match")
+
+        # collate all data into single structures to calculate distances
+        self_data = np.c_[self.fractions, self.volumes]
+        other_data = np.c_[other.fractions, other.volumes]
+        dists = spatial.distance.cdist(self_data, other_data, "cityblock")
+
+        # determine optimal permutation
+        _, cols = optimize.linear_sum_assignment(dists)
+        if ret_dists:
+            return cols, dists
+        else:
+            return cols
+
 
 
 class PhasesResult(Phases):
