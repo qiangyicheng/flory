@@ -33,12 +33,7 @@ for muA in tqdm(np.arange(-2, 4, 0.3)):
                 num_comp, is_canonical, constraints
             )
             finder = flory.CoexistingPhasesFinder(
-                fh.interaction,
-                fh.entropy,
-                ensemble,
-                random_std=1.0,
-                progress=False,
-                tolerance=1e-12,
+                fh.interaction, fh.entropy, ensemble, random_std=1.0, progress=False
             )
             phases = finder.run().get_clusters()
 
