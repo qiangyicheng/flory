@@ -38,7 +38,7 @@ for muA in tqdm(np.arange(-2, 4, 0.3)):
             phases = finder.run().get_clusters()
 
             # save the relevant data
-            if len(phases.fractions) == 2:
+            if phases.num_phases == 2:
                 phi_D_dilute.append(min(phases.fractions[0][0], phases.fractions[1][0]))
                 phi_D_dense.append(max(phases.fractions[0][0], phases.fractions[1][0]))
                 mu_A.append(muA)
