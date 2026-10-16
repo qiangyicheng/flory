@@ -164,7 +164,8 @@ class LinearLocalConstraint(ConstraintBase):
         r"""
         Args:
             num_feat:
-                Number of features :math:`N_\mathrm{S}`.
+                Number of features :math:`N_\mathrm{S}`. In simple cases, the number of
+                features equals the component count :math:`N_\mathrm{C}`.
             Cs:
                 2D array with the size of :math:`N_\mathrm{A} \times N_\mathrm{S}`,
                 containing coefficients of features for linear constraints. Note that both

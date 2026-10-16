@@ -6,12 +6,89 @@
 
 from __future__ import annotations
 
+import logging
+
 import numpy as np
+from scipy import linalg
 
 from .common import PhasesResult
-from .ensemble import CanonicalEnsemble
+from .constraint import ConstraintBase, LinearLocalConstraint, NoConstraint
+from .ensemble import CanonicalEnsemble, EnsembleBase, SemiGrandCanonicalEnsemble
 from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
+
+_logger = logging.getLogger(__name__)
+
+
+def prepare_reactions(
+    stoichiometric_matrix: np.ndarray,
+    phi_means: np.ndarray,
+    *,
+    mus: np.ndarray | None = None,
+    sizes: np.ndarray | None = None,
+) -> tuple[EnsembleBase, ConstraintBase]:
+    """Prepare an ensemble and conservation constraint for a reaction system.
+
+    Components that participate in at least one reaction are treated grand
+    canonically, with chemical potentials and relative molecule sizes given by ``mus``
+    and ``sizes``. Components absent from all reactions remain canonical. The returned
+    local constraint enforces the conserved quantities implied by the stoichiometric
+    matrix, initialized using ``phi_means``.
+
+    Args:
+        stoichiometric_matrix:
+            Matrix with one reaction per row and one component per column.
+        phi_means:
+            Mean volume fractions of all components.
+        mus:
+            Chemical potentials for the components, defaulting to zero for all
+            components.
+        sizes:
+            Relative molecule volumes for the components, defaulting to one for
+            all components.
+
+    Returns:
+        The ensemble and the corresponding constraint for the reaction system.
+    """
+    # TODO add tests
+
+    # parse the stoichiometric_matrix
+    stoichiometric_matrix = np.atleast_2d(stoichiometric_matrix)
+    _, num_comp = stoichiometric_matrix.shape
+    if mus is None:
+        mus = np.zeros(num_comp)
+    else:
+        mus = np.atleast_1d(mus)
+    if sizes is None:
+        sizes = np.ones(num_comp)
+    else:
+        sizes = np.atleast_1d(sizes)
+
+    # check arguments for consistency
+    if not np.allclose(stoichiometric_matrix.sum(axis=1), 0):
+        _logger.warning("Stoichiometric matrix violates volume conservation.")
+
+    # determine the reacting components
+    reacting = np.any(stoichiometric_matrix != 0, axis=0)
+
+    if not np.any(reacting):
+        return CanonicalEnsemble(num_comp, phi_means), NoConstraint(num_comp)
+
+    # determine the ensemble
+    ensemble = SemiGrandCanonicalEnsemble(
+        num_comp, is_canonical=~reacting, constraint=phi_means
+    )
+    for i in np.flatnonzero(reacting):
+        ensemble.set_chemical_potential(i, mus[i], sizes[i])
+
+    # determine the constraint based on the cokernel of stoichiometric matrix
+    b = linalg.null_space(stoichiometric_matrix[:, reacting])
+    constraint_matrix = np.zeros((b.shape[1], num_comp))
+    constraint_matrix[:, reacting] = b.T
+    constraint_value = constraint_matrix @ phi_means
+    constraint = LinearLocalConstraint(num_comp, constraint_matrix, constraint_value)
+
+    return ensemble, constraint
 
 
 def find_coexisting_phases(
