@@ -20,7 +20,11 @@ def test_reactions_1comp(caplog):
     ens, constr = flory.prepare_reactions([0], phi_means)
     free_energy = flory.FloryHuggins(num_comp, chis, sizes)
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble=ens, constraints=constr
+        free_energy.interaction,
+        free_energy.entropy,
+        ensemble=ens,
+        constraints=constr,
+        random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     )
 
     phases = finder.run(progress=False).get_clusters()
@@ -40,7 +44,11 @@ def test_reactions_2comp(caplog):
     ens, constr = flory.prepare_reactions([1, -1], phi_means, sizes=sizes)
     free_energy = flory.FloryHuggins(num_comp, chis, sizes)
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble=ens, constraints=constr
+        free_energy.interaction,
+        free_energy.entropy,
+        ensemble=ens,
+        constraints=constr,
+        random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     )
 
     phases = finder.run(progress=False).get_clusters()
@@ -66,7 +74,11 @@ def test_reactions_2comp_mu(caplog):
     ens, constr = flory.prepare_reactions([1, -1], phi_means, mus=[1, 1 + w])
     free_energy = flory.FloryHuggins(num_comp, chis)
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble=ens, constraints=constr
+        free_energy.interaction,
+        free_energy.entropy,
+        ensemble=ens,
+        constraints=constr,
+        random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     )
 
     phases = finder.run(progress=False).get_clusters()
@@ -88,7 +100,11 @@ def test_reactions_3comp(caplog):
     assert constr.num_cons == 1
     free_energy = flory.FloryHuggins(num_comp, chis, sizes)
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble=ens, constraints=constr
+        free_energy.interaction,
+        free_energy.entropy,
+        ensemble=ens,
+        constraints=constr,
+        random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     )
 
     phases = finder.run(progress=False).get_clusters()
@@ -127,6 +143,7 @@ def test_reactions_4comp(stoichiometries):
         free_energy.entropy,
         ensemble=ens,
         constraints=constr,
+        random_std=1.0,  # use less aggressive randomness to avoid rapid dying of compartments
     )
 
     phases = finder.run(progress=False).get_clusters()

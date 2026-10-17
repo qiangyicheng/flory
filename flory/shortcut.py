@@ -12,7 +12,7 @@ import numpy as np
 from scipy import linalg
 
 from .common import PhasesResult
-from .constraint import ConstraintBase, LinearLocalConstraint, NoConstraint
+from .constraint import ConstraintBase, LinearGlobalConstraint, NoConstraint
 from .ensemble import CanonicalEnsemble, EnsembleBase, SemiGrandCanonicalEnsemble
 from .free_energy import FloryHuggins
 from .mcmp import CoexistingPhasesFinder
@@ -29,11 +29,11 @@ def prepare_reactions(
 ) -> tuple[EnsembleBase, ConstraintBase]:
     """Prepare an ensemble and conservation constraint for a reaction system.
 
-    Components that participate in at least one reaction are treated grand
-    canonically, with chemical potentials and relative molecule sizes given by ``mus``
-    and ``sizes``. Components absent from all reactions remain canonical. The returned
-    local constraint enforces the conserved quantities implied by the stoichiometric
-    matrix, initialized using ``phi_means``.
+    Components that participate in at least one reaction are treated grand canonically,
+    with chemical potentials and relative molecule sizes given by ``mus`` and ``sizes``.
+    Components absent from all reactions remain canonical. The returned global
+    constraint enforces the conserved quantities implied by the stoichiometric matrix,
+    initialized using ``phi_means``.
 
     Args:
         stoichiometric_matrix:
@@ -50,8 +50,6 @@ def prepare_reactions(
     Returns:
         The ensemble and the corresponding constraint for the reaction system.
     """
-    # TODO add tests
-
     # parse the stoichiometric_matrix
     stoichiometric_matrix = np.atleast_2d(stoichiometric_matrix)
     _, num_comp = stoichiometric_matrix.shape
@@ -86,7 +84,7 @@ def prepare_reactions(
     constraint_matrix = np.zeros((b.shape[1], num_comp))
     constraint_matrix[:, reacting] = b.T
     constraint_value = constraint_matrix @ phi_means
-    constraint = LinearLocalConstraint(num_comp, constraint_matrix, constraint_value)
+    constraint = LinearGlobalConstraint(num_comp, constraint_matrix, constraint_value)
 
     return ensemble, constraint
 
