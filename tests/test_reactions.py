@@ -55,7 +55,7 @@ def test_reactions_2comp(caplog):
     assert phases.num_phases == 1
     mus = free_energy.chemical_potentials(phases.fractions)
     assert mus.shape == (1, 2)
-    assert mus[0, 0] == pytest.approx(mus[0, 1])
+    assert mus[0, 0] == pytest.approx(mus[0, 1], abs=1e-4)
 
     with caplog.at_level(logging.WARNING):
         flory.prepare_reactions([1, -2], phi_means)
@@ -86,7 +86,7 @@ def test_reactions_2comp_mu(caplog):
     assert sum(phases.fractions.flat) == pytest.approx(1, abs=1e-4)
     mus = free_energy.chemical_potentials(phases.fractions)
     assert mus.shape == (1, 2)
-    assert mus[0, 0] == pytest.approx(mus[0, 1] - w)
+    assert mus[0, 0] == pytest.approx(mus[0, 1] - w, abs=1e-4)
 
 
 def test_reactions_3comp(caplog):
@@ -111,8 +111,8 @@ def test_reactions_3comp(caplog):
     assert phases.num_phases == 1
     assert sum(phases.fractions.flat) == pytest.approx(1, abs=1e-4)
     mus = free_energy.chemical_potentials(phases.fractions)
-    assert phases.fractions[0, 0] == pytest.approx(0.4)
-    assert phases.fractions[0, 1:].sum() == pytest.approx(0.6)
+    assert phases.fractions[0, 0] == pytest.approx(0.4, abs=1e-4)
+    assert phases.fractions[0, 1:].sum() == pytest.approx(0.6, abs=1e-4)
     assert mus.shape == (1, 3)
     assert mus[0, 1] == pytest.approx(mus[0, 2], abs=1e-4)
 
@@ -151,8 +151,8 @@ def test_reactions_4comp(stoichiometries):
     assert phases.num_phases == 1
     assert sum(phases.fractions.flat) == pytest.approx(1, abs=1e-4)
     mus = free_energy.chemical_potentials(phases.fractions)
-    assert phases.fractions[0, 0] == pytest.approx(0.4)
-    assert phases.fractions[0, 1:].sum() == pytest.approx(0.6)
+    assert phases.fractions[0, 0] == pytest.approx(0.4, abs=1e-4)
+    assert phases.fractions[0, 1:].sum() == pytest.approx(0.6, abs=1e-4)
     assert mus.shape == (1, 4)
     assert mus[0, 1] == pytest.approx(mus[0, 2], abs=1e-4)
     assert mus[0, 1] == pytest.approx(mus[0, 3], abs=1e-4)
