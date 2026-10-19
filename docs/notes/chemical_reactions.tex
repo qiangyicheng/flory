@@ -31,35 +31,30 @@ We consider a system of $\Nc$ components, $X_1, \ldots, X_{\Nc}$, that can under
     \sum_{i=1}^{\Nc} \sigma^{(b)}_{\leftarrow, i} X_i
 \end{equation}
 for each reaction $b=1,\ldots, \Nb$.
-The stoichiometric coefficients count molecules, as is standard for chemical reaction
-equations. Writing $\sigma^{(b)}_i =
+The stoichiometric coefficients are defined with respect to volume fractions, not
+molecular counts. Writing $\sigma^{(b)}_i =
 \sigma^{(b)}_{\leftarrow, i}-\sigma^{(b)}_{\rightarrow, i}$, equilibrium requires
-the corresponding molecular chemical potentials to balance. In the package, $\mu_i$
-denotes the chemical potential per volume, so the molecular chemical potential is
-$l_i\mu_i$, where $l_i=\nu_i/\nu$ is the relative molecule volume:
+the corresponding chemical potentials per volume, $\mu_i$, to balance:
 \begin{equation}
-    \sum_{i=1}^{\Nc} \sigma^{(b)}_i l_i \mu_i = 0
+    \sum_{i=1}^{\Nc} \sigma^{(b)}_i \mu_i = 0
 \end{equation}
 
-Volume fractions are proportional to molecule numbers times molecule volumes.
-Consequently, a reaction extent changes the volume fractions according to
+With this convention, a reaction extent changes the volume fractions according to
 \begin{equation}
-    \Delta \phi_i = l_i \sigma^{(b)}_i \Delta \xi_b \;.
+    \Delta \phi_i = \sigma^{(b)}_i \Delta \xi_b \;.
 \end{equation}
-Thus, the matrix used to find conserved volume-fraction combinations is the
-stoichiometric matrix with each component column weighted by $l_i$. This weighting
-converts molecule-number coefficients into volume-fraction changes; it does not change
-the molecular-number convention of the reaction equation. In particular, a reaction
-conserves volume when $\sum_i l_i \sigma^{(b)}_i=0$.
+Thus, the stoichiometric matrix directly specifies volume-fraction changes and is used
+without weighting its columns by the relative molecule volumes $l_i=\nu_i/\nu$.
+In particular, a reaction conserves volume when $\sum_i \sigma^{(b)}_i=0$.
 
 Each reaction (in general) leaves conserved linear combinations of volume fractions,
 \begin{equation}
     \sum_{i=1}^{\Nc} q^{(b)}_i \phi_i = \psi_b
 \end{equation}
-where $q^{(b)}_i$ are linearly independent vectors in the null space of the size-weighted
+where $q^{(b)}_i$ are linearly independent vectors in the null space of the
 stoichiometric matrix,
 \begin{equation}
-    \sum_{i=1}^{\Nc} q^{(b)}_i l_i \sigma^{(b)}_i = 0
+    \sum_{i=1}^{\Nc} q^{(b)}_i \sigma^{(b)}_i = 0
     \;.
 \end{equation}
 Once we determine a basis for this null space, e.g., using

@@ -33,15 +33,15 @@ def prepare_reactions(
     with chemical potentials and relative molecule sizes given by ``mus`` and ``sizes``.
     Components absent from all reactions remain canonical. The returned global
     constraint enforces the conserved quantities implied by the stoichiometric matrix,
-    initialized using ``phi_means``. Stoichiometric coefficients count molecules, so
-    molecule sizes convert reaction extents into changes in volume fractions.
+    initialized using ``phi_means``. Stoichiometric coefficients specify changes in
+    volume fractions, not molecule counts.
 
     Args:
         stoichiometric_matrix:
             Matrix with one reaction per row and one component per column, with
-            coefficients counting molecules. This matrix also determines the component
-            count :math:`N_\mathrm{C}`. Its columns are weighted by ``sizes`` when deriving
-            volume-fraction conservation constraints.
+            coefficients specifying volume-fraction changes. This matrix also determines
+            the component count :math:`N_\mathrm{C}` and directly determines the conserved
+            volume-fraction constraints.
         phi_means:
             Mean volume fractions of all components.
         mus:
@@ -67,12 +67,8 @@ def prepare_reactions(
         sizes = np.array(sizes, dtype=float, ndmin=1, ndmax=1)
     phi_means = np.array(phi_means, dtype=float, ndmin=1, ndmax=1)
 
-    # Reaction stoichiometry counts molecules, while the constraints act on volume
-    # fractions, so weight each component by its relative molecule volume.
-    volume_stoichiometric_matrix = stoichiometric_matrix * sizes
-
     # check arguments for consistency
-    if not np.allclose(volume_stoichiometric_matrix.sum(axis=1), 0):
+    if not np.allclose(stoichiometric_matrix.sum(axis=1), 0):
         _logger.warning("Stoichiometric matrix violates volume conservation.")
 
     # determine the reacting components
@@ -89,7 +85,7 @@ def prepare_reactions(
         ensemble.set_chemical_potential(i, mus[i], sizes[i])
 
     # determine the constraint based on the null space of volume-fraction changes
-    b = linalg.null_space(volume_stoichiometric_matrix[:, reacting])
+    b = linalg.null_space(stoichiometric_matrix[:, reacting])
     constraint_matrix = np.zeros((b.shape[1], num_comp))
     constraint_matrix[:, reacting] = b.T
     constraint_value = constraint_matrix @ phi_means
@@ -134,10 +130,9 @@ def find_coexisting_phases(
             of the solvent is included as well, so the sum of this array must be one.
         stoichiometric_matrix:
             Matrix defining reactions between components (one reaction per row and one
-            component per column, with coefficients counting molecules. The component
-            columns are weighted by their relative molecule volumes to determine changes
-            in volume fractions and their conserved quantities. If omitted, all components
-            are treated canonically.
+            component per column), with coefficients specifying changes in volume
+            fractions rather than molecule counts. The matrix directly determines the
+            conserved quantities. If omitted, all components are treated canonically.
         sizes:
             The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
             volume of a reference molecule :math:`\nu`. It is treated as all-one vector by

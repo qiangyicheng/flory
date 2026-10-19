@@ -42,12 +42,10 @@ which gives two phases:
 
 Chemical reactions
 ------------------
-Reaction stoichiometric coefficients count molecules, following the usual chemical
-equation convention. For example, :math:`2A \rightleftharpoons B` is represented by
-``[-2, 1]``. Since component volume fractions are proportional to molecule numbers
-multiplied by their relative molecule volumes, the reaction coefficients are weighted
-by ``sizes`` when deriving volume-fraction changes and conserved quantities. This keeps
-the reaction notation in molecule numbers even when components have unequal sizes.
+Reaction stoichiometric coefficients specify changes in volume fractions, not molecule
+counts. For example, ``[-1, 1]`` represents a reaction that converts an equal volume
+fraction of component A into component B. The matrix directly determines conserved
+volume-fraction combinations; coefficients are not weighted by ``sizes``.
 
 Construct a 2D phase diagram
 ----------------------------
