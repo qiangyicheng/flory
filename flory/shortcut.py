@@ -57,11 +57,12 @@ def prepare_reactions(
     if mus is None:
         mus = np.zeros(num_comp)
     else:
-        mus = np.atleast_1d(mus)
+        mus = np.array(mus, dtype=float, ndmin=1, ndmax=1)
     if sizes is None:
         sizes = np.ones(num_comp)
     else:
-        sizes = np.atleast_1d(sizes)
+        sizes = np.array(sizes, dtype=float, ndmin=1, ndmax=1)
+    phi_means = np.array(phi_means, dtype=float, ndmin=1, ndmax=1)
 
     # check arguments for consistency
     if not np.allclose(stoichiometric_matrix.sum(axis=1), 0):
