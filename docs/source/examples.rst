@@ -40,6 +40,15 @@ which gives two phases:
 .. literalinclude:: /../../examples/find_coexiting_phases_ternary.py.out
    :linenos:
 
+Chemical reactions
+------------------
+Reaction stoichiometric coefficients count molecules, following the usual chemical
+equation convention. For example, :math:`2A \rightleftharpoons B` is represented by
+``[-2, 1]``. Since component volume fractions are proportional to molecule numbers
+multiplied by their relative molecule volumes, the reaction coefficients are weighted
+by ``sizes`` when deriving volume-fraction changes and conserved quantities. This keeps
+the reaction notation in molecule numbers even when components have unequal sizes.
+
 Construct a 2D phase diagram
 ----------------------------
 When constructing a phase diagram, we usually need to find coexisting phases for multiple instances.
