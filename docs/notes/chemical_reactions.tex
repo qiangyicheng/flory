@@ -31,24 +31,41 @@ We consider a system of $\Nc$ components, $X_1, \ldots, X_{\Nc}$, that can under
     \sum_{i=1}^{\Nc} \sigma^{(b)}_{\leftarrow, i} X_i
 \end{equation}
 for each reaction $b=1,\ldots, \Nb$.
-Equilibrium then implies that the respective chemical potentials are balanced,
+The stoichiometric coefficients count molecules, as is standard for chemical reaction
+equations. Writing $\sigma^{(b)}_i =
+\sigma^{(b)}_{\leftarrow, i}-\sigma^{(b)}_{\rightarrow, i}$, equilibrium requires
+the corresponding molecular chemical potentials to balance. In the package, $\mu_i$
+denotes the chemical potential per volume, so the molecular chemical potential is
+$l_i\mu_i$, where $l_i=\nu_i/\nu$ is the relative molecule volume:
 \begin{equation}
-    \sum_{i=1}^{\Nc} \sigma^{(b)}_i \mu_i = 0
+    \sum_{i=1}^{\Nc} \sigma^{(b)}_i l_i \mu_i = 0
 \end{equation}
-where we introduced the stoichiometry matrix $\sigma^{(b)}_i = \sigma^{(b)}_{\leftarrow, i}-\sigma^{(b)}_{\rightarrow, i}$.
 
-To describe this, we notice that each reaction (in general) introduces a constraint,
+Volume fractions are proportional to molecule numbers times molecule volumes.
+Consequently, a reaction extent changes the volume fractions according to
+\begin{equation}
+    \Delta \phi_i = l_i \sigma^{(b)}_i \Delta \xi_b \;.
+\end{equation}
+Thus, the matrix used to find conserved volume-fraction combinations is the
+stoichiometric matrix with each component column weighted by $l_i$. This weighting
+converts molecule-number coefficients into volume-fraction changes; it does not change
+the molecular-number convention of the reaction equation. In particular, a reaction
+conserves volume when $\sum_i l_i \sigma^{(b)}_i=0$.
+
+Each reaction (in general) leaves conserved linear combinations of volume fractions,
 \begin{equation}
     \sum_{i=1}^{\Nc} q^{(b)}_i \phi_i = \psi_b
 \end{equation}
-where $q^{(b)}_i$ are linearly independent vectors in the cokernel of the stoichiometric matrix,
+where $q^{(b)}_i$ are linearly independent vectors in the null space of the size-weighted
+stoichiometric matrix,
 \begin{equation}
-    \sum_{i=1}^{\Nc} q^{(b)}_i \sigma^{(b)}_i = 0
+    \sum_{i=1}^{\Nc} q^{(b)}_i l_i \sigma^{(b)}_i = 0
     \;.
 \end{equation}
-Once we determined a basis for the cokernel, e.g., using \texttt{scipy.linalg.null\_space}, we can use it to express a linear constraint.
+Once we determine a basis for this null space, e.g., using
+\texttt{scipy.linalg.null\_space}, we can use it to express a linear constraint.
 Moreover, we need to impose a grandcanonical potential for the respective species.
-The the imposed chemical potential difference relates to the internal energy difference
+The imposed chemical potential difference relates to the internal energy difference
 of the species, which is not part of the free energy in our formulation.
 
 

@@ -41,7 +41,7 @@ def test_reactions_2comp(caplog):
     phi_means = [0.4, 0.6]
     sizes = [2.0, 1.0]
 
-    ens, constr = flory.prepare_reactions([1, -1], phi_means, sizes=sizes)
+    ens, constr = flory.prepare_reactions([1, -2], phi_means, sizes=sizes)
     free_energy = flory.FloryHuggins(num_comp, chis, sizes)
     finder = flory.CoexistingPhasesFinder(
         free_energy.interaction,
@@ -156,6 +156,24 @@ def test_reactions_4comp(stoichiometries):
     assert mus.shape == (1, 4)
     assert mus[0, 1] == pytest.approx(mus[0, 2], abs=1e-4)
     assert mus[0, 1] == pytest.approx(mus[0, 3], abs=1e-4)
+
+
+def test_reaction_stoichiometry_uses_molecule_numbers(caplog):
+    phi_means = [0.2, 0.4, 0.4]
+    sizes = [1.0, 2.0, 1.0]
+    stoichiometric_matrix = [[-2, 1, 0]]
+
+    with caplog.at_level(logging.WARNING):
+        _, constraint = flory.prepare_reactions(
+            stoichiometric_matrix, phi_means, sizes=sizes
+        )
+
+    assert "volume conservation" not in caplog.text
+    assert constraint.num_cons == 1
+    np.testing.assert_allclose(
+        constraint.Cs @ (np.asarray(stoichiometric_matrix) * sizes).T, 0
+    )
+    np.testing.assert_allclose(constraint.Ts, constraint.Cs @ phi_means)
 
 
 def test_reaction_equilibrium():
