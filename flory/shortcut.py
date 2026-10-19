@@ -77,19 +77,25 @@ def prepare_reactions(
     if not np.any(reacting):
         return CanonicalEnsemble(num_comp, phi_means), NoConstraint(num_comp)
 
+    # determine the constraint based on the null space of volume-fraction changes
+    b = linalg.null_space(stoichiometric_matrix[:, reacting])
+    if b.shape[1] == 0:
+        # empty null spaces can happen with incompatible matrices
+        _logger.warning(
+            "Stoichiometric matrix has empty null space; ignoring reactions."
+        )
+        return CanonicalEnsemble(num_comp, phi_means), NoConstraint(num_comp)
+    constraint_matrix = np.zeros((b.shape[1], num_comp))
+    constraint_matrix[:, reacting] = b.T
+    constraint_value = constraint_matrix @ phi_means
+    constraint = LinearGlobalConstraint(num_comp, constraint_matrix, constraint_value)
+
     # determine the ensemble
     ensemble = SemiGrandCanonicalEnsemble(
         num_comp, is_canonical=~reacting, constraint=phi_means
     )
     for i in np.flatnonzero(reacting):
         ensemble.set_chemical_potential(i, mus[i], sizes[i])
-
-    # determine the constraint based on the null space of volume-fraction changes
-    b = linalg.null_space(stoichiometric_matrix[:, reacting])
-    constraint_matrix = np.zeros((b.shape[1], num_comp))
-    constraint_matrix[:, reacting] = b.T
-    constraint_value = constraint_matrix @ phi_means
-    constraint = LinearGlobalConstraint(num_comp, constraint_matrix, constraint_value)
 
     return ensemble, constraint
 
