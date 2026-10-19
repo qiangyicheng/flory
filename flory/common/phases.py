@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import typing
 
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 from scipy import cluster, optimize, spatial
@@ -250,3 +251,75 @@ class PhasesResult(Phases):
                 2D array containing new component fractions of the phases.
         """
         return self.__class__(volumes, fractions, info=self.info.copy())
+
+    def plot(self, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+        """Plot the phase compositions as a volume-weighted heat map.
+
+        Each column represents one phase, with its horizontal width
+        proportional to the phase volume. Each row represents one component
+        and the color indicates its fraction in the phase. Phases are shown
+        in their current order.
+
+        Args:
+            **kwargs: Optional plotting parameters. Supported parameters are
+                ``vmin`` and ``vmax`` for the color scale,
+                ``colorbar_label`` and ``colorbar_label_size`` for the
+                colorbar, and ``axis_label_size``, ``axis_tick_major``, and
+                ``axis_tick_minor`` for axis text and ticks. Additional
+                keyword arguments are ignored.
+
+        Returns:
+            A tuple containing the created Matplotlib figure and axes.
+        """
+        kwargs.setdefault("vmin", 0.0)
+        kwargs.setdefault("vmax", 1.0)
+        kwargs.setdefault("colorbar_label_size", 20)
+        kwargs.setdefault("axis_label_size", 23)
+        kwargs.setdefault("axis_tick_major", 14)
+        kwargs.setdefault("axis_tick_minor", 10)
+        kwargs.setdefault("colorbar_label", r"$\phi$")
+        kwargs.setdefault("figtitle", "")
+        kwargs.setdefault("figtitle_size", 25)
+        kwargs.setdefault("figsize", (6, 7))
+
+        fig0, ax0 = plt.subplots(figsize=kwargs["figsize"])
+        fractions = self.fractions.T
+        volumes = np.asarray(self.volumes, dtype=float)
+        volume_edges = np.concatenate(([0.0], np.cumsum(volumes)))
+        image = None
+
+        for phase_index in range(fractions.shape[1]):
+            phase_image = ax0.imshow(
+                fractions[:, phase_index:phase_index + 1],
+                cmap="viridis",
+                aspect="auto",
+                vmin=kwargs["vmin"],
+                vmax=kwargs["vmax"],
+                extent=(
+                    volume_edges[phase_index],
+                    volume_edges[phase_index + 1],
+                    -0.5,
+                    fractions.shape[0] - 0.5,
+                ),
+            )
+            if image is None:
+                image = phase_image
+
+        ax0.set_xlim(volume_edges[0], volume_edges[-1])
+        fig0.subplots_adjust(right=0.9)
+        cbar = fig0.colorbar(image, ax=ax0, orientation="vertical")
+        cbar.set_label(label = kwargs["colorbar_label"], fontsize = kwargs["colorbar_label_size"])
+
+        ax0.set_xlabel("Phase", fontsize=kwargs["axis_label_size"])
+        ax0.set_ylabel("Component", fontsize=kwargs["axis_label_size"])
+
+        phase_positions = (volume_edges[:-1] + volume_edges[1:]) / 2
+        ax0.set_xticks(phase_positions)
+        ax0.set_xticklabels(np.arange(1, 1 + fractions.shape[1]))
+        ax0.set_yticks(np.arange(fractions.shape[0]))
+        ax0.set_yticklabels(np.arange(fractions.shape[0], 0, -1))
+        ax0.tick_params(axis="both", which="major", labelsize=kwargs["axis_tick_major"])
+        ax0.tick_params(axis="both", which="minor", labelsize=kwargs["axis_tick_minor"])
+        ax0.set_title(kwargs["figtitle"], fontsize=kwargs["figtitle_size"])
+
+        return fig0, ax0
