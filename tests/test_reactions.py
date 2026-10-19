@@ -170,7 +170,9 @@ def test_reaction_stoichiometry_uses_volume_fractions(caplog):
 
     assert "volume conservation" not in caplog.text
     assert constraint.num_cons == 1
-    np.testing.assert_allclose(constraint.Cs @ np.asarray(stoichiometric_matrix).T, 0)
+    np.testing.assert_allclose(
+        constraint.Cs @ np.asarray(stoichiometric_matrix).T, 0, atol=1e-10
+    )
     np.testing.assert_allclose(constraint.Ts, constraint.Cs @ phi_means)
 
 
@@ -214,10 +216,16 @@ def test_reaction_equilibrium_3reacts():
     chis = np.zeros((num_comp, num_comp))
     phi_means = [0.2, 0.2, 0.6]
     sigma = [[0, 1, -1], [1, 0, -1], [1, -1, 0]]
+    sizes = [1, 1, 1]
     ws = [0, 1, 2]
 
     phases = flory.find_coexisting_phases(
-        num_comp, chis, phi_means, stoichiometric_matrix=sigma, internal_energies=ws
+        num_comp,
+        chis,
+        phi_means,
+        stoichiometric_matrix=sigma,
+        sizes=sizes,
+        internal_energies=ws,
     )
 
     assert phases.num_phases == 1
