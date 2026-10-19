@@ -43,9 +43,7 @@ def convert_and_broadcast(
     Returns:
         : The broadcasted array.
     """
-    if dtype is not None:
-        arr = np.asarray(arr, dtype=dtype)
-    return np.broadcast_to(arr, shape)
+    return np.array(np.broadcast_to(arr, shape), dtype=dtype)
 
 
 def make_square_blocks(arr: np.ndarray, block_sizes: np.ndarray) -> np.ndarray:

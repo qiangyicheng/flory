@@ -115,7 +115,7 @@ class GrandCanonicalEnsemble(EnsembleBase):
                 Updated scaled activities :math:`e^{l_i \mu_i - 1}`.
         """
         self._scaled_activity = convert_and_broadcast(
-            scaled_activity, (self.num_comp,), dtype=float
+            scaled_activity_new, (self.num_comp,), dtype=float
         )
 
     @classmethod
