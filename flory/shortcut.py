@@ -11,7 +11,7 @@ import logging
 import numpy as np
 from scipy import linalg
 
-from .common import PhasesResult
+from .common import PhasesResult, convert_and_broadcast
 from .constraint import ConstraintBase, LinearGlobalConstraint, NoConstraint
 from .ensemble import CanonicalEnsemble, EnsembleBase, SemiGrandCanonicalEnsemble
 from .free_energy import FloryHuggins
@@ -60,12 +60,12 @@ def prepare_reactions(
     if mus is None:
         mus = np.zeros(num_comp)
     else:
-        mus = np.array(mus, dtype=float, ndmin=1, ndmax=1)
+        mus = convert_and_broadcast(mus, (num_comp,), dtype=float)
     if sizes is None:
         sizes = np.ones(num_comp)
     else:
-        sizes = np.array(sizes, dtype=float, ndmin=1, ndmax=1)
-    phi_means = np.array(phi_means, dtype=float, ndmin=1, ndmax=1)
+        sizes = convert_and_broadcast(sizes, (num_comp,), dtype=float)
+    phi_means = convert_and_broadcast(phi_means, (num_comp,), dtype=float)
 
     # check arguments for consistency
     if not np.allclose(stoichiometric_matrix.sum(axis=1), 0):
@@ -170,7 +170,9 @@ def find_coexisting_phases(
         if internal_energies is None:
             internal_energies = np.zeros(num_comp)
         else:
-            internal_energies = np.atleast_1d(internal_energies)
+            internal_energies = convert_and_broadcast(
+                internal_energies, (num_comp,), dtype=float
+            )
 
         ensemble, constraint = prepare_reactions(
             stoichiometric_matrix=stoichiometric_matrix,

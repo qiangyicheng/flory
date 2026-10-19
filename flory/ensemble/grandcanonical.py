@@ -11,6 +11,7 @@ import numpy as np
 from numba import float64, int32
 from numba.experimental import jitclass
 
+from ..common import convert_and_broadcast
 from .base import EnsembleBase, EnsembleBaseCompiled
 
 
@@ -96,11 +97,9 @@ class GrandCanonicalEnsemble(EnsembleBase):
         """
         super().__init__(num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
-
-        scaled_activity = np.atleast_1d(scaled_activity)
-
-        shape = (num_comp,)
-        self._scaled_activity = np.array(np.broadcast_to(scaled_activity, shape))
+        self._scaled_activity = convert_and_broadcast(
+            scaled_activity, (num_comp,), dtype=float
+        )
 
     @property
     def scaled_activity(self) -> np.ndarray:
@@ -115,8 +114,9 @@ class GrandCanonicalEnsemble(EnsembleBase):
             scaled_activity_new:
                 Updated scaled activities :math:`e^{l_i \mu_i - 1}`.
         """
-        shape = (self.num_comp,)
-        self._scaled_activity = np.array(np.broadcast_to(scaled_activity_new, shape))
+        self._scaled_activity = convert_and_broadcast(
+            scaled_activity, (self.num_comp,), dtype=float
+        )
 
     @classmethod
     def from_chemical_potential(
@@ -138,16 +138,12 @@ class GrandCanonicalEnsemble(EnsembleBase):
             Instance of :class:`GrandCanonicalEnsemble` with activities corresponding to
             :paramref:`mus`.
         """
-        mus = np.atleast_1d(mus)
-
-        shape = (num_comp,)
-        mus = np.array(np.broadcast_to(mus, shape))
+        mus = convert_and_broadcast(mus, (num_comp,), dtype=float)
 
         if sizes is None:
             sizes = np.ones_like(mus)
         else:
-            sizes = np.atleast_1d(sizes)
-            sizes = np.array(np.broadcast_to(sizes, shape))
+            sizes = convert_and_broadcast(sizes, (num_comp,), dtype=float)
 
         scaled_activity = np.exp(sizes * mus - 1)
         return cls(num_comp, scaled_activity)

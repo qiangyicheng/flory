@@ -11,6 +11,7 @@ import numpy as np
 from numba import float64, int32
 from numba.experimental import jitclass
 
+from ..common import convert_and_broadcast
 from .base import ConstraintBase, ConstraintBaseCompiled
 
 
@@ -187,11 +188,10 @@ class LinearLocalConstraint(ConstraintBase):
             self._logger.error("Constraint matrix is not 1D or 2D.")
             raise ValueError("Constraint matrix must be 1D or 2D.")
 
-        shape = (self.num_cons, self.num_feat)
-        self._Cs = np.broadcast_to(Cs, shape).astype(float)
-        shape = (self.num_cons,)
-        Ts = np.atleast_1d(Ts)
-        self._Ts = np.broadcast_to(Ts, shape).astype(float)
+        self._Cs = convert_and_broadcast(
+            Cs, (self.num_cons, self.num_feat), dtype=float
+        )
+        self._Ts = convert_and_broadcast(Ts, (self.num_cons,), dtype=float)
 
     @property
     def Cs(self) -> np.ndarray:
@@ -206,9 +206,9 @@ class LinearLocalConstraint(ConstraintBase):
             Cs_new:
                 Updated coefficients :math:`C_{\alpha,r}`.
         """
-        Cs_new = np.atleast_1d(Cs_new)
-        shape = (self.num_cons, self.num_feat)
-        self._Cs = np.broadcast_to(Cs_new, shape).astype(float)
+        self._Cs = convert_and_broadcast(
+            Cs_new, (self.num_cons, self.num_feat), dtype=float
+        )
 
     @property
     def Ts(self) -> np.ndarray:
@@ -223,9 +223,7 @@ class LinearLocalConstraint(ConstraintBase):
             Ts_new:
                 Updated targets :math:`T_\alpha`.
         """
-        shape = (self.num_cons,)
-        Ts_new = np.atleast_1d(Ts_new)
-        self._Ts = np.broadcast_to(Ts_new, shape).astype(float)
+        self._Ts = convert_and_broadcast(Ts_new, (self.num_cons,), dtype=float)
 
     def _compiled_impl(
         self,
