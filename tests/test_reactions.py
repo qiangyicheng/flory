@@ -156,3 +156,54 @@ def test_reactions_4comp(stoichiometries):
     assert mus.shape == (1, 4)
     assert mus[0, 1] == pytest.approx(mus[0, 2], abs=1e-4)
     assert mus[0, 1] == pytest.approx(mus[0, 3], abs=1e-4)
+
+
+def test_reaction_equilibrium():
+    num_comp = 2
+    chis = np.zeros((num_comp, num_comp))
+    phi_means = [0.4, 0.6]
+    sigma = [1, -1]
+    ws = [0, 2]
+
+    phases = flory.find_coexisting_phases(
+        num_comp, chis, phi_means, stoichiometric_matrix=sigma, internal_energies=ws
+    )
+
+    assert phases.num_phases == 1
+    phi0, phi1 = phases.fractions[0]
+    assert phi0 / phi1 == pytest.approx(np.exp(2.0), rel=1e-4)
+
+
+def test_reaction_equilibrium_phasesep():
+    num_comp = 3
+    chis = np.zeros((num_comp, num_comp))
+    chis[0, 1:] = chis[1:, 0] = 3
+    phi_means = [0.4, 0.4, 0.2]
+    sigma = [0, 1, -1]
+    ws = [0, 0, 1.5]
+
+    phases = flory.find_coexisting_phases(
+        num_comp, chis, phi_means, stoichiometric_matrix=sigma, internal_energies=ws
+    )
+
+    assert phases.num_phases == 2
+    assert phases.mean_fractions[0] == pytest.approx(0.4, abs=1e-4)
+    np.testing.assert_allclose(
+        phases.fractions[:, 1], np.exp(1.5) * phases.fractions[:, 2]
+    )
+
+
+def test_reaction_equilibrium_3reacts():
+    num_comp = 3
+    chis = np.zeros((num_comp, num_comp))
+    phi_means = [0.2, 0.2, 0.6]
+    sigma = [[0, 1, -1], [1, 0, -1], [1, -1, 0]]
+    ws = [0, 1, 2]
+
+    phases = flory.find_coexisting_phases(
+        num_comp, chis, phi_means, stoichiometric_matrix=sigma, internal_energies=ws
+    )
+
+    assert phases.num_phases == 1
+    fs = np.exp(-np.array(ws))
+    np.testing.assert_allclose(phases.fractions[0], fs / fs.sum())

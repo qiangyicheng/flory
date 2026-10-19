@@ -27,7 +27,7 @@ def prepare_reactions(
     mus: np.ndarray | None = None,
     sizes: np.ndarray | None = None,
 ) -> tuple[EnsembleBase, ConstraintBase]:
-    """Prepare an ensemble and conservation constraint for a reaction system.
+    r"""Prepare an ensemble and conservation constraint for a reaction system.
 
     Components that participate in at least one reaction are treated grand canonically,
     with chemical potentials and relative molecule sizes given by ``mus`` and ``sizes``.
@@ -37,7 +37,8 @@ def prepare_reactions(
 
     Args:
         stoichiometric_matrix:
-            Matrix with one reaction per row and one component per column.
+            Matrix with one reaction per row and one component per column. This matrix
+            also determines the component count :math:`N_\mathrm{C}`.
         phi_means:
             Mean volume fractions of all components.
         mus:
@@ -93,10 +94,17 @@ def find_coexisting_phases(
     num_comp: int,
     chis: np.ndarray,
     phi_means: np.ndarray,
+    *,
+    stoichiometric_matrix: np.ndarray | None = None,
     sizes: np.ndarray | None = None,
+    internal_energies: np.ndarray | None = None,
     **kwargs,
 ) -> PhasesResult:
-    r"""Find coexisting phases of Flory-Huggins mixtures in canonical ensemble.
+    r"""Find coexisting phases of incompressible Flory-Huggins mixtures.
+
+    The function generally assumes a canonical ensemble, but it also supports cases in
+    which some of the components undergo reactions, which are specified by the
+    corresponding ``stoichiometric_matrix``.
 
     This function is a convenience wrapper for the class
     :class:`~flory.mcmp.finder.CoexistingPhasesFinder`. This function will create the
@@ -116,10 +124,17 @@ def find_coexisting_phases(
             The average volume fractions :math:`\bar{\phi}_i` of all the components of the
             system. 1D array of length :math:`N_\mathrm{C}`. Note that the volume fraction
             of the solvent is included as well, so the sum of this array must be one.
+        stoichiometric_matrix:
+            Matrix defining reactions between components (one reaction per row and one
+            component per column). If omitted, all components are treated canonically.
         sizes:
             The relative molecule volumes :math:`l_i = \nu_i/\nu` with respect to the
             volume of a reference molecule :math:`\nu`. It is treated as all-one vector by
             default.
+        internal_energies:
+            Internal energies of components (measured per volume), which is relevant if
+            chemical reactions are present. Internal energies do not matter for
+            canonical components that do not participate in reactions.
         **kwargs:
             All additional arguments are used directly to initialize
             :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
@@ -132,16 +147,46 @@ def find_coexisting_phases(
             :paramref:`~flory.common.phases.Phases.fractions` (accessible by
             :code:`.fractions`) contains volume fractions of all components.
     """
+    # prepare the standard Flory–Huggins free energy
     free_energy = FloryHuggins(num_comp, chis, sizes)
-    ensemble = CanonicalEnsemble(num_comp, phi_means)
+
+    # prepare the ensemble and potential constraints
+    if stoichiometric_matrix is None or len(stoichiometric_matrix) == 0:
+        # all components are treated canonically
+        if internal_energies is not None:
+            _logger.warning("`internal_energies` is only used with reactions")
+
+        ensemble = CanonicalEnsemble(num_comp, phi_means)
+        constraint = NoConstraint(num_comp)
+
+    else:
+        # some components are involved in reactions
+        if internal_energies is None:
+            internal_energies = np.zeros(num_comp)
+        else:
+            internal_energies = np.atleast_1d(internal_energies)
+
+        ensemble, constraint = prepare_reactions(
+            stoichiometric_matrix=stoichiometric_matrix,
+            phi_means=phi_means,
+            mus=-internal_energies,
+            sizes=sizes,
+        )
+        # use less aggressive randomness to avoid rapid dying of compartments
+        kwargs.setdefault("random_std", 1.0)
+
+    # initialize and run the phase finder
     finder = CoexistingPhasesFinder(
-        free_energy.interaction,
-        free_energy.entropy,
-        ensemble,
+        interaction=free_energy.interaction,
+        entropy=free_energy.entropy,
+        ensemble=ensemble,
+        constraints=constraint,
         **kwargs,
     )
     phases = finder.run()
+
     # cluster (using default distance threshold), sort, and normalize the phases
     phases = phases.get_clusters().sort().normalize()
+
     # return result together with diagnostic information
     return PhasesResult.from_phases(phases, info=finder.diagnostics.copy())
