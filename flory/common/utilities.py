@@ -3,6 +3,8 @@
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
+from __future__ import annotations
+
 import inspect
 from typing import Any, Callable
 
@@ -25,7 +27,9 @@ def filter_kwargs(kwargs_full: dict[str, Any], func: Callable) -> dict[str, Any]
     return {para: kwargs_full[para] for para in params if para in kwargs_full}
 
 
-def convert_and_broadcast(arr: np.ndarray, shape: np.ndarray) -> np.ndarray:
+def convert_and_broadcast(
+    arr: np.ndarray, shape: tuple[int, ...], dtype: np.typing.DTypeLike | None = None
+) -> np.ndarray:
     """Converts input and broadcasts it to an array with specified shape.
 
     Args:
@@ -33,13 +37,13 @@ def convert_and_broadcast(arr: np.ndarray, shape: np.ndarray) -> np.ndarray:
             The input array.
         shape:
             The target shape to broadcast to.
+        dtype:
+            The dtype of the target array
 
     Returns:
         : The broadcasted array.
     """
-    ans = np.atleast_1d(arr)
-    ans = np.array(np.broadcast_to(ans, shape))
-    return ans
+    return np.array(np.broadcast_to(arr, shape), dtype=dtype)
 
 
 def make_square_blocks(arr: np.ndarray, block_sizes: np.ndarray) -> np.ndarray:

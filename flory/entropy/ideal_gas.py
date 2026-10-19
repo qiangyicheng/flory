@@ -11,7 +11,7 @@ import numpy as np
 from numba import float64, int32
 from numba.experimental import jitclass
 
-from ..common.math import xlogx
+from ..common import convert_and_broadcast, xlogx
 from .base import EntropyBase, EntropyBaseCompiled
 
 
@@ -148,9 +148,7 @@ class IdealGasEntropyBase(EntropyBase):
         if sizes is None:
             self._sizes = np.ones(num_comp)
         else:
-            sizes = np.atleast_1d(sizes)
-            shape = (num_comp,)
-            self._sizes = np.array(np.broadcast_to(sizes, shape))
+            self._sizes = convert_and_broadcast(sizes, (num_comp,), dtype=float)
 
     def _energy_impl(self, phis: np.ndarray) -> np.ndarray:
         r"""Implementation of calculating entropic energy :math:`f_\mathrm{entropy}`.
@@ -277,9 +275,7 @@ class IdealGasEntropy(IdealGasEntropyBase):
             sizes_new:
                 Updated relative molecule volumes :math:`l_i = \nu_i/\nu`.
         """
-        sizes_new = np.atleast_1d(sizes_new)
-        shape = (self.num_comp,)
-        self._sizes = np.array(np.broadcast_to(sizes_new, shape))
+        self._sizes = convert_and_broadcast(sizes_new, (self.num_comp,), dtype=float)
 
     def _compiled_impl(self) -> IdealGasEntropyCompiled:
         """Implementation of creating a compiled entropy instance.
