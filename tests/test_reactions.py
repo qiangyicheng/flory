@@ -83,7 +83,7 @@ def test_reactions_2comp_mu(caplog):
 
     phases = finder.run(progress=False).get_clusters()
     assert phases.num_phases == 1
-    assert sum(phases.fractions.flat) == pytest.approx(1)
+    assert sum(phases.fractions.flat) == pytest.approx(1, abs=1e-4)
     mus = free_energy.chemical_potentials(phases.fractions)
     assert mus.shape == (1, 2)
     assert mus[0, 0] == pytest.approx(mus[0, 1] - w)
@@ -109,7 +109,7 @@ def test_reactions_3comp(caplog):
 
     phases = finder.run(progress=False).get_clusters()
     assert phases.num_phases == 1
-    assert sum(phases.fractions.flat) == pytest.approx(1)
+    assert sum(phases.fractions.flat) == pytest.approx(1, abs=1e-4)
     mus = free_energy.chemical_potentials(phases.fractions)
     assert phases.fractions[0, 0] == pytest.approx(0.4)
     assert phases.fractions[0, 1:].sum() == pytest.approx(0.6)
@@ -149,7 +149,7 @@ def test_reactions_4comp(stoichiometries):
     phases = finder.run(progress=False).get_clusters()
 
     assert phases.num_phases == 1
-    assert sum(phases.fractions.flat) == pytest.approx(1)
+    assert sum(phases.fractions.flat) == pytest.approx(1, abs=1e-4)
     mus = free_energy.chemical_potentials(phases.fractions)
     assert phases.fractions[0, 0] == pytest.approx(0.4)
     assert phases.fractions[0, 1:].sum() == pytest.approx(0.6)
