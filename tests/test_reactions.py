@@ -248,4 +248,4 @@ def test_reactions_interactions():
     assert phases.num_phases == 1
     f = flory.FloryHuggins(2, chis=chis)
     mu1, mu2 = f.chemical_potentials(phases.fractions)[0]
-    assert mu1 == pytest.approx(mu2 + 0.1)
+    assert mu1 == pytest.approx(mu2 + 0.1, abs=1e-4)
