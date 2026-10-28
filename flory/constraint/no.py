@@ -84,6 +84,8 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
 class NoConstraint(ConstraintBase):
     r"""Class for no constraints."""
 
+    num_cons: int = 0
+
     def __init__(self, num_feat: int):
         r"""
         Args:

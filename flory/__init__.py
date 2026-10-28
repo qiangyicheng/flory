@@ -45,4 +45,4 @@ from .interaction import (
     InteractionBase,
 )
 from .mcmp import CoexistingPhasesFinder
-from .shortcut import find_coexisting_phases
+from .shortcut import find_coexisting_phases, prepare_reactions

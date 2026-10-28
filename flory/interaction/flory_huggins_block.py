@@ -13,7 +13,6 @@ import logging
 import numpy as np
 
 from ..common import *
-from .base import InteractionBase
 from .flory_huggins import FloryHugginsInteractionBase, FloryHugginsInteractionCompiled
 
 

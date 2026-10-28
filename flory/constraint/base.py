@@ -106,7 +106,7 @@ class ConstraintBase:
     satisfied in all compartments. For example, the charge balance is a local constraint.
     Global constraint means that it only needs to be satisfied by the mean value. For
     example, the volume conservation is a global constraint. Note that we expect that
-    constraints always act on feature, in stead of components.
+    constraints always act on feature, instead of components.
     """
 
     def __init__(self, num_feat: int):
