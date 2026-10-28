@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import typing
 
-import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 from scipy import cluster, optimize, spatial
@@ -252,74 +251,76 @@ class PhasesResult(Phases):
         """
         return self.__class__(volumes, fractions, info=self.info.copy())
 
-    def plot(self, **kwargs) -> tuple[plt.Figure, plt.Axes]:
+    def plot(self, vmin=0.0, vmax=1.0, cmap="viridis", ax=None) -> mpl.collections.QuadMesh:
         """Plot the phase compositions as a volume-weighted heat map.
 
-        Each column represents one phase, with its horizontal width
-        proportional to the phase volume. Each row represents one component
-        and the color indicates its fraction in the phase. Phases are shown
-        in their current order.
+        Each column represents one phase, with its horizontal width proportional
+        to the phase volume. Each row represents one component, and the color
+        indicates its fraction in the phase. Phases are shown in their current
+        order.
 
         Args:
-            **kwargs: Optional plotting parameters. Supported parameters are
-                ``vmin`` and ``vmax`` for the color scale,
-                ``colorbar_label`` and ``colorbar_label_size`` for the
-                colorbar, and ``axis_label_size``, ``axis_tick_major``, and
-                ``axis_tick_minor`` for axis text and ticks. Additional
-                keyword arguments are ignored.
+            vmin: Minimum value for the colormap.
+            vmax: Maximum value for the colormap.
+            cmap: Name of the Matplotlib colormap to use.
+            ax: Matplotlib axes to draw on. If omitted, the current axes are
+                used and configured with labels, ticks, and a colorbar.
 
         Returns:
-            A tuple containing the created Matplotlib figure and axes.
+            The Matplotlib ``QuadMesh`` created by ``pcolormesh``. When
+            ``ax`` is omitted, the mesh is also set as the current image.
         """
-        kwargs.setdefault("vmin", 0.0)
-        kwargs.setdefault("vmax", 1.0)
-        kwargs.setdefault("colorbar_label_size", 20)
-        kwargs.setdefault("axis_label_size", 23)
-        kwargs.setdefault("axis_tick_major", 14)
-        kwargs.setdefault("axis_tick_minor", 10)
-        kwargs.setdefault("colorbar_label", r"$\phi$")
-        kwargs.setdefault("figtitle", "")
-        kwargs.setdefault("figtitle_size", 25)
-        kwargs.setdefault("figsize", (6, 7))
+        try:
+            import matplotlib.pyplot as plt
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError(
+                "Matplotlib is required for plotting. Please install it."
+            ) from err
 
-        fig0, ax0 = plt.subplots(figsize=kwargs["figsize"])
+        # Use the current axes by default, while allowing callers to provide
+        # an axes object when composing a custom figure.
+        plt_ax = plt.gca() if ax is None else ax
         fractions = self.fractions.T
-        volumes = np.asarray(self.volumes, dtype=float)
-        volume_edges = np.concatenate(([0.0], np.cumsum(volumes)))
-        image = None
+        volume_edges = np.concatenate(([0.0], np.cumsum(self.volumes)))
+        component_edges = np.arange(fractions.shape[0] + 1)
+        image = plt_ax.pcolormesh(
+            volume_edges,
+            component_edges,
+            fractions,
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+        )
 
-        for phase_index in range(fractions.shape[1]):
-            phase_image = ax0.imshow(
-                fractions[:, phase_index:phase_index + 1],
-                cmap="viridis",
-                aspect="auto",
-                vmin=kwargs["vmin"],
-                vmax=kwargs["vmax"],
-                extent=(
-                    volume_edges[phase_index],
-                    volume_edges[phase_index + 1],
-                    -0.5,
-                    fractions.shape[0] - 0.5,
-                ),
+        if ax is None:
+            # Configure sensible defaults only for axes created implicitly.
+            default_colorbar_label = r"$\phi$"
+            default_colorbar_label_size = 20
+            default_axis_label_size = 23
+            default_axis_tick_major = 14
+
+            fig = plt.gcf()
+
+            fig.subplots_adjust(right=0.9)
+            cbar = fig.colorbar(image, ax=plt_ax, orientation="vertical")
+            cbar.set_label(
+                label=default_colorbar_label, fontsize=default_colorbar_label_size
             )
-            if image is None:
-                image = phase_image
 
-        ax0.set_xlim(volume_edges[0], volume_edges[-1])
-        fig0.subplots_adjust(right=0.9)
-        cbar = fig0.colorbar(image, ax=ax0, orientation="vertical")
-        cbar.set_label(label = kwargs["colorbar_label"], fontsize = kwargs["colorbar_label_size"])
+            plt_ax.set_xlabel("Phase", fontsize=default_axis_label_size)
+            plt_ax.set_ylabel("Component", fontsize=default_axis_label_size)
 
-        ax0.set_xlabel("Phase", fontsize=kwargs["axis_label_size"])
-        ax0.set_ylabel("Component", fontsize=kwargs["axis_label_size"])
+            phase_positions = (volume_edges[:-1] + volume_edges[1:]) / 2
+            plt_ax.set_xticks(phase_positions)
+            plt_ax.set_xticklabels(np.arange(1, 1 + fractions.shape[1]))
+            plt_ax.set_yticks(np.arange(fractions.shape[0]) + 0.5)
+            plt_ax.set_yticklabels(np.arange(1, 1 + fractions.shape[0]))
+            plt_ax.tick_params(
+                axis="both", which="major", labelsize=default_axis_tick_major
+            )
 
-        phase_positions = (volume_edges[:-1] + volume_edges[1:]) / 2
-        ax0.set_xticks(phase_positions)
-        ax0.set_xticklabels(np.arange(1, 1 + fractions.shape[1]))
-        ax0.set_yticks(np.arange(fractions.shape[0]))
-        ax0.set_yticklabels(np.arange(fractions.shape[0], 0, -1))
-        ax0.tick_params(axis="both", which="major", labelsize=kwargs["axis_tick_major"])
-        ax0.tick_params(axis="both", which="minor", labelsize=kwargs["axis_tick_minor"])
-        ax0.set_title(kwargs["figtitle"], fontsize=kwargs["figtitle_size"])
-
-        return fig0, ax0
+        if ax is None:
+            # Preserve pyplot's current-image behavior for the implicit axes.
+            plt.sci(image)
+            plt.sca(plt_ax)
+        return image
