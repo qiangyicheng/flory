@@ -43,7 +43,9 @@ def convert_and_broadcast(
     Returns:
         : The broadcasted array.
     """
-    return np.array(np.broadcast_to(arr, shape), dtype=dtype)
+    # make a copy of the array since `broadcast_to` might return a view. We also force
+    # C-order since our numba code typically expects it (or runs faster for such order).
+    return np.array(np.broadcast_to(arr, shape), dtype=dtype, copy=True, order="C")
 
 
 def make_square_blocks(arr: np.ndarray, block_sizes: np.ndarray) -> np.ndarray:
