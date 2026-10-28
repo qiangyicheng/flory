@@ -231,3 +231,21 @@ def test_reaction_equilibrium_3reacts():
     assert phases.num_phases == 1
     fs = np.exp(-np.array(ws))
     np.testing.assert_allclose(phases.fractions[0], fs / fs.sum())
+
+
+def test_reactions_interactions():
+    """test reactions with interactions"""
+    num_comp = 2
+    chis = np.array([[0, 4], [4, 0]])
+    phi_means = [0.4, 0.6]
+    sigma = [1, -1]
+    ws = [0, 0.1]
+
+    phases = flory.find_coexisting_phases(
+        num_comp, chis, phi_means, stoichiometric_matrix=sigma, internal_energies=ws
+    )
+
+    assert phases.num_phases == 1
+    f = flory.FloryHuggins(2, chis=chis)
+    mu1, mu2 = f.chemical_potentials(phases.fractions)[0]
+    assert mu1 == pytest.approx(mu2 + 0.1)
