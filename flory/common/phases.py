@@ -250,3 +250,77 @@ class PhasesResult(Phases):
                 2D array containing new component fractions of the phases.
         """
         return self.__class__(volumes, fractions, info=self.info.copy())
+
+    def plot(self, vmin=0.0, vmax=1.0, cmap="viridis", ax=None) -> mpl.collections.QuadMesh:
+        """Plot the phase compositions as a volume-weighted heat map.
+
+        Each column represents one phase, with its horizontal width proportional
+        to the phase volume. Each row represents one component, and the color
+        indicates its fraction in the phase. Phases are shown in their current
+        order.
+
+        Args:
+            vmin: Minimum value for the colormap.
+            vmax: Maximum value for the colormap.
+            cmap: Name of the Matplotlib colormap to use.
+            ax: Matplotlib axes to draw on. If omitted, the current axes are
+                used and configured with labels, ticks, and a colorbar.
+
+        Returns:
+            The Matplotlib ``QuadMesh`` created by ``pcolormesh``. When
+            ``ax`` is omitted, the mesh is also set as the current image.
+        """
+        try:
+            import matplotlib.pyplot as plt
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError(
+                "Matplotlib is required for plotting. Please install it."
+            ) from err
+
+        # Use the current axes by default, while allowing callers to provide
+        # an axes object when composing a custom figure.
+        plt_ax = plt.gca() if ax is None else ax
+        fractions = self.fractions.T
+        volume_edges = np.concatenate(([0.0], np.cumsum(self.volumes)))
+        component_edges = np.arange(fractions.shape[0] + 1)
+        image = plt_ax.pcolormesh(
+            volume_edges,
+            component_edges,
+            fractions,
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+        )
+
+        if ax is None:
+            # Configure sensible defaults only for axes created implicitly.
+            default_colorbar_label = r"$\phi$"
+            default_colorbar_label_size = 20
+            default_axis_label_size = 23
+            default_axis_tick_major = 14
+
+            fig = plt.gcf()
+
+            fig.subplots_adjust(right=0.9)
+            cbar = fig.colorbar(image, ax=plt_ax, orientation="vertical")
+            cbar.set_label(
+                label=default_colorbar_label, fontsize=default_colorbar_label_size
+            )
+
+            plt_ax.set_xlabel("Phase", fontsize=default_axis_label_size)
+            plt_ax.set_ylabel("Component", fontsize=default_axis_label_size)
+
+            phase_positions = (volume_edges[:-1] + volume_edges[1:]) / 2
+            plt_ax.set_xticks(phase_positions)
+            plt_ax.set_xticklabels(np.arange(1, 1 + fractions.shape[1]))
+            plt_ax.set_yticks(np.arange(fractions.shape[0]) + 0.5)
+            plt_ax.set_yticklabels(np.arange(1, 1 + fractions.shape[0]))
+            plt_ax.tick_params(
+                axis="both", which="major", labelsize=default_axis_tick_major
+            )
+
+        if ax is None:
+            # Preserve pyplot's current-image behavior for the implicit axes.
+            plt.sci(image)
+            plt.sca(plt_ax)
+        return image
