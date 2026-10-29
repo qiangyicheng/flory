@@ -82,7 +82,7 @@ class CoexistingPhasesFinder:
         kill_threshold: float = 0.0,
         revive_scaler: float = 1.0,
         max_revive_per_compartment: int = 16,
-        **kwargs,
+        args: dict[str, dict[str, Any]] | None = None,
     ):
         r"""
         Args:
@@ -170,16 +170,20 @@ class CoexistingPhasesFinder:
                 Maximum average number of tries per compartment to revive the dead
                 compartments. 0 or negative value indicates no reviving. When this value
                 is exhausted, the revive will be turned off.
-            kwargs:
+            args:
                 Additional keyword arguments that will be forwarded to the compile method
                 in :paramref:`interaction`, :paramref:`entropy`, :paramref:`ensemble` or
-                :paramref:`constraints`. Redundant arguments are allowed and ignored.
+                :paramref:`constraints`. Specify arguments using a dictionary with
+                entries for the respective methods, e.g.,
+                ``args={"constraints": {"constraint_elasticity": 0.1}}``.
         """
         self._logger = logging.getLogger(self.__class__.__name__)
+        if args is None:
+            args = {}
 
-        self._interaction = interaction.compiled(**kwargs)
-        self._entropy = entropy.compiled(**kwargs)
-        self._ensemble = ensemble.compiled(**kwargs)
+        self._interaction = interaction.compiled(**args.get("interaction", {}))
+        self._entropy = entropy.compiled(**args.get("entropy", {}))
+        self._ensemble = ensemble.compiled(**args.get("ensemble", {}))
 
         self._num_comp = self._entropy.num_comp
         self._num_feat = self._entropy.num_feat
@@ -187,11 +191,12 @@ class CoexistingPhasesFinder:
 
         self._constraints = []
         if constraints:
+            cons_args = args.get("constraints", {})
             if isinstance(constraints, ConstraintBase):
-                self._constraints.append(constraints.compiled(**kwargs))
+                self._constraints.append(constraints.compiled(**cons_args))
             elif isinstance(constraints, Iterable):
                 for cons in constraints:
-                    self._constraints.append(cons.compiled(**kwargs))
+                    self._constraints.append(cons.compiled(**cons_args))
         else:
             self._constraints.append(NoConstraintCompiled(self._num_feat))
 
@@ -235,7 +240,7 @@ class CoexistingPhasesFinder:
         self._phis_feat = np.full((self._num_feat, self._num_part), 0.0, float)
         self._phis_comp = np.full((self._num_comp, self._num_part), 0.0, float)
         self._revive_count_left = self._max_revive_per_compartment * self._num_part
-        self._kwargs_for_instances = kwargs
+        self._args_for_instances = args
         self.reinitialize_random()
 
     def check_instance(
@@ -324,9 +329,8 @@ class CoexistingPhasesFinder:
             kwargs:
                 The keyword arguments to update the default.
         """
-        self._interaction = interaction.compiled(
-            **{**self._kwargs_for_instances, **kwargs}
-        )
+        args = {**self._args_for_instances.get("interaction", {}), **kwargs}
+        self._interaction = interaction.compiled(**args)
         self.check_instance(self._interaction)
         if if_reset_revive:
             self.reset_revive()
@@ -347,8 +351,8 @@ class CoexistingPhasesFinder:
             kwargs:
                 The keyword arguments to update the default.
         """
-
-        self._entropy = entropy.compiled(**{**self._kwargs_for_instances, **kwargs})
+        args = {**self._args_for_instances.get("entropy", {}), **kwargs}
+        self._entropy = entropy.compiled(**args)
         self.check_instance(self._entropy)
         if if_reset_revive:
             self.reset_revive()
@@ -369,8 +373,8 @@ class CoexistingPhasesFinder:
             kwargs:
                 The keyword arguments to update the default.
         """
-
-        self._ensemble = ensemble.compiled(**{**self._kwargs_for_instances, **kwargs})
+        args = {**self._args_for_instances.get("ensemble", {}), **kwargs}
+        self._ensemble = ensemble.compiled(**args)
         self.check_instance(self._ensemble)
         if if_reset_revive:
             self.reset_revive()
@@ -380,7 +384,6 @@ class CoexistingPhasesFinder:
         constraints: ConstraintBase | tuple[ConstraintBase] | None = None,
         *,
         if_reset_revive: bool = True,
-        kwargs_individual: dict | tuple[dict] | None = None,
         **kwargs,
     ) -> None:
         """Set a new set of constraint instances.
@@ -393,32 +396,18 @@ class CoexistingPhasesFinder:
                 New set of constraint instances.
             if_reset_revive:
                 Whether the revive count is reset.
-            kwargs_individual:
-                The keyword arguments to update the default for each constraint. This
-                parameter has higher priority than :paramref:`kwargs`.
             kwargs:
-                The keyword arguments to update the default.
+                The keyword arguments to update the all constraints.
         """
 
         self._constraints = []
         if constraints:
+            args = {**self._args_for_instances.get("constraints", {}), **kwargs}
             if isinstance(constraints, ConstraintBase):
-                if kwargs_individual is None:
-                    kwargs_individual = {}
-                self._constraints.append(
-                    constraints.compiled(
-                        **{**self._kwargs_for_instances, **kwargs, **kwargs_individual}
-                    )
-                )
+                self._constraints.append(constraints.compiled(**args))
             elif isinstance(constraints, Iterable):
-                if kwargs_individual is None:
-                    kwargs_individual = [{}] * len(constraints)
-                for cons, current_args in zip(constraints, kwargs_individual):
-                    self._constraints.append(
-                        cons.compiled(
-                            **{**self._kwargs_for_instances, **kwargs, **current_args}
-                        )
-                    )
+                for cons in constraints:
+                    self._constraints.append(cons.compiled(**args))
         else:
             self._constraints.append(NoConstraintCompiled(self._num_feat))
 

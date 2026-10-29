@@ -193,7 +193,7 @@ class EntropyBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> EntropyBaseCompiled:
+    def compiled(self, **kwargs) -> EntropyBaseCompiled:
         r"""Make a compiled entropy instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The entropy
@@ -211,14 +211,11 @@ class EntropyBase:
         See :class:`~flory.ensemble.entropy.IdealGasEntropyCompiled` for an example.
 
         Args:
-            kwargs_full:
-                The keyword arguments for :meth:`_compiled_impl` but allowing redundant
-                arguments.
+            kwargs:
+                The keyword arguments for :meth:`_compiled_impl`.
 
         Returns:
             : The compiled entropy instance.
 
         """
-
-        kwargs = filter_kwargs(kwargs_full, self._compiled_impl)
         return self._compiled_impl(**kwargs)

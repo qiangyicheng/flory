@@ -86,7 +86,7 @@ class EnsembleBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> EnsembleBaseCompiled:
+    def compiled(self, **kwargs) -> EnsembleBaseCompiled:
         r"""Make a compiled ensemble instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The ensemble
@@ -96,12 +96,10 @@ class EnsembleBase:
         for an example.
 
         Args:
-            kwargs_full:
-                The keyword arguments for :meth:`_compiled_impl` but allowing redundant
-                arguments.
+            kwargs:
+                The keyword arguments for :meth:`_compiled_impl`
 
         Returns:
             : The compiled ensemble instance.
         """
-        kwargs = filter_kwargs(kwargs_full, self._compiled_impl)
         return self._compiled_impl(**kwargs)

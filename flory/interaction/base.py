@@ -183,7 +183,7 @@ class InteractionBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> InteractionBaseCompiled:
+    def compiled(self, **kwargs) -> InteractionBaseCompiled:
         r"""Make a compiled interaction instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The
@@ -196,12 +196,10 @@ class InteractionBase:
         of components.
 
         Args:
-            kwargs_full:
-                The keyword arguments for :meth:`_compiled_impl` but allowing redundant
-                arguments.
+            kwargs:
+                The keyword arguments for :meth:`_compiled_impl`.
 
         Returns:
             : The compiler interaction instance.
         """
-        kwargs = filter_kwargs(kwargs_full, self._compiled_impl)
         return self._compiled_impl(**kwargs)
