@@ -129,7 +129,7 @@ class ConstraintBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> ConstraintBaseCompiled:
+    def compiled(self, **kwargs) -> ConstraintBaseCompiled:
         r"""Make a compiled constraint instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The
@@ -140,12 +140,10 @@ class ConstraintBase:
         the implementation.
 
         Args:
-            kwargs_full:
-                The keyword arguments for :meth:`_compiled_impl` but allowing redundant
-                arguments.
+            kwargs:
+                The keyword arguments for :meth:`_compiled_impl`
 
         Returns:
             : The compiled constraint instance.
         """
-        kwargs = filter_kwargs(kwargs_full, self._compiled_impl)
         return self._compiled_impl(**kwargs)
