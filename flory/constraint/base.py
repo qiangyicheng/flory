@@ -5,8 +5,6 @@
 
 import numpy as np
 
-from ..common import filter_kwargs
-
 
 class ConstraintBaseCompiled:
     r"""Abstract base class for a general compiled constraint.
@@ -106,7 +104,7 @@ class ConstraintBase:
     satisfied in all compartments. For example, the charge balance is a local constraint.
     Global constraint means that it only needs to be satisfied by the mean value. For
     example, the volume conservation is a global constraint. Note that we expect that
-    constraints always act on feature, in stead of components.
+    constraints always act on feature, instead of components.
     """
 
     def __init__(self, num_feat: int):
@@ -129,7 +127,7 @@ class ConstraintBase:
         """
         raise NotImplementedError
 
-    def compiled(self, **kwargs_full) -> ConstraintBaseCompiled:
+    def compiled(self, **kwargs) -> ConstraintBaseCompiled:
         r"""Make a compiled constraint instance for :class:`~flory.mcmp.finder.CoexistingPhasesFinder`.
 
         This function requires the implementation of :meth:`_compiled_impl`. The
@@ -140,12 +138,10 @@ class ConstraintBase:
         the implementation.
 
         Args:
-            kwargs_full:
-                The keyword arguments for :meth:`_compiled_impl` but allowing redundant
-                arguments.
+            kwargs:
+                The keyword arguments for :meth:`_compiled_impl`
 
         Returns:
             : The compiled constraint instance.
         """
-        kwargs = filter_kwargs(kwargs_full, self._compiled_impl)
         return self._compiled_impl(**kwargs)

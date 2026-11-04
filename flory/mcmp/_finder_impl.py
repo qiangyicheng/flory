@@ -171,7 +171,7 @@ def revive_compartments_by_copy(
         : Number of revives
     """
     revive_count = 0
-    num_comp, num_part = targets.shape
+    _num_comp, num_part = targets.shape
 
     dead_indexes = np.full(num_part, -1, dtype=np.int32)
     dead_count = 0

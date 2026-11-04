@@ -184,9 +184,7 @@ class IdealGasPolydispersedEntropy(IdealGasEntropyBase):
             sizes_new:
                 Updated relative molecule volumes :math:`l_i = \nu_i/\nu`.
         """
-        sizes_new = np.atleast_1d(sizes_new)
-        shape = (self.num_comp,)
-        self._sizes = np.array(np.broadcast_to(sizes_new, shape))
+        self._sizes = convert_and_broadcast(sizes_new, (self.num_comp,), dtype=float)
 
     def _compiled_impl(self) -> IdealGasPolydispersedEntropyCompiled:
         """Implementation of creating a compiled entropy instance.

@@ -64,3 +64,9 @@ def test_find_coexisting_phases_asymmetric_ternary(num_part: int):
     )
     np.testing.assert_allclose(phases.volumes, volumes_ref, rtol=1e-5)
     np.testing.assert_allclose(phases.fractions, phis_ref, rtol=1e-5)
+
+
+def test_find_coexisting_phases_wrong_argument():
+    """test whether misspelled arguments are caught"""
+    with pytest.raises(TypeError):
+        flory.find_coexisting_phases(1, [[1]], [1], non_sensical_argument=True)

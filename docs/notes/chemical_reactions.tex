@@ -1,0 +1,67 @@
+\documentclass[reprint,onecolumn,groupedaddress,amsmath,amssymb]{revtex4-2}
+
+\usepackage[]{hyperref}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{xr}
+
+\hypersetup{
+  colorlinks   = true,
+  urlcolor     = blue,
+  linkcolor    = blue,
+  citecolor   = red
+}
+
+\newcommand{\Nc}{N_\mathrm{c}}
+\newcommand{\Nb}{N_\mathrm{B}}
+
+\begin{document}
+
+\title{Equilibria with chemical reactions}
+
+\author{David Zwicker}
+\affiliation{Max Planck Institute for Dynamics and Self-Organization, Am Fa{\ss}berg 17, 37077 G{\"o}ttingen, Germany}
+
+\maketitle
+
+We consider a system of $\Nc$ components, $X_1, \ldots, X_{\Nc}$, that can undergo $\Nb$ different reactions,
+\begin{equation}
+    \sum_{i=1}^{\Nc} \sigma^{(b)}_{\rightarrow, i} X_i
+    \rightleftharpoons
+    \sum_{i=1}^{\Nc} \sigma^{(b)}_{\leftarrow, i} X_i
+\end{equation}
+for each reaction $b=1,\ldots, \Nb$.
+The stoichiometric coefficients are defined with respect to volume fractions, not
+molecular counts. Writing $\sigma^{(b)}_i =
+\sigma^{(b)}_{\leftarrow, i}-\sigma^{(b)}_{\rightarrow, i}$, equilibrium requires
+the corresponding chemical potentials per volume, $\mu_i$, to balance:
+\begin{equation}
+    \sum_{i=1}^{\Nc} \sigma^{(b)}_i \mu_i = 0
+\end{equation}
+
+With this convention, a reaction extent changes the volume fractions according to
+\begin{equation}
+    \Delta \phi_i = \sigma^{(b)}_i \Delta \xi_b \;.
+\end{equation}
+Thus, the stoichiometric matrix directly specifies volume-fraction changes and is used
+without weighting its columns by the relative molecule volumes $l_i=\nu_i/\nu$.
+In particular, a reaction conserves volume when $\sum_i \sigma^{(b)}_i=0$.
+
+Each reaction (in general) leaves conserved linear combinations of volume fractions,
+\begin{equation}
+    \sum_{i=1}^{\Nc} q^{(b)}_i \phi_i = \psi_b
+\end{equation}
+where $q^{(b)}_i$ are linearly independent vectors in the null space of the
+stoichiometric matrix,
+\begin{equation}
+    \sum_{i=1}^{\Nc} q^{(b)}_i \sigma^{(b)}_i = 0
+    \;.
+\end{equation}
+Once we determine a basis for this null space, e.g., using
+\texttt{scipy.linalg.null\_space}, we can use it to express a linear constraint.
+Moreover, we need to impose a grandcanonical potential for the respective species.
+The imposed chemical potential difference relates to the internal energy difference
+of the species, which is not part of the free energy in our formulation.
+
+
+\end{document}

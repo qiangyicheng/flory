@@ -12,6 +12,7 @@ import numpy as np
 from numba import float64, int32
 from numba.experimental import jitclass
 
+from ..common import convert_and_broadcast
 from .base import InteractionBase, InteractionBaseCompiled
 
 
@@ -128,10 +129,7 @@ class FloryHugginsInteractionBase(InteractionBase):
         super().__init__(num_comp=num_comp)
         self._logger = logging.getLogger(self.__class__.__name__)
 
-        chis = np.atleast_1d(chis)
-
-        shape = (num_comp, num_comp)
-        chis = np.array(np.broadcast_to(chis, shape))
+        chis = convert_and_broadcast(chis, (num_comp, num_comp), dtype=float)
 
         # ensure that the chi matrix is symmetric
         if not np.allclose(chis, chis.T):
@@ -260,9 +258,9 @@ class FloryHugginsInteraction(FloryHugginsInteractionBase):
             chis_new:
                 Updated interaction matrix :math:`\chi_{ij}`.
         """
-        chis_new = np.atleast_1d(chis_new)
-        shape = (self.num_comp, self.num_comp)
-        chis_new = np.array(np.broadcast_to(chis_new, shape))
+        chis_new = convert_and_broadcast(
+            chis_new, (self.num_comp, self.num_comp), dtype=float
+        )
         if not np.allclose(chis_new, chis_new.T):
             self._logger.warning("Using symmetrized χ interaction-matrix")
         self._chis = 0.5 * (chis_new + chis_new.T)

@@ -3,7 +3,6 @@
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
-import logging
 
 import numpy as np
 from numba import float64, int32
@@ -83,6 +82,8 @@ class NoConstraintCompiled(ConstraintBaseCompiled):
 
 class NoConstraint(ConstraintBase):
     r"""Class for no constraints."""
+
+    num_cons: int = 0
 
     def __init__(self, num_feat: int):
         r"""

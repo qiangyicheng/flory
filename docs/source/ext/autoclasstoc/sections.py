@@ -53,7 +53,7 @@ class Section:
     Whether or not to include inherited attributes in this section.
     """
 
-    exclude_pattern = ["__"]
+    exclude_pattern = ["__"]  # noqa: RUF012
     """
     A regular expression (or list of regular expressions) matching attribute 
     names that should be excluded from this section.

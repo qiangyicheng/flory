@@ -11,6 +11,7 @@ import numpy as np
 from numba import float64, int32
 from numba.experimental import jitclass
 
+from ..common import convert_and_broadcast
 from .base import EnsembleBase, EnsembleBaseCompiled
 
 
@@ -101,7 +102,7 @@ class CanonicalEnsemble(EnsembleBase):
         if phi_means is None:
             self.phi_means = np.full(num_comp, 1 / num_comp)
         else:
-            self.phi_means = np.atleast_1d(phi_means)
+            self.phi_means = convert_and_broadcast(phi_means, (num_comp,), dtype=float)
 
     @property
     def phi_means(self) -> np.ndarray:
@@ -117,7 +118,7 @@ class CanonicalEnsemble(EnsembleBase):
                 Updated average volume fractions :math:`\bar{\phi}_i`.
         """
         phi_means_new = np.array(phi_means_new)  # copy data
-        self._phi_means = np.broadcast_to(phi_means_new, (self.num_comp,))
+        self._phi_means = convert_and_broadcast(phi_means_new, (self.num_comp,))
 
         if not np.isclose(self._phi_means.sum(), 1.0):
             self._logger.warning(

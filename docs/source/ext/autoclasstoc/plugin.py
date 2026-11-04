@@ -21,7 +21,7 @@ class AutoClassToc(SphinxDirective):
     """
 
     optional_arguments = 1
-    option_spec = {
+    option_spec = {  # noqa: RUF012
         "sections": utils.comma_separated_list,
         "exclude-sections": utils.comma_separated_list,
     }
@@ -33,7 +33,7 @@ class AutoClassToc(SphinxDirective):
         try:
             qual_name = self.arguments[0] if self.arguments else None
             mod_name, cls_name = utils.pick_class(qual_name, self.env)
-            mod, cls = utils.load_class(mod_name, cls_name)
+            _mod, cls = utils.load_class(mod_name, cls_name)
             sections = utils.pick_sections(
                 self.options.get("sections") or self.config.autoclasstoc_sections,
                 exclude=self.options.get("exclude-sections"),

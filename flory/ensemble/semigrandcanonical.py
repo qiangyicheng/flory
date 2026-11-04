@@ -13,6 +13,7 @@ from numba import bool_, float64, int32
 from numba.experimental import jitclass
 from numpy.typing import NDArray
 
+from ..common import convert_and_broadcast
 from .base import EnsembleBase, EnsembleBaseCompiled
 
 
@@ -133,9 +134,9 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
         self._logger = logging.getLogger(self.__class__.__name__)
 
         shape = (num_comp,)
-        self._is_canonical = np.array(np.broadcast_to(is_canonical, shape), dtype=bool)
+        self._is_canonical = convert_and_broadcast(is_canonical, shape, dtype=bool)
         # using the setter here also runs the check on the total fractions
-        self.constraint = np.array(np.broadcast_to(constraint, shape))
+        self.constraint = convert_and_broadcast(constraint, shape)
 
     def _check(self):
         """Internal consistency check"""
@@ -159,7 +160,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
                 Updated list of components treated canonically.
         """
         shape = (self.num_comp,)
-        self._is_canonical = np.array(np.broadcast_to(is_canonical_new, shape))
+        self._is_canonical = convert_and_broadcast(is_canonical_new, shape)
         self._check()
 
     @property
@@ -176,7 +177,7 @@ class SemiGrandCanonicalEnsemble(EnsembleBase):
                 Updated constraints.
         """
         shape = (self.num_comp,)
-        self._constraint = np.array(np.broadcast_to(constraint_new, shape))
+        self._constraint = convert_and_broadcast(constraint_new, shape)
         self._check()
 
     def set_chemical_potential(
