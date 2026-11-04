@@ -5,8 +5,6 @@
 
 import numpy as np
 
-from ..common import filter_kwargs
-
 
 class ConstraintBaseCompiled:
     r"""Abstract base class for a general compiled constraint.

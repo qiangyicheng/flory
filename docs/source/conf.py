@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "flory"
-copyright = "2024, Yicheng Qiang"  # noqa: A001
+copyright = "2024, Yicheng Qiang"
 author = "Yicheng Qiang"
 
 # -- General configuration ---------------------------------------------------

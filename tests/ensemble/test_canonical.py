@@ -4,7 +4,6 @@
 
 import numpy as np
 import pytest
-from scipy import stats
 
 from flory.ensemble import CanonicalEnsemble
 

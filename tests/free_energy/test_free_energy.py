@@ -3,7 +3,6 @@
 """
 
 import numpy as np
-import pytest
 
 import flory
 from flory.common.phases import get_uniform_random_composition
