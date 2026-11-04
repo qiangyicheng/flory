@@ -1,17 +1,17 @@
 """
-.. codeauthor:: David Zwicker <david.zwicker@ds.mpg.de>
+.. codeauthor:: Henri Schmidt <henri.schmidt@ds.mpg.de>
 """
 
 import matplotlib as mpl
 import numpy as np
-import pytest
 
 from flory.common.phases import Phases, PhasesResult
 
 
 def test_plotting():
-    """A simple test to check whether the plotting method of PhasesResult exits normally and returns a QuadMesh object. 
-    This test does not check the actual content of the plot, but only that it can be generated without errors."""
+    """A simple test to check whether the plotting method of PhasesResult exits normally
+    and returns a QuadMesh object.  This test does not check the actual content of the
+    plot, but only that it can be generated without errors."""
     #create mock data
     Nc, Np = 3, 2
     fractions = np.random.uniform(0, 1, size=(Np, Nc))

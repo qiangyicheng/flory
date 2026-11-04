@@ -5,11 +5,14 @@
 
 from __future__ import annotations
 
-import typing
+from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy import cluster, optimize, spatial
+
+if TYPE_CHECKING:
+    import matplotlib as mpl
 
 
 def get_uniform_random_composition(num_comps: int, rng=None) -> np.ndarray:
@@ -196,6 +199,46 @@ class Phases:
         else:
             return cols
 
+    def plot(self, ax=None, **kwargs) -> mpl.collections.QuadMesh:
+        """Plot the phase compositions as a volume-weighted density plot.
+
+        Each column represents one phase, with its horizontal width proportional to the
+        phase volume. Each row represents one component, and the color indicates its
+        fraction in the phase. Phases are shown in their current order.
+
+        Args:
+            ax:
+                The Matplotlib axes to plot on. If omitted, the current axes are used.
+            **kwargs:
+                Additional keyword arguments are passed to
+                :func:`~matplotlib.pyplot.pcolormesh`. For example, ``cmap`` can be used
+                to set the colormap, and ``vmin`` and ``vmax`` set the limits.
+
+        Returns:
+            The Matplotlib ``QuadMesh`` created by :func:`~matplotlib.pyplot.pcolormesh`
+        """
+        try:
+            import matplotlib.pyplot as plt
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError("Matplotlib is required for plotting.") from err
+
+        # Use the current axes by default, while allowing callers to provide an axes
+        # object when composing a custom figure.
+        plt_ax = plt.gca() if ax is None else ax
+        fractions = self.fractions.T
+        volume_edges = np.r_[0, np.cumsum(self.volumes)]
+        component_edges = np.arange(-0.5, fractions.shape[0] + 0.5)
+
+        image = plt_ax.pcolormesh(volume_edges, component_edges, fractions, **kwargs)
+        plt.sci(image)
+
+        # Set ticks to enumerate phases on the x-axis and components on the y-axis
+        phase_positions = (volume_edges[:-1] + volume_edges[1:]) / 2
+        plt_ax.set_xticks(phase_positions)
+        plt_ax.set_xticklabels(np.arange(1, 1 + fractions.shape[1]))
+        plt_ax.set_yticks(np.arange(fractions.shape[0]))
+
+        return image
 
 
 class PhasesResult(Phases):
@@ -250,46 +293,3 @@ class PhasesResult(Phases):
                 2D array containing new component fractions of the phases.
         """
         return self.__class__(volumes, fractions, info=self.info.copy())
-
-    def plot(self, ax=None, **kwargs) -> mpl.collections.QuadMesh:
-        """Plot the phase compositions as a volume-weighted heat map.
-
-        Each column represents one phase, with its horizontal width proportional
-        to the phase volume. Each row represents one component, and the color
-        indicates its fraction in the phase. Phases are shown in their current
-        order.
-
-        Args:
-            ax:
-                The Matplotlib axes to plot on. If omitted, the current axes are used.
-            **kwargs:
-                Additional keyword arguments are passed to ``pcolormesh``. For example,
-                ``cmap`` can be used to set the colormap, and ``vmin`` and ``vmax`` set the limits.
-
-        Returns:
-            The Matplotlib ``QuadMesh`` created by ``pcolormesh``. When
-            ``ax`` is omitted, the mesh is also set as the current image.
-        """
-        try:
-            import matplotlib.pyplot as plt
-        except ModuleNotFoundError as err:
-            raise ModuleNotFoundError(
-                "Matplotlib is required for plotting. Please install it."
-            ) from err
-
-        # Use the current axes by default, while allowing callers to provide
-        # an axes object when composing a custom figure.
-        plt_ax = plt.gca() if ax is None else ax
-        fractions = self.fractions.T
-        volume_edges = np.concatenate(([0.0], np.cumsum(self.volumes)))
-        component_edges = np.arange(fractions.shape[0] + 1)
-
-        image = plt_ax.pcolormesh(volume_edges, component_edges, fractions, **kwargs)
-
-        # now set sensible ticks on the x-axis
-        # this is done as this is a non-standard plot, and the user might not want to fiddle around with finding the correct tick positions themselves
-        phase_positions = (volume_edges[:-1] + volume_edges[1:]) / 2
-        plt_ax.set_xticks(phase_positions)
-        plt_ax.set_xticklabels(np.arange(1, 1 + fractions.shape[1]))
-
-        return image
