@@ -5,8 +5,6 @@
 
 from __future__ import annotations
 
-import typing
-
 import numpy as np
 from numpy.typing import NDArray
 from scipy import cluster, optimize, spatial

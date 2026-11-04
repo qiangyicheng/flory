@@ -3,7 +3,6 @@
 .. codeauthor:: Yicheng Qiang <yicheng.qiang@ds.mpg.de>
 """
 
-import logging
 
 import numpy as np
 from numba import float64, int32

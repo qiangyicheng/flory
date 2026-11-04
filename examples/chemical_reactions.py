@@ -1,6 +1,3 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from tqdm.auto import tqdm
 
 import flory
 

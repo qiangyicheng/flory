@@ -11,7 +11,7 @@ import flory
 
 @pytest.mark.slow
 @pytest.mark.no_cover
-def test_consistency_ensemble():
+def test_consistency_ensemble(rng):
     num_comp = 3
     chis = [[3.27, -0.34, 0], [-0.34, -3.96, 0], [0, 0, 0]]
     phi_means = [0.16, 0.68, 0.16]
@@ -21,7 +21,7 @@ def test_consistency_ensemble():
     ensemble = flory.CanonicalEnsemble(num_comp, phi_means)
 
     finder = flory.CoexistingPhasesFinder(
-        free_energy.interaction, free_energy.entropy, ensemble
+        free_energy.interaction, free_energy.entropy, ensemble, rng=rng
     )
 
     phases_canonical = finder.run(progress=False).get_clusters()
@@ -41,6 +41,7 @@ def test_consistency_ensemble():
         ensemble,
         constraint,
         random_std=1.0,
+        rng=rng,
     )
 
     phases_grandcanonical = finder.run(progress=False).get_clusters()
