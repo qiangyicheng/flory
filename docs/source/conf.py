@@ -18,7 +18,7 @@ import pathlib
 import sys
 
 proj_path = pathlib.Path(__file__).parent.parent.parent.resolve()
-sys.path.append(str(proj_path))
+sys.path.insert(0, str(proj_path))
 ext_path = (pathlib.Path(__file__) / "ext").resolve()
 sys.path.insert(0, str(ext_path))
 
@@ -58,15 +58,24 @@ def add_autoclasstoc_if_html(app):
 # Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "numba": ("https://numba.readthedocs.io/en/latest/", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
+autodoc_default_options = {
+    "members": True,
+    "special-members": False,
+    "private-members": False,
+    "inherited-members": True,
+    "undoc-members": False,
+}
+
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 autoclass_content = "both"  # Add __init__ doc (ie. params) to class summaries
 # Remove 'view source code' from top of page (for html, not python)
-html_show_sourcelink = False
+html_show_sourcelink = True
 autodoc_inherit_docstrings = True  # If no docstring, inherit from base class
 autodoc_member_order = "bysource"
 set_type_checking_flag = True  # Enable 'expensive' imports for sphinx_autodoc_typehints
