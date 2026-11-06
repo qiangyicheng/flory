@@ -215,7 +215,7 @@ class Phases:
                 to set the colormap, and ``vmin`` and ``vmax`` set the limits.
 
         Returns:
-            The Matplotlib ``QuadMesh`` created by :func:`~matplotlib.pyplot.pcolormesh`
+            `QuadMesh`: Plot element created by :func:`~matplotlib.pyplot.pcolormesh`
         """
         try:
             import matplotlib.pyplot as plt

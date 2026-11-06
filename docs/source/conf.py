@@ -58,9 +58,18 @@ def add_autoclasstoc_if_html(app):
 # Mappings for sphinx.ext.intersphinx. Projects have to have Sphinx-generated doc! (.inv file)
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "numba": ("https://numba.readthedocs.io/en/latest/", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+}
+
+autodoc_default_options = {
+    "members": True,
+    "special-members": False,
+    "private-members": False,
+    "inherited-members": True,
+    "undoc-members": False,
 }
 
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
